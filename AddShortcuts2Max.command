@@ -16,7 +16,7 @@ defaults delete com.cycling74.Max NSUserKeyEquivalents 2> /dev/null
 
 sleep 0.5 
 echo "- Adding new shorcuts..."
-defaults write com.cycling74.Max NSUserKeyEquivalents -dict-add "Restore Origin" "@~R" "Set Origin" "@~S" "Open As Text…" "@~O" "Save As…" "@\$S" Clear "~X" "Paste Replace" "@~V" "Lock Background" "@~L" Redo "@~Z" "Text" "@~N"
+defaults write com.cycling74.Max NSUserKeyEquivalents -dict-add "Restore Origin" "@~R" "Set Origin" "@~S" "Open As Text…" "@~O" "Save As…" "@\$S" Clear "~X" "Paste Replace" "@~V" "Lock Background" "@~L" Redo "@~Z" "Text" "@~N" "New from Clipboard" "@\$N"
 
 echo "- Shortcuts added."
 
@@ -24,6 +24,6 @@ echo "" # saut de ligne
 echo "To revert, remove the ~/Library/Preferences/com.cycling74.Max.plist file."
 
 sleep 0.5
-echo "The new shortcuts will be available the next time you start MaxMSP."
+echo -e "The new shortcuts will be available the next time you start MaxMSP.\n\n"
 
 exit 0
