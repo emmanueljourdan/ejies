@@ -6,8 +6,6 @@
 // global code
 
 var ejies = EjiesUtils();	// lien vers ejies-extension.js
-var CopyRight = new Global("EjiesCopyRight");	// variable globale utilisŽe pour le copyright
-CopyRight["cn"] = 0; 						// init
 
 inlets = 1;
 outlets = 0;
@@ -19,21 +17,9 @@ var OldNomObjet;
 var NewNomObjet;
 
 if (jsarguments.length == 2)
-OldNomObjet = jsarguments[1];
+	OldNomObjet = jsarguments[1];
 if (jsarguments.length > 2)
-post("¥ error: ej.cn.js extra arguments\n");
-
-
-// affiche le copyright une seule fois, gr‰ce ˆ la variable globale
-function loadbang(a)
-{
-	if ( ! CopyRight["cn"]) {
-		post("ej.cn.js: version", ejies.VersNum, ejies.VersDate);
-		post("\n     by Emmanuel Jourdan\, Ircam Ñ \n");
-		CopyRight["cn"] = 1 ;
-	}	
-}
-
+	perror("extra arguments...");
 
 function anything()
 {
@@ -49,6 +35,13 @@ function ReplaceName(MyObj)
 		MyObj.varname = NewNomObjet;
 	return true;
 }
+
+function perror()
+{
+	ejies.scriptname = "ej.cn.js";
+	ejies.perror(arguments);
+}
+perror.local = 1;
 
 // Pour la compilation automatique
 // autowatch = 1;

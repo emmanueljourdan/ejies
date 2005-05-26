@@ -6,8 +6,6 @@
 // global code
 
 var ejies = EjiesUtils();	// lien vers ejies-extension.js
-var CopyRight = new Global("EjiesCopyRight");	// variable globale utilisŽe pour le copyright
-CopyRight["nthru"] = 0; 						// init
 
 var NbInlets = 1;
 var NbOutlets = 1;
@@ -18,7 +16,7 @@ if (jsarguments.length>1 && typeof jsarguments[1] == "number")
 if (jsarguments.length>2 && typeof jsarguments[2] == "number")
 	NbOutlets = Math.min(jsarguments[2],MAXINOUT);	// outlet (minimum 1, max 64)
 if (jsarguments.length>3)
-	post("¥ error: ej.nthru.js extra arguments\n");
+	perror("extra arguments...");
 
 inlets = NbInlets;
 outlets = NbOutlets;
@@ -38,16 +36,6 @@ for ( i=0 ; i < NbOutlets ; i++) {
 
 // en fonction des arguments
 mapping();
-
-// affiche le copyright une seule fois, gr‰ce ˆ la variable globale
-function loadbang(a)
-{
-	if ( ! CopyRight["nthru"]) {
-		post("ej.nthru.js: version", ejies.VersNum, ejies.VersDate);
-		post("\n     by Emmanuel Jourdan\, Ircam\n");
-		CopyRight["nthru"] = 1 ;
-	}	
-}
 
 function mapping()
 {
@@ -98,7 +86,14 @@ function anything()
 		outlet(sortie[inlet], a);
 	}
 }
+anything.immediate = 1;
 
+function perror()
+{
+	ejies.scriptname = "ej.nthru.js";
+	ejies.perror(arguments);
+}
+perror.local = 1;
 
 // Pour la compilation automatique
 // autowatch = 1;

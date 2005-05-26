@@ -4,17 +4,38 @@
 	Pour l'instant, ça ne sert à rien... mais à l'avenir... j'en ferai sans doute un usage intensif :-)
 */
 
+var ejies = new EjiesUtils();
+post("ejies", ejies.VersNum, ejies.VersDate);
+post("\n     by Emmanuel Jourdan\, Ircam\n");
 
 function EjiesUtils()
 { 
-	this.VersNum = "1.51";			// Version Number
-	this.VersDate = "(04/2005)";	// Version release date
+	this.VersNum = "1.52-dev";			// Version Number
+	this.VersDate = "(05/2005)";	// Version release date
 
 	// clip method
 	this.clip = function(x, min, max)
 	{
 		return Math.min(Math.max(x,min),max);
 	}
+	
+/* 	perror: il faut mettre une fonction perror à l'intérieur de chaque */
+	this.perror = function(a)
+	{
+		this.scriptname;
+		
+		var string = "• error: " + this.scriptname + ":";
+		var i;
+	
+		for (i = 0; i < a.length; i++) {
+			string += " " + a[i];
+		}
+		string += "\n";
+		
+		post(string);
+		return;
+	}
+
 		
 	return this;
 }

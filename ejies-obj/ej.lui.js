@@ -15,10 +15,10 @@ if ( jsarguments[1] ) {
 	if (jsarguments[1] != "noUI")
 		wait_and_process();
 } else
-	post("¥ error: ej.lui.js: missing argument!\n");
+	perror("missing argument!");
 
-if (max.version < 454)
-	post("¥ error: ej.lui.js required MaxMSP 4.5.4 or higher.");
+if (max.version < 455)
+	perror("MaxMSP 4.5.5 or higher is required.");
 
 function wait_and_process()
 {
@@ -63,6 +63,12 @@ function testinstallation()
 	post("Make sure the ejies-extensions.js is installed in the \"C74:/jsextensions\" folder!\n");
 }
 
+function perror()
+{
+	ejies.scriptname = "ej.lui.js";
+	ejies.perror(arguments);
+}
+perror.local = 1;
 // Pour la compilation automatique
 // autowatch = 1;
 // post("Compiled...\n");

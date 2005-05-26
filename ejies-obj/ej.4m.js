@@ -5,8 +5,6 @@
 
 // global code
 var ejies = new EjiesUtils();				// lien vers ejies-extension.js
-var CopyRight = new Global("EjiesCopyRight");	// variable globale utilisée pour le copyright
-CopyRight["4m"] = 0;							// init
 
 inlets = 1;
 outlets = 5;
@@ -31,32 +29,15 @@ if (jsarguments.length > 2) {
 		VerboseOrNot = 1;
 	}
 if (jsarguments.length > 3)
-	post("• error: ej.4m.js extra arguments\n");
+	perror("extra arguments...");
 
-
-// imprime le copyright
-function loadbang()
-{
-	if ( ! CopyRight["4m"] ) {
-		post("ej.4m.js: version", ejies.VersNum, ejies.VersDate);
-		post("\n     by Emmanuel Jourdan\, Ircam\n");
-		CopyRight["4m"] = 1 ;
-	}
-}
-
-function msg_int(entier)
+function msg_float(nombre)
 {
 	a.shift();			// supprime le premier élément
-	a.push(entier);		// ajoute l'élément à la fin de 'a'
+	a.push(nombre);	// ajoute l'élément à la fin de 'a'
 	sortie();
 }
-
-function msg_float(flottant)
-{
-	a.shift();			// supprime le premier élément
-	a.push(flottant);	// ajoute l'élément à la fin de 'a'
-	sortie();
-}
+msg_float.immediate = 1;
 
 function bang()
 {
@@ -67,7 +48,7 @@ function bang()
 		for (i = 0 ; i < (OldWindowSize - WindowReset) ; i++ ) {
 			a.shift();
 		}
-		post("ej.4m.js using temp window size of ", a.length, " items.\n");
+		perror("using temp window size of ", a.length, " items.");
 		sortie();
 		window(OldWindowSize);
 	} else if (WindowReset >= a.length) { // il y a suffisament d'élément.
@@ -77,7 +58,7 @@ function bang()
 
 function anything()
 {
-	post("• error: ej.4m.js doesn't understand ", messagename, "\n");
+	perror("doesn't understand ", messagename);
 }
 
 // change la taille de la fenêtre d'analyse
@@ -91,7 +72,7 @@ function reset()			// reset: vide le buffer
 {
 	window(a.length);
 	if (VerboseOrNot)
-		post("ej.4m.js: buffer is now empty.\n");
+		perror("buffer is now empty.");
 }
 
 function clear() { reset() ;} // alias
@@ -142,6 +123,13 @@ function getverbose()
 	var WindowMessage = new Array("verbose", VerboseOrNot); 
 	outlet(4, WindowMessage);
 }
+
+function perror()
+{
+	ejies.scriptname = "ej.4m.js";
+	ejies.perror(arguments);
+}
+perror.local = 1;
 
 // Pour la compilation automatique
 // autowatch = 1;

@@ -5,9 +5,6 @@
 
 // global code
 var ejies = EjiesUtils();	// lien vers ejies-extension.js
-var CopyRight = new Global("EjiesCopyRight");	// variable globale utilisŽe pour le copyright
-CopyRight["dn"] = 0;							// init
-
 
 inlets = 1;
 outlets = 0;
@@ -18,16 +15,7 @@ var str, re;
 var SearchState = 0;
 
 if (jsarguments.length > 1) SearchState = jsarguments[1];
-if (jsarguments.length > 2) post("¥ error: ej.dn.js: too many arguments\n");
-
-function loadbang()
-{
-	if ( ! CopyRight["dn"]) {
-		post("ej.dn.js: version", ejies.VersNum, ejies.VersDate);
-		post("\n     by Emmanuel Jourdan\, Ircam\n");
-		CopyRight["dn"] = 1 ;
-	}
-}
+if (jsarguments.length > 2) perror("too many arguments...");
 
 function searchmode(v)
 {
@@ -69,6 +57,13 @@ function testinput(re, str)
 		return 0 ;	// it does not contain;
 }
 testinput.local = 1;
+
+function perror()
+{
+	ejies.scriptname = "ej.dn.js";
+	ejies.perror(arguments);
+}
+perror.local = 1;
 
 // Pour la compilation automatique
 // autowatch = 1;

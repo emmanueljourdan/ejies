@@ -5,8 +5,6 @@
 
 // global code
 var ejies = EjiesUtils();	// lien vers ejies-extension.js
-var CopyRight = new Global("EjiesCopyRight");	// variable globale utilisée pour le copyright
-CopyRight["lock"] = 0;							// init
 inlets = 1;
 outlets = 1;
 setinletassist(0, "0=lock, 1=unlock, ...");
@@ -14,24 +12,15 @@ setoutletassist(0, "dumpout");
 
 var IsRuntime;
 
-function loadbang()
-{
-	if ( ! CopyRight["lock"] ) {
-		post("ej.lock.js: version", ejies.VersNum, ejies.VersDate);
-		post("\n     by Emmanuel Jourdan\, Ircam\n");
-		CopyRight["4m"] = 1 ;
-	}
-}
+if (max.version < 455)
+	perror("MaxMSP 4.5.5 or higher is required.");
 
 function runtime_test()
 {
-	if (max.version >= 452) {
-		IsRuntime = max.isruntime;
-		if (IsRuntime)
-			post("• error: ej.lock.js disabled while working in a standalone/runtime environement.\n");
-		}
-	else
-        post("ej.lock.js requires Max 4.5.2 or higher to work\n");
+	IsRuntime = max.isruntime;
+	
+	if (IsRuntime)
+		perror("disabled while working in a standalone/runtime environement.");
 }
 runtime_test.local = 1;
 
@@ -52,9 +41,14 @@ function getlock()
 	outlet(0, "lock",this.patcher.locked);
 }
 
+function perror()
+{
+	ejies.scriptname = "ej.lock.js";
+	ejies.perror(arguments);
+}
+perror.local = 1;
 
-if (max.os != "windows")
-	runtime_test() // pour voir si on est en mode runtime/standalone
+runtime_test();
 
 // Pour la compilation automatique
 // autowatch = 1;

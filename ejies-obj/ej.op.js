@@ -5,14 +5,11 @@
 
 // global code
 var ejies = EjiesUtils();	// lien vers ejies-extension.js
-var CopyRight = new Global("EjiesCopyRight");	// variable globale utilisŽe pour le copyright
-CopyRight["op"] = 0;						// init
 
 inlets = 1;
 outlets = 1;
 setinletassist(0, "symbol: Name of the patcher you want to open")
 setoutletassist(0, "Don't expect anything comming here :-)");
-
 
 var str;
 var re;
@@ -22,16 +19,7 @@ var SearchState = 0;
 
 if (jsarguments.length > 1) SearchState = jsarguments[1];
 if (jsarguments.length > 2) CaseState = jsarguments[2];
-if (jsarguments.length > 3 ) ejies.error("");
-
-function loadbang()
-{
-	if ( ! CopyRight["op"]) {
-		post("ej.op.js: version", ejies.VersNum, ejies.VersDate);
-		post("\n     by Emmanuel Jourdan\, Ircam\n");
-		CopyRight["op"] = 1 ;
-	}
-}
+if (jsarguments.length > 3 ) perror("too many arguments...");
 
 function anything()
 {
@@ -92,6 +80,13 @@ function testinput(re, str)
 		return 0 ;	// it does not contain;
 }
 testinput.local = 1;
+
+function perror()
+{
+	ejies.scriptname = "ej.op.js";
+	ejies.perror(arguments);
+}
+perror.local = 1;
 
 // Pour la compilation automatique
 // autowatch = 1;

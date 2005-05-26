@@ -6,8 +6,6 @@
 // global code
 
 var ejies = EjiesUtils();	// lien vers ejies-extension.js
-var CopyRight = new Global("EjiesCopyRight");	// variable globale utilisŽe pour le copyright
-CopyRight["cc"] = 0;							// init
 
 inlets = 1;
 outlets = 0;
@@ -25,21 +23,10 @@ if (jsarguments.length == 2) {
 	else if (jsarguments[1] == "ej")
 		ej();								// mes paramtres
 	else
-		post("¥ error: ej.cc.js wrong argument\n");
+		perror("wrong argument");
 }
 if (jsarguments.length > 2)
-	post("¥ error: ej.cc.js extra arguments\n");
-
-
-// affiche le copyright une seule fois, gr‰ce ˆ la variable globale
-function loadbang(a)
-{
-	if ( ! CopyRight["cc"]) {
-		post("ej.cc.js: version", ejies.VersNum, ejies.VersDate);
-		post("\n     by Emmanuel Jourdan\, Ircam\n");
-		CopyRight["cc"] = 1 ;
-	}	
-}
+	perror("extra arguments...");
 
 function anything()
 {
@@ -50,7 +37,7 @@ function anything()
 	if (typeof NomObjet == "string" && typeof Couleur == "number")
 		ExecuteOperation(ChangeColor);
 	else
-		post("¥ error: ej.cc.js wrong argument, must be [symbol] [int]\n");
+		perror("wrong argument, must be [symbol] [int]");
 }
 
 function ExecuteOperation(toto)
@@ -87,7 +74,7 @@ function global(a)
 	if (a == 1 ||Êa == 0)
 		GlobalState = a;
 	else
-		post("¥ error: ej.cc.js wrong argument for message global (must be 1 or 0)\n");
+		perror("wrong argument for message global (1 or 0 expected)");
 }
 
 
@@ -122,6 +109,12 @@ function InternalExecuteOperation(a, b)
 }
 InternalExecuteOperation.local = 1;
 
+function perror()
+{
+	ejies.scriptname = "ej.cc.js";
+	ejies.perror(arguments);
+}
+perror.local = 1;
 
 // Pour la compilation automatique
 // autowatch = 1;
