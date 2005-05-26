@@ -1,31 +1,31 @@
 /* 
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
+
 */
 
 // global code
-var ejies = new EjiesUtils();					// lien vers ejies-extension.js
-var CopyRight = new Global("EjiesCopyRight");	// variable globale utilisée pour le copyright
-CopyRight["function"] = 0;						// init
-CopyRight["copy"] = new Array();				// Utilisé pour le copier-coller
-CopyRight["copycolors"] = new Array();			// Utilisé pour le copier-coller des couleurs
+var ejies = new EjiesUtils();						// lien vers ejiesUtils.js
 
-const FUNCTIONVERSION = 1;
+const FUNCTIONVERSION = 2;
 inlets = 1;
 outlets = 5;
 const INTERP_OUTLET = 0;
 const LINE_OUTLET = 1;
-const DUMP = 2;
+const DUMP_OUTLET = 2;
 const BANG_OUTLET = 3;
 const DUMPOUT = 4;
 setinletassist(0, "quite anything...");
 setoutletassist(INTERP_OUTLET, "interpolated Y for input X");
 setoutletassist(LINE_OUTLET, "points in line~ format");
-setoutletassist(DUMP, "dump");
+setoutletassist(DUMP_OUTLET, "dump message output");
 setoutletassist(BANG_OUTLET, "bang when changed with mouse");
-setoutletassist(DUMPOUT, "bang when changed with mouse");
+setoutletassist(DUMPOUT, "dumpout");
 
 var g = new Global("ej.function");	// utilisé par dump & listdump
+g["function"] = 0;					// init
+g["copy"] = new Array();			// Utilisé pour le copier-coller
+g["copycolors"] = new Array();		// Utilisé pour le copier-coller des couleurs
 var NbCourbes = 2;
 var fctns = new Array();
 var current = 0;
@@ -51,6 +51,10 @@ var AllowEdit = 1;
 var TimeFlag = 0;
 var OpendialogPrepend = 0;
 var DisplayOneTime;
+var LectureInspectorFlag = 0;
+
+if (max.version < 455)
+	perror("MaxMSP 4.5.5 or higher is required.");
 
 if (box.rect[2] - box.rect[0] == 64 && box.rect[3] - box.rect[1] == 64) {
 	// numbox a été créée à partie de jsui : dimensions = 64*64
@@ -73,8 +77,10 @@ function Courbe(name)
 {
 	this.name = name;			// c'est assez clair...
 	this.np = 0;				// nombre de points dans la courbe
-	this.domain = 1000.;		// domain de la courbe
+	this.domain = [0., 1000.];	// domain de la courbe
 	this.range = [0., 1.];		// range de la courbe
+	this.ZoomX = [0., 1000.];	// domain de la courbe
+	this.ZoomY = [0., 1.];		// range de la courbe
 	this.pa = new Array();		// PointsArray
 	this.brgb =[0.8,0.8,0.8];	// Couleur de fond
 	this.frgb =[0.32,0.32,0.32];// Couleur des points
@@ -87,21 +93,9 @@ function Courbe(name)
 	this.PixelDomain;			// ...
 	this.PixelRange;			// ...
 	this.NextFrom = 0;			// utilisé pour le message next
+/* 	this.DisplayFrom = [0, 0]; */
 }
 
-// affiche le copyright une seule fois, grâce à la variable globale
-function loadbang()
-{
-	if ( ! CopyRight["function"]) {
-		post("ej.function.js: version", ejies.VersNum, ejies.VersDate);
-		post("\n     by Emmanuel Jourdan\, Ircam\n");
-		CopyRight["function"] = 1 ;
-
-		// version check
-		if (max.version < 454)
-			post("• warning: ej.function: MaxMSP 4.5.4 is required.\n");
-	}
-}
 
 function init()
 {
@@ -137,22 +131,22 @@ function draw()
 		if ( GridMode ) {
 			glcolor(tmpF["rgb5"], 0.2);
 			
-			for (j = 0; j < ((tmpF.domain / tmpF.GridStep)+1); j++) {
+			for (j = 0; j < (((tmpF.ZoomX[1] - tmpF.ZoomX[0]) / tmpF.GridStep)+1); j++) {
 			linesegment( screentoworld(val2x(tmpF, j*tmpF.GridStep), val2y(tmpF, tmpF.range[0]-Bordure) ),
 				screentoworld( val2x(tmpF, j*tmpF.GridStep), val2y(tmpF, tmpF.range[1]) ) );
 			}
 		}
 	
-		for (c = 0 ; c < NbCourbes ; c++) {
+		for (c = 0; c < NbCourbes; c++) {
 			if (fctns[c].np > 0) {
 
 				// dessine les segments
 				if ( fctns[c].display ) {
 					glcolor(fctns[c]["rgb2"], ((c == current) * 0.5) + 0.2);
 							
-					moveto(screentoworld(fctns[c]["pa"]["0"].x,fctns[c]["pa"]["0"].y ));
+					moveto(screentoworld(fctns[c]["pa"][0].x,fctns[c]["pa"][0].y ));
 					
-					for (i=0 ; i < (fctns[c].np - 1) ; i++) {
+					for (i = 0; i < (fctns[c].np - 1); i++) {
 						lineto(screentoworld(fctns[c]["pa"][i+1].x,fctns[c]["pa"][i+1].y ));
 					}
 				}
@@ -162,7 +156,7 @@ function draw()
 					// dessine les points
 					glcolor(fctns[c]["frgb"], ((c == current) * 0.5) + 0.2);
 	
-					for (i=0; i < fctns[c].np; i++) {
+					for (i = 0; i < fctns[c].np; i++) {							
 						moveto(screentoworld(fctns[c]["pa"][i].x,fctns[c]["pa"][i].y ));
 						
 						if ( fctns[c]["pa"][i].sustain) {
@@ -214,16 +208,16 @@ function draw()
 			}
 		}
 	}
-
+/* 	post("draw operation completed\n"); */
 	refresh();
 }
 
 
 //////////////// Fonctions magiques ///////////////
-function x2val(courbe, x) { return (( x - Bordure) * courbe.PixelDomain); }
-function y2val(courbe, y) {	return (courbe.range[1] - ((y  - Bordure - LegendBordure) * courbe.PixelRange)); }
-function val2x(courbe, valx) {	return (( valx / courbe.PixelDomain) + Bordure); }
-function val2y(courbe, valy) {	return ( ((courbe.range[1] - valy) / courbe.PixelRange) + Bordure + LegendBordure); }
+function x2val(courbe, x) { return ((( x - Bordure)) * courbe.PixelDomain + courbe.ZoomX[0]); }
+function y2val(courbe, y) {	return (courbe.ZoomY[1] - ((y  - Bordure - LegendBordure) * courbe.PixelRange)); }
+function val2x(courbe, valx) {	return (( (valx - courbe.ZoomX[0]) / courbe.PixelDomain) + Bordure); }
+function val2y(courbe, valy) {	return ( ((courbe.ZoomY[1] - valy) / courbe.PixelRange) + Bordure + LegendBordure); }
 
 
 //////////////// Fonctions standart ///////////////
@@ -231,11 +225,13 @@ function bang()
 {
 	line(fctns[current]);
 }
+bang.immediate = 1;
 
 function msg_float(v)
 {
 	Interpolation(fctns[current], v);
 }
+msg_float.immediate = 1;
 
 function list()
 {
@@ -280,11 +276,14 @@ function onresize(w,h)
 //////////////// Fonctions Internes ///////////////
 function LectureInspector()
 {
+	if (LectureInspectorFlag)
+		return;
+	
 	var i, j;
 	var idx = 1; // jsarguments[0] == ej.function.js
 	if (jsarguments.length > 2) {
 		NbCourbes = jsarguments[idx++];
-		
+		post(NbCourbes, "\n");
 		init();	// création des courbes
 		
 		if (jsarguments.length != (10 + NbCourbes*18) ) {
@@ -311,7 +310,7 @@ function LectureInspector()
 		return;
 	}
 	else {
-		NbCourbes = 2;
+/* 		NbCourbes = 2; // C'est déjà défini et ça fout la merde avec l'initialisation save() */
 		init();	// création des courbes
 	}
 }
@@ -361,23 +360,17 @@ function PattrInterpError(v)
 }
 PattrInterpError.local = 1;
 
-function PattrToMany(v)
+function PattrTooMany(v)
 {
 	if (v >= 2048) {
-		if (PattrToMany.flag) {
-			perror("to many functions/points... pattr won't work...");
-			PattrToMany.flag = 0;
+		if (PattrTooMany.flag) {
+			perror("too many functions/points... pattr won't work...");
+			PattrTooMany.flag = 0;
 		}
-	} else if (v >= 256 && max.version < 455) {
-		if (PattrToMany.flag) {
-			perror("to many functions/points... pattr won't work...");
-			PattrToMany.flag = 0;
-		}
-
 	} else	
-		PattrToMany.flag = 1;
+		PattrTooMany.flag = 1;
 }
-PattrToMany.local = 1;
+PattrTooMany.local = 1;
 
 function MyDomain2String(v)
 {
@@ -423,7 +416,7 @@ function line(courbe)
 	
 	tmpF.NextFrom = 0;
 
-	for (i = 1, idx = 0; i < tmpF.np ; i++) {
+	for (i = 1, idx = 0; i < tmpF.np; i++) {
 		tmpArray[idx++] = tmpF.pa[i].valy;
 		tmpArray[idx++] = tmpF.pa[i].valx - tmpF.pa[i-1].valx;
 		if (tmpF.pa[i].sustain) {
@@ -474,8 +467,8 @@ function ValRecalculate()
 	// recalcule la position en fonction des valeurs
 	var c,i;
 	
-	for (c = 0 ; c < NbCourbes; c++) {
-		for (i = 0 ; i < fctns[c].np ; i++) {
+	for (c = 0; c < NbCourbes; c++) {
+		for (i = 0; i < fctns[c].np; i++) {
 			fctns[c]["pa"][i].x = val2x(fctns[c], fctns[c]["pa"][i].valx);
 			fctns[c]["pa"][i].y = val2y(fctns[c], fctns[c]["pa"][i].valy);
 		}
@@ -502,6 +495,60 @@ function ApplyAutoSustain()
 }
 ApplyAutoSustain.local = 1;
 
+function MyDomain(start, stop, courbe)
+{
+	var i;
+
+	courbe.domain[0] = start;
+	courbe.domain[1] = stop;
+
+	MyDomain2Zoom(courbe);
+	pixel2machin(courbe);
+	
+	for (i = 0; i < courbe.np; i++) {
+		courbe.pa[i].x = val2x(courbe, courbe.pa[i].valx);
+	}
+}
+MyDomain.local = 1;
+
+function MyDomain2Zoom(courbe)
+{
+	courbe.ZoomX[0] = courbe.domain[0];
+	courbe.ZoomX[1] = courbe.domain[1];
+}
+MyDomain2Zoom.local = 1;
+
+function MyRange2Zoom(courbe)
+{
+	courbe.ZoomY[0] = courbe.range[0];
+	courbe.ZoomY[1] = courbe.range[1];
+}
+MyRange2Zoom.local = 1;
+
+function MyThings2Zoom(courbe)
+{
+	MyDomain2Zoom(courbe);
+	MyRange2Zoom(courbe);
+}
+MyThings2Zoom.local = 1;
+
+function MySetDomain(start, stop, courbe)
+{
+	var i;
+	
+	courbe.domain[0] = start;
+	courbe.domain[1] = stop;
+
+	MyDomain2Zoom(courbe);
+	pixel2machin(courbe);
+	
+	for (i = 0; i < courbe.np; i++) {
+		courbe.pa[i].valx = x2val(courbe, courbe.pa[i].x);
+	}
+
+}
+MySetDomain.local = 1;
+
 function MyAutoRange(courbe)
 {
 	var i, min, max;
@@ -526,25 +573,30 @@ MyAutoRange.local = 1;
 
 function MyAutoDomain(courbe)
 {
-	var i, tmp ;
+	var i, min, max;
 
 	if (courbe.np < 2 )
 		return;
-	
-	tmp = courbe.pa[0].valx;
+
+	min = courbe.pa[0].valx;
+	max = courbe.pa[0].valx;
 	for(i = 1; i < courbe.np; i++) {
-		if (courbe.pa[i].valx > tmp)
-			tmp = courbe.pa[i].valx;
+		if (courbe.pa[i].valx > max)
+			max = courbe.pa[i].valx;
+		if (courbe.pa[i].valx < min)
+			min = courbe.pa[i].valx;
 	}
-	
-	domain(tmp, courbe);
+	if (min == max)	// si le minimum et le maximum sont identiques... on arrête.
+		return;
+
+	MyDomain(min, max, courbe);
 }
 MyAutoDomain.local = 1;
 
 function MyPasteColors(courbe)
 {
 	var c, j, idx;
-	var cp = CopyRight["copycolors"];
+	var cp = g["copycolors"];
 	idx = 0;
 	
 	if (cp.length == 0) {
@@ -665,15 +717,44 @@ MySmooth.local = 1;
 
 function pixel2machin(courbe)
 {
-	courbe.PixelDomain = courbe.domain / (BoxWidth-(Bordure*2));
-	courbe.PixelRange = (courbe.range[1] - courbe.range[0]) / (BoxHeight-((Bordure*2) + LegendBordure));
+	courbe.PixelDomain = (courbe.ZoomX[1] - courbe.ZoomX[0]) / (BoxWidth-(Bordure*2));
+	courbe.PixelRange = (courbe.ZoomY[1] - courbe.ZoomY[0]) / (BoxHeight-((Bordure*2) + LegendBordure));
+/* 	MyPointsInside(courbe); */
 }
 pixel2machin.local = 1.;
+
+function MyPointsInside(courbe)
+{
+	var i;
+
+	courbe.DisplayFrom[0] = 0;
+	courbe.DisplayFrom[1] = courbe.np - 1;
+
+	if (courbe.domain[0] == courbe.ZoomX[0] && courbe.domain[1] == courbe.ZoomX[1] && courbe.range[0] == courbe.ZoomY[1] && courbe.range[1] == courbe.ZoomY[1]) {
+		return;
+	}
+	
+	for (i = (courbe.np - 2); i > 1; i--) {
+		if ((courbe.pa[i-1].x < Bordure) == 1 && (courbe.pa[i].x < Bordure) == 1) {
+			courbe.DisplayFrom[0] = i;
+			break;
+		}
+	}
+
+	for (i = 2; i < (courbe.np - 2); i++) {
+		if ((courbe.pa[i-1].x > BoxWidth) == 1 && (courbe.pa[i].x > BoxWidth) == 1) {
+			courbe.DisplayFrom[1] = i;
+			break;
+		}
+	}
+	
+}
+MyPointsInside.local = 1;
 
 function ALLpixel2machin()
 {
 	var c;
-	for (c = 0 ; c < NbCourbes; c++) {
+	for (c = 0; c < NbCourbes; c++) {
 		pixel2machin(fctns[c]);
 	}
 }
@@ -796,67 +877,87 @@ function ArgsParser(courbe, msg, a)
 			case 1: Interpolation(courbe, a[0]); break;
 			case 2: AddPoint(courbe, val2x(courbe, a[0]), val2y(courbe, a[1])); NeedDraw++; NeedNotify++; break;
 			case 3: MovePoint(courbe, a[0], a[1], a[2]); NeedDraw++; NeedNotify++; break;
-			default: perror("to many arguments for message", msg); break;
+			default: perror("too many arguments for message", msg); break;
 		}
 		return ( (NeedNotify > 0 ? 2 : 0) + (NeedDraw > 0 ? 1 : 0) );	// sort de la fonction
 	}
 
 	switch (a[0]) {
 		case "bang":		line(courbe); tmpReturn++; break;
-		case "clear":		MyClear(courbe); NeedDraw++; NeedNotify++; tmpReturn++; break;
-		case "clearsustain":	MyClearSustain(courbe); NeedDraw++; NeedNotify++; tmpReturn++; break;
+		case "clear":		redrawoff(); MyClear(courbe); NeedDraw++; NeedNotify++; tmpReturn++; break;
+		case "clearsustain":	redrawoff(); MyClearSustain(courbe); NeedDraw++; NeedNotify++; tmpReturn++; break;
 		case "dump":		a.length == 2 ? MyDump(courbe, a[1]) : MyDump(courbe); tmpReturn++; break;
 		case "listdump":	a.length == 2 ? MyListDump(courbe, a[1]) : MyListDump(courbe); tmpReturn++; break;
 		case "fix":			if (a.length == 3) { FixPoint(courbe, a[1], a[2]); } ; NeedNotify++; tmpReturn++; break;
 		case "unfix":		MyUnfix(courbe); NeedNotify++; tmpReturn++; break;
-		case "name":		if (a.length == 2) { MyName(courbe, a[1]);} ; getname(); NeedDraw++; NeedNotify++; tmpReturn++; break;
+		case "name":		redrawoff(); if (a.length == 2) { MyName(courbe, a[1]);} ; getname(); NeedDraw++; NeedNotify++; tmpReturn++; break;
 		case "next":		MyNext(courbe); tmpReturn++; break;
 		case "nth":			if (a.length == 2) { MyNth(a[1], courbe); } ; tmpReturn++; break;
-		case "sustain":		if (a.length == 3) { MySustain(a[1], a[2], courbe); } ; NeedDraw++; NeedNotify++; tmpReturn++; break;
-		case "domain":		if (a.length == 2) { domain(a[1], courbe);} ; NeedDraw++; NeedNotify++; tmpReturn++; break;
-		case "setdomain":	if (a.length == 2) { setdomain(a[1], courbe);} ; NeedDraw++; NeedNotify++; tmpReturn++; break;
-		case "range":		if (a.length == 3) { range(a[1], a[2], courbe);};  NeedDraw++; NeedNotify++; tmpReturn++; break;
-		case "setrange":	if (a.length == 3) { setrange(a[1], a[2], courbe);} ; NeedDraw++; NeedNotify++; tmpReturn++; break;
-		case "autodomain":	MyAutoDomain(courbe); NeedDraw++; NeedNotify++; tmpReturn++; break;
-		case "autorange":	MyAutoRange(courbe); NeedDraw++; NeedNotify++; tmpReturn++; break;
-		case "removeduplicate": 	MyRemoveDuplicate(courbe); NeedDraw++; NeedNotify++; tmpReturn++; break;
-		case "smooth":		MySmooth(courbe); NeedDraw++; NeedNotify++; tmpReturn++; break;
-		case "gridstep":	if (a.length == 2) { MyGridStep(courbe, a[1]); }; NeedDraw++; NeedNotify++; tmpReturn++; break;
-		case "brgb":		SetColor(courbe, "brgb", a[1], a[2], a[3]); NeedDraw++; tmpReturn++; break;
-		case "frgb":		SetColor(courbe, "frgb", a[1], a[2], a[3]); NeedDraw++; tmpReturn++; break;
-		case "rgb2":		SetColor(courbe, "rgb2", a[1], a[2], a[3]); NeedDraw++; tmpReturn++; break;
-		case "rgb3":		SetColor(courbe, "rgb3", a[1], a[2], a[3]); NeedDraw++; tmpReturn++; break;
-		case "rgb4":		SetColor(courbe, "rgb4", a[1], a[2], a[3]); NeedDraw++; tmpReturn++; break;
-		case "rgb5":		SetColor(courbe, "rgb5", a[1], a[2], a[3]); NeedDraw++; tmpReturn++; break;
+		case "sustain":		redrawoff(); if (a.length == 3) { MySustain(a[1], a[2], courbe); } ; NeedDraw++; NeedNotify++; tmpReturn++; break;
+		case "domain":
+							redrawoff(); 
+							if (a.length == 2)
+								MyDomain(0, a[1], courbe);
+							else if (a.length == 3)
+								MyDomain(a[1], a[2], courbe);
+							else
+								perror("bad argument(s) for message domain"); 
+							NeedDraw++; NeedNotify++; tmpReturn++; break;
+		case "setdomain":	
+							redrawoff(); 
+							if (a.length == 2)
+								MySetDomain(0, a[1], courbe);
+							else if (a.length == 3)
+								MySetDomain(a[1], a[2], courbe);
+							else
+								perror("bad argument(s) for message setdomain"); 
+							NeedDraw++; NeedNotify++; tmpReturn++; break;
+		case "range":		redrawoff(); if (a.length == 3) { range(a[1], a[2], courbe);};  NeedDraw++; NeedNotify++; tmpReturn++; break;
+		case "setrange":	redrawoff(); if (a.length == 3) { setrange(a[1], a[2], courbe);} ; NeedDraw++; NeedNotify++; tmpReturn++; break;
+		case "zoom_x":		redrawoff(); zoom_x(a[1], a[2], courbe); NeedDraw++; tmpReturn++; break;
+		case "zoom_y":		redrawoff(); zoom_y(a[1], a[2], courbe); NeedDraw++; tmpReturn++; break;
+		case "zoomout":		redrawoff(); MyZoomOut(courbe); NeedDraw++; tmpReturn++; break;
+		case "autodomain":	redrawoff(); MyAutoDomain(courbe); NeedDraw++; NeedNotify++; tmpReturn++; break;
+		case "autorange":	redrawoff(); MyAutoRange(courbe); NeedDraw++; NeedNotify++; tmpReturn++; break;
+		case "removeduplicate": 	redrawoff(); MyRemoveDuplicate(courbe); NeedDraw++; NeedNotify++; tmpReturn++; break;
+		case "smooth":		redrawoff(); MySmooth(courbe); NeedDraw++; NeedNotify++; tmpReturn++; break;
+		case "gridstep":	redrawoff(); if (a.length == 2) { MyGridStep(courbe, a[1]); }; NeedDraw++; NeedNotify++; tmpReturn++; break;
+		case "brgb":		redrawoff(); SetColor(courbe, "brgb", a[1], a[2], a[3]); NeedDraw++; tmpReturn++; break;
+		case "frgb":		redrawoff(); SetColor(courbe, "frgb", a[1], a[2], a[3]); NeedDraw++; tmpReturn++; break;
+		case "rgb2":		redrawoff(); SetColor(courbe, "rgb2", a[1], a[2], a[3]); NeedDraw++; tmpReturn++; break;
+		case "rgb3":		redrawoff(); SetColor(courbe, "rgb3", a[1], a[2], a[3]); NeedDraw++; tmpReturn++; break;
+		case "rgb4":		redrawoff(); SetColor(courbe, "rgb4", a[1], a[2], a[3]); NeedDraw++; tmpReturn++; break;
+		case "rgb5":		redrawoff(); SetColor(courbe, "rgb5", a[1], a[2], a[3]); NeedDraw++; tmpReturn++; break;
 
-		case "pastefunction":	MyPasteFunction(courbe); NeedDraw++; NeedNotify++; tmpReturn++; break;
-		case "pastecolors":	MyPasteColors(courbe); NeedDraw++; tmpReturn++; break;
+		case "pastefunction":	redrawoff(); MyPasteFunction(courbe); NeedDraw++; NeedNotify++; tmpReturn++; break;
+		case "pastecolors":	redrawoff(); MyPasteColors(courbe); NeedDraw++; tmpReturn++; break;
 
 		// get things
-		case "getdomain":	getdomain(courbe); tmpReturn++; break;
-		case "getrange":	getrange(courbe); tmpReturn++; break;
-		case "getfix":		getfix(courbe); tmpReturn++; break;
-		case "getsustain":	getsustain(courbe); tmpReturn++; break;
-		case "getgridstep":	getgridstep(courbe); tmpReturn++; break;
-		case "getbrgb":		GetColor(courbe, "brgb"); tmpReturn++; break;
-		case "getfrgb":		GetColor(courbe, "frgb"); tmpReturn++; break;
-		case "getrgb2":		GetColor(courbe, "rgb2"); tmpReturn++; break;
-		case "getrgb3":		GetColor(courbe, "rgb3"); tmpReturn++; break;
-		case "getrgb4":		GetColor(courbe, "rgb4"); tmpReturn++; break;
-		case "getrgb5":		GetColor(courbe, "rgb5"); tmpReturn++; break;
-		case "getnbpoints":	getnbpoints(courbe); tmpReturn++; break;
+		case "getdomain":	getdomain(courbe); break;
+		case "getrange":	getrange(courbe); break;
+		case "getfix":		getfix(courbe); break;
+		case "getsustain":	getsustain(courbe); break;
+		case "getgridstep":	getgridstep(courbe); break;
+		case "getbrgb":		GetColor(courbe, "brgb"); break;
+		case "getfrgb":		GetColor(courbe, "frgb"); break;
+		case "getrgb2":		GetColor(courbe, "rgb2"); break;
+		case "getrgb3":		GetColor(courbe, "rgb3"); break;
+		case "getrgb4":		GetColor(courbe, "rgb4"); break;
+		case "getrgb5":		GetColor(courbe, "rgb5"); break;
+		case "getnbpoints":	getnbpoints(courbe); break;
+		case "getzoom_x":	getzoom_x(courbe); break;
+		case "getzoom_y":	getzoom_y(courbe); break;
 
-		default: 			{
-								if (msg == "all") {
-									if (DisplayOneTime == 1) {
-										perror("bad arguments for message all");
-										DisplayOneTime = 0;
-									}
-								} else
-									perror("doesn't understand", msg);
-								tmpReturn++;
-								break;
-							}
+		default: 			// message d'erreurs en fonction du type de message all ou pas
+							if (msg == "all") {
+								if (DisplayOneTime == 1) {
+									perror("bad arguments for message all");
+									DisplayOneTime = 0;
+								}
+							} else
+								perror("doesn't understand", msg);
+							tmpReturn++;
+							break;
 	}
 	
 	if (tmpReturn == -1)
@@ -869,7 +970,7 @@ ArgsParser.local = 1;
 function WaitALittleBit()
 {
 	// attend 750ms avant de redessiner
-	tsk = new Task(function() { if ( ! tsk.running) { draw(); } }, this);
+	tsk = new Task(function() { if (! tsk.running) { draw(); } }, this);
 	tsk.interval = 750;
 	tsk.repeat(1);
 }
@@ -896,7 +997,7 @@ function MyNext(courbe)
 		return;
 	}
 	
-	for (i = (courbe.NextFrom + 1), idx = 0; i < courbe.np ; i++) {
+	for (i = (courbe.NextFrom + 1), idx = 0; i < courbe.np; i++) {
 		tmpArray[idx++] = courbe.pa[i].valy;
 		tmpArray[idx++] = courbe.pa[i].valx - courbe.pa[i-1].valx;
 		if (courbe.pa[i].sustain) {
@@ -941,7 +1042,7 @@ MyClear.local = 1;
 function MyClearSustain(courbe)
 {
 	var i;
-	for (i = 0; i < courbe.np ; i++)
+	for (i = 0; i < courbe.np; i++)
 		courbe.pa[i].sustain = 0;
 }
 MyClearSustain.local = 1;
@@ -969,7 +1070,7 @@ MyFloat2Color.local = 1;
 function MyGridStep(courbe, v)
 {
 	if (typeof(v) == "number" && v > 0) {
-		if ( (courbe.domain / v) < (BoxWidth-(Bordure*2) / 4) )
+		if ( ((courbe.ZoomX[1] - courbe.ZoomX[0]) / v) < (BoxWidth-(Bordure*2) / 4) )
 			courbe.GridStep = v;
 	} else
 		perror("bad argument for message gridstep");
@@ -986,13 +1087,13 @@ function MyDump(courbe, sendname)
 		return;
 
 	if (arguments.length == 1) {
-		for (i = 0; i < tmpF.np ; i++) {
-			outlet(DUMP, tmpF.name, tmpF.pa[i].valx, tmpF.pa[i].valy);
+		for (i = 0; i < tmpF.np; i++) {
+			outlet(DUMP_OUTLET, tmpF.name, tmpF.pa[i].valx, tmpF.pa[i].valy);
 		}
 		return;
 	}
 	//else -> on envoie vers un send
-	for (i = 0; i < tmpF.np ; i++) {
+	for (i = 0; i < tmpF.np; i++) {
 		str = tmpF.name + " " + tmpF.pa[i].valx.toFixed(6) + " " + tmpF.pa[i].valy.toFixed(6);
 		g.dump = str.split(" ");	// String -> Array
 		g.sendnamed(sendname,"dump");
@@ -1009,13 +1110,13 @@ function MyListDump(courbe, sendname)
 	if (! tmpF.np)
 		return;
 	
-	for (i = 0, idx = 0; i < tmpF.np ; i++) {
+	for (i = 0, idx = 0; i < tmpF.np; i++) {
 		tmpArray[idx++] = tmpF.pa[i].valx;
 		tmpArray[idx++] = tmpF.pa[i].valy;
 	}
 
 	if (arguments.length == 1) {
-		outlet(DUMP, tmpF.name, tmpArray);
+		outlet(DUMP_OUTLET, tmpF.name, tmpArray);
 		return;
 	}
 	//else -> on envoie vers un send
@@ -1030,27 +1131,14 @@ MyListDump.local = 1;
 
 function MyName(courbe, name)
 {
-//	var tmpF = CurrentOrArgument(courbe, arguments, 0);
-	var tmpF = courbe;
-	tmpF.name = name;
+	courbe.name = name;
 }
 MyName.local = 1;
 
-function MySetValue(a)
-{
-}
-MySetValue.local = 1;
-
 function perror()
 {
-	var string = "• error: ej.function:";
-	var i;
-	
-	for (i=0; i < arguments.length; i++) {
-		string += " " + arguments[i];
-	}
-	string += "\n";
-	post(string);
+	ejies.scriptname = "ej.function.js";
+	ejies.perror(arguments);
 }
 perror.local = 1;
 
@@ -1095,7 +1183,7 @@ function all()
 	NeedDraw = 0;
 	DisplayOneTime = 1;
 	
-	for (i = 0, tmp = 0; i < NbCourbes ; i++) {
+	for (i = 0, tmp = 0; i < NbCourbes; i++) {
 		tmp = ArgsParser(fctns[i], "all" , arguments, "\n");
 		if (NeedNotify == 0)
 			NeedNotify = tmp & 2 > 0 ? 1 : 0;
@@ -1106,7 +1194,7 @@ function all()
 	if (NeedNotify)
 		notifyclients();
 	if (NeedDraw)
-		draw();
+		redrawon();
 }
 
 function args4insp()
@@ -1150,19 +1238,19 @@ function autosustain(v)
 function autorange()
 {
 	MyAutoRange(fctns[current]);
-	notifyclients();
+	UpdateDisplay();
 }
 
 function autodomain()
 {
 	MyAutoDomain(fctns[current]);
-	notifyclients();
+	UpdateDisplay();
 }
 
 function addfunction()
 {
 	if (arguments.length != 1) {
-		perror("missing argument for message addfunction");
+		perror("missing argument (name) for message addfunction");
 		return;
 	}
 	
@@ -1177,7 +1265,7 @@ function addfunction()
 function insertfunction()
 {
 	if (arguments.length != 1) {
-		perror("missing argument for message insertfunction");
+		perror("missing argument (name) for message insertfunction");
 		return;
 	}
 
@@ -1348,7 +1436,7 @@ function active()
 	var i;
 	
 	if (tmpArray.length > (NbCourbes + 1)) {
-		perror("to many arguments for message active");
+		perror("too many arguments for message active");
 		return;
 	}
 	
@@ -1439,6 +1527,7 @@ function next()
 	else
 		perror("extra arguments for message next");
 }
+next.immediate = 1;
 
 function sustain()
 {
@@ -1456,34 +1545,38 @@ function rgb3() { SetColor(fctns[current], "rgb3", arguments); draw(); }
 function rgb4() { SetColor(fctns[current], "rgb4", arguments); draw(); }
 function rgb5() { SetColor(fctns[current], "rgb5", arguments); draw(); }
 
-function domain(v, courbe)
+function domain()
 {
-	var tmpF = CurrentOrArgument(courbe, arguments, 1);
-	var i;
-	
-	tmpF.domain = Math.max(0.,v);
-	pixel2machin(tmpF);
-	
-	for (i = 0; i < tmpF.np; i++) {
-		tmpF.pa[i].x = val2x(tmpF, tmpF.pa[i].valx);
+	switch (arguments.length) {
+		case 1:
+				MyDomain(0, arguments[0], fctns[current]);
+				break;
+		case 2:
+				MyDomain(arguments[0], arguments[1], fctns[current]);
+				break;
+		default:
+				perror("bad argument(s) for message domain");
+				return;
 	}
 
 	UpdateDisplay();
 }
 
-function setdomain(v, courbe)
+function setdomain()
 {
-	var tmpF = CurrentOrArgument(courbe, arguments, 1);
-	var i;
-	
-	tmpF.domain = Math.max(0.,v);
-	pixel2machin(tmpF);
-	
-	for (i = 0; i < tmpF.np; i++) {
-		tmpF.pa[i].valx = x2val(tmpF, tmpF.pa[i].x);
+	switch (arguments.length) {
+		case 1:
+				MySetDomain(0, arguments[0], fctns[current]);
+				break;
+		case 2:
+				MySetDomain(arguments[0], arguments[1], fctns[current]);
+				break;
+		default:
+				perror("bad argument(s) for message setdomain");
+				return;
 	}
-
-	UpdateDisplay();
+	
+	notifyclients();	// pas besoin d'un draw ça ne change pas la position des points.
 }
 
 function range(a, b, courbe)
@@ -1492,11 +1585,12 @@ function range(a, b, courbe)
 	var i;
 	
 	if ( (b - a)  < 0) {
-		pos(ERROR, "\n");
+		perror("bad values for message range");
 		return ;
 	}
 	
 	tmpF.range = [a, b];
+	MyRange2Zoom(tmpF);
 	pixel2machin(tmpF);
 	
 	for (i = 0; i < tmpF.np; i++) {
@@ -1512,18 +1606,19 @@ function setrange(a, b, courbe)
 	var i;
 
 	if ( (b - a)  < 0) {
-		pos(ERROR, "\n");
+		perror("bad values for message setrange");
 		return ;
 	}
 	
 	tmpF.range = [a, b];
+	MyRange2Zoom(tmpF);
 	pixel2machin(tmpF);
 	
 	for (i = 0; i < tmpF.np; i++) {
 		tmpF.pa[i].valy = y2val(tmpF, tmpF.pa[i].y);
 	}
 
-	UpdateDisplay();
+	notifyclients();
 }
 
 function fswitch() { SwitchCurrent(); }
@@ -1545,7 +1640,7 @@ function resetall()
 	// initialisation de propriétés de variables
 	EditedWithMouse.state = 0;
 	PattrInterpError.flag = 0;
-	PattrToMany.flag = 1;
+	PattrTooMany.flag = 1;
 	current = 0;
 	UpdateDisplay();
 }
@@ -1565,7 +1660,7 @@ function smooth()
 function copycolors()
 {
 	var c, i, j, idx;
-	var cp = CopyRight["copycolors"];
+	var cp = g["copycolors"];
 	idx = 0;
 	c = -1;
 	
@@ -1603,6 +1698,67 @@ function pastecolors()
 	draw();
 }
 
+function zoom_x(start, stop, courbe)
+{
+	var i;
+	var tmpF = CurrentOrArgument(courbe, arguments, 2);
+	
+	if (arguments.length == 0) {
+		start = 0;
+		stop = 1;
+	} else if (arguments.length == 1) {
+		perror("missing argument for message zoom_x");
+		return;
+	}
+
+	tmpF.ZoomX[0] = start * (tmpF.domain[1] - tmpF.domain[0]) + tmpF.domain[0];
+	tmpF.ZoomX[1] = stop * (tmpF.domain[1] - tmpF.domain[0]) + tmpF.domain[0];
+	pixel2machin(tmpF);
+	
+	for (i = 0; i < tmpF.np; i++) {
+		tmpF.pa[i].x = val2x(tmpF, tmpF.pa[i].valx);
+	}
+
+	draw();
+}
+
+function zoom_y(start, stop, courbe)
+{
+	var i;
+	var tmpF = CurrentOrArgument(courbe, arguments, 2);
+	
+	if (arguments.length == 0) {
+		start = 0;
+		stop = 1;
+	} else if (arguments.length == 1) {
+		perror("missing argument for message zoom_y");
+		return;
+	}
+	
+	tmpF.ZoomY[0] = start * (tmpF.range[1] - tmpF.range[0]) + tmpF.range[0];
+	tmpF.ZoomY[1] = stop * (tmpF.range[1] - tmpF.range[0]) + tmpF.range[0];
+	pixel2machin(tmpF);
+
+	for (i = 0; i < tmpF.np; i++) {
+		tmpF.pa[i].y = val2y(tmpF, tmpF.pa[i].valy);
+	}
+
+	draw();
+}
+
+function zoomout()
+{
+	redrawoff();				// On ne passe dans cette fonction que quand elle est appelée depuis l'extérieur
+	MyZoomOut(fctns[current]);
+	redrawon();					// on ne réaffiche donc qu'à la sortie, une seule fois.
+}
+
+function MyZoomOut(courbe)
+{
+	zoom_x(0, 1, courbe);
+	zoom_y(0, 1, courbe);
+}
+MyZoomOut.local = 1;
 
 
 
@@ -1660,8 +1816,9 @@ function onclick(x,y,but,cmd,shift,capslock,option,ctrl)
 				EditedWithMouse.state++;
 				EditedWithMouse();
 				notifyclients();
-				onidle(x, y);
-				if (! IdleMode) { draw(); }	// si idle mode est désactivé on redessine
+/* 				MyPointsInside(tmpF); */
+				onidle(x, y);	// pour ne pas afficher la position (puisqu'on y est)
+//				draw();
 				return;
 			}
 			break;
@@ -1678,9 +1835,10 @@ function onclick(x,y,but,cmd,shift,capslock,option,ctrl)
 		SelectedPoint = AddPoint(tmpF, x, y);
 		ApplyAutoSustain();
 		EditedWithMouse.state++;
+/* 		MyPointsInside(tmpF); */
 		notifyclients();
 		onidle(x,y);
-		if (! IdleMode) { draw(); }
+//		draw();
 	}
 }
 
@@ -1835,6 +1993,20 @@ function getactive()
 	outlet(DUMPOUT, "active", tmpArray);
 }
 
+function getzoom_x(courbe)
+{
+	var tmpF = CurrentOrArgument(courbe, arguments, 0);
+	outlet(DUMPOUT, tmpF.name, "zoom_x",	tmpF.ZoomX[0] / (tmpF.domain[1] - tmpF.domain[0]) - tmpF.domain[0],
+											tmpF.ZoomX[1] / (tmpF.domain[1] - tmpF.domain[0]) - tmpF.domain[0]);
+}
+
+function getzoom_y(courbe)
+{
+	var tmpF = CurrentOrArgument(courbe, arguments, 0);
+	outlet(DUMPOUT, tmpF.name, "zoom_y",	tmpF.ZoomY[0] / (tmpF.range[1] - tmpF.range[0]) - tmpF.range[0],
+											tmpF.ZoomY[1] / (tmpF.range[1] - tmpF.range[0]) - tmpF.range[0]);
+}
+
 
 
 
@@ -1848,96 +2020,96 @@ function setvalueof()
 	
 	RedrawEnable = 0;
 			
-	var FunctionVersion = arguments[idx++];
+	var FunctionVersionCheck = arguments[idx++];
 
-	if (FunctionVersion == 1) {
-		// si le nombre de courbe n'est pas un entier, on quitte de toute urgence.
-		if ( (arguments[idx] % 1) != 0) {
-			PattrInterpError(0);
-			return;
-		}
-
-		var OldNbCourbes = NbCourbes;
-		NbCourbes = arguments[idx++];
-		
-		while (OldNbCourbes < NbCourbes) {
-	 		fctns[OldNbCourbes] = new Courbe();
-			pixel2machin(fctns[OldNbCourbes++]);
-		}
-
-		while (OldNbCourbes > NbCourbes) {
-			fctns.splice(--OldNbCourbes, 1);
-			// si la courbe qu'on vient de supprimer était la courbe courante... current = 0
-			if (current >= NbCourbes)
-				current = 0;
-		}
-
-		for (i=0; i< NbCourbes; i++) {
-			if ( (arguments[i+2] % 1) != 0) {
-				PattrInterpError(1);
-				return;
-			}
-		}
-
-		AllowEdit = 0;
-		
-		BeginCurve = new Array();
-		for (i = 0; i < arguments.length; i++) {
-			if (typeof(arguments[i]) != "number")
-				BeginCurve[BeginCurve.length] = i;
-		}
-		
-		for (i=0; i< NbCourbes; i++) {
-			var LastDomain, LastRangeMin, LastRangeMax;
-			var NeedUpdate = 0;
-			idx	= BeginCurve[i]
-			fctns[i].name = arguments[idx++];
-			
-			LastDomain = fctns[i].domain;
-			fctns[i].domain = arguments[idx++];
-			if (LastDomain != fctns[i].domain) { NeedUpdate++; }
-			
-			LastRangeMin = fctns[i].range[0];
-			LastRangeMax = fctns[i].range[1];
-			fctns[i].range[0] = arguments[idx++];
-			fctns[i].range[1] = arguments[idx++];
-
-			if (LastRangeMin != fctns[i].range[0]) { NeedUpdate++; }
-			if (LastRangeMax != fctns[i].range[1]) { NeedUpdate++; }
-			
-			if (NeedUpdate) { pixel2machin(fctns[i]); }	// update si ça a changé par rapport au range précédent
-			
-			fctns[i].GridStep = arguments[idx++];
-			
-			OldNp = fctns[i].np;
-			fctns[i].np = (arguments[i+2]);
-
-			// création des points s'ils ne sont pas présents dans la courbe
-			while (OldNp < fctns[i].np) {
-				fctns[i]["pa"][OldNp++] = new Point();
-			}
-
-			// suppression des points n'existant plus dans la courbe
-			while (OldNp > fctns[i].np) {
-				fctns[i]["pa"].splice(--OldNp, 1);
-			}
-
-			for (p = 0; p < fctns[i].np; p++) {
-				fctns[i]["pa"][p].valx = arguments[idx++];
-				fctns[i]["pa"][p].valy = arguments[idx++];
-				fctns[i]["pa"][p].sustain = arguments[idx] & 2 ? 1 : 0; // pas d'incrémentation
-				fctns[i]["pa"][p].fix = arguments[idx++] & 1;	// elle est faite ici.
-			}
-		}
-		
-		ValRecalculate();		
-		RedrawEnable = 1;
-		AllowEdit = 1;
-		PattrInterpError.flag = 0;
-		UpdateDisplay();
+	// si le nombre de courbe n'est pas un entier, on quitte de toute urgence.
+	if ( (arguments[idx] % 1) != 0) {
+		PattrInterpError(0);
 		return;
 	}
-	perror("bad version number - interpolation aborted");
+
+	var OldNbCourbes = NbCourbes;
+	NbCourbes = arguments[idx++];
+	
+	while (OldNbCourbes < NbCourbes) {
+		fctns[OldNbCourbes] = new Courbe();
+		MyThings2Zoom(fctns[OldNbCourbes]);
+		pixel2machin(fctns[OldNbCourbes++]);
+	}
+
+	while (OldNbCourbes > NbCourbes) {
+		fctns.splice(--OldNbCourbes, 1);
+		// si la courbe qu'on vient de supprimer était la courbe courante... current = 0
+		if (current >= NbCourbes)
+			current = 0;
+	}
+
+	for (i = 0; i < NbCourbes; i++) {
+		if ( (arguments[i+2] % 1) != 0) {
+			PattrInterpError(1);
+			return;
+		}
+	}
+
+	AllowEdit = 0;
+	
+	BeginCurve = new Array();
+	for (i = 0; i < arguments.length; i++) {
+		if (typeof(arguments[i]) != "number")
+			BeginCurve[BeginCurve.length] = i;
+	}
+	
+	for (i = 0; i < NbCourbes; i++) {
+		var LastDomain, LastRangeMin, LastRangeMax;
+		var NeedUpdate = 0;
+		idx	= BeginCurve[i]
+		fctns[i].name = arguments[idx++];
+
+		// depuis la version 1.52 domaine contient deux limites.
+		if (FunctionVersionCheck == 1 )
+			fctns[i].domain[0] = 0;
+		else
+			fctns[i].domain[0] = parseFloat(arguments[idx++]);
+
+		fctns[i].domain[1] = parseFloat(arguments[idx++]);
+
+		fctns[i].range[0] = parseFloat(arguments[idx++]);
+		fctns[i].range[1] = parseFloat(arguments[idx++]);
+
+		MyThings2Zoom(fctns[i]);
+		
+		fctns[i].GridStep = arguments[idx++];
+		
+		OldNp = fctns[i].np;
+		fctns[i].np = (arguments[i+2]);
+
+		// création des points s'ils ne sont pas présents dans la courbe
+		while (OldNp < fctns[i].np) {
+			fctns[i]["pa"][OldNp++] = new Point();
+		}
+
+		// suppression des points n'existant plus dans la courbe
+		while (OldNp > fctns[i].np) {
+			fctns[i]["pa"].splice(--OldNp, 1);
+		}
+
+		for (p = 0; p < fctns[i].np; p++) {
+			fctns[i]["pa"][p].valx = arguments[idx++];
+			fctns[i]["pa"][p].valy = arguments[idx++];
+			fctns[i]["pa"][p].sustain = arguments[idx] & 2 ? 1 : 0; // pas d'incrémentation
+			fctns[i]["pa"][p].fix = arguments[idx++] & 1;	// elle est faite ici.
+		}
+	}
+
+ 	ALLpixel2machin();
+	ValRecalculate();
+	RedrawEnable = 1;
+	AllowEdit = 1;
+	PattrInterpError.flag = 0;
+	UpdateDisplay();
+
+	if ( FunctionVersionCheck < 1 && FunctionVersionCheck > 2 )
+		perror("bad version number - interpolation aborted");
 }
 
 function getvalueof()
@@ -1945,7 +2117,7 @@ function getvalueof()
 	var i, j, p;
 	var tmpData = new Array();
 	var idx = 0;
-
+	
 	//versioning to allow for future changes (technoui style...)
 	tmpData[idx++] = FUNCTIONVERSION;
 	tmpData[idx++] = NbCourbes;
@@ -1956,7 +2128,8 @@ function getvalueof()
 	
 	for (i = 0; i < NbCourbes; i++) {
 		tmpData[idx++] = fctns[i].name;
-		tmpData[idx++] = fctns[i].domain;
+		tmpData[idx++] = fctns[i].domain[0];
+		tmpData[idx++] = fctns[i].domain[1];
 		tmpData[idx++] = fctns[i].range[0];
 		tmpData[idx++] = fctns[i].range[1];
 		tmpData[idx++] = fctns[i].GridStep;
@@ -1969,9 +2142,51 @@ function getvalueof()
 		}
 	}
 
-	PattrToMany(tmpData.length);
+	PattrTooMany(tmpData.length);
 
 	return tmpData;
+}
+
+function save()
+{
+/* 	return; */
+/* 	var tmpArray = new Array(); */
+/* 	var idx = 0; */
+
+	RedrawEnable = 0;
+	
+	embedmessage("CreateNFunctions", NbCourbes);
+	embedmessage("legend", Legend);
+	embedmessage("grid", GridMode);
+	embedmessage("snap2grid", Snap2Grid);
+	embedmessage("hiddenpoint", HiddenPointDisplay);
+	embedmessage("clickadd", ClickAdd);
+	embedmessage("clickmove", ClickAdd);
+	embedmessage("autosustain", AutoSustain);
+	embedmessage("timedisplay", TimeFlag);
+	
+	// Il faut faire les couleurs
+	
+	RedrawEnable = 1;
+	
+/* 	for (i = 0; i < NbCourbes; i++) { */
+/* 		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(fctns[i].brgb[j] * 255); } */
+/* 		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(fctns[i].frgb[j] * 255); } */
+/* 		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(fctns[i].rgb2[j] * 255); } */
+/* 		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(fctns[i].rgb3[j] * 255); } */
+/* 		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(fctns[i].rgb4[j] * 255); } */
+/* 		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(fctns[i].rgb5[j] * 255); } */
+/* 	} */
+/*  */
+
+	RedrawEnable = 1;
+}
+
+function CreateNFunctions(v)
+{
+	NbCourbes = v;
+	init();
+	LectureInspectorFlag = 1;
 }
 
 function copyfunction()
@@ -1996,17 +2211,17 @@ function copyfunction()
 		return;
 	}
 
-	var cp = CopyRight["copy"];	// c'est moins long
-	cp.length = 0;	// vide le "presse papier"
+	var cp = g["copy"];	// c'est moins long
+	cp.length = 0;	// "vide le presse papier"
 
 	cp[idx++] = fctns[c].np;	
 	cp[idx++] = fctns[c].name;
-	cp[idx++] = fctns[c].domain;
+	cp[idx++] = fctns[c].domain[0];
+	cp[idx++] = fctns[c].domain[1];
 	cp[idx++] = fctns[c].range[0];
 	cp[idx++] = fctns[c].range[1];
 	cp[idx++] = fctns[c].GridStep;
-	cp[idx++] = fctns[c].PixelDomain;
-	cp[idx++] = fctns[c].PixelRange;
+	cp[idx++] = fctns[c].display;
 
 	for (p = 0; p < fctns[c].np; p++) {
 		cp[idx++] = fctns[c]["pa"][p].x;
@@ -2023,7 +2238,7 @@ function pastefunction()
 	if (! arguments.length)
 		MyPasteFunction(fctns[current]);
 	else
-		perror("extra arguments for message pastecolors");
+		perror("extra arguments for message pastefunction");
 	
 	getname();			// il se peut que le nom soit changé
 	UpdateDisplay();
@@ -2035,7 +2250,7 @@ function MyPasteFunction(courbe)
 	var c, p;
 	var idx = 0;
 	var OldNp;
-	var cp = CopyRight["copy"];	// c'est moins long
+	var cp = g["copy"];	// c'est moins long
 	
 	if (cp.length == 0) {
 		perror("before pasting, you have to copy something");
@@ -2056,12 +2271,12 @@ function MyPasteFunction(courbe)
 	}
 
 	courbe.name = cp[idx++];
-	courbe.domain = cp[idx++];
+	courbe.domain[0] = cp[idx++];
+	courbe.domain[1] = cp[idx++];
 	courbe.range[0] = cp[idx++];
 	courbe.range[1] = cp[idx++];
 	courbe.GridStep = cp[idx++];
-	courbe.PixelDomain = cp[idx++];
-	courbe.PixelRange = cp[idx++];
+	courbe.display = cp[idx++];
 	
 	for (p = 0; p < courbe.np; p++) {
 		courbe["pa"][p].x = cp[idx++];
@@ -2070,7 +2285,10 @@ function MyPasteFunction(courbe)
 		courbe["pa"][p].valy = cp[idx++];
 		courbe["pa"][p].sustain = cp[idx++];
 		courbe["pa"][p].fix = cp[idx++];
-	}		
+	}
+	
+	MyThings2Zoom(courbe);
+	pixel2machin(courbe);
 }
 MyPasteFunction.local = 1;
 
@@ -2078,9 +2296,8 @@ function insertpaste()
 {
 	var c, p, idx;
 	var OldNp;
-	var cp = CopyRight["copy"];	// c'est moins long
+	var cp = g["copy"];	// c'est moins long
 	p = idx = 0;
-	c = current;
 	
 	if (cp.length == 0) {
 		perror("before inserting and pasting, you have to copy something");
@@ -2090,22 +2307,25 @@ function insertpaste()
 	// insertion de la nouvelle courbe (le nom est bidon, puisqu'on va le remplir après)
 	fctns.splice(current, 0, new Courbe("tmpName"));
 	NbCourbes++;
+
+	fctns[current].np = cp[idx++];
+	fctns[current].name = cp[idx++];
+	fctns[current].domain[0] = cp[idx++];
+	fctns[current].domain[1] = cp[idx++];
+	fctns[current].range[0] = cp[idx++];
+	fctns[current].range[1] = cp[idx++];	
+	fctns[current].GridStep = cp[idx++];
+	fctns[current].display = cp[idx++];
 	
-	fctns[c].np = cp[idx++];
-	fctns[c].name = cp[idx++];
-	fctns[c].domain = cp[idx++];
-	fctns[c].range[0] = cp[idx++];
-	fctns[c].range[1] = cp[idx++];	
-	fctns[c].GridStep = cp[idx++];
-	fctns[c].PixelDomain = cp[idx++];
-	fctns[c].PixelRange = cp[idx++];
-	
-	for (p = 0; p < fctns[c].np; p++) {
-		fctns[c]["pa"][p] = new Point(cp[idx], cp[idx+1], cp[idx+2], cp[idx+3]);
+	for (p = 0; p < fctns[current].np; p++) {
+		fctns[current]["pa"][p] = new Point(cp[idx], cp[idx+1], cp[idx+2], cp[idx+3]);
 		idx += 4;
-		fctns[c]["pa"][p].sustain = cp[idx++];
-		fctns[c]["pa"][p].fix = cp[idx++];
+		fctns[current]["pa"][p].sustain = cp[idx++];
+		fctns[current]["pa"][p].fix = cp[idx++];
 	}		
+
+	MyThings2Zoom(fctns[current]);
+	pixel2machin(fctns[current]);
 
 	getname();		// mise à jour du menu
 	UpdateDisplay();
@@ -2142,87 +2362,88 @@ function read(filename)
 		var c, i;
 		var OldNp;
 		
-		if (tmpLine[idx++] == 1) {
-			var OldNbCourbes = NbCourbes;
-			NbCourbes = parseFloat(tmpLine[idx++]);
-			
-			while (OldNbCourbes < NbCourbes) {		// création des courbes si nécessaire
-				fctns[OldNbCourbes] = new Courbe();
-				pixel2machin(fctns[OldNbCourbes++]);
-			}
-	
-			while (OldNbCourbes > NbCourbes) {		// suppression des courbes si nécessaire
-				fctns.splice(--OldNbCourbes, 1);
-				if (current >= NbCourbes)
-					current = 0;
-			}
-			
-			for ( c = 0; c < NbCourbes; c++) {
-				OldNp = fctns[c].np;
-				fctns[c].np = parseFloat(tmpLine[idx++]);
-				// création ou suppression de points
-				while (OldNp < fctns[c].np) { fctns[c]["pa"][OldNp++] = new Point(); }
-				while (OldNp > fctns[c].np) { fctns[c]["pa"].splice(--OldNp, 1); }
-			}
+		var FunctionVersionCheck = tmpLine[idx++];	// stocke le numéro de version
+
+		var OldNbCourbes = NbCourbes;
+		NbCourbes = parseFloat(tmpLine[idx++]);
 		
-			c = 0;
-			while ( fichier.position < fichier.eof ) {
-				tmpLine = LectureNextLigne(fichier);
-				if (tmpLine == "")
-					break;
-				tmpLine = tmpLine.split(" ");
-
-				idx = 0;
-	
-				var LastDomain, LastRangeMin, LastRangeMax, p;
-				var NeedUpdate = 0;
-				fctns[c].name = tmpLine[idx++];
-				
-				LastDomain = fctns[c].domain;
-				fctns[c].domain = parseFloat(tmpLine[idx++]);
-				if (LastDomain != fctns[c].domain) { NeedUpdate++; }
-				
-				LastRangeMin = fctns[c].range[0];
-				LastRangeMax = fctns[c].range[1];
-				fctns[c].range[0] = parseFloat(tmpLine[idx++]);
-				fctns[c].range[1] = parseFloat(tmpLine[idx++]);
-	
-				if (LastRangeMin != fctns[c].range[0]) { NeedUpdate++; }
-				if (LastRangeMax != fctns[c].range[1]) { NeedUpdate++; }
-				
-				if (NeedUpdate) { pixel2machin(fctns[c]); }	// update si ça a changé par rapport au range précédent
-				
-				fctns[c].GridStep = parseFloat(tmpLine[idx++]);
-				fctns[c].display = parseFloat(tmpLine[idx++]);
-
-				idx = 0;
-				tmpLine = LectureNextLigne(fichier);
-				tmpLine = tmpLine.split(" ");
-				for (j=0; j < 3; j++) { fctns[c].brgb[j] = tmpLine[idx++] / 255; }
-				for (j=0; j < 3; j++) { fctns[c].frgb[j] = tmpLine[idx++] / 255; }
-				for (j=0; j < 3; j++) { fctns[c].rgb2[j] = tmpLine[idx++] / 255; }
-				for (j=0; j < 3; j++) { fctns[c].rgb3[j] = tmpLine[idx++] / 255; }
-				for (j=0; j < 3; j++) { fctns[c].rgb4[j] = tmpLine[idx++] / 255; }
-				for (j=0; j < 3; j++) { fctns[c].rgb5[j] = tmpLine[idx++] / 255; }
-	
-				for (p = 0; p < fctns[c].np; p++) {
-					idx = 0;
-					tmpLine = LectureNextLigne(fichier);
-					tmpLine = tmpLine.split(" ");
-					if (tmpLine.length != 3) {
-						perror("bad file contents");
-						break;
-					}
-					fctns[c]["pa"][p].valx = parseFloat(tmpLine[idx++]);
-					fctns[c]["pa"][p].valy = parseFloat(tmpLine[idx++]);
-					fctns[c]["pa"][p].sustain = tmpLine[idx] & 2 ? 1 : 0; // pas d'incrémentation
-					fctns[c]["pa"][p].fix = tmpLine[idx++] & 1;	// elle est faite ici.
-				}
-				c++;
-			}
+		while (OldNbCourbes < NbCourbes) {		// création des courbes si nécessaire
+			fctns[OldNbCourbes] = new Courbe();
+			MyThings2Zoom(fctns[OldNbCourbes]);
+			pixel2machin(fctns[OldNbCourbes++]);
 		}
 
-		ValRecalculate();		
+		while (OldNbCourbes > NbCourbes) {		// suppression des courbes si nécessaire
+			fctns.splice(--OldNbCourbes, 1);
+			if (current >= NbCourbes)
+				current = 0;
+		}
+		
+		for (c = 0; c < NbCourbes; c++) {
+			OldNp = fctns[c].np;
+			fctns[c].np = parseFloat(tmpLine[idx++]);
+			// création ou suppression de points
+			while (OldNp < fctns[c].np) { fctns[c]["pa"][OldNp++] = new Point(); }
+			while (OldNp > fctns[c].np) { fctns[c]["pa"].splice(--OldNp, 1); }
+		}
+	
+		c = 0;
+		while ( fichier.position < fichier.eof ) {
+			tmpLine = LectureNextLigne(fichier);
+			if (tmpLine == "")
+				break;
+			tmpLine = tmpLine.split(" ");
+
+			idx = 0;
+
+			var p;
+			var NeedUpdate = 0;
+			fctns[c].name = tmpLine[idx++];
+			
+			// depuis la version 1.52 domaine contient deux limites.
+			if (FunctionVersionCheck == 1 )
+				fctns[c].domain[0] = 0;
+			else
+				fctns[c].domain[0] = parseFloat(tmpLine[idx++]);
+
+			fctns[c].domain[1] = parseFloat(tmpLine[idx++]);
+			
+			fctns[c].range[0] = parseFloat(tmpLine[idx++]);
+			fctns[c].range[1] = parseFloat(tmpLine[idx++]);
+
+			MyThings2Zoom(fctns[c]);
+			
+			fctns[c].GridStep = parseFloat(tmpLine[idx++]);
+			fctns[c].display = parseFloat(tmpLine[idx++]);
+
+			idx = 0;
+			tmpLine = LectureNextLigne(fichier);
+			tmpLine = tmpLine.split(" ");
+			for (j=0; j < 3; j++) { fctns[c].brgb[j] = tmpLine[idx++] / 255; }
+			for (j=0; j < 3; j++) { fctns[c].frgb[j] = tmpLine[idx++] / 255; }
+			for (j=0; j < 3; j++) { fctns[c].rgb2[j] = tmpLine[idx++] / 255; }
+			for (j=0; j < 3; j++) { fctns[c].rgb3[j] = tmpLine[idx++] / 255; }
+			for (j=0; j < 3; j++) { fctns[c].rgb4[j] = tmpLine[idx++] / 255; }
+			for (j=0; j < 3; j++) { fctns[c].rgb5[j] = tmpLine[idx++] / 255; }
+
+			for (p = 0; p < fctns[c].np; p++) {
+				idx = 0;
+				tmpLine = LectureNextLigne(fichier);
+				tmpLine = tmpLine.split(" ");
+				if (tmpLine.length != 3) {
+					perror("bad file contents");
+					break;
+				}
+				fctns[c]["pa"][p].valx = parseFloat(tmpLine[idx++]);
+				fctns[c]["pa"][p].valy = parseFloat(tmpLine[idx++]);
+				fctns[c]["pa"][p].sustain = tmpLine[idx] & 2 ? 1 : 0; // pas d'incrémentation
+				fctns[c]["pa"][p].fix = tmpLine[idx++] & 1;	// elle est faite ici.
+			}
+			c++;
+		}
+
+		ALLpixel2machin();
+		ValRecalculate();
 		RedrawEnable = 1;
 		AllowEdit = 1;
 		PattrInterpError.flag = 0;
@@ -2285,7 +2506,8 @@ function write(filename)
 			if (PrintComment) { fichier.writeline("// new function: name, domain, range min, range max, gridstep");	}
 			tmpStr = "";
 			tmpStr += fctns[i].name + sep;
-			tmpStr += fctns[i].domain + sep;
+			tmpStr += fctns[i].domain[0] + sep;
+			tmpStr += fctns[i].domain[1] + sep;
 			tmpStr += fctns[i].range[0] + sep;
 			tmpStr += fctns[i].range[1] + sep;
 			tmpStr += fctns[i].GridStep + sep;
@@ -2321,5 +2543,5 @@ function write(filename)
 
 resetall();
 
-/* autowatch = 1; */
-/* post("compiled...\n"); */
+autowatch = 1;
+post("compiled...\n");
