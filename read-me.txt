@@ -1,6 +1,6 @@
-e j i e s (version 1.5)
+e j i e s (version 1.52)
 by Emmanuel Jourdan, Ircam
-Some of this objects required MaxMSP 4.5.4 or higher.
+This version requires MaxMSP 4.5.5 or higher.
 
 JS:
 ¥ ej.4m.js: calculate minimum, mean, median and maximum
@@ -35,13 +35,13 @@ Other:
 ¥ AddShortcuts2Max.command: Bash script (MacOS X only) which add some shortcuts to MaxMSP.
 
 Installation:
-- put the ejies-extras contents in the /Applications/MaxMSP 4.5/patches/extras
-- put the ejies-init contents in the C74:/init
-- put the ejies-jsui contents in the C74:/jsui-library
-- put the ejies-jsextensions contents in the C74:/jsextensions
-- put the ejies-obj folder in the C74:/externals
-- put the ejies-help folder in the /Applications/MaxMSP 4.5/max-help
-- double click on the AddShortcuts2Max.command
+- put the CONTENTS of the ejies-extras folder in the ../MaxMSP 4.5/patches/extras
+- put the CONTENTS of the ejies-init folder in the C74:/init
+- put the CONTENTS of the ejies-jsui folder in the C74:/jsui-library
+- put the CONTENTS of the ejies-jsextensions folder in the C74:/jsextensions
+- put the ejies-obj folder in the C74:/externals or whatever you want in the Max Search path
+- put the ejies-help folder in the ../MaxMSP 4.5/max-help or whatever you want in the Max Search path
+- double click on the AddShortcuts2Max.command (MacOS X Only)
 
 Contact:
 manu(at)e--j.com
