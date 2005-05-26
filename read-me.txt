@@ -1,0 +1,48 @@
+e j i e s (version 1.5)
+by Emmanuel Jourdan, Ircam
+Some of this objects required MaxMSP 4.5.4 or higher.
+
+JS:
+¥ ej.4m.js: calculate minimum, mean, median and maximum
+¥ ej.cc.js: Change object Color
+¥ ej.cn.js: Change Name of named object
+¥ ej.cycle.js: send value to different outlets
+¥ ej.dn.js: display a named object
+¥ ej.lock.js: get/set locked mode
+¥ ej.lui.js: use the arguement to load a jsui file.
+¥ ej.nthru.js: like thru object (number of inlet/outlet can change)
+¥ ej.op.js: Open subPatcher
+¥ ej.route.js: route data types
+
+JSUI:
+¥ ej.numbox.js: an alternative number box
+¥ ej.function.js: multi bpf editor (compatible with the function object)
+
+Abstractions:
+¥ ej.mout~: panpot on multiple output
+¥ ej.vdb~: Variable delay without clicks or transposition (cheaper than vdb~ in the Bennies)
+¥ ej.vdb-sig~: Same as ej.vdb~ but accepts signal as delay time
+¥ jit.getparam: grab attributes/message from jitter (and others?) objects
+¥ jit.fullscreen: create a jit.window on the second screen
+¥ kaf: kill and activate finder (OS X only, shell object required)
+¥ kd&u: report key down (1) and up (0)
+¥ nine2X: convert mac path file to Unix path file (obsolete with 4.3 and earlier)
+¥ ptt: push to talk (usefull during conferences...)
+¥ splay~: sound file player with interface
+¥ stout~: control stereo (replace dac~ or ezdac~)
+
+Other:
+¥ AddShortcuts2Max.command: Bash script (MacOS X only) which add some shortcuts to MaxMSP.
+
+Installation:
+- put the ejies-extras contents in the /Applications/MaxMSP 4.5/patches/extras
+- put the ejies-init contents in the C74:/init
+- put the ejies-jsui contents in the C74:/jsui-library
+- put the ejies-jsextensions contents in the C74:/jsextensions
+- put the ejies-obj folder in the C74:/externals
+- put the ejies-help folder in the /Applications/MaxMSP 4.5/max-help
+- double click on the AddShortcuts2Max.command
+
+Contact:
+manu(at)e--j.com
+emmanuel.jourdan(at)ircam.fr

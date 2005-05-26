@@ -1,0 +1,148 @@
+/*
+	ej.4m.js by Emmanuel Jourdan, Ircam — 06 2004
+	output the min, median, mean, maximum on a int/float stream
+ */
+
+// global code
+var ejies = new EjiesUtils();				// lien vers ejies-extension.js
+var CopyRight = new Global("EjiesCopyRight");	// variable globale utilisée pour le copyright
+CopyRight["4m"] = 0;							// init
+
+inlets = 1;
+outlets = 5;
+setinletassist(0, "int/float");
+setoutletassist(0, "minimum");
+setoutletassist(1, "median");
+setoutletassist(2, "mean");
+setoutletassist(3, "maximum");
+setoutletassist(4, "list of values / dumpout");
+
+var WindowReset = 0;
+var a = new Array(5);
+var VerboseOrNot = 0;
+
+// argument s'il est connu, spécifie la taille de fenêtre
+if (jsarguments.length > 1 ) {
+	if (typeof jsarguments[1] == "number")
+		window( jsarguments[1] );
+	}
+if (jsarguments.length > 2) {
+	if (typeof jsarguments[2] == "number" && jsarguments[2] == 1)
+		VerboseOrNot = 1;
+	}
+if (jsarguments.length > 3)
+	post("• error: ej.4m.js extra arguments\n");
+
+
+// imprime le copyright
+function loadbang()
+{
+	if ( ! CopyRight["4m"] ) {
+		post("ej.4m.js: version", ejies.VersNum, ejies.VersDate);
+		post("\n     by Emmanuel Jourdan\, Ircam\n");
+		CopyRight["4m"] = 1 ;
+	}
+}
+
+function msg_int(entier)
+{
+	a.shift();			// supprime le premier élément
+	a.push(entier);		// ajoute l'élément à la fin de 'a'
+	sortie();
+}
+
+function msg_float(flottant)
+{
+	a.shift();			// supprime le premier élément
+	a.push(flottant);	// ajoute l'élément à la fin de 'a'
+	sortie();
+}
+
+function bang()
+{
+	if (WindowReset < a.length && WindowReset > 0) {
+		// s'il y a moins d'éléments que la taille de fenêtre, mais qu'il y en a au minimum 1.
+		var OldWindowSize = a.length;
+		// ne pas utiliser a.length puisque ça change au cours de la boucle for !!
+		for (i = 0 ; i < (OldWindowSize - WindowReset) ; i++ ) {
+			a.shift();
+		}
+		post("ej.4m.js using temp window size of ", a.length, " items.\n");
+		sortie();
+		window(OldWindowSize);
+	} else if (WindowReset >= a.length) { // il y a suffisament d'élément.
+		sortie();
+	}
+}
+
+function anything()
+{
+	post("• error: ej.4m.js doesn't understand ", messagename, "\n");
+}
+
+// change la taille de la fenêtre d'analyse
+function window(l)
+{
+	a = new Array(Math.max(3,l));	// minimum 3
+	WindowReset = 0;					// le buffer est vide...
+}
+
+function reset()			// reset: vide le buffer
+{
+	window(a.length);
+	if (VerboseOrNot)
+		post("ej.4m.js: buffer is now empty.\n");
+}
+
+function clear() { reset() ;} // alias
+
+function somme()
+{
+	var SommeDesValeurs = 0;
+	for (i=0; i< a.length; i++) {
+		SommeDesValeurs += a[i].valueOf();
+	}
+	return SommeDesValeurs;
+}
+somme.local = 1; // on ne peut pas appeler la fonction depuis max
+
+function verbose(a)
+{
+	VerboseOrNot = a;
+}
+
+function sortie(v)
+{
+	// copie de a dans b
+	var b = new Array(a.length);
+	for (i=0 ; i < b.length ; i++) {
+		b[i] = a[i];
+	}
+	// la sortie ne fonctionne que quand le buffer a été rempli
+	if (++WindowReset >= b.length) {
+		// ordre décroissant des outlets pour permettre la sortie de gauche à droite
+		if (VerboseOrNot) outlet(4, b);			// listes des valeurs analysées
+		b.sort(function(a,b) { return a-b; });	// tri numérique croissant utilisant une fonction littérale
+		outlet(3, b[b.length - 1]);				// max
+		outlet(2, somme()/a.length);			// moyenne
+		outlet(1, b[Math.floor(b.length/2)]);	// valeur médianne (Math.floor ne prend que la partie entière)
+		outlet(0, b[0]);						// minimum
+	}
+}
+sortie.local = 1; // on ne peut pas appeler la fonction depuis max
+
+function getwindow()
+{
+	var WindowMessage = new Array("window", a.length); 
+	outlet(4, WindowMessage);
+}
+
+function getverbose()
+{
+	var WindowMessage = new Array("verbose", VerboseOrNot); 
+	outlet(4, WindowMessage);
+}
+
+// Pour la compilation automatique
+// autowatch = 1;
+// post("Compiled...\n");

@@ -1,0 +1,103 @@
+e j i e s
+Version history
+
+******************
+1.0: Initial release (mars 2004)
+
+******************
+1.1: (Juilly 2004)
+New JavaScripts objects: ej.4m.js, ej.lock.js, ej.nthru.js
+Bug corrections:
+- jit.fullscreen: hide cursor when fullscreen mode is on, with 1 screen only.
+- kd&u: using modifiers second argument, modifiers is now 0 by default (Mac)
+- ptt: using modifiers second argument
+
+
+******************
+1.2: 14 Sep 2004
+ej.numbox.js: new JavaScript object (should be placed in C74:/jsui-library/)
+ej.lui.js: new JavaScript object which load a jsui object (ej.numbox.js for instance)
+ej.route.js: new JavaScript object which route
+
+Bug corrections:
+- jit.getparam: second input now accepts lists (can be used with ej.numbox.js)
+- stout~: optimisations (Max 4.5.2 required)
+- ej.nthru.js: correct argument bug
+- ej.lock.js: desactivated in runtime (Max 4.5.2 required, not tested with 4.5.2 final)
+
+
+******************
+1.3: 21 Oct 2004
+help files updated
+ej.dn.js: new JavaScript object which display (open the patcher) a named object
+ej.op.js: new JavaScript object which open subpatcher
+AddShortcuts2Max.command: BASH script which add some shortcuts to Max (Set Origin, Restore Origin, Open As Text..., Save As..., Clear, Paste Replace, Lock Background, Redo). The script doesn't modifie Max itself. To revert you just need to remove the ~/Library/Preferences/com.cycling74.Max.plist file)
+ej.numbox.js: Jitter isn't required anymore (to hide the cursor while clicking)
+
+Bug corrections:
+ej.lock.js: bug correction (stupid ";")
+ej.numbox.js: bugs corrections (help patch also)
+jit.fullscreen: mousestate disable while working with only one screen
+
+
+******************
+1.31: Nov 2004
+AddShortcuts2Max.command: adding shortcuts for New Text File.
+
+
+******************
+1.4: 9 Fev 2005
+ej.cc.js: new JavaScript which allows you to change the objecs colors
+ej.cn.js: new JavaScript which allows you to change the name of a named object
+ej.cycle.js: New Javascript, does the same as cycle, but for any type of data
+ej.mout~: panpot on multiple output
+ejies-extensions.js: JavaScript library to reuse some functions
+
+Modifications:
+splay~: now using preload... and more...
+stout~: now initialized at 0dB, windows shortcuts compatible, display slider value (using ej.numbox)... and more...
+jit.fullscreen: not using third party externals anymore
+AddShortcuts2Max.command: no error message, the first time.
+ej.numbox: is now able to display -inf and +inf
+
+
+******************
+1.41: 11 Fev 2005
+ej.vdb~: Variable delay without clicks or transposition
+
+Modifications:
+stout~: using umenu instead of ubumenu (better on windows)
+
+
+******************
+1.42: 14 Fev 2005
+ej.vdb-sig~: Variable delay without clicks or transposition (delay as signal)
+
+
+******************
+1.5: 6 April 2005
+ej.function.js: multi bpf editor
+ejies-Overview: ... with version checker (Jitter and internet access required)
+
+Modifications:
+jit.fullscreen: correction of a stupid bug...
+
+
+
+******************
+1.51: 26 April 2005
+Bug corrections:
+ej.function.js: crash when using message all dump (Thanks Alexis)
+
+Improvements:
+ej.function.js: if the shift modifier is on you can't create a new point (it avoids to create a new point whhen you wanted to delete one but you are not enough precise with the mouse...)
+ej.function.js: better error messages
+ej.function.js: open dialog box when using message read or write without argument (scripting hack)
+ej.function.js: inserting (instead of adding at the end) a new function is now allowed
+ej.function.js: new messages for copy and paste of function (data or colors).
+splay~: english text...
+
+******************
+Contact:
+manu(at)e--j.com
+emmanuel.jourdan(at)ircam.fr
