@@ -6,8 +6,6 @@
 // Global Code
 
 var ejies = EjiesUtils();	// lien vers ejies-extension.js
-var CopyRight = new Global("EjiesCopyRight");	// variable globale utilisée pour le copyright
-CopyRight["numbox"] = 0;						// init
 inlets = 1;
 outlets = 3;
 setinletassist(0, "int/float, messages");
@@ -72,7 +70,7 @@ if (jsarguments.length>21)	MinMaxValues[1] = jsarguments[21];
 if (jsarguments.length>22)	DefaultValue = jsarguments[22];
 if (jsarguments.length>23)	change(jsarguments[23]);
 if (jsarguments.length>24)	mouseup(jsarguments[24]);
-if (jsarguments.length>25)	post("• error: ej.numbox.js extra arguments\n");
+if (jsarguments.length>25)	perror("extra arguments - check the inspector");
 
 MyVal = DefaultValue;
 
@@ -80,19 +78,14 @@ boxposition();
 
 //dimensions de la boîte
 if (box.rect[2] - box.rect[0] == 64 && box.rect[3] - box.rect[1] == 64)
-box.size(32,16);	// numbox a été créée à partie de jsui : dimensions = 64*64
+	box.size(32,16);	// numbox a été créée à partie de jsui : dimensions = 64*64
 else
-box.size(Math.max(box.rect[2]-box.rect[0],32),16);	// check box size
+	box.size(Math.max(box.rect[2]-box.rect[0],32),16);	// check box size
 
 leading0(LeadingValue);							// va aussi déclencher draw() et refresh()
 
 function loadbang()
 {
-	if (! CopyRight["numbox"]) {
-		post("ej.numbox.js: version", ejies.VersNum, ejies.VersDate);
-		post("\n     by Emmanuel Jourdan\, Ircam\n");
-		CopyRight["numbox"] = 1;
-	}
 	msg_float(MyVal);
 }
 
@@ -117,12 +110,15 @@ function draw()
 			glclearcolor(MyBrgb2);
 		else
 			glclearcolor(MyBrgb);
+			
+		
 		glclear();			
 
 		if (inside)
 			glcolor(MyFrgb2);
 	    else
 			glcolor(MyFrgb);
+		
 		textalign("center", "center");		
 		moveto(0,0)
 
@@ -165,7 +161,7 @@ function leading0(v)
 			LeadingValue = v;
 			LeadingText = "";
 		} else
-			post("• error: ej.numbox: leading0 ", v, "wrong argument\n");
+			perror("leading0 ", v, "wrong argument");
 	}
 	draw();
 	refresh();
@@ -194,7 +190,7 @@ function mouseup(v)
 	if (v == 1 || v == 0)
 		MouseUpState = v;
 	else
-		post("• error: ej.numbox: mouseup ", v, "wrong argument\n")
+		perror("mouseup ", v, "wrong argument");
 }
 
 function getmouseup()
@@ -208,7 +204,7 @@ function roundmode(v)
 		RoundValue = v;
 		msg_float(MyVal);
 	} else
-		post("• error: ej.numbox: roundmode ", v, "wrong argument (must be 0, 1 or 2)\n");
+		perror("roundmode ", v, "wrong argument (must be 0, 1 or 2)");
 }
 
 function getroundmode()
@@ -241,8 +237,15 @@ function change(v)
 	if (v == 1 || v == 0) {
 		ChangeState = v;
 	} else
-		post("• error: ej.numbox: change ", v, "wrong argument\n")
+		perror("change ", v, "wrong argument");
 }
+
+function perror()
+{
+	ejies.scriptname = "ej.numbox.js";
+	ejies.perror(arguments);
+}
+perror.local = 1;
 
 function getchange()
 {
@@ -350,6 +353,23 @@ function setvalueof(v)
 function getvalueof()
 {
 	return MyVal;
+}
+
+function save()
+{
+	embedmessage("brgb", MyBrgb[0]*255, MyBrgb[1]*255, MyBrgb[2]*255);
+	embedmessage("brgb2", MyBrgb2[0]*255, MyBrgb2[1]*255, MyBrgb2[2]*255);
+	embedmessage("brgb3", MyBrgb3[0]*255, MyBrgb3[1]*255, MyBrgb3[2]*255);
+	embedmessage("frgb", MyFrgb[0]*255, MyFrgb[1]*255, MyFrgb[2]*255);
+	embedmessage("frgb2", MyFrgb2[0]*255, MyFrgb2[1]*255, MyFrgb2[2]*255);
+	embedmessage("roundmode", RoundValue);
+	embedmessage("leading0", LeadingValue);
+	embedmessage("approximation", ApproxiValue);
+	embedmessage("clip", MinMaxState);
+	embedmessage("minmax", MinMaxValues[0], MinMaxValues[1]);
+	embedmessage("initvalue", DefaultValue);
+	embedmessage("change", ChangeState);
+	embedmessage("mouseup", MouseUpState);
 }
 
 function getattributes()
