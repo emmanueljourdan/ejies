@@ -256,10 +256,11 @@ function anything()
 		return;
 	}
 
+	post(NeedUpdate, "\n");
 	if (NeedUpdate & 2 == 2)
 		notifyclients();
 	if (NeedUpdate & 1 == 1)
-		draw();
+		redrawon();
 }
 
 function onresize(w,h)
@@ -1142,11 +1143,17 @@ function perror()
 }
 perror.local = 1;
 
-function SetColor(courbe, which, a, b, c)
+function SetColor(intOrcourbe, which, a, b, c)
 {
 	// which : quelle couleur (string), a arguments (Array)
 	var tmpA = new Array();
+	var courbe = new Object();
 	
+	if (typeof(intOrcourbe) == "number")
+		courbe = fctns[intOrcourbe];
+	else
+		courbe = intOrcourbe;
+		
 	if (arguments.length == 5)
 		tmpA = [a,b,c];
 	else
@@ -1157,7 +1164,7 @@ function SetColor(courbe, which, a, b, c)
 	else
 		perror("bad arguments for message", which);
 }
-SetColor.local = 1;
+//SetColor.local = 1;
 
 function GetColor(courbe, which)
 {
@@ -1538,7 +1545,14 @@ function sustain()
 		perror("bad arguments for message sustain");
 }
 
-function brgb() { SetColor(fctns[current], "brgb", arguments); draw(); }
+function brgb(r, g, b, courbe)
+{
+	post(arguments.length, "\n");
+	var tmpF = CurrentOrArgument(courbe, arguments, 3);
+	post(tmpF.name, "\n");
+	SetColor(tmpF, "brgb", r, g, b); draw();
+}
+
 function frgb() { SetColor(fctns[current], "frgb", arguments); draw(); }
 function rgb2() { SetColor(fctns[current], "rgb2", arguments); draw(); }
 function rgb3() { SetColor(fctns[current], "rgb3", arguments); draw(); }
@@ -2149,13 +2163,10 @@ function getvalueof()
 
 function save()
 {
-/* 	return; */
-/* 	var tmpArray = new Array(); */
-/* 	var idx = 0; */
-
+	var i;
 	RedrawEnable = 0;
 	
-	embedmessage("CreateNFunctions", NbCourbes);
+	embedmessage("CreateNFunctions", NbCourbes);	// required for the number of color to save
 	embedmessage("legend", Legend);
 	embedmessage("grid", GridMode);
 	embedmessage("snap2grid", Snap2Grid);
@@ -2165,19 +2176,14 @@ function save()
 	embedmessage("autosustain", AutoSustain);
 	embedmessage("timedisplay", TimeFlag);
 	
-	// Il faut faire les couleurs
-	
-	RedrawEnable = 1;
-	
-/* 	for (i = 0; i < NbCourbes; i++) { */
-/* 		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(fctns[i].brgb[j] * 255); } */
-/* 		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(fctns[i].frgb[j] * 255); } */
-/* 		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(fctns[i].rgb2[j] * 255); } */
-/* 		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(fctns[i].rgb3[j] * 255); } */
-/* 		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(fctns[i].rgb4[j] * 255); } */
-/* 		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(fctns[i].rgb5[j] * 255); } */
-/* 	} */
-/*  */
+	for (i = 0; i < NbCourbes; i++) {
+		embedmessage("SetColor", i, "brgb", Math.round(fctns[i].brgb[0] * 255), Math.round(fctns[i].brgb[1] * 255), Math.round(fctns[i].brgb[2] * 255) );
+		embedmessage("SetColor", i, "frgb", Math.round(fctns[i].frgb[0] * 255), Math.round(fctns[i].frgb[1] * 255), Math.round(fctns[i].frgb[2] * 255) );
+		embedmessage("SetColor", i, "rgb2", Math.round(fctns[i].rgb2[0] * 255), Math.round(fctns[i].rgb2[1] * 255), Math.round(fctns[i].rgb2[2] * 255) );
+		embedmessage("SetColor", i, "rgb3", Math.round(fctns[i].rgb3[0] * 255), Math.round(fctns[i].rgb3[1] * 255), Math.round(fctns[i].rgb3[2] * 255) );
+		embedmessage("SetColor", i, "rgb4", Math.round(fctns[i].rgb4[0] * 255), Math.round(fctns[i].rgb4[1] * 255), Math.round(fctns[i].rgb4[2] * 255) );
+		embedmessage("SetColor", i, "rgb5", Math.round(fctns[i].rgb5[0] * 255), Math.round(fctns[i].rgb5[1] * 255), Math.round(fctns[i].rgb5[2] * 255) );
+	}
 
 	RedrawEnable = 1;
 }
