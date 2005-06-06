@@ -7,7 +7,7 @@
 // global code
 var ejies = new EjiesUtils();						// lien vers ejiesUtils.js
 
-const FUNCTIONVERSION = 2;
+const FUNCTIONVERSION = 2;	// Depuis ejies version 1.52 le numéro de version est 2 (à cause du domain qui a 2 bornes).
 inlets = 1;
 outlets = 5;
 const INTERP_OUTLET = 0;
@@ -28,30 +28,32 @@ g["copy"] = new Array();			// Utilisé pour le copier-coller
 g["copycolors"] = new Array();		// Utilisé pour le copier-coller des couleurs
 var NbCourbes = 2;
 var fctns = new Array();
-var current = 0;
 var Tolerance = 4;
 var Bordure = 4;
 var LegendBordure = 12;
-var Legend = 1;
 var BoxWidth = box.rect[2] - box.rect[0];
 var BoxHeight = box.rect[3] - box.rect[1] ;
 var PixelDomain;
 var PixelRange;
-var GridMode = 0;
-var Snap2Grid = 0;
-var HiddenPointDisplay = 0;
+var current;
+var Legend;
+var GridMode;
+var Snap2Grid;
+var HiddenPointDisplay;
+var ClickAdd;
+var ClickMove;
+var AutoSustain;
+var IdleMode = 0;
 var SelectedPoint = -2;
 var IdlePoint = -1;
-var IdleMode = 0;
-var RedrawEnable = 0;
-var ClickAdd = 1;
-var ClickMove = 1;
-var AutoSustain = 0;
+var RedrawEnable;
 var AllowEdit = 1;
 var TimeFlag = 0;
 var OpendialogPrepend = 0;
 var DisplayOneTime;
 var LectureInspectorFlag = 0;
+
+RedrawEnable = 0;	// désactivation de l'affichage pendant l'initialisation
 
 if (max.version < 455)
 	perror("MaxMSP 4.5.5 or higher is required.");
@@ -93,7 +95,6 @@ function Courbe(name)
 	this.PixelDomain;			// ...
 	this.PixelRange;			// ...
 	this.NextFrom = 0;			// utilisé pour le message next
-/* 	this.DisplayFrom = [0, 0]; */
 }
 
 
@@ -256,7 +257,6 @@ function anything()
 		return;
 	}
 
-	post(NeedUpdate, "\n");
 	if (NeedUpdate & 2 == 2)
 		notifyclients();
 	if (NeedUpdate & 1 == 1)
@@ -268,7 +268,7 @@ function onresize(w,h)
 	box.size(ejies.clip(w, 100, 1024),ejies.clip(h, 50, 1024));	// taille minimum 100*50
 	BoxWidth = box.rect[2] - box.rect[0];
 	BoxHeight = box.rect[3] - box.rect[1] ;
-	ALLpixel2machin();
+	AllPixel2Machin();
 	ValRecalculate();
 	draw();
 }
@@ -284,7 +284,7 @@ function LectureInspector()
 	var idx = 1; // jsarguments[0] == ej.function.js
 	if (jsarguments.length > 2) {
 		NbCourbes = jsarguments[idx++];
-		post(NbCourbes, "\n");
+
 		init();	// création des courbes
 		
 		if (jsarguments.length != (10 + NbCourbes*18) ) {
@@ -347,15 +347,27 @@ function EditedWithMouse()
 }
 EditedWithMouse.local = 1;
 
+function DisplayCursor(v)
+{
+	if (CursorChange == 0)
+		return;
+	
+	if (v != DisplayCursor.state) {
+		setcursor(v);
+		DisplayCursor.state = v
+	}
+}
+DisplayCursor.local = 1;
+
 function PattrInterpError(v)
 {
 	if (PattrInterpError.flag)
 		return;
 	
 	if (v == 0 )
-		perror("interpolation not possible (different number of function)");
+		perror("interpolation isn't possible (different number of function)");
 	else
-		perror("interpolation not possible (different number of points)");
+		perror("interpolation isn't possible (different number of points)");
 
 	PattrInterpError.flag = 1;
 }
@@ -368,7 +380,7 @@ function PattrTooMany(v)
 			perror("too many functions/points... pattr won't work...");
 			PattrTooMany.flag = 0;
 		}
-	} else	
+	} else
 		PattrTooMany.flag = 1;
 }
 PattrTooMany.local = 1;
@@ -724,42 +736,14 @@ function pixel2machin(courbe)
 }
 pixel2machin.local = 1.;
 
-function MyPointsInside(courbe)
-{
-	var i;
-
-	courbe.DisplayFrom[0] = 0;
-	courbe.DisplayFrom[1] = courbe.np - 1;
-
-	if (courbe.domain[0] == courbe.ZoomX[0] && courbe.domain[1] == courbe.ZoomX[1] && courbe.range[0] == courbe.ZoomY[1] && courbe.range[1] == courbe.ZoomY[1]) {
-		return;
-	}
-	
-	for (i = (courbe.np - 2); i > 1; i--) {
-		if ((courbe.pa[i-1].x < Bordure) == 1 && (courbe.pa[i].x < Bordure) == 1) {
-			courbe.DisplayFrom[0] = i;
-			break;
-		}
-	}
-
-	for (i = 2; i < (courbe.np - 2); i++) {
-		if ((courbe.pa[i-1].x > BoxWidth) == 1 && (courbe.pa[i].x > BoxWidth) == 1) {
-			courbe.DisplayFrom[1] = i;
-			break;
-		}
-	}
-	
-}
-MyPointsInside.local = 1;
-
-function ALLpixel2machin()
+function AllPixel2Machin()
 {
 	var c;
 	for (c = 0; c < NbCourbes; c++) {
 		pixel2machin(fctns[c]);
 	}
 }
-ALLpixel2machin.local = 1;
+AllPixel2Machin.local = 1;
 
 function AddPoint(courbe, x, y)
 {
@@ -1309,7 +1293,7 @@ function deletefunction()
 	
 	fctns.splice(which, 1);
 	NbCourbes--;
-/* 	ALLpixel2machin(); */
+/* 	AllPixel2Machin(); */
 	getname();
 	
 	if (which < fctns.length)
@@ -1506,7 +1490,7 @@ function legend(v)
 	
 	Legend = v;
 	LegendBordure = 12 * v;		// 12 pixels la légende...
-	ALLpixel2machin();
+	AllPixel2Machin();
 	ValRecalculate();
 	draw();
 }
@@ -1545,14 +1529,7 @@ function sustain()
 		perror("bad arguments for message sustain");
 }
 
-function brgb(r, g, b, courbe)
-{
-	post(arguments.length, "\n");
-	var tmpF = CurrentOrArgument(courbe, arguments, 3);
-	post(tmpF.name, "\n");
-	SetColor(tmpF, "brgb", r, g, b); draw();
-}
-
+function brgb() { SetColor(fctns[current], "brgb", arguments); draw(); }
 function frgb() { SetColor(fctns[current], "frgb", arguments); draw(); }
 function rgb2() { SetColor(fctns[current], "rgb2", arguments); draw(); }
 function rgb3() { SetColor(fctns[current], "rgb3", arguments); draw(); }
@@ -1647,16 +1624,43 @@ function redrawon()
 
 function resetall()
 {
-	LectureInspector();	// lecture des arguments
-	ALLpixel2machin();	// calcule le rapport pixel/temps/range
+	LectureInspector();			// lecture des arguments
+	defaults();					// Applique les couleurs et paramètres pas défaut
+	AllPixel2Machin();			// calcule le rapport pixel/temps/range
 	sketch.default2d();
-	RedrawEnable = 1;
 	// initialisation de propriétés de variables
-	EditedWithMouse.state = 0;
+	EditedWithMouse.state = 0;	// flag initialisation
 	PattrInterpError.flag = 0;
 	PattrTooMany.flag = 1;
-	current = 0;
+	current = 0;				// première courbe est la courbe actvie
+	RedrawEnable = 1;
 	UpdateDisplay();
+}
+
+function defaults()
+{
+	// utilisé pour la restauration des paramètres par défaut.
+	var c;
+	
+	Legend = 1;
+	GridMode = 0;
+	Snap2grid = 0;
+	HiddenPointDisplay = 0;
+	ClickAdd = 1;
+	ClickMove = 1;
+	AutoSustain = 0;
+	CursorChange = 1;
+	
+	for (c = 0; c < NbCourbes; c++) {
+		fctns[c].brgb =[0.8,0.8,0.8];
+		fctns[c].frgb =[0.32,0.32,0.32];
+		fctns[c].rgb2 =[0.33,0.33,0.33];
+		fctns[c].rgb3 =[1,0.,0.];
+		fctns[c].rgb4 =[0.2,0.2,0.2];
+		fctns[c].rgb5 =[0.5,0.5,0.5];
+	}
+	
+	draw();	// si c'est utilisé dans la fonction save(), draw est désactivé automatiquement (RedrawEnable = 0);
 }
 
 function removeduplicate()
@@ -1788,54 +1792,57 @@ function onidle(x,y,but,cmd,shift,capslock,option,ctrl)
 	for(i=0; i< fctns[current].np; i++) {
 
 		if ( (Math.abs(x - fctns[current]["pa"][i].x) < Tolerance) && (Math.abs(y - fctns[current]["pa"][i].y) < Tolerance) ) {
+			DisplayCursor(5);
 			IdlePoint = i;
-			
+
 			if ( IdlePoint != OldIdlePoint) {	// que quand c'est différent...
 				RedrawOrNot(IdlePoint);
-				break;
+				break;			
 			}
 		}
 	}
+
+	if (IdlePoint == -1 && shift == 0)
+		DisplayCursor(6);
+	
 	RedrawOrNot(IdlePoint);
+}
+
+function onidleout()
+{
+	DisplayCursor(1);
 }
 
 function onclick(x,y,but,cmd,shift,capslock,option,ctrl)
 {
 	var tmpF = fctns[current];
 
-	if (AllowEdit == 0 || tmpF.display == 0)
+	if (AllowEdit == 0 || tmpF.display == 0) {
+		onidle(x, y);
 		return;
-	
-
+	}
 	SelectedPoint = -2;
 	x = ejies.clip(x - 2, Bordure, BoxWidth - Bordure);
 	y = ejies.clip(y - 2, Bordure + LegendBordure, BoxHeight - Bordure);
 
-	for(i=0; i< tmpF.np; i++) {
-
-		if ( (Math.abs(x - tmpF["pa"][i].x) < Tolerance) && (Math.abs(y - tmpF["pa"][i].y) < Tolerance) ) {
-			SelectedPoint = i;
-			
-			if (cmd) {
-				tmpF.pa[SelectedPoint].sustain = 1 - tmpF.pa[SelectedPoint].sustain;
-				EditedWithMouse.state++;
-				UpdateDisplay();
-				return ;
-			}
-			
-			if (shift) {
-				DeletePoint(tmpF, SelectedPoint);
-				SelectedPoint = -1;
-				ApplyAutoSustain();
-				EditedWithMouse.state++;
-				EditedWithMouse();
-				notifyclients();
-/* 				MyPointsInside(tmpF); */
-				onidle(x, y);	// pour ne pas afficher la position (puisqu'on y est)
-//				draw();
-				return;
-			}
-			break;
+	if (IdlePoint != -1) {
+		SelectedPoint = IdlePoint;
+		if (cmd) {
+			tmpF.pa[SelectedPoint].sustain = 1 - tmpF.pa[SelectedPoint].sustain;
+			EditedWithMouse.state++;
+			UpdateDisplay();
+			return ;
+		}
+		
+		if (shift) {
+			DeletePoint(tmpF, SelectedPoint);
+			SelectedPoint = -1;
+			ApplyAutoSustain();
+			EditedWithMouse.state++;
+			EditedWithMouse();
+			notifyclients();
+			onidle(x, y);	// pour ne pas afficher la position (puisqu'on y est)
+			return;
 		}
 	}
 
@@ -1849,10 +1856,8 @@ function onclick(x,y,but,cmd,shift,capslock,option,ctrl)
 		SelectedPoint = AddPoint(tmpF, x, y);
 		ApplyAutoSustain();
 		EditedWithMouse.state++;
-/* 		MyPointsInside(tmpF); */
 		notifyclients();
 		onidle(x,y);
-//		draw();
 	}
 }
 
@@ -1864,13 +1869,13 @@ function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 		return;
 
 	if ( but == 0 ||  SelectedPoint < 0) {
-		EditedWithMouse(); // quand c'est delete c'est fait dans onidle()
+		EditedWithMouse();	// quand c'est delete c'est fait dans onidle()
 		SelectedPoint = -2;	// si on a relâché c'est qu'il n'y a plus de points sélectionnés.
 		onidle(x,y);		// tout pareil...
 		draw();
 		return;
 	}
-
+	
 	if (SelectedPoint < tmpF.np) {
 		if (tmpF["pa"][SelectedPoint].fix)
 			return;
@@ -2115,7 +2120,7 @@ function setvalueof()
 		}
 	}
 
- 	ALLpixel2machin();
+ 	AllPixel2Machin();
 	ValRecalculate();
 	RedrawEnable = 1;
 	AllowEdit = 1;
@@ -2164,15 +2169,15 @@ function getvalueof()
 function save()
 {
 	var i;
-	RedrawEnable = 0;
-	
+
 	embedmessage("CreateNFunctions", NbCourbes);	// required for the number of color to save
 	embedmessage("legend", Legend);
 	embedmessage("grid", GridMode);
 	embedmessage("snap2grid", Snap2Grid);
+	
 	embedmessage("hiddenpoint", HiddenPointDisplay);
 	embedmessage("clickadd", ClickAdd);
-	embedmessage("clickmove", ClickAdd);
+	embedmessage("clickmove", ClickMove);
 	embedmessage("autosustain", AutoSustain);
 	embedmessage("timedisplay", TimeFlag);
 	
@@ -2184,15 +2189,16 @@ function save()
 		embedmessage("SetColor", i, "rgb4", Math.round(fctns[i].rgb4[0] * 255), Math.round(fctns[i].rgb4[1] * 255), Math.round(fctns[i].rgb4[2] * 255) );
 		embedmessage("SetColor", i, "rgb5", Math.round(fctns[i].rgb5[0] * 255), Math.round(fctns[i].rgb5[1] * 255), Math.round(fctns[i].rgb5[2] * 255) );
 	}
-
-	RedrawEnable = 1;
+	
+	embedmessage("redrawon");	// refresh de l'affichage après la lecture des arguments
 }
 
 function CreateNFunctions(v)
 {
+	RedrawEnable = 0;
 	NbCourbes = v;
 	init();
-	LectureInspectorFlag = 1;
+	LectureInspectorFlag = 1;	// comme ça il n'y a pas de scan des arguments
 }
 
 function copyfunction()
@@ -2448,7 +2454,7 @@ function read(filename)
 			c++;
 		}
 
-		ALLpixel2machin();
+		AllPixel2Machin();
 		ValRecalculate();
 		RedrawEnable = 1;
 		AllowEdit = 1;
