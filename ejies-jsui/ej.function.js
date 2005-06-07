@@ -38,7 +38,7 @@ var PixelRange;
 var current;
 var Legend;
 var GridMode;
-var Snap2Grid;
+var Snap2GridState;
 var HiddenPointDisplay;
 var ClickAdd;
 var ClickMove;
@@ -293,7 +293,7 @@ function LectureInspector()
 		}
 		Legend = jsarguments[idx++];
 		GridMode = jsarguments[idx++];
-		Snap2Grid = jsarguments[idx++];
+		Snap2GridState = jsarguments[idx++];
 		HiddenPointDisplay = jsarguments[idx++];
 		ClickAdd = jsarguments[idx++];
 		ClickMove = jsarguments[idx++];
@@ -349,7 +349,7 @@ EditedWithMouse.local = 1;
 
 function DisplayCursor(v)
 {
-	if (CursorChange == 0)
+	if (this.box.ignoreclick == 0 && CursorChange == 0)		// Si la boîte est ignore click ou on ne change pas le cursor
 		return;
 	
 	if (v != DisplayCursor.state) {
@@ -1198,7 +1198,7 @@ function args4insp()
 	tmpArray[idx++] = NbCourbes;
 	tmpArray[idx++] = Legend;
 	tmpArray[idx++] = GridMode;
-	tmpArray[idx++] = Snap2Grid;
+	tmpArray[idx++] = Snap2GridState;
 	tmpArray[idx++] = HiddenPointDisplay;
 	tmpArray[idx++] = ClickAdd;
 	tmpArray[idx++] = ClickMove;
@@ -1236,6 +1236,15 @@ function autodomain()
 {
 	MyAutoDomain(fctns[current]);
 	UpdateDisplay();
+}
+
+function autocursor(v)
+{
+	if (v != 0 && v != 1) {
+		perror("autocursor doesn't understand", v);
+		return;
+	}
+	CursorChange = v;
 }
 
 function addfunction()
@@ -1457,7 +1466,7 @@ function snap2grid(v)
 		perror("snap2grid doesn't understand", v);
 		return;
 	}
-	Snap2Grid = v;
+	Snap2GridState = v;
 
 	draw();
 }
@@ -1644,7 +1653,7 @@ function defaults()
 	
 	Legend = 1;
 	GridMode = 0;
-	Snap2grid = 0;
+	Snap2GridState = 0;
 	HiddenPointDisplay = 0;
 	ClickAdd = 1;
 	ClickMove = 1;
@@ -1851,7 +1860,7 @@ function onclick(x,y,but,cmd,shift,capslock,option,ctrl)
 
 	// ajout d'un point
 	if (cmd == 0 && shift == 0 && SelectedPoint == -2 && ClickAdd == 1) {
-		if ( Snap2Grid )
+		if ( Snap2GridState )
 			x = val2x(tmpF, Math.round(x2val(tmpF, x) / tmpF.GridStep) * tmpF.GridStep);
 		SelectedPoint = AddPoint(tmpF, x, y);
 		ApplyAutoSustain();
@@ -1880,7 +1889,7 @@ function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 		if (tmpF["pa"][SelectedPoint].fix)
 			return;
 	
-		if ( Snap2Grid )
+		if ( Snap2GridState )
 			x = val2x(tmpF, Math.round(x2val(tmpF, x) / tmpF.GridStep) * tmpF.GridStep);
 		
 		x = ejies.clip(x, Bordure, BoxWidth - Bordure);
@@ -1984,13 +1993,14 @@ function getnbpoints(courbe)
 /// get généraux ///
 function getlegend() { outlet(DUMPOUT, "legend", Legend); }
 function getgrid() { outlet(DUMPOUT, "grid", GridMode); }
-function getsnap2grid() { outlet(DUMPOUT, "snap2grid", Snap2Grid); }
+function getsnap2grid() { outlet(DUMPOUT, "snap2grid", Snap2GridState); }
 function gethiddenpoint() { outlet(DUMPOUT, "hiddenpointdisplay", HiddenPointDisplay); }
 function getautosustain() {	outlet(DUMPOUT, "autosustain", AutoSustain); }
 function getclickadd() { outlet(DUMPOUT, "clickadd", ClickAdd); }
 function getclickmove() { outlet(DUMPOUT, "clickmove", ClickMove); }
 function gettimedisplay() { outlet(DUMPOUT, "timedisplay", TimeFlag); }
 function getnbfunctions() { outlet(DUMPOUT, "nbfunctions", NbCourbes); }
+function getautocursor() { outlet(DUMPOUT, "autocursor", CursorChange); }
 
 function getname()
 {
@@ -2173,13 +2183,13 @@ function save()
 	embedmessage("CreateNFunctions", NbCourbes);	// required for the number of color to save
 	embedmessage("legend", Legend);
 	embedmessage("grid", GridMode);
-	embedmessage("snap2grid", Snap2Grid);
-	
+	embedmessage("snap2grid", Snap2GridState);
 	embedmessage("hiddenpoint", HiddenPointDisplay);
 	embedmessage("clickadd", ClickAdd);
 	embedmessage("clickmove", ClickMove);
 	embedmessage("autosustain", AutoSustain);
 	embedmessage("timedisplay", TimeFlag);
+	embedmessage("autocursor", CursorChange);
 	
 	for (i = 0; i < NbCourbes; i++) {
 		embedmessage("SetColor", i, "brgb", Math.round(fctns[i].brgb[0] * 255), Math.round(fctns[i].brgb[1] * 255), Math.round(fctns[i].brgb[2] * 255) );
