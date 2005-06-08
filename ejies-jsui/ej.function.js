@@ -2572,5 +2572,5 @@ function write(filename)
 
 resetall();
 
-autowatch = 1;
-post("compiled...\n");
+//autowatch = 1;
+//post("compiled...\n");
