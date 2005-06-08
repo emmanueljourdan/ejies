@@ -23,7 +23,6 @@ setoutletassist(BANG_OUTLET, "bang when changed with mouse");
 setoutletassist(DUMPOUT, "dumpout");
 
 var g = new Global("ej.function");	// utilisŽ par dump & listdump
-g["function"] = 0;					// init
 g["copy"] = new Array();			// UtilisŽ pour le copier-coller
 g["copycolors"] = new Array();		// UtilisŽ pour le copier-coller des couleurs
 var NbCourbes = 2;
@@ -111,6 +110,7 @@ function init()
 		fctns.splice(fctns.length - 1, 1);
 	}
 }
+
 
 
 //////////////// Fonctions Affichage ///////////////
@@ -1100,10 +1100,16 @@ function MyListDump(courbe, sendname)
 		tmpArray[idx++] = tmpF.pa[i].valy;
 	}
 
+	if (tmpArray.length > 255) {
+		perror("listdump aborted: too many points... use dump instead for now.");
+		return;
+	}
+	
 	if (arguments.length == 1) {
 		outlet(DUMP_OUTLET, tmpF.name, tmpArray);
 		return;
 	}
+
 	//else -> on envoie vers un send
 	str = tmpF.name;
 	for (i = 0; i < tmpArray.length; i++) {
@@ -1367,6 +1373,7 @@ function dump()
 
 function listdump()
 {
+	// il faut tester le nombre d'argument ˆ cause de argsparser()
 	if (arguments.length)
 		MyListDump(fctns[current], arguments[0]);
 	else
