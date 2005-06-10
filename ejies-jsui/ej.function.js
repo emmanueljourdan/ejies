@@ -5,9 +5,9 @@
 */
 
 // global code
-var ejies = new EjiesUtils();						// lien vers ejiesUtils.js
+var ejies = new EjiesUtils(); // lien vers ejiesUtils.js
 
-const FUNCTIONVERSION = 2;	// Depuis ejies version 1.52 le numro de version est 2 (ˆ cause du domain qui a 2 bornes).
+const FUNCTIONVERSION = 2; // Depuis ejies version 1.52 le numro de version est 2 (ˆ cause du domain qui a 2 bornes).
 inlets = 1;
 outlets = 5;
 const INTERP_OUTLET = 0;
@@ -110,7 +110,6 @@ function init()
 		fctns.splice(fctns.length - 1, 1);
 	}
 }
-
 
 
 //////////////// Fonctions Affichage ///////////////
@@ -1100,7 +1099,7 @@ function MyListDump(courbe, sendname)
 		tmpArray[idx++] = tmpF.pa[i].valy;
 	}
 
-	if (tmpArray.length > 255) {
+	if (tmpArray.length > 4094) {
 		perror("listdump aborted: too many points... use dump instead for now.");
 		return;
 	}
