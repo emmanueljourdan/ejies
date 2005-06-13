@@ -1098,7 +1098,8 @@ function MyListDump(courbe, sendname)
 		tmpArray[idx++] = tmpF.pa[i].valx;
 		tmpArray[idx++] = tmpF.pa[i].valy;
 	}
-
+	
+	// sortie limitŽe ˆ 4095 ŽlŽments (4094 + nom de la fonction)
 	if (tmpArray.length > 4094) {
 		perror("listdump aborted: too many points... use dump instead for now.");
 		return;
@@ -1109,7 +1110,7 @@ function MyListDump(courbe, sendname)
 		return;
 	}
 
-	//else -> on envoie vers un send
+	// else -> on envoie vers un send
 	str = tmpF.name;
 	for (i = 0; i < tmpArray.length; i++) {
 		str += " " + tmpArray[i].toFixed(6);
