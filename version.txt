@@ -9,7 +9,7 @@ Bug corrections:
 ej.function.js: 5th outlet assistance correction (Thanks Oliv')
 
 Improvements:
-AddShortcuts2Max.command: adding shortcuts for New from Clipboard.
+AddShortcuts2Max.command: adding shortcuts for New from Clipboard, Encapsulate and De-Encapsulate.
 ej.function.js: domain has now 2 limits (like the range). If you specify the domain, with only one argument, it'll start at 0 (it shouldn't break any old patch).
 ej.function.js: Zoom features (zoom_x, zoom_y, getzoom_x, getzoom_y & zoomout messages).
 ej.function.js: draw improvements (the drawing operations appears less often)
