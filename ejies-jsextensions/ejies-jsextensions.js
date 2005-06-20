@@ -37,15 +37,3 @@ function EjiesUtils()
 		
 	return this;
 }
-
-function EjiesTestMaxVersion()
-{
-	if (max.version > 454) {
-		post("ejies", ejies.VersNum, ejies.VersDate);
-		post("\n     by Emmanuel Jourdan\, Ircam\n");
-	} else
-		EjiesUtils.perror("ejies requires MaxMSP 4.5.5 or higher. Please upgrade, there's some cool new features :-)");
-}
-
-// C'est parti... test de la vesrsion...
-EjiesTestMaxVersion();
