@@ -8,7 +8,7 @@ var ejies = new EjiesUtils();
 
 function EjiesUtils()
 { 
-	this.VersNum = "1.52a4";			// Version Number
+	this.VersNum = "1.52a5";			// Version Number
 	this.VersDate = "(06/2005)";	// Version release date
 
 	// clip method
