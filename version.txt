@@ -9,15 +9,16 @@ Bug corrections:
 ej.function.js: 5th outlet assistance correction (Thanks Oliv')
 
 Improvements:
-AddShortcuts2Max.command: adding shortcuts for New from Clipboard, Encapsulate and De-Encapsulate.
-ej.function.js: domain has now 2 limits (like the range). If you specify the domain, with only one argument, it'll start at 0 (it shouldn't break any old patch).
-ej.function.js: Zoom features (zoom_x, zoom_y, getzoom_x, getzoom_y & zoomout messages).
+AddShortcuts2Max.command: adding shortcuts for New from Clipboard, Encapsulate and De-Encapsulate
+ej.function.js: domain has now 2 limits (like the range). If you specify the domain, with only one argument, it'll start at 0 (it shouldn't break any old patch)
+ej.function.js: Zoom features (zoom_x, zoom_y, getzoom_x, getzoom_y & zoomout messages)
 ej.function.js: draw improvements (the drawing operations appears less often)
 ej.function.js: bang, int/float, and next message are now in the high priority thread
 ej.function.js: object configuration is now saved in the patcher (you don't have to put the arguments in the inspector anymore)
 ej.numbox.js: object configuration is now saved in the patcher (you don't have to put the arguments in the inspector anymore)
-ej.function.js: cursor changes when you edit points (autocursor mode).
-ej.function.js: set limit to 2047 points (the js array is limited to 4095 items, for going thru an outlet).
+ej.function.js: cursor changes when you edit points (autocursor mode)
+ej.function.js: set limit to 2047 points (the js array is limited to 4095 items, for going thru an outlet)
+ej.function.js: new ghost & getghost function to set the transparency of the background functions and the transparency of the grid
 
 
 

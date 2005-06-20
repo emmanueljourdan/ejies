@@ -42,6 +42,7 @@ var HiddenPointDisplay;
 var ClickAdd;
 var ClickMove;
 var AutoSustain;
+var Ghostness;
 var IdleMode = 0;
 var SelectedPoint = -2;
 var IdlePoint = -1;
@@ -85,7 +86,7 @@ function Courbe(name)
 	this.pa = new Array();		// PointsArray
 	this.brgb =[0.8,0.8,0.8];	// Couleur de fond
 	this.frgb =[0.32,0.32,0.32];// Couleur des points
-	this.rgb2 =[0.33,0.33,0.33];// Couleur des traits
+	this.rgb2 =[0.42,0.42,0.42];// Couleur des traits
 	this.rgb3 =[1,0.,0.];		// Couleur sustain
 	this.rgb4 =[0.2,0.2,0.2];	// couleur texte
 	this.rgb5 =[0.5,0.5,0.5];	// Couleur grille
@@ -95,7 +96,6 @@ function Courbe(name)
 	this.PixelRange;			// ...
 	this.NextFrom = 0;			// utilisé pour le message next
 }
-
 
 function init()
 {
@@ -125,11 +125,11 @@ function draw()
 		// on efface tout
 		glclearcolor(tmpF.brgb);
 		glclear();
-		gldisable("lighting");
+		//gldisable("lighting");
 
 		// dessine la grille
 		if ( GridMode ) {
-			glcolor(tmpF["rgb5"], 0.2);
+			glcolor(tmpF["rgb5"], Ghostness);
 			
 			for (j = 0; j < (((tmpF.ZoomX[1] - tmpF.ZoomX[0]) / tmpF.GridStep)+1); j++) {
 			linesegment( screentoworld(val2x(tmpF, j*tmpF.GridStep), val2y(tmpF, tmpF.range[0]-Bordure) ),
@@ -142,7 +142,7 @@ function draw()
 
 				// dessine les segments
 				if ( fctns[c].display ) {
-					glcolor(fctns[c]["rgb2"], ((c == current) * 0.5) + 0.2);
+					glcolor(fctns[c]["rgb2"], (c == current ? 1 : Ghostness));
 							
 					moveto(screentoworld(fctns[c]["pa"][0].x,fctns[c]["pa"][0].y ));
 					
@@ -154,23 +154,22 @@ function draw()
 				// dessine les points de la courbe active ou de toutes les courbes si HiddenPointDisplay est activé
 				if ( fctns[c].display && ((c == current) || HiddenPointDisplay) ) {
 					// dessine les points
-					glcolor(fctns[c]["frgb"], ((c == current) * 0.5) + 0.2);
+					var tmpTransparency = c == current ? 1 : Ghostness;
+					glcolor(fctns[c]["frgb"], tmpTransparency);
 	
 					for (i = 0; i < fctns[c].np; i++) {							
 						moveto(screentoworld(fctns[c]["pa"][i].x,fctns[c]["pa"][i].y ));
 						
 						if ( fctns[c]["pa"][i].sustain) {
-							glcolor(fctns[c]["rgb3"], ((c == current) * 0.5) + 0.2);
-							circle(5/BoxHeight); // 5 pixels le point...
-							glcolor(fctns[c]["frgb"], ((c == current) * 0.5) + 0.2);
+							glcolor(fctns[c]["rgb3"], tmpTransparency);
+							circle(5 / BoxHeight); // 5 pixels le point...
+							glcolor(fctns[c]["frgb"], tmpTransparency);
 						}
 						else
-							circle(5/BoxHeight); // 5 pixels le point...
+							circle(5 / BoxHeight); // 5 pixels le point...
 					}
 				}
-				
 			}
-
 		}
 
 		if ( Legend ) {
@@ -1196,6 +1195,10 @@ function all()
 
 function args4insp()
 {
+	//
+	perror("since 1.52 the parameters are embed with the patcher");
+	return;
+	
 	var i, j;
 	var idx = 0;
 	var tmpArray = new Array();
@@ -1511,6 +1514,16 @@ function legend(v)
 	draw();
 }
 
+function ghost(v)
+{
+	if (v < 0 && v > 100) {
+		perror("ghost percentage between 0 and 100 % expected", v);
+		return;
+	}
+	Ghostness = v * 0.01;
+	draw();
+}
+
 function timedisplay(v)
 {
 	if (v != 0 && v != 1) {
@@ -1658,7 +1671,7 @@ function defaults()
 	// utilisé pour la restauration des paramètres par défaut.
 	var c;
 	
-	Legend = 1;
+	legend(1);
 	GridMode = 0;
 	Snap2GridState = 0;
 	HiddenPointDisplay = 0;
@@ -1666,11 +1679,12 @@ function defaults()
 	ClickMove = 1;
 	AutoSustain = 0;
 	CursorChange = 1;
+	Ghostness = 0.2;
 	
 	for (c = 0; c < NbCourbes; c++) {
 		fctns[c].brgb =[0.8,0.8,0.8];
 		fctns[c].frgb =[0.32,0.32,0.32];
-		fctns[c].rgb2 =[0.33,0.33,0.33];
+		fctns[c].rgb2 =[0.42,0.42,0.42];
 		fctns[c].rgb3 =[1,0.,0.];
 		fctns[c].rgb4 =[0.2,0.2,0.2];
 		fctns[c].rgb5 =[0.5,0.5,0.5];
@@ -2006,6 +2020,7 @@ function getautosustain() {	outlet(DUMPOUT, "autosustain", AutoSustain); }
 function getclickadd() { outlet(DUMPOUT, "clickadd", ClickAdd); }
 function getclickmove() { outlet(DUMPOUT, "clickmove", ClickMove); }
 function gettimedisplay() { outlet(DUMPOUT, "timedisplay", TimeFlag); }
+function getghost() { outlet(DUMPOUT, "ghost", Math.round(Ghostness * 100) ); }
 function getnbfunctions() { outlet(DUMPOUT, "nbfunctions", NbCourbes); }
 function getautocursor() { outlet(DUMPOUT, "autocursor", CursorChange); }
 
@@ -2197,6 +2212,7 @@ function save()
 	embedmessage("autosustain", AutoSustain);
 	embedmessage("timedisplay", TimeFlag);
 	embedmessage("autocursor", CursorChange);
+	embedmessage("ghost", Math.round(Ghostness * 100));
 	
 	for (i = 0; i < NbCourbes; i++) {
 		embedmessage("SetColor", i, "brgb", Math.round(fctns[i].brgb[0] * 255), Math.round(fctns[i].brgb[1] * 255), Math.round(fctns[i].brgb[2] * 255) );
