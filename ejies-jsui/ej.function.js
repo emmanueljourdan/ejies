@@ -1918,14 +1918,13 @@ function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 	
 		if (tmpF["np"] > 1) {
 
-			if (SelectedPoint == 0)
+			if (SelectedPoint == 0) {
 				x = ejies.clip(x, Bordure, tmpF["pa"][SelectedPoint+1].x );  
-	
-			if (SelectedPoint > 0 && SelectedPoint < (tmpF["np"] - 1))
-				x = ejies.clip(x, tmpF["pa"][SelectedPoint-1].x, tmpF["pa"][SelectedPoint+1].x);  
-	
-			if (SelectedPoint == (tmpF["np"] - 1) )
-				x = ejies.clip(x, tmpF["pa"][SelectedPoint-1].x, BoxWidth - Bordure);  
+			} else if (SelectedPoint > 0 && SelectedPoint < (tmpF["np"] - 1)) {
+				x = ejies.clip(x, tmpF["pa"][SelectedPoint-1].x, tmpF["pa"][SelectedPoint+1].x);
+			} else if (SelectedPoint == (tmpF["np"] - 1) ) {
+				x = ejies.clip(x, tmpF["pa"][SelectedPoint-1].x, BoxWidth - Bordure);
+			}				
 		}
 
 		EditedWithMouse.state++;		
@@ -1939,6 +1938,8 @@ function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 
 function ondblclick(x,y,but,cmd,shift,capslock,option,ctrl)
 {
+	IdlePoint = -1;
+	
 	if (cmd)
 		SwitchCurrent(shift);	// avec shift on tourne dans l'autre sens
 }
