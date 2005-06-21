@@ -1813,6 +1813,8 @@ MyZoomOut.local = 1;
 //////////////// Fonctions Mouse ///////////////
 function onidle(x,y,but,cmd,shift,capslock,option,ctrl)
 {
+//	DisplayCursor(Math.round((x-8)/200 * 10));
+//	return;
 	var OldIdlePoint = IdlePoint;
 	IdlePoint = -1;
 	
@@ -1832,8 +1834,11 @@ function onidle(x,y,but,cmd,shift,capslock,option,ctrl)
 		}
 	}
 
-	if (IdlePoint == -1 && shift == 0)
+	if (IdlePoint == -1 && shift == 0) {
 		DisplayCursor(6);
+	} else if (IdlePoint == -1 && shift == 1) {
+		DisplayCursor(1);
+	}
 	
 	RedrawOrNot(IdlePoint);
 }
