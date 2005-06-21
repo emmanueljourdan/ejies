@@ -1834,10 +1834,10 @@ function onidle(x,y,but,cmd,shift,capslock,option,ctrl)
 		}
 	}
 
-	if (IdlePoint == -1 && shift == 0) {
-		DisplayCursor(6);
-	} else if (IdlePoint == -1 && shift == 1) {
+	if (IdlePoint == -1 && shift == 1) {
 		DisplayCursor(1);
+	} else if (IdlePoint == -1 && shift == 0) {
+		DisplayCursor(6);
 	}
 	
 	RedrawOrNot(IdlePoint);
