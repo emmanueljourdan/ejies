@@ -347,9 +347,9 @@ EditedWithMouse.local = 1;
 
 function DisplayCursor(v)
 {
-	if (this.box.ignoreclick == 0 && CursorChange == 0)		// Si la bo”te est ignore click ou on ne change pas le cursor
+	if (this.box.ignoreclick == 1 || CursorChange == 0)		// Si la bo”te est ignore click ou on ne change pas le cursor
 		return;
-	
+
 	if (v != DisplayCursor.state) {
 		setcursor(v);
 		DisplayCursor.state = v
