@@ -165,8 +165,12 @@ function draw()
 							circle(5 / BoxHeight); // 5 pixels le point...
 							glcolor(fctns[c]["frgb"], tmpTransparency);
 						}
-						else
-							circle(5 / BoxHeight); // 5 pixels le point...
+						else {
+							if (fctns[c]["pa"][i].valy == 0)
+								framecircle(5 / BoxHeight); // 5 pixels le point...
+							else
+								circle(5 / BoxHeight); // 5 pixels le point...
+						}
 					}
 				}
 			}
@@ -2594,5 +2598,5 @@ function write(filename)
 
 resetall();
 
-//autowatch = 1;
-//post("compiled...\n");
+autowatch = 1;
+post("compiled...\n");
