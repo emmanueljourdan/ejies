@@ -19,6 +19,7 @@ ej.numbox.js: object configuration is now saved in the patcher (you don't have t
 ej.function.js: cursor changes when you edit points (autocursor mode)
 ej.function.js: set limit to 2047 points (the js array is limited to 4095 items, for going thru an outlet)
 ej.function.js: new ghost & getghost function to set the transparency of the background functions and the transparency of the grid
+ej.function.js: point display as framecircle when it's y value is equal to 0 (like the function object)
 
 
 
