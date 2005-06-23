@@ -22,6 +22,7 @@ ej.function.js: point display as framecircle when it's y value is equal to 0 (li
 ej.numbox.js: object configuration is now saved in the patcher (you don't have to put the arguments in the inspector anymore)
 jit.fullscreen: fsmenubar correctly defined (depending on the number of screen).
 ej.cc.js: new defaults message... use my favorites colors :-)
+splay~: dropfile added (you can drop a sound file on the window to select the sound you want to play).
 
 
 ******************
