@@ -19,14 +19,41 @@ var GlobalState = 1;
 if (jsarguments.length == 2) {
 	if (jsarguments[1] == 0)
 		GlobalState = 0;
-	else if (jsarguments[1] == 1 ) { ; }	 // GlobalState reste à 1
+	else if (jsarguments[1] == 1 ) { ; }	// GlobalState reste à 1
 	else if (jsarguments[1] == "ej")
-		ej();								// mes paramètres
+		defaults(); 						// mes paramètres
 	else
 		perror("wrong argument");
 }
 if (jsarguments.length > 2)
 	perror("extra arguments...");
+
+function defaults()
+{
+	var GlobalStateTmp = GlobalState;      // sauvegarde la valeur actuelle
+	global(1);
+	
+	resetall();
+	InternalExecuteOperation("send",6);
+	InternalExecuteOperation("receive",6);
+	InternalExecuteOperation("send~",6);
+	InternalExecuteOperation("receive~",6);
+	InternalExecuteOperation("value",6);
+	InternalExecuteOperation("forward",6);
+	InternalExecuteOperation("pvar",6);
+	InternalExecuteOperation("coll",14);
+	InternalExecuteOperation("patcher",5);
+	InternalExecuteOperation("poly~",5);
+	InternalExecuteOperation("loadbang",4);
+	InternalExecuteOperation("loadmess",4);
+	InternalExecuteOperation("closebang",4);
+	InternalExecuteOperation("thispatcher",4);
+	InternalExecuteOperation("pattr",12);
+	InternalExecuteOperation("pattrstorage",12);
+	InternalExecuteOperation("autopattr",12);
+	
+	GlobalState = GlobalStateTmp;          // restauration de la valeur
+}
 
 function anything()
 {
@@ -75,30 +102,6 @@ function global(a)
 		GlobalState = a;
 	else
 		perror("wrong argument for message global (1 or 0 expected)");
-}
-
-
-function ej() // une fonction dédiée
-{
-	var GlobalStateTmp = GlobalState;      // sauvegarde la valeur actuelle
-	global(1);
-
-	resetall();
-	InternalExecuteOperation("send",6);
-	InternalExecuteOperation("receive",6);
-	InternalExecuteOperation("send~",6);
-	InternalExecuteOperation("receive~",6);
-	InternalExecuteOperation("value",6);
-	InternalExecuteOperation("forward",6);
-	InternalExecuteOperation("coll",14);
-	InternalExecuteOperation("patcher",5);
-	InternalExecuteOperation("poly~",5);
-	InternalExecuteOperation("loadbang",4);
-	InternalExecuteOperation("loadmess",4);
-	InternalExecuteOperation("closebang",4);
-	InternalExecuteOperation("thispatcher",4);
-
-	GlobalState = GlobalStateTmp;          // restauration de la valeur
 }
 
 function InternalExecuteOperation(a, b)
