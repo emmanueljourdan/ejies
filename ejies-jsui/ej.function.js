@@ -1915,6 +1915,7 @@ function onclick(x,y,but,cmd,shift,capslock,option,ctrl)
 function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 {
 	var tmpF = fctns[current];
+	var borderthing = -1;
 
 	if (AllowEdit == 0 || tmpF.display == 0)
 		return;
@@ -1930,13 +1931,17 @@ function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 	if (SelectedPoint < tmpF.np) {
 		if (tmpF["pa"][SelectedPoint].fix)
 			return;
-	
+			
 		if ( Snap2GridState )
 			x = val2x(tmpF, Math.round(x2val(tmpF, x) / tmpF.GridStep) * tmpF.GridStep);
 		
 		x = ejies.clip(x, Bordure, BoxWidth - Bordure);
 		y = ejies.clip(y, Bordure + LegendBordure, BoxHeight - Bordure);
 	
+		if ( BorderSyncState == 1 && tmpF.np > 2 && ( SelectedPoint == 0 || SelectedPoint == (tmpF.np - 1 ) )) {
+			SelectedPoint == 0 ? borderthing = (tmpF.np - 1) : borderthing = 0;
+		}
+
 		if (tmpF["np"] > 1) {
 
 			if (SelectedPoint == 0) {
@@ -1945,7 +1950,7 @@ function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 				x = ejies.clip(x, tmpF["pa"][SelectedPoint-1].x, tmpF["pa"][SelectedPoint+1].x);
 			} else if (SelectedPoint == (tmpF["np"] - 1) ) {
 				x = ejies.clip(x, tmpF["pa"][SelectedPoint-1].x, BoxWidth - Bordure);
-			}				
+			}
 		}
 
 		EditedWithMouse.state++;		
@@ -1953,6 +1958,12 @@ function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 		tmpF["pa"][SelectedPoint].y = y;
 		tmpF["pa"][SelectedPoint].valx = x2val(tmpF, x);
 		tmpF["pa"][SelectedPoint].valy = y2val(tmpF, y);
+		
+		if (borderthing != -1) {
+			tmpF["pa"][borderthing].y = y;
+			tmpF["pa"][borderthing].valy = y2val(tmpF, y);
+		}
+		
 		UpdateDisplay();
 	}
 }
