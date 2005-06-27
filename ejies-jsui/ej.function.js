@@ -52,6 +52,7 @@ var TimeFlag = 0;
 var OpendialogPrepend = 0;
 var DisplayOneTime;
 var LectureInspectorFlag = 0;
+var BorderSyncState;
 
 RedrawEnable = 0;	// désactivation de l'affichage pendant l'initialisation
 
@@ -1328,6 +1329,15 @@ function deletefunction()
 	UpdateDisplay();
 }
 
+function bordersync(v)
+{
+	if (v != 0 && v != 1) {
+		perror("bordersync doesn't understand", v);
+		return;
+	}
+	BorderSyncState = v;
+}
+
 function clickadd(v)
 {
 	if (v != 0 && v != 1) {
@@ -1684,6 +1694,7 @@ function defaults()
 	AutoSustain = 0;
 	CursorChange = 1;
 	Ghostness = 0.2;
+	BorderSyncState = 0;
 	
 	for (c = 0; c < NbCourbes; c++) {
 		fctns[c].brgb =[0.8,0.8,0.8];
@@ -1860,6 +1871,7 @@ function onclick(x,y,but,cmd,shift,capslock,option,ctrl)
 		onidle(x, y);
 		return;
 	}
+	
 	SelectedPoint = -2;
 	x = ejies.clip(x - 2, Bordure, BoxWidth - Bordure);
 	y = ejies.clip(y - 2, Bordure + LegendBordure, BoxHeight - Bordure);
@@ -2033,6 +2045,7 @@ function gettimedisplay() { outlet(DUMPOUT, "timedisplay", TimeFlag); }
 function getghost() { outlet(DUMPOUT, "ghost", Math.round(Ghostness * 100) ); }
 function getnbfunctions() { outlet(DUMPOUT, "nbfunctions", NbCourbes); }
 function getautocursor() { outlet(DUMPOUT, "autocursor", CursorChange); }
+function getbordersync() { outlet(DUMPOUT, "bordersync", BorderSyncState); }
 
 function getname()
 {
