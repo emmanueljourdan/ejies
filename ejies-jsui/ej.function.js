@@ -2246,6 +2246,7 @@ function save()
 	embedmessage("autosustain", AutoSustain);
 	embedmessage("timedisplay", TimeFlag);
 	embedmessage("autocursor", CursorChange);
+	embedmessage("bordersync", BorderSyncState);
 	embedmessage("ghost", Math.round(Ghostness * 100));
 	
 	for (i = 0; i < NbCourbes; i++) {
