@@ -2581,6 +2581,23 @@ function write(filename)
 		if (PrintComment) { fichier.writeline("// format version number, Nb functions, Nb points function 0, Nb points function 1..."); }
 		fichier.writeline(tmpStr);
 
+
+//		// Non décidé... si on met ou pas...
+//		if (PrintComment) { fichier.writeline("// display parameters: Legend...");}
+//		
+//		tmpStr = "";		
+//		tmpStr += Legend + sep;
+//		tmpStr += GridMode + sep;
+//		tmpStr += Snap2GridState + sep;
+//		tmpStr += HiddenPointDisplay + sep;
+//		tmpStr += ClickAdd + sep;
+//		tmpStr += ClickMove + sep;
+//		tmpStr += AutoSustain + sep;
+//		tmpStr += CursorChange + sep;
+//		tmpStr += Ghostness + sep;
+//		tmpStr += BorderSyncState;
+//		fichier.writeline(tmpStr);		
+
 		for (i = 0; i < NbCourbes; i++) {
 			fichier.writeline("");
 			if (PrintComment) { fichier.writeline("// new function: name, domain, range min, range max, gridstep");	}
