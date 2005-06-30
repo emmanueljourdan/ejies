@@ -5,6 +5,9 @@ ejies Ñ Version history
 1.52: X Jun 2005
 This version requires MaxMSP 4.5.5 or higher (for multithread JavaScript, and some other improvements).
 
+New Abstraction:
+ej.dialog: replacement for the dialog object.
+
 Bug corrections:
 ej.function.js: 5th outlet assistance correction (Thanks Oliv')
 
