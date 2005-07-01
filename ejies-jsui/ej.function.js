@@ -21,6 +21,7 @@ setoutletassist(LINE_OUTLET, "points in line~ format");
 setoutletassist(DUMP_OUTLET, "dump message output");
 setoutletassist(BANG_OUTLET, "bang when changed with mouse");
 setoutletassist(DUMPOUT, "dumpout");
+inspector = 1;
 
 var g = new Global("ej.function");	// utilisé par dump & listdump
 g["copy"] = new Array();			// Utilisé pour le copier-coller
