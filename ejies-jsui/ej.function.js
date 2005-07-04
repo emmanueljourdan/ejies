@@ -1,7 +1,6 @@
 /* 
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
-
 */
 
 // global code
@@ -1202,7 +1201,7 @@ function all()
 function args4insp()
 {
 	//
-	perror("since 1.52 the parameters are embed with the patcher");
+	perror("since 1.52 the parameters are embed with the patcher. Use the inspector.");
 	return;
 	
 	var i, j;
@@ -2236,8 +2235,12 @@ function getvalueof()
 function save()
 {
 	var i;
+	var NameListe = new Array();
 
-	embedmessage("CreateNFunctions", NbCourbes);	// required for the number of color to save
+	for (i = 0; i < NbCourbes; i++)
+		NameListe[i] = fctns[i].name;
+
+	embedmessage("CreateNFunctions", NbCourbes, NameListe);	// required for the number of color to save
 	embedmessage("legend", Legend);
 	embedmessage("grid", GridMode);
 	embedmessage("snap2grid", Snap2GridState);
