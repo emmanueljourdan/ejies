@@ -12,6 +12,7 @@ setinletassist(0, "int/float, messages");
 setoutletassist(0, "Output incoming");
 setoutletassist(1, "mouse idle 1/0");
 setoutletassist(2, "dumpout");
+inspector = 1;
 
 // Variables Globales
 var LastY = 0;
@@ -357,11 +358,11 @@ function getvalueof()
 
 function save()
 {
-	embedmessage("brgb", MyBrgb[0]*255, MyBrgb[1]*255, MyBrgb[2]*255);
-	embedmessage("brgb2", MyBrgb2[0]*255, MyBrgb2[1]*255, MyBrgb2[2]*255);
-	embedmessage("brgb3", MyBrgb3[0]*255, MyBrgb3[1]*255, MyBrgb3[2]*255);
-	embedmessage("frgb", MyFrgb[0]*255, MyFrgb[1]*255, MyFrgb[2]*255);
-	embedmessage("frgb2", MyFrgb2[0]*255, MyFrgb2[1]*255, MyFrgb2[2]*255);
+	embedmessage("brgb", Math.floor(MyBrgb[0]*255), Math.floor(MyBrgb[1]*255), Math.floor(MyBrgb[2]*255));
+	embedmessage("brgb2", Math.floor(MyBrgb2[0]*255), Math.floor(MyBrgb2[1]*255), Math.floor(MyBrgb2[2]*255));
+	embedmessage("brgb3", Math.floor(MyBrgb3[0]*255), Math.floor(MyBrgb3[1]*255), Math.floor(MyBrgb3[2]*255));
+	embedmessage("frgb", Math.floor(MyFrgb[0]*255), Math.floor(MyFrgb[1]*255), Math.floor(MyFrgb[2]*255));
+	embedmessage("frgb2", Math.floor(MyFrgb2[0]*255), Math.floor(MyFrgb2[1]*255), Math.floor(MyFrgb2[2]*255));
 	embedmessage("roundmode", RoundValue);
 	embedmessage("leading0", LeadingValue);
 	embedmessage("approximation", ApproxiValue);
@@ -421,7 +422,7 @@ function brgb3(r,g,b)
 	MyBrgb3[2] = b/255.;
 }
 
-function getbrgb() {Êgetcolor("brgb", 0); }
+function getbrgb() { getcolor("brgb", 0); }
 
 function getbrgb2() { getcolor("brgb2", 1); }
 
