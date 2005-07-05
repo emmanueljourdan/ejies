@@ -53,14 +53,14 @@ function getversion()
 
 function testinstallation()
 {
-	var fichier = new File("C74:/jsextensions/ejies-jsextensions.js", "read"); 
+	var fichier = new File("C74:/mtjsextensions/ejies-Utils.js", "read"); 
 	if (fichier.isopen) {
 		fichier.close();
 		return;
 	}
 	
 	post("WARNING: Ejies are not properly installed!\n");
-	post("Make sure the ejies-extensions.js is installed in the \"C74:/jsextensions\" folder!\n");
+	post("Make sure the ejies-extensions.js is installed in the \"C74:/mtjsextensions\" folder!\n");
 }
 
 function perror()
@@ -69,6 +69,7 @@ function perror()
 	ejies.perror(arguments);
 }
 perror.local = 1;
+
 // Pour la compilation automatique
 // autowatch = 1;
 // post("Compiled...\n");

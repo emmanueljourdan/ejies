@@ -2,7 +2,7 @@ ejies Ñ Version history
 
 
 ******************
-1.52: X Jun 2005
+1.6: X Jun 2005
 This version requires MaxMSP 4.5.5 or higher (for multithread JavaScript, and some other improvements).
 
 New Abstraction:
@@ -30,6 +30,7 @@ jit.fullscreen: fsmenubar correctly defined (depending on the number of screen).
 ej.cc.js: new defaults message... use my favorites colors :-)
 splay~: dropfile added (you can drop a sound file on the window to select the sound you want to play)
 splay~: inlet works now (connected to the sfplay~).
+ejies-jsextensions.js has been renamed ejies-Utils.js and is now in C74:/mtjsextensions/
 
 
 
