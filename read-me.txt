@@ -1,4 +1,4 @@
-e j i e s (version 1.6)
+e j i e s (version 1.52)
 by Emmanuel Jourdan, Ircam
 This version requires MaxMSP 4.5.5 or higher.
 

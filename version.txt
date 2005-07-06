@@ -2,11 +2,12 @@ ejies Ñ Version history
 
 
 ******************
-1.6: X Jun 2005
+1.52: X Jully 2005
 This version requires MaxMSP 4.5.5 or higher (for multithread JavaScript, and some other improvements).
 
-New Abstraction:
+New:
 ej.dialog: replacement for the dialog object.
+ejies-shortcuts.txt: init file containing the ejies's shortcuts (new feature of 4.5.5)
 
 Bug corrections:
 ej.function.js: 5th outlet assistance correction (Thanks Oliv')

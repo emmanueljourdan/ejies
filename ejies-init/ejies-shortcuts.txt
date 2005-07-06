@@ -4,6 +4,7 @@ max shortcut 4m js ej.4m.js;
 max shortcut cc js ej.cc.js;
 max shortcut cn js ej.cn.js;
 max shortcut cycle js ej.cycle.js;
+max shortcut dialog ej.dialog;
 max shortcut dn js ej.dn.js;
 max shortcut lock js ej.lock.js;
 max shortcut lui js ej.lui.js;
