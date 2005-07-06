@@ -30,9 +30,8 @@ function wait_and_process()
 function replace_js_by_jsui()
 {
 	// create "unique" name
-	var TempEjLuiJs = "temp-";
+	var TempEjLuiJs = "ej.function-";
 	var TempDate = new Date();
-	TempEjLuiJs += TempDate.getUTCFullYear();
 	TempEjLuiJs += TempDate.getUTCDay();
 	TempEjLuiJs += TempDate.getUTCHours();
 	TempEjLuiJs += TempDate.getUTCMinutes();
