@@ -1839,7 +1839,9 @@ function onidle(x,y,but,cmd,shift,capslock,option,ctrl)
 	for(i=0; i< fctns[current].np; i++) {
 
 		if ( (Math.abs(x - fctns[current]["pa"][i].x) < Tolerance) && (Math.abs(y - fctns[current]["pa"][i].y) < Tolerance) ) {
-			DisplayCursor(5);
+			if (ClickMove == 1)
+				DisplayCursor(5);
+			
 			IdlePoint = i;
 
 			if ( IdlePoint != OldIdlePoint) {	// que quand c'est diffŽrent...
@@ -1851,7 +1853,7 @@ function onidle(x,y,but,cmd,shift,capslock,option,ctrl)
 
 	if (IdlePoint == -1 && shift == 1) {
 		DisplayCursor(1);
-	} else if (IdlePoint == -1 && shift == 0) {
+	} else if (IdlePoint == -1 && shift == 0 && ClickAdd == 1) {
 		DisplayCursor(6);
 	}
 	
@@ -1885,7 +1887,7 @@ function onclick(x,y,but,cmd,shift,capslock,option,ctrl)
 			return ;
 		}
 		
-		if (shift) {
+		if (shift && ClickAdd) {
 			DeletePoint(tmpF, SelectedPoint);
 			SelectedPoint = -1;
 			ApplyAutoSustain();
