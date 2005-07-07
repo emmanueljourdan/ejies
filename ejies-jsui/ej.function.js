@@ -2234,13 +2234,22 @@ function getvalueof()
 
 function save()
 {
-	var i;
-	var NameListe = new Array();
+	var i, j;
+
+	// c'est juste pour l'inspecteur : il contient le nom et les domain/range des fonctions
+	var tmpArray = new Array();
 
 	for (i = 0; i < NbCourbes; i++)
-		NameListe[i] = fctns[i].name;
+		tmpArray[i] = fctns[i].name;
 
-	embedmessage("CreateNFunctions", NbCourbes, NameListe);	// required for the number of color to save
+	for (j = 0; j < NbCourbes; j++) {
+		tmpArray[i++] = fctns[j].range[0];
+		tmpArray[i++] = fctns[j].range[1];
+		tmpArray[i++] = fctns[j].domain[0];
+		tmpArray[i++] = fctns[j].domain[1];
+	}
+	
+	embedmessage("CreateNFunctions", NbCourbes, tmpArray);	// required for the number of color to save
 	embedmessage("legend", Legend);
 	embedmessage("grid", GridMode);
 	embedmessage("snap2grid", Snap2GridState);
