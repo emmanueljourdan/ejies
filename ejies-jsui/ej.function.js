@@ -721,7 +721,7 @@ function MySmooth(courbe)
 	var i;
 	
 	for (i = 1; i < (courbe.np - 1); i++) {
-		courbe.pa[i].valy = courbe.pa[i-1].valy*0.2 + courbe.pa[i].valy*0.6 + courbe.pa[i+1].valy*0.2;
+		courbe.pa[i].valy = courbe.pa[i-1].valy*0.15 + courbe.pa[i].valy*0.7 + courbe.pa[i+1].valy*0.15;
 		courbe.pa[i].y = val2y(courbe, courbe.pa[i].valy);
 	}
 }
