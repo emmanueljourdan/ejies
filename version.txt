@@ -7,6 +7,7 @@ This version requires MaxMSP 4.5.5 or higher (for multithread JavaScript, and so
 New:
 ej.dialog: replacement for the dialog object.
 ejies-shortcuts.txt: init file containing the ejies's shortcuts (new feature of 4.5.5)
+ejies-prototypes: contains the prototypes of the ejies's jsui (new feature of 4.5.5)
 
 Bug corrections:
 ej.function.js: 5th outlet assistance correction (Thanks Oliv')
