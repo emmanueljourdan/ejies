@@ -20,7 +20,7 @@ setoutletassist(LINE_OUTLET, "points in line~ format");
 setoutletassist(DUMP_OUTLET, "dump message output");
 setoutletassist(BANG_OUTLET, "bang when changed with mouse");
 setoutletassist(DUMPOUT, "dumpout");
-inspector = 1;
+inspector = 1;						// Youpi!!!!!!
 
 var g = new Global("ej.function");	// utilisé par dump & listdump
 g["copy"] = new Array();			// Utilisé pour le copier-coller
@@ -50,6 +50,7 @@ var RedrawEnable;
 var AllowEdit = 1;
 var TimeFlag = 0;
 var OpendialogPrepend = 0;
+var ReadDialogObjectRef = new Array();
 var DisplayOneTime;
 var LectureInspectorFlag = 0;
 var BorderSyncState;
@@ -57,7 +58,7 @@ var BorderSyncState;
 RedrawEnable = 0;	// désactivation de l'affichage pendant l'initialisation
 
 if (max.version < 455)
-	perror("MaxMSP 4.5.5 or higher is required.");
+	perror("MaxMSP 4.5.5 or higher is required. Please upgrade!");
 
 if (box.rect[2] - box.rect[0] == 64 && box.rect[3] - box.rect[1] == 64) {
 	// numbox a été créée à partie de jsui : dimensions = 64*64
@@ -268,9 +269,14 @@ function anything()
 
 function onresize(w,h)
 {
-	box.size(ejies.clip(w, 100, 1024),ejies.clip(h, 50, 1024));	// taille minimum 100*50
+	// taille minimum 100*50 - le maximum dépend de fsaa
+	if (sketch.fsaa)
+		box.size(ejies.clip(w, 100, 1024),ejies.clip(h, 50, 1024));
+	else
+		box.size(ejies.clip(w, 100, 2048),ejies.clip(h, 50, 2048));
+	
 	BoxWidth = box.rect[2] - box.rect[0];
-	BoxHeight = box.rect[3] - box.rect[1] ;
+	BoxHeight = box.rect[3] - box.rect[1];
 	AllPixel2Machin();
 	ValRecalculate();
 	draw();
@@ -635,25 +641,15 @@ function WriteDialog()
 	var savedialog, prepend;
 	savedialog = this.patcher.newdefault(box.rect[0], box.rect[1] - 50, "savedialog", "TEXT");
 	prepend = this.patcher.newdefault(box.rect[0], box.rect[1] - 25, "prepend", "write");
-	savedialog.varname = "temp-savedialog";
-	prepend.varname = "temp-prepend";
 	savedialog.hidden = 1;
 	prepend.hidden = 1;
 	
-	// pour connecter en hidden, il faut que la fonction soit nommée
-	if (! this.box.varname)
-		this.box.varname = "tmp-function";
-
-	this.patcher.script("hidden", "connect", "temp-savedialog", 0, "temp-prepend", 0);
-	this.patcher.script("hidden", "connect", "temp-prepend", 0, this.box.varname, 0);
+	this.patcher.hiddenconnect(savedialog, 0, prepend, 0);	
+	this.patcher.hiddenconnect(prepend, 0, this.box, 0);
 	
-	// dénommage de la fonction si elle s'appelle tmp-function
-	if (this.box.varname == "tmp-function")
-		this.box.varname = "";
-
 	savedialog.message("bang");
-	this.patcher.script("delete", "temp-savedialog");
-	this.patcher.script("delete", "temp-prepend");
+	this.patcher.remove(savedialog);
+	this.patcher.remove(prepend);
 }
 WriteDialog.local = 1;
 
@@ -663,29 +659,22 @@ function ReadDialog()
 	opendialog = this.patcher.newdefault(box.rect[0], box.rect[1] - 50, "opendialog", "TEXT");
 	prepend = this.patcher.newdefault(box.rect[0], box.rect[1] - 25, "prepend", "read");
 	prepend2 = this.patcher.newdefault(box.rect[0] + 50, box.rect[1] - 25, "prepend", "DeleteReadThings");
-	opendialog.varname = "temp-opendialog";
-	prepend.varname = "temp-prepend";
-	prepend2.varname = "temp-prepend2";
 	opendialog.hidden = 1;
 	prepend.hidden = 1;
 	prepend2.hidden = 1;
 
-	// pour connecter en hidden, il faut que la fonction soit nommée
-	if (! this.box.varname)
-		this.box.varname = "tmp-function";
-
-	this.patcher.script("hidden", "connect", "temp-opendialog", 0, "temp-prepend", 0);
-	this.patcher.script("hidden", "connect", "temp-prepend", 0, this.box.varname, 0);
-	this.patcher.script("hidden", "connect", "temp-opendialog", 1, "temp-prepend2", 0);
-	this.patcher.script("hidden", "connect", "temp-prepend2", 0, this.box.varname, 0);
+	this.patcher.hiddenconnect(opendialog, 0, prepend, 0);
+	this.patcher.hiddenconnect(prepend, 0, this.box, 0);
+	this.patcher.hiddenconnect(opendialog, 1, prepend2, 0);
+	this.patcher.hiddenconnect(prepend2, 0, this.box, 0);
+	
+	// on en a besoin pour la suppression
+	ReadDialogObjectRef[0] = opendialog;
+	ReadDialogObjectRef[1] = prepend;
+	ReadDialogObjectRef[2] = prepend2;
 	
 	OpendialogPrepend = 1;
 	
-	
-	// dénommage de la fonction si elle s'appelle tmp-function
-	if (this.box.varname == "tmp-function")
-		this.box.varname = "";
-
 	opendialog.message("bang");
 }
 ReadDialog.local = 1;
@@ -695,7 +684,14 @@ function DeleteReadThings()
 	// pour l'opération de suppression quand on vient de read...
 	// pour une raison qui m'échappe...
 	// il faut délayer...
-	tsk = new Task(function() { if ( ! tsk.running) { this.patcher.script("delete", "temp-opendialog"); this.patcher.script("delete", "temp-prepend"); this.patcher.script("delete", "temp-prepend2"); } }, this);
+	tsk = new Task(function() {
+		if ( ! tsk.running) {
+			var i;
+			for (i = 0; i < ReadDialogObjectRef.length; i++)
+				this.patcher.remove(ReadDialogObjectRef[i]);
+		}
+	}, this);
+		
 	tsk.interval = 100;
 	tsk.repeat(1);
 	
@@ -1158,7 +1154,7 @@ function SetColor(intOrcourbe, which, a, b, c)
 	else
 		perror("bad arguments for message", which);
 }
-//SetColor.local = 1;
+//SetColor.local = 1; // utilisée par embedmessage c'est pourquoi il ne faut pas qu'elle soit locale
 
 function GetColor(courbe, which)
 {
@@ -2595,23 +2591,6 @@ function write(filename)
 
 		if (PrintComment) { fichier.writeline("// format version number, Nb functions, Nb points function 0, Nb points function 1..."); }
 		fichier.writeline(tmpStr);
-
-
-//		// Non décidé... si on met ou pas...
-//		if (PrintComment) { fichier.writeline("// display parameters: Legend...");}
-//		
-//		tmpStr = "";		
-//		tmpStr += Legend + sep;
-//		tmpStr += GridMode + sep;
-//		tmpStr += Snap2GridState + sep;
-//		tmpStr += HiddenPointDisplay + sep;
-//		tmpStr += ClickAdd + sep;
-//		tmpStr += ClickMove + sep;
-//		tmpStr += AutoSustain + sep;
-//		tmpStr += CursorChange + sep;
-//		tmpStr += Ghostness + sep;
-//		tmpStr += BorderSyncState;
-//		fichier.writeline(tmpStr);		
 
 		for (i = 0; i < NbCourbes; i++) {
 			fichier.writeline("");

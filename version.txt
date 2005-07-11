@@ -1,6 +1,5 @@
 ejies Ñ Version history
 
-
 ******************
 1.52: X Jully 2005
 This version requires MaxMSP 4.5.5 or higher (for multithread JavaScript, and some other improvements).
@@ -23,8 +22,10 @@ ej.function.js: cursor changes when you edit points (autocursor mode)
 ej.function.js: set limit to 2047 points (the js array is limited to 4095 items, for going thru an outlet)
 ej.function.js: new ghost & getghost function to set the transparency of the background functions and the transparency of the grid
 ej.function.js: point display as framecircle when it's y value is equal to 0 (like the function object)
-ej.function.js: new bordersync function (Thanks Vlad)
+ej.function.js: new bordersync feature (Thanks Vlad)
 ej.function.js: have now its own inspector! Thanks Cyclists!
+ej.function.js: read and write function optimized (using the new hiddenconnect message)
+ej.function.js: increased the size of the object (2048*2048) if the fsaa is disabled (nofsaa 1 message)
 ej.numbox.js: object configuration is now saved in the patcher (you don't have to put the arguments in the inspector anymore)
 ej.numbox.js: have now its own inspector! Thanks Cyclists!
 jit.fullscreen: fsmenubar correctly defined (depending on the number of screen).
