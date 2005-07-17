@@ -1,7 +1,7 @@
 /*
 	ej.numbox.js by Emmanuel Jourdan, Ircam - 08 2004
 	an alternative number box.
- */
+*/
 
 // Global Code
 
@@ -41,9 +41,11 @@ var ChangeState = 0;
 var MouseUpState = 0;
 var TempValue;					// utilsé pour la fonction change
 var MyVal = 0;
+var keyboard = -1;					// utilisé pour l'entrée au clavier
+var KeyboardError = 1;
 
-border = 0;			// ça marche pas ?
-sketch.fsaa = 0;	// ça doit marcher
+border = 0;
+sketch.fsaa = 0;
 sketch.default2d();
 
 // process arguments
@@ -180,7 +182,11 @@ function outputidle(v)
 		inside = v;
 		draw();
 		refresh();
+		if (v) // on se sert du idle 0 pour envoyer la valeur quand on sort de la boite
+			KeyboardInput(1);
 		outlet(1, v);
+		if (! v)
+			KeyboardInput(0);
 	}
 	LastIdle = v ;
 }
@@ -211,6 +217,11 @@ function roundmode(v)
 function getroundmode()
 {
 	outlet(2, "roundmode", RoundValue);
+}
+
+function getval()
+{
+	outlet(2, "val", MyVal);
 }
 
 function onresize(w,h)
@@ -260,7 +271,7 @@ function msg_float(v)
 	// clipping or not clipping
 	if (MinMaxState)
 		clipping(MyVal);
-	
+
 	// rounding
 	switch (RoundValue) {
 		case 1:
@@ -302,8 +313,25 @@ function set(v)
 {
 	MyVal = v;
 	
+	// Clipping or not cliping
 	if (MinMaxState)
 		clipping(MyVal);
+		
+	// rounding
+	switch (RoundValue) {
+		case 1:
+			MyVal = Math.round(MyVal);
+			approxi = 0;
+			break;
+		case 2:
+			MyVal = Math.floor(MyVal);
+			approxi = 0;
+			break;
+		case 0:
+			approxi = ApproxiValue;
+			break;
+	}
+
 	draw();
 	refresh();
 	notifyclients();
@@ -444,14 +472,51 @@ function getcolor(MsgName,ColorItem)
 }
 getcolor.local = 1;	// private
 
-function cursor(a)
+function cursor(c)
 {
-	if (a)
+	if (c)
 		max.showcursor();
 	else
 		max.hidecursor();
 }
 cursor.local = 1;
+
+function KeyboardInput(v)
+{
+	if (v && this.patcher.locked) {
+		if (KeyboardError) {
+			keyboard = this.patcher.newdefault(box.rect[0], box.rect[1] - 25, "ej.numbox-keyboard.pat");
+			// ça serait bien d'éviter le nommage...
+			// create "unique" name
+			var TempName = "num-";
+			var TempDate = new Date();
+			TempName += TempDate.getUTCDay();
+			TempName += TempDate.getUTCHours();
+			TempName += TempDate.getUTCMinutes();
+			TempName += TempDate.getUTCSeconds();
+
+			keyboard.varname = TempName;
+			this.patcher.script("hide", TempName);
+			
+			if (keyboard.maxclass == "bogus") {
+				perror("check the installation: ej.numbox-keyboard.pat is missing in the ejies'help folder");
+				KeyboardError = 0;
+				return;
+			}
+			
+			this.patcher.hiddenconnect(this.box, 1, keyboard, 0);
+			this.patcher.hiddenconnect(this.box, 2, keyboard, 1);
+			this.patcher.hiddenconnect(keyboard, 0, this.box, 0);
+			getval();	// envoie la valeur actuelle
+		} else
+			return;
+	} else
+		if (keyboard != -1) {	// si keyboard n'existe pas... il ne faut pas vouloir le supprimer
+			this.patcher.remove(keyboard);
+			keyboard = -1;
+		}
+}
+KeyboardInput.local = 1;
 
 // not using any mouse args
 function onclick(x,y,but,cmd,shift,capslock,option,ctrl)
