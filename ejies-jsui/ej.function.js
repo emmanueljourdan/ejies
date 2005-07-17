@@ -25,7 +25,7 @@ inspector = 1;						// Youpi!!!!!!
 var g = new Global("ej.function");	// utilisé par dump & listdump
 g["copy"] = new Array();			// Utilisé pour le copier-coller
 g["copycolors"] = new Array();		// Utilisé pour le copier-coller des couleurs
-var NbCourbes = 2;
+var NbCourbes = 1;
 var fctns = new Array();
 var Tolerance = 4;
 var Bordure = 4;
@@ -731,7 +731,6 @@ function pixel2machin(courbe)
 {
 	courbe.PixelDomain = (courbe.ZoomX[1] - courbe.ZoomX[0]) / (BoxWidth-(Bordure*2));
 	courbe.PixelRange = (courbe.ZoomY[1] - courbe.ZoomY[0]) / (BoxHeight-((Bordure*2) + LegendBordure));
-/* 	MyPointsInside(courbe); */
 }
 pixel2machin.local = 1.;
 
@@ -1615,7 +1614,7 @@ function range(a, b, courbe)
 	var i;
 	
 	if ( (b - a)  < 0) {
-		perror("bad values for message range");
+		perror("bad values for message range: min must be lower than max");
 		return ;
 	}
 	
@@ -1636,7 +1635,7 @@ function setrange(a, b, courbe)
 	var i;
 
 	if ( (b - a)  < 0) {
-		perror("bad values for message setrange");
+		perror("bad values for message setrange: min must be lower than max");
 		return ;
 	}
 	
