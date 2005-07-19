@@ -17,7 +17,7 @@ ej.numbox.js: now rounding while using the set method
 
 Improvements:
 AddShortcuts2Max.command: adding shortcuts for New from Clipboard, Encapsulate and Dcvs e-Encapsulate
-ej.function.js: domain has now 2 limits (like the range). If you specify the domain, with only one argument, it'll start at 0 (it shouldn't break any old patch)
+ej.function.js: domain has now 2 limits (like the range). If you specify the domain, with only one argument, it'll start at 0
 ej.function.js: Zoom features (zoom_x, zoom_y, getzoom_x, getzoom_y & zoomout messages)
 ej.function.js: draw improvements (the drawing operations appears less often)
 ej.function.js: bang, int/float, and next message are now in the high priority thread
@@ -29,7 +29,7 @@ ej.function.js: point display as framecircle when it's y value is equal to 0 (li
 ej.function.js: new bordersync feature (Thanks Vlad)
 ej.function.js: read and write function optimized (using the new hiddenconnect message)
 ej.function.js: increased the size of the object (2048*2048) if the fsaa is disabled ("nofsaa 1" message)
-ej.function.js: new outputmode message wich enable the output of the message "recalled" when a preset is recalled (from pattrstorage)
+ej.function.js: send a the message "recalled" when a preset is recalled (from pattrstorage)
 ej.numbox.js: object configuration is now saved in the patcher (you don't have to put the arguments in the inspector anymore)
 ej.numbox.js: keyboard input is now possible while the patch is locked, non edit mode (an abstraction is automatically loaded and removed)
 jit.fullscreen: fsmenubar correctly defined (depending on the number of screen)

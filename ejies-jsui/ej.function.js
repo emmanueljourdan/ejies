@@ -134,9 +134,9 @@ function draw()
 		if ( GridMode ) {
 			glcolor(tmpF["rgb5"], Ghostness);
 			
-			for (j = 0; j < (((tmpF.ZoomX[1] - tmpF.ZoomX[0]) / tmpF.GridStep)+1); j++) {
-			linesegment( screentoworld(val2x(tmpF, j*tmpF.GridStep), val2y(tmpF, tmpF.range[0]-Bordure) ),
-				screentoworld( val2x(tmpF, j*tmpF.GridStep), val2y(tmpF, tmpF.range[1]) ) );
+			for (j = 0; j < (((tmpF.domain[1] - tmpF.domain[0]) / tmpF.GridStep)+1); j++) {
+			linesegment( screentoworld(val2x(tmpF, j*tmpF.GridStep + tmpF.domain[0]), val2y(tmpF, tmpF.range[0]-Bordure) ),
+				screentoworld( val2x(tmpF, j*tmpF.GridStep + tmpF.domain[0]), val2y(tmpF, tmpF.range[1]) ) );
 			}
 		}
 	
