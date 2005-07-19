@@ -54,6 +54,7 @@ var ReadDialogObjectRef = new Array();
 var DisplayOneTime;
 var LectureInspectorFlag = 0;
 var BorderSyncState;
+var outputmode = 1;	// utilise pour l'envoi d'un message lors du rappel pattr
 
 RedrawEnable = 0;	// désactivation de l'affichage pendant l'initialisation
 
@@ -2189,6 +2190,9 @@ function setvalueof()
 	AllowEdit = 1;
 	PattrInterpError.flag = 0;
 	UpdateDisplay();
+	
+	if (outputmode)
+		outlet(DUMPOUT, "recalled");
 
 	if ( FunctionVersionCheck < 1 && FunctionVersionCheck > 2 )
 		perror("bad version number - interpolation aborted");
