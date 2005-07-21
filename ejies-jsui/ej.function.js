@@ -455,33 +455,31 @@ line.local = 1;
 
 function Interpolation(courbe, v)
 {
-	var tmpF = courbe;
 	var i, a, tmpRange, tmpDomain;
 	
-	if ( tmpF.np < 2 )
+	if ( courbe.np < 2 )
 		return;
 	
-	if ( v < tmpF.pa[0].valx ) {	// v est plus petit que le premier point
-		outlet(INTERP_OUTLET, tmpF.name, tmpF.pa[0].valy);
+	if ( v < courbe.pa[0].valx ) {	// v est plus petit que le premier point
+		outlet(INTERP_OUTLET, courbe.name, courbe.pa[0].valy);
 		return;
 	}
 
-	if ( v > tmpF.pa[tmpF.np - 1].valx ) {	// v est plus grand que le dernier point
-		outlet(INTERP_OUTLET, tmpF.name, tmpF.pa[tmpF.np - 1].valy);
+	if ( v > courbe.pa[courbe.np - 1].valx ) {	// v est plus grand que le dernier point
+		outlet(INTERP_OUTLET, courbe.name, courbe.pa[courbe.np - 1].valy);
 		return;
 	}
 	
-	for (i = 0, a = 0; i < tmpF.np; i++) {
-		if (v > tmpF.pa[i].valx)
+	for (i = 0, a = 0; i < courbe.np; i++) {
+		if (v > courbe.pa[i].valx)
 			a = i;
 		else
 			break;
 	}
-
-	tmpRange = tmpF.pa[a+1].valy - tmpF.pa[a].valy;
-	tmpDomain = tmpF.pa[a+1].valx - tmpF.pa[a].valx;
+	tmpRange = courbe.pa[a+1].valy - courbe.pa[a].valy;
+	tmpDomain = courbe.pa[a+1].valx - courbe.pa[a].valx;
 	
-	outlet(INTERP_OUTLET, tmpF.name, ((v - tmpF.pa[a].valx) / tmpDomain) * tmpRange + tmpF.pa[a].valy);
+	outlet(INTERP_OUTLET, courbe.name, ((v - courbe.pa[a].valx) / tmpDomain) * tmpRange + courbe.pa[a].valy);
 }
 Interpolation.local = 1;
 
@@ -1064,21 +1062,21 @@ MyGridStep.local = 1;
 
 function MyDump(courbe, sendname)
 {
-	var tmpF = courbe;
+/* 	var tmpF = courbe; */
 	var i, str;
 	
-	if (! tmpF.np)
+	if (! courbe.np)
 		return;
 
 	if (arguments.length == 1) {
-		for (i = 0; i < tmpF.np; i++) {
-			outlet(DUMP_OUTLET, tmpF.name, tmpF.pa[i].valx, tmpF.pa[i].valy);
+		for (i = 0; i < courbe.np; i++) {
+			outlet(DUMP_OUTLET, courbe.name, courbe.pa[i].valx, courbe.pa[i].valy);
 		}
 		return;
 	}
 	//else -> on envoie vers un send
-	for (i = 0; i < tmpF.np; i++) {
-		str = tmpF.name + " " + tmpF.pa[i].valx.toFixed(6) + " " + tmpF.pa[i].valy.toFixed(6);
+	for (i = 0; i < courbe.np; i++) {
+		str = courbe.name + " " + courbe.pa[i].valx.toFixed(6) + " " + courbe.pa[i].valy.toFixed(6);
 		g.dump = str.split(" ");	// String -> Array
 		g.sendnamed(sendname,"dump");
 	}
@@ -1087,16 +1085,16 @@ MyDump.local = 1;
 
 function MyListDump(courbe, sendname)
 {
-	var tmpF = courbe;
+/* 	var tmpF = courbe; */
 	var tmpArray = new Array();
 	var i, idx, str;
 	
-	if (! tmpF.np)
+	if (! courbe.np)
 		return;
 	
-	for (i = 0, idx = 0; i < tmpF.np; i++) {
-		tmpArray[idx++] = tmpF.pa[i].valx;
-		tmpArray[idx++] = tmpF.pa[i].valy;
+	for (i = 0, idx = 0; i < courbe.np; i++) {
+		tmpArray[idx++] = courbe.pa[i].valx;
+		tmpArray[idx++] = courbe.pa[i].valy;
 	}
 	
 	// sortie limitŽe ˆ 4095 ŽlŽments (4094 + nom de la fonction)
@@ -1106,12 +1104,12 @@ function MyListDump(courbe, sendname)
 	}
 	
 	if (arguments.length == 1) {
-		outlet(DUMP_OUTLET, tmpF.name, tmpArray);
+		outlet(DUMP_OUTLET, courbe.name, tmpArray);
 		return;
 	}
 
 	// else -> on envoie vers un send
-	str = tmpF.name;
+	str = courbe.name;
 	for (i = 0; i < tmpArray.length; i++) {
 		str += " " + tmpArray[i].toFixed(6);
 	}
