@@ -13,6 +13,7 @@ max shortcut op js ej.op.js;
 max shortcut route js ej.route.js;
 max shortcut mout ej.mout~;
 max shortcut vdb ej.vdb~;
+max shortcut vdb-sig ej.vdb-sig~;
 max shortcut fullscreen jit.fullscreen;
 max shortcut getparam jit.getparam;
 max shortcut sp splay~;

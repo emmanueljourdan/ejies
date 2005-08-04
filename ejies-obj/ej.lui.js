@@ -30,9 +30,9 @@ function wait_and_process()
 function replace_js_by_jsui()
 {
 	// create "unique" name
-	var TempEjLuiJs = "ej.function-";
+	var TempEjLuiJs = "ej.lui-";
 	var TempDate = new Date();
-	TempEjLuiJs += TempDate.getUTCDay();
+	TempEjLuiJs += TempDate.getUTCDay() + 1;
 	TempEjLuiJs += TempDate.getUTCHours();
 	TempEjLuiJs += TempDate.getUTCMinutes();
 	TempEjLuiJs += TempDate.getUTCSeconds();
@@ -52,14 +52,14 @@ function getversion()
 
 function testinstallation()
 {
-	var fichier = new File("C74:/mtjsextensions/ejies-Utils.js", "read"); 
+	var fichier = new File("C74:/jsextensions/ejies-jsextensions.js", "read"); 
 	if (fichier.isopen) {
 		fichier.close();
 		return;
 	}
 	
-	post("WARNING: Ejies are not properly installed!\n");
-	post("Make sure the ejies-extensions.js is installed in the \"C74:/mtjsextensions\" folder!\n");
+	post("¥ WARNING Ejies are not properly installed!\n");
+	post("Make sure the ejies-jsextensions.js is installed in the \"C74:/jsextensions\" folder!\n");
 }
 
 function perror()

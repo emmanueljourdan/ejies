@@ -39,7 +39,7 @@ Installation:
 - put the CONTENTS of the ejies-extras folder in the ../MaxMSP 4.5/patches/extras folder
 - put the CONTENTS of the ejies-init folder in the C74:/init folder
 - put the CONTENTS of the ejies-jsui folder in the C74:/jsui-library folder
-- put the CONTENTS of the ejies-mtjsextensions folder in the C74:/mtjsextensions folder
+- put the CONTENTS of the ejies-jsextensions folder in the C74:/jsextensions folder
 - put the CONTENTS of the ejies-prototypes folder in the ./MaxMSP 4.5/patches/object-protypes/ folder
 - put the ejies-insp folder in the ../MaxMSP 4.5/patches/inspectors/ folder
 - put the ejies-obj folder in the C74:/externals or whatever you want in the Max Search path

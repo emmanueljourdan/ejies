@@ -1,42 +1,41 @@
 ejies Ñ Version history
 
 ******************
-1.52: X Jully 2005
+1.52: 4 August 2005
 This version requires MaxMSP 4.5.5 or higher.
 
 New:
-ej.dialog: replacement for the dialog object.
+ej.dialog: replacement for the dialog object
 ejies-shortcuts.txt: init file containing the ejies's shortcuts (new feature of 4.5.5)
 ejies-prototypes: contains the prototypes of the ejies's jsui (new feature of 4.5.5)
-ej.function.js: have now its own inspector! Thanks Cyclists! (new feature of 4.5.5)
-ej.numbox.js: have now its own inspector! Thanks Cyclists! (new feature of 4.5.5)
+ej.function.js: have now its own inspector! (new feature of 4.5.5)
+ej.numbox.js: have now its own inspector! (new feature of 4.5.5)
 
-Bug corrections:
+Bugs corrections:
 ej.function.js: 5th outlet assistance correction (Thanks Oliv')
 ej.numbox.js: now rounding while using the set method
+jit.fullscreen: fsmenubar correctly defined (depending on the number of screen)
+splay~: inlet works now (connected to the sfplay~)
 
 Improvements:
-AddShortcuts2Max.command: adding shortcuts for New from Clipboard, Encapsulate and Dcvs e-Encapsulate
+AddShortcuts2Max.command: adding shortcuts for New from Clipboard, Encapsulate and De-Encapsulate
 ej.function.js: domain has now 2 limits (like the range). If you specify the domain, with only one argument, it'll start at 0
 ej.function.js: Zoom features (zoom_x, zoom_y, getzoom_x, getzoom_y & zoomout messages)
-ej.function.js: draw improvements (the drawing operations appears less often)
 ej.function.js: bang, int/float, and next message are now in the high priority thread
-ej.function.js: object configuration is now saved in the patcher (you don't have to put the arguments in the inspector anymore)
+ej.function.js: draw improvements (the drawing operations appears less often)
+ej.function.js: object configuration is now saved in the patcher
 ej.function.js: cursor changes when you edit points (autocursor mode)
 ej.function.js: set limit to 2047 points (the js array is limited to 4095 items, for being sent to an outlet)
 ej.function.js: new ghost & getghost messages to set/get the transparency of the background functions and the transparency of the grid
 ej.function.js: point display as framecircle when it's y value is equal to 0 (like the function object)
-ej.function.js: new bordersync feature (Thanks Vlad)
+ej.function.js: new bordersync feature wich keep the first and last points at the same y position (Thanks Vlad)
 ej.function.js: read and write function optimized (using the new hiddenconnect message)
 ej.function.js: increased the size of the object (2048*2048) if the fsaa is disabled ("nofsaa 1" message)
-ej.function.js: send a the message "recalled" when a preset is recalled (from pattrstorage)
+ej.function.js: output the message "recalled" when a preset is recalled from pattrstorage (That's for Ben)
 ej.numbox.js: object configuration is now saved in the patcher (you don't have to put the arguments in the inspector anymore)
-ej.numbox.js: keyboard input is now possible while the patch is locked, non edit mode (an abstraction is automatically loaded and removed)
-jit.fullscreen: fsmenubar correctly defined (depending on the number of screen)
+ej.numbox.js: keyboard input is now possible while the patch is locked, i.e non edit mode (an abstraction is automatically loaded and removed)
 ej.cc.js: new defaults message... use my favorites colors :-)
 splay~: dropfile added (you can drop a sound file on the window to select the sound you want to play)
-splay~: inlet works now (connected to the sfplay~)
-ejies-jsextensions.js has been renamed ejies-Utils.js and is now in C74:/mtjsextensions/
 
 
 
