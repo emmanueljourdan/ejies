@@ -92,6 +92,11 @@ function loadbang()
 	msg_float(MyVal);
 }
 
+function notifydeleted()
+{
+	KeyboardInput(0);	// si on supprime ej.function on fait dispara”tre le sous patch keyboard-input
+}
+
 function boxposition()
 {
 	// pour le recentrage du curseur quand on rel‰che
