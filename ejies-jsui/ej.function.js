@@ -1899,7 +1899,7 @@ function onclick(x,y,but,cmd,shift,capslock,option,ctrl)
 	// ajout d'un point
 	if (cmd == 0 && shift == 0 && SelectedPoint == -2 && ClickAdd == 1) {
 		if ( Snap2GridState )
-			x = val2x(tmpF, Math.round(x2val(tmpF, x) / tmpF.GridStep) * tmpF.GridStep);
+			x = val2x(tmpF, Math.round((x2val(tmpF, x) - tmpF.domain[0]) / tmpF.GridStep) * tmpF.GridStep + tmpF.domain[0]);
 		SelectedPoint = AddPoint(tmpF, x, y);
 		ApplyAutoSustain();
 		EditedWithMouse.state++;
@@ -1929,7 +1929,7 @@ function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 			return;
 			
 		if ( Snap2GridState )
-			x = val2x(tmpF, Math.round(x2val(tmpF, x) / tmpF.GridStep) * tmpF.GridStep);
+			x = val2x(tmpF, Math.round((x2val(tmpF, x) - tmpF.domain[0]) / tmpF.GridStep) * tmpF.GridStep + tmpF.domain[0]);
 		
 		x = ejies.clip(x, Bordure, BoxWidth - Bordure);
 		y = ejies.clip(y, Bordure + LegendBordure, BoxHeight - Bordure);
@@ -2635,5 +2635,5 @@ function write(filename)
 
 resetall();
 
-autowatch = 1;
-post("compiled...\n");
+/* autowatch = 1; */
+/* post("compiled...\n"); */
