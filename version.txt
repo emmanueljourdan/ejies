@@ -31,7 +31,7 @@ ej.function.js: point display as framecircle when it's y value is equal to 0 (li
 ej.function.js: new bordersync feature wich keep the first and last points at the same y position (Thanks Vlad)
 ej.function.js: read and write function optimized (using the new hiddenconnect message)
 ej.function.js: increased the size of the object (2048*2048) if the fsaa is disabled ("nofsaa 1" message)
-ej.function.js: output the message "recalled" when a preset is recalled from pattrstorage (That's for Ben)
+ej.function.js: if notifyrecalled is on (in the inspector), output the message "recalled" when a preset is recalled from pattrstorage (That's for Ben)
 ej.numbox.js: object configuration is now saved in the patcher (you don't have to put the arguments in the inspector anymore)
 ej.numbox.js: keyboard input is now possible while the patch is locked, i.e non edit mode (an abstraction is automatically loaded and removed)
 ej.cc.js: new defaults message... use my favorites colors :-)

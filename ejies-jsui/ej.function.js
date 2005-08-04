@@ -54,7 +54,7 @@ var ReadDialogObjectRef = new Array();
 var DisplayOneTime;
 var LectureInspectorFlag = 0;
 var BorderSyncState;
-var outputmode = 1;	// utilise pour l'envoi d'un message lors du rappel pattr
+var NotifyRecalledState;	// utilise pour l'envoi d'un message lors du rappel pattr
 
 RedrawEnable = 0;	// désactivation de l'affichage pendant l'initialisation
 
@@ -1446,6 +1446,15 @@ function nth(v)
 		perror("bad argument for message nth");
 }
 
+function notifyrecalled(v)
+{
+	if (v != 0 && v != 1) {
+		perror("notifyrecalled doesn't understand", v);
+		return;
+	}
+	NotifyRecalledState = v;
+}
+
 function active()
 {
 	// ne pas éditer si c'est invisible
@@ -1679,7 +1688,7 @@ function defaults()
 	// utilisé pour la restauration des paramètres par défaut.
 	var c;
 	
-	legend(1);
+	legend(1);	// il y a aussi recalcul du facteur multiplicateur
 	GridMode = 0;
 	Snap2GridState = 0;
 	HiddenPointDisplay = 0;
@@ -1687,8 +1696,9 @@ function defaults()
 	ClickMove = 1;
 	AutoSustain = 0;
 	CursorChange = 1;
-	Ghostness = 0.2;
 	BorderSyncState = 0;
+	Ghostness = 0.2;
+	NotifyRecalledState = 0;
 	
 	for (c = 0; c < NbCourbes; c++) {
 		fctns[c].brgb =[0.8,0.8,0.8];
@@ -2189,7 +2199,7 @@ function setvalueof()
 	PattrInterpError.flag = 0;
 	UpdateDisplay();
 	
-	if (outputmode)
+	if (NotifyRecalledState)
 		outlet(DUMPOUT, "recalled");
 
 	if ( FunctionVersionCheck < 1 && FunctionVersionCheck > 2 )
@@ -2260,6 +2270,7 @@ function save()
 	embedmessage("autocursor", CursorChange);
 	embedmessage("bordersync", BorderSyncState);
 	embedmessage("ghost", Math.round(Ghostness * 100));
+	embedmessage("notifyrecalled", NotifyRecalledState);
 	
 	for (i = 0; i < NbCourbes; i++) {
 		embedmessage("SetColor", i, "brgb", Math.round(fctns[i].brgb[0] * 255), Math.round(fctns[i].brgb[1] * 255), Math.round(fctns[i].brgb[2] * 255) );
