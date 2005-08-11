@@ -1,6 +1,16 @@
 ejies Ñ Version history
 
 ******************
+1.53: X August 2005
+This version requires MaxMSP 4.5.5 or higher.
+
+Improvements:
+ej.function.js: clear allows argument(s) to delete one or more point(s)
+
+
+
+
+******************
 1.52: 4 August 2005
 This version requires MaxMSP 4.5.5 or higher.
 

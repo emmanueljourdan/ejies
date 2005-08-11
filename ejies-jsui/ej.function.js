@@ -866,7 +866,7 @@ function ArgsParser(courbe, msg, a)
 
 	switch (a[0]) {
 		case "bang":		line(courbe); tmpReturn++; break;
-		case "clear":		redrawoff(); MyClear(courbe); NeedDraw++; NeedNotify++; tmpReturn++; break;
+		case "clear":		redrawoff(); a.length == 1 ? MyClear(courbe) : MyClear(courbe, a); NeedDraw++; NeedNotify++; tmpReturn++; break;
 		case "clearsustain":	redrawoff(); MyClearSustain(courbe); NeedDraw++; NeedNotify++; tmpReturn++; break;
 		case "dump":		a.length == 2 ? MyDump(courbe, a[1]) : MyDump(courbe); tmpReturn++; break;
 		case "listdump":	a.length == 2 ? MyListDump(courbe, a[1]) : MyListDump(courbe); tmpReturn++; break;
@@ -1014,12 +1014,36 @@ function MySustain(point, state, courbe)
 }
 MySustain.local = 1;
 
-function MyClear(courbe)
+function MyClear(courbe, v)
 {
-	courbe.pa.splice(0, courbe.np - 1);
-	courbe.np = 0;
+	if (arguments.length == 1) {
+		courbe.pa.splice(0, courbe.np - 1);
+		courbe.np = 0;
+	} else {
+		var i, j;
+		var ListeASupprimer = new Array();
+		
+/* 		Il est possible que le premier élément de v[] soit clear si ça vient de ArgParser */
+		for (i = 0, j = 0; i < v.length; i++) {
+			if (v[i] >= 0 && v[i] < courbe.np) {
+				ListeASupprimer[j++] = v[i];
+			}
+		}
+		ListeASupprimer.sort(InverseSorting);
+		
+		for (i = 0; i < ListeASupprimer.length; i++) {
+			courbe.pa.splice(ListeASupprimer[i], 1)
+			courbe.np--;
+		}
+	}
 }
 MyClear.local = 1;
+
+function InverseSorting(a, b)
+{
+   return b - a; // sort des Nombres de manières décroissantes 
+}
+InverseSorting.local = 1;
 
 function MyClearSustain(courbe)
 {
@@ -1393,11 +1417,11 @@ function listdump()
 
 function clear()
 {
-	if (! arguments.length )
+	if (arguments.length == 0)
 		MyClear(fctns[current]);
 	else
-		perror("extra arguments for message clear");
-	
+		MyClear(fctns[current], arguments);
+
 	UpdateDisplay();
 }
 
