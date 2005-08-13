@@ -6,7 +6,7 @@ This version requires MaxMSP 4.5.5 or higher.
 
 Improvements:
 ej.function.js: clear allows argument(s) to delete one or more point(s)
-
+ej.numbox.js: draw optimisations (on loading)
 
 
 

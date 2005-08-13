@@ -42,6 +42,7 @@ var MouseUpState = 0;
 var TempValue;					// utilsé pour la fonction change
 var MyVal = 0;
 var keyboard = -1;					// utilisé pour l'entrée au clavier
+var RedrawEnable = 0;
 var KeyboardError = 1;
 
 border = 0;
@@ -89,7 +90,9 @@ leading0(LeadingValue);							// va aussi déclencher draw() et refresh()
 
 function loadbang()
 {
+	redrawoff();
 	msg_float(MyVal);
+	RedrawEnable = 1;
 }
 
 function notifydeleted()
@@ -108,6 +111,9 @@ boxposition.local = 1;
 
 function draw()
 {
+	if (! RedrawEnable)
+		return;
+	
 	var DisplayValue ;
 	
 	with (sketch) {
@@ -143,6 +149,8 @@ function draw()
 			DisplayValue = MyVal.toFixed(approxi); 
 			
 		text(DisplayValue);
+		
+		post("draw\n");
 	}
 }
 draw.local = 1;	// private
@@ -196,6 +204,17 @@ function outputidle(v)
 	LastIdle = v ;
 }
 outputidle.local = 1;
+
+function redrawoff()
+{
+	RedrawEnable = 0;
+}
+
+function redrawon()
+{
+	RedrawEnable = 1;
+	draw();
+}
 
 function mouseup(v)
 {
@@ -391,6 +410,7 @@ function getvalueof()
 
 function save()
 {
+	embedmessage("redrawoff");
 	embedmessage("brgb", Math.floor(MyBrgb[0]*255), Math.floor(MyBrgb[1]*255), Math.floor(MyBrgb[2]*255));
 	embedmessage("brgb2", Math.floor(MyBrgb2[0]*255), Math.floor(MyBrgb2[1]*255), Math.floor(MyBrgb2[2]*255));
 	embedmessage("brgb3", Math.floor(MyBrgb3[0]*255), Math.floor(MyBrgb3[1]*255), Math.floor(MyBrgb3[2]*255));
@@ -404,6 +424,7 @@ function save()
 	embedmessage("initvalue", DefaultValue);
 	embedmessage("change", ChangeState);
 	embedmessage("mouseup", MouseUpState);
+	embedmessage("redrawon");
 }
 
 function getattributes()
@@ -599,6 +620,9 @@ function flashwhiledbleclick()
 		msg_float(DefaultValue);
 }
 flashwhiledbleclick.local = 1;
+
+RedrawEnable = 1;
+
 
 // Pour la compilation automatique
 // autowatch = 1;
