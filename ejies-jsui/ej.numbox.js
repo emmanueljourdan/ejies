@@ -150,7 +150,7 @@ function draw()
 			
 		text(DisplayValue);
 		
-		post("draw\n");
+/* 		post("draw\n"); */
 	}
 }
 draw.local = 1;	// private
