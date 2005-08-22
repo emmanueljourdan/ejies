@@ -7,7 +7,7 @@ This version requires MaxMSP 4.5.5 or higher.
 Improvements:
 ej.function.js: clear allows argument(s) to delete one or more point(s)
 ej.numbox.js: draw optimisations (on loading)
-
+ej.mout~: now support up to 16 channels, the position of 0 is now between the left and right front speaker.
 
 
 ******************
