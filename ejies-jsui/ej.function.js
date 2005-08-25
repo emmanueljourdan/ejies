@@ -55,6 +55,7 @@ var DisplayOneTime;
 var LectureInspectorFlag = 0;
 var BorderSyncState;
 var NotifyRecalledState;	// utilise pour l'envoi d'un message lors du rappel pattr
+var MouseReportState;
 
 RedrawEnable = 0;	// désactivation de l'affichage pendant l'initialisation
 
@@ -296,7 +297,7 @@ function LectureInspector()
 		NbCourbes = jsarguments[idx++];
 
 		init();	// création des courbes
-		
+
 		if (jsarguments.length != (10 + NbCourbes*18) ) {
 			perror("bad number of arguments in the inspector");
 			return;
@@ -1574,6 +1575,15 @@ function timedisplay(v)
 	TimeFlag = v;
 }
 
+function mousereport(v)
+{
+	if (v != 0 && v != 1) {
+		perror("mousereport doesn't understand", v);
+		return;
+	}
+	MouseReportState = v;
+}
+
 function name(name)
 {
 	MyName(fctns[current], name);
@@ -1723,6 +1733,7 @@ function defaults()
 	BorderSyncState = 0;
 	Ghostness = 0.2;
 	NotifyRecalledState = 0;
+	MouseReportState = 0;
 	
 	for (c = 0; c < NbCourbes; c++) {
 		fctns[c].brgb =[0.8,0.8,0.8];
@@ -1860,7 +1871,10 @@ function onidle(x,y,but,cmd,shift,capslock,option,ctrl)
 //	return;
 	var OldIdlePoint = IdlePoint;
 	IdlePoint = -1;
-	
+
+	if (MouseReportState)
+		outlet(DUMPOUT, "mouseidle", x2val(fctns[current], x), y2val(fctns[current], y));
+
 	if (AllowEdit == 0 || fctns[current].display == 0)
 		return;
 
@@ -1902,6 +1916,9 @@ function onclick(x,y,but,cmd,shift,capslock,option,ctrl)
 		return;
 	}
 	
+	if (MouseReportState)
+		outlet(DUMPOUT, "mouse", x2val(fctns[current], x), y2val(fctns[current], y));
+
 	SelectedPoint = -2;
 	x = ejies.clip(x - 2, Bordure, BoxWidth - Bordure);
 	y = ejies.clip(y - 2, Bordure + LegendBordure, BoxHeight - Bordure);
@@ -1958,6 +1975,9 @@ function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 		return;
 	}
 	
+	if (MouseReportState)
+		outlet(DUMPOUT, "mouse", x2val(fctns[current], x), y2val(fctns[current], y));
+
 	if (SelectedPoint < tmpF.np) {
 		if (tmpF["pa"][SelectedPoint].fix)
 			return;
@@ -2079,14 +2099,17 @@ function getlegend() { outlet(DUMPOUT, "legend", Legend); }
 function getgrid() { outlet(DUMPOUT, "grid", GridMode); }
 function getsnap2grid() { outlet(DUMPOUT, "snap2grid", Snap2GridState); }
 function gethiddenpoint() { outlet(DUMPOUT, "hiddenpointdisplay", HiddenPointDisplay); }
-function getautosustain() {	outlet(DUMPOUT, "autosustain", AutoSustain); }
 function getclickadd() { outlet(DUMPOUT, "clickadd", ClickAdd); }
 function getclickmove() { outlet(DUMPOUT, "clickmove", ClickMove); }
+function getautosustain() {	outlet(DUMPOUT, "autosustain", AutoSustain); }
 function gettimedisplay() { outlet(DUMPOUT, "timedisplay", TimeFlag); }
-function getghost() { outlet(DUMPOUT, "ghost", Math.round(Ghostness * 100) ); }
-function getnbfunctions() { outlet(DUMPOUT, "nbfunctions", NbCourbes); }
 function getautocursor() { outlet(DUMPOUT, "autocursor", CursorChange); }
 function getbordersync() { outlet(DUMPOUT, "bordersync", BorderSyncState); }
+function getghost() { outlet(DUMPOUT, "ghost", Math.round(Ghostness * 100) ); }
+function getnotifyrecalled() { outlet(DUMPOUT, "notifyrecalled", NotifyRecalledState ); }
+function getmousereport() { outlet(DUMPOUT, "mousereport", MouseReportState ); }
+
+function getnbfunctions() { outlet(DUMPOUT, "nbfunctions", NbCourbes); }
 
 function getname()
 {
@@ -2295,6 +2318,8 @@ function save()
 	embedmessage("bordersync", BorderSyncState);
 	embedmessage("ghost", Math.round(Ghostness * 100));
 	embedmessage("notifyrecalled", NotifyRecalledState);
+	embedmessage("mousereport", MouseReportState);
+	
 	
 	for (i = 0; i < NbCourbes; i++) {
 		embedmessage("SetColor", i, "brgb", Math.round(fctns[i].brgb[0] * 255), Math.round(fctns[i].brgb[1] * 255), Math.round(fctns[i].brgb[2] * 255) );
@@ -2313,6 +2338,19 @@ function CreateNFunctions(v)
 	RedrawEnable = 0;
 	NbCourbes = v;
 	init();
+
+	// utilise le Nom, Range et Domain embed dans le patch
+	var i, j;
+	for (i = 0; i < v; i++) {
+		fctns[i].name = arguments[i+1];
+	}
+	for (i = 0, j = v + 1; i <	v; i++) {
+		fctns[i].range[0] = arguments[j++];
+		fctns[i].range[1] = arguments[j++];
+		fctns[i].domain[0] = arguments[j++];
+		fctns[i].domain[1] = arguments[j++];
+	}
+	
 	LectureInspectorFlag = 1;	// comme ça il n'y a pas de scan des arguments
 }
 
