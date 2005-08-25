@@ -2472,15 +2472,15 @@ function read(filename)
 
 	var fichier = new File(filename,"read"); 
 	if (fichier.isopen) {
+		RedrawEnable = 0;
+		AllowEdit = 0;
+
 		var tmpLine = LectureNextLigne(fichier);
 		if (tmpLine != "ej.function format") {
 			perror("can't read this file format");
 			return;
 		}
-		
-		RedrawEnable = 0;
-		AllowEdit = 0;
-		
+				
 		// Lecture de la première ligne du fichier
 		tmpLine = LectureNextLigne(fichier);
 		tmpLine = tmpLine.split(" ");
