@@ -517,6 +517,19 @@ function ApplyAutoSustain()
 }
 ApplyAutoSustain.local = 1;
 
+function MyAddPoints(courbe, liste)
+{	
+	var i;
+	// ça commence à 1 car le premier élément est addfunctions
+	// Nombre d'élément réel dans la liste / 2 pour vérifier qu'il y a bien un nombre pair
+	for (i = 1; i < (Math.floor((liste.length - 1) / 2) * 2); i += 2) {
+		courbe.pa[courbe.np++] = new Point( val2x(courbe, liste[i]), val2y(courbe, liste[i+1]), liste[i], liste[i+1]);
+	}
+	
+	SortBulle(courbe);
+}
+MyAddPoints.local = 1;
+
 function MyDomain(start, stop, courbe)
 {
 	var i;
@@ -871,6 +884,7 @@ function ArgsParser(courbe, msg, a)
 		case "clearsustain":	redrawoff(); MyClearSustain(courbe); NeedDraw++; NeedNotify++; tmpReturn++; break;
 		case "dump":		a.length == 2 ? MyDump(courbe, a[1]) : MyDump(courbe); tmpReturn++; break;
 		case "listdump":	a.length == 2 ? MyListDump(courbe, a[1]) : MyListDump(courbe); tmpReturn++; break;
+		case "addpoints":	MyAddPoints(courbe, a); NeedDraw++; NeedNotify++; tmpReturn++; break;
 		case "fix":			if (a.length == 3) { FixPoint(courbe, a[1], a[2]); } ; NeedNotify++; tmpReturn++; break;
 		case "unfix":		MyUnfix(courbe); NeedNotify++; tmpReturn++; break;
 		case "name":		redrawoff(); if (a.length == 2) { MyName(courbe, a[1]);} ; getname(); NeedDraw++; NeedNotify++; tmpReturn++; break;
@@ -911,6 +925,7 @@ function ArgsParser(courbe, msg, a)
 		case "rgb3":		redrawoff(); SetColor(courbe, "rgb3", a[1], a[2], a[3]); NeedDraw++; tmpReturn++; break;
 		case "rgb4":		redrawoff(); SetColor(courbe, "rgb4", a[1], a[2], a[3]); NeedDraw++; tmpReturn++; break;
 		case "rgb5":		redrawoff(); SetColor(courbe, "rgb5", a[1], a[2], a[3]); NeedDraw++; tmpReturn++; break;
+
 
 		case "pastefunction":	redrawoff(); MyPasteFunction(courbe); NeedDraw++; NeedNotify++; tmpReturn++; break;
 		case "pastecolors":	redrawoff(); MyPasteColors(courbe); NeedDraw++; tmpReturn++; break;
@@ -1217,10 +1232,16 @@ function all()
 		redrawon();
 }
 
+function addpoints()
+{
+	MyAddPoints(fctns[current], arrayfromargs(messagename, arguments));
+	UpdateDisplay();
+}
+
 function args4insp()
 {
 	//
-	perror("since 1.52 the parameters are embed with the patcher. Use the inspector.");
+	perror("since 1.52 the parameters are embed with the patcher. Use the inspector insteed.");
 	return;
 	
 	var i, j;
