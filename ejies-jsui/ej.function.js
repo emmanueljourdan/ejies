@@ -1873,7 +1873,7 @@ function onidle(x,y,but,cmd,shift,capslock,option,ctrl)
 	IdlePoint = -1;
 
 	if (MouseReportState)
-		outlet(DUMPOUT, "mouseidle", x2val(fctns[current], x), y2val(fctns[current], y));
+		outlet(DUMPOUT, "mouseidle", x2val(fctns[current], x), ejies.clip(y2val(fctns[current], y), fctns[current].range[0], fctns[current].range[1]));
 
 	if (AllowEdit == 0 || fctns[current].display == 0)
 		return;
@@ -1917,7 +1917,7 @@ function onclick(x,y,but,cmd,shift,capslock,option,ctrl)
 	}
 	
 	if (MouseReportState)
-		outlet(DUMPOUT, "mouse", x2val(fctns[current], x), y2val(fctns[current], y));
+		outlet(DUMPOUT, "mouse", x2val(fctns[current], x), ejies.clip(y2val(fctns[current], y), fctns[current].range[0], fctns[current].range[1]));
 
 	SelectedPoint = -2;
 	x = ejies.clip(x - 2, Bordure, BoxWidth - Bordure);
@@ -1976,7 +1976,7 @@ function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 	}
 	
 	if (MouseReportState)
-		outlet(DUMPOUT, "mouse", x2val(fctns[current], x), y2val(fctns[current], y));
+		outlet(DUMPOUT, "mouse", x2val(fctns[current], x), ejies.clip(y2val(fctns[current], y), fctns[current].range[0], fctns[current].range[1]));
 
 	if (SelectedPoint < tmpF.np) {
 		if (tmpF["pa"][SelectedPoint].fix)
@@ -2299,6 +2299,8 @@ function save()
 		tmpArray[i] = fctns[i].name;
 
 	for (j = 0; j < NbCourbes; j++) {
+		// c'est stupide... j'ai inversŽ range et domain dans 1.52
+		// NE PAS INVERSER c'est trop tard :-(
 		tmpArray[i++] = fctns[j].range[0];
 		tmpArray[i++] = fctns[j].range[1];
 		tmpArray[i++] = fctns[j].domain[0];
@@ -2349,6 +2351,8 @@ function CreateNFunctions(v)
 		fctns[i].range[1] = arguments[j++];
 		fctns[i].domain[0] = arguments[j++];
 		fctns[i].domain[1] = arguments[j++];
+		MyDomain2Zoom(fctns[i]);
+		MyRange2Zoom(fctns[i]);
 	}
 	
 	LectureInspectorFlag = 1;	// comme a il n'y a pas de scan des arguments
