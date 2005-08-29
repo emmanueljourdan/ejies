@@ -267,7 +267,7 @@ function anything()
 	if (NeedUpdate & 2 == 2)
 		notifyclients();
 	if (NeedUpdate & 1 == 1)
-		redrawon();
+		draw();
 }
 
 function onresize(w,h)
@@ -1234,7 +1234,7 @@ function all()
 	if (NeedNotify)
 		notifyclients();
 	if (NeedDraw)
-		redrawon();
+		draw();
 }
 
 function addpoints()
@@ -1877,9 +1877,11 @@ function zoom_y(start, stop, courbe)
 
 function zoomout()
 {
-	redrawoff();				// On ne passe dans cette fonction que quand elle est appelée depuis l'extérieur
+	var OldRedrawState = RedrawEnable;
+	RedrawEnable = 0;
 	MyZoomOut(fctns[current]);
-	redrawon();					// on ne réaffiche donc qu'à la sortie, une seule fois.
+	draw();					// on ne réaffiche donc qu'à la sortie, une seule fois.
+	RedrawEnable = OldRedrawState; // restauration de l'état de la variable d'avant son entrée dans la fonction
 }
 
 function MyZoomOut(courbe)
