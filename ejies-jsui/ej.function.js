@@ -42,18 +42,19 @@ var HiddenPointDisplay;
 var ClickAdd;
 var ClickMove;
 var AutoSustain;
+var TimeFlag = 0;
 var Ghostness;
 var IdleMode = 0;
 var SelectedPoint = -2;
 var IdlePoint = -1;
 var RedrawEnable;
 var AllowEdit = 1;
-var TimeFlag = 0;
 var OpendialogPrepend = 0;
 var ReadDialogObjectRef = new Array();
 var DisplayOneTime;
 var LectureInspectorFlag = 0;
 var BorderSyncState;
+var CursorChange;
 var NotifyRecalledState;	// utilise pour l'envoi d'un message lors du rappel pattr
 var MouseReportState;
 
@@ -714,18 +715,24 @@ function DeleteReadThings()
 function MyRemoveDuplicate(courbe)
 {
 	var i, flag;
+	var startat = 1;
+	var ReturnState = 0;
 	
 	do
 	{
 		flag = 0;
-		for (i = 1; i < (courbe.np - 1); i++) {
+		for (i = startat; i < (courbe.np - 1); i++) {
 			// suppression du point du milieu s'il est encadré par 2 valeurs identiques
 			if ( courbe.pa[i-1].valy == courbe.pa[i].valy && courbe.pa[i+1].valy == courbe.pa[i-1].valy) {
 				DeletePoint(courbe, i);
 				flag = 1;
+				startat = Math.max(1, i - 1); // la prochaine fois qu'on rentre dans la boucle for ça commencera à partir de ce point
+				ReturnState++;
 			}
 		}
 	} while (flag)
+	
+	return ReturnState;
 }
 MyRemoveDuplicate.local = 1;
 
@@ -862,13 +869,12 @@ RedrawOrNot.local = 1;
 
 function ArgsParser(courbe, msg, a) 
 {
-	// en fonction du nombre d'arguments 1 (interpolationX-Y) 2 (AddPoint) 3 (MovePoint)
 	var tmpReturn = -1;
-	var NeedDraw = 0;	// pour savoir si on doit
-	var NeedNotify = 0;
+	var NeedDraw = 0;	// pour savoir si on doit réafficher
+	var NeedNotify = 0;	// pour savoir si on doit mettre à jour psto
 
 	if ( typeof(a[0]) == "number") {
-
+	// en fonction du nombre d'arguments 1 (interpolationX-Y) 2 (AddPoint) 3 (MovePoint)
 		switch (a.length) {
 			case 1: Interpolation(courbe, a[0]); break;
 			case 2: AddPoint(courbe, val2x(courbe, a[0]), val2y(courbe, a[1])); NeedDraw++; NeedNotify++; break;
@@ -901,22 +907,21 @@ function ArgsParser(courbe, msg, a)
 								perror("bad argument(s) for message domain"); 
 							NeedDraw++; NeedNotify++; tmpReturn++; break;
 		case "setdomain":	
-							redrawoff(); 
 							if (a.length == 2)
 								MySetDomain(0, a[1], courbe);
 							else if (a.length == 3)
 								MySetDomain(a[1], a[2], courbe);
 							else
 								perror("bad argument(s) for message setdomain"); 
-							NeedDraw++; NeedNotify++; tmpReturn++; break;
+							NeedNotify++; tmpReturn++; break;
 		case "range":		redrawoff(); if (a.length == 3) { range(a[1], a[2], courbe);};  NeedDraw++; NeedNotify++; tmpReturn++; break;
-		case "setrange":	redrawoff(); if (a.length == 3) { setrange(a[1], a[2], courbe);} ; NeedDraw++; NeedNotify++; tmpReturn++; break;
+		case "setrange":	if (a.length == 3) { setrange(a[1], a[2], courbe);} ; NeedNotify++; tmpReturn++; break;
 		case "zoom_x":		redrawoff(); zoom_x(a[1], a[2], courbe); NeedDraw++; tmpReturn++; break;
 		case "zoom_y":		redrawoff(); zoom_y(a[1], a[2], courbe); NeedDraw++; tmpReturn++; break;
 		case "zoomout":		redrawoff(); MyZoomOut(courbe); NeedDraw++; tmpReturn++; break;
 		case "autodomain":	redrawoff(); MyAutoDomain(courbe); NeedDraw++; NeedNotify++; tmpReturn++; break;
 		case "autorange":	redrawoff(); MyAutoRange(courbe); NeedDraw++; NeedNotify++; tmpReturn++; break;
-		case "removeduplicate": 	redrawoff(); MyRemoveDuplicate(courbe); NeedDraw++; NeedNotify++; tmpReturn++; break;
+		case "removeduplicate": 	if ( MyRemoveDuplicate(courbe)) { redrawoff(); NeedDraw++; NeedNotify++; } tmpReturn++; break;
 		case "smooth":		redrawoff(); MySmooth(courbe); NeedDraw++; NeedNotify++; tmpReturn++; break;
 		case "gridstep":	redrawoff(); if (a.length == 2) { MyGridStep(courbe, a[1]); }; NeedDraw++; NeedNotify++; tmpReturn++; break;
 		case "brgb":		redrawoff(); SetColor(courbe, "brgb", a[1], a[2], a[3]); NeedDraw++; tmpReturn++; break;
@@ -931,20 +936,20 @@ function ArgsParser(courbe, msg, a)
 		case "pastecolors":	redrawoff(); MyPasteColors(courbe); NeedDraw++; tmpReturn++; break;
 
 		// get things
-		case "getdomain":	getdomain(courbe); break;
-		case "getrange":	getrange(courbe); break;
-		case "getfix":		getfix(courbe); break;
-		case "getsustain":	getsustain(courbe); break;
-		case "getgridstep":	getgridstep(courbe); break;
-		case "getbrgb":		GetColor(courbe, "brgb"); break;
-		case "getfrgb":		GetColor(courbe, "frgb"); break;
-		case "getrgb2":		GetColor(courbe, "rgb2"); break;
-		case "getrgb3":		GetColor(courbe, "rgb3"); break;
-		case "getrgb4":		GetColor(courbe, "rgb4"); break;
-		case "getrgb5":		GetColor(courbe, "rgb5"); break;
-		case "getnbpoints":	getnbpoints(courbe); break;
-		case "getzoom_x":	getzoom_x(courbe); break;
-		case "getzoom_y":	getzoom_y(courbe); break;
+		case "getdomain":	getdomain(courbe); tmpReturn++; break;
+		case "getrange":	getrange(courbe); tmpReturn++; break;
+		case "getfix":		getfix(courbe); tmpReturn++; break;
+		case "getsustain":	getsustain(courbe); tmpReturn++; break;
+		case "getgridstep":	getgridstep(courbe); tmpReturn++; break;
+		case "getbrgb":		GetColor(courbe, "brgb"); tmpReturn++; break;
+		case "getfrgb":		GetColor(courbe, "frgb"); tmpReturn++; break;
+		case "getrgb2":		GetColor(courbe, "rgb2"); tmpReturn++; break;
+		case "getrgb3":		GetColor(courbe, "rgb3"); tmpReturn++; break;
+		case "getrgb4":		GetColor(courbe, "rgb4"); tmpReturn++; break;
+		case "getrgb5":		GetColor(courbe, "rgb5"); tmpReturn++; break;
+		case "getnbpoints":	getnbpoints(courbe); tmpReturn++; break;
+		case "getzoom_x":	getzoom_x(courbe); tmpReturn++; break;
+		case "getzoom_y":	getzoom_y(courbe); tmpReturn++; break;
 
 		default: 			// message d'erreurs en fonction du type de message all ou pas
 							if (msg == "all") {
@@ -1154,7 +1159,7 @@ function MyListDump(courbe, sendname)
 		str += " " + tmpArray[i].toFixed(6);
 	}
 	g.listdump = str.split(" ");	// String -> Array
-	g.sendnamed(sendname,"listdump");
+	g.sendnamed(sendname, "listdump");
 }
 MyListDump.local = 1;
 
@@ -1770,8 +1775,9 @@ function defaults()
 
 function removeduplicate()
 {
-	MyRemoveDuplicate(fctns[current]);
-	UpdateDisplay();
+	// si il y a eu suppression d'élément, il y aura réaffichage.
+	if ( MyRemoveDuplicate(fctns[current]) )
+		UpdateDisplay();
 }
 
 function smooth()
@@ -1893,9 +1899,6 @@ function onidle(x,y,but,cmd,shift,capslock,option,ctrl)
 	var OldIdlePoint = IdlePoint;
 	IdlePoint = -1;
 
-	if (MouseReportState)
-		outlet(DUMPOUT, "mouseidle", x2val(fctns[current], x), ejies.clip(y2val(fctns[current], y), fctns[current].range[0], fctns[current].range[1]));
-
 	if (AllowEdit == 0 || fctns[current].display == 0)
 		return;
 
@@ -1913,6 +1916,11 @@ function onidle(x,y,but,cmd,shift,capslock,option,ctrl)
 			}
 		}
 	}
+
+	if (MouseReportState)
+		outlet(DUMPOUT, "mouseidle", 	ejies.clip(x2val(fctns[current], x), fctns[current].domain[0], fctns[current].domain[1]),
+										ejies.clip(y2val(fctns[current], y), fctns[current].range[0], fctns[current].range[1]),
+										but, IdlePoint);
 
 	if (IdlePoint == -1 && shift == 1) {
 		DisplayCursor(1);
@@ -1937,9 +1945,6 @@ function onclick(x,y,but,cmd,shift,capslock,option,ctrl)
 		return;
 	}
 	
-	if (MouseReportState)
-		outlet(DUMPOUT, "mouse", x2val(fctns[current], x), ejies.clip(y2val(fctns[current], y), fctns[current].range[0], fctns[current].range[1]));
-
 	SelectedPoint = -2;
 	x = ejies.clip(x - 2, Bordure, BoxWidth - Bordure);
 	y = ejies.clip(y - 2, Bordure + LegendBordure, BoxHeight - Bordure);
@@ -1978,6 +1983,10 @@ function onclick(x,y,but,cmd,shift,capslock,option,ctrl)
 		notifyclients();
 		onidle(x,y);
 	}
+	if (MouseReportState)
+		outlet(DUMPOUT, "mouse",	ejies.clip(x2val(fctns[current], x), fctns[current].domain[0], fctns[current].domain[1]),
+									ejies.clip(y2val(fctns[current], y), fctns[current].range[0], fctns[current].range[1]),
+									but, SelectedPoint);
 }
 
 function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
@@ -1991,13 +2000,15 @@ function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 	if ( but == 0 ||  SelectedPoint < 0) {
 		EditedWithMouse();	// quand c'est delete c'est fait dans onidle()
 		SelectedPoint = -2;	// si on a relâché c'est qu'il n'y a plus de points sélectionnés.
-		onidle(x,y);		// tout pareil...
+		onidle(x,y, 0);		// tout pareil...
 		draw();
 		return;
 	}
 	
 	if (MouseReportState)
-		outlet(DUMPOUT, "mouse", x2val(fctns[current], x), ejies.clip(y2val(fctns[current], y), fctns[current].range[0], fctns[current].range[1]));
+		outlet(DUMPOUT, "mouse", 	ejies.clip(x2val(fctns[current], x), fctns[current].domain[0], fctns[current].domain[1]),
+									ejies.clip(y2val(fctns[current], y), fctns[current].range[0], fctns[current].range[1]),
+									but, SelectedPoint);
 
 	if (SelectedPoint < tmpF.np) {
 		if (tmpF["pa"][SelectedPoint].fix)
@@ -2320,7 +2331,7 @@ function save()
 		tmpArray[i] = fctns[i].name;
 
 	for (j = 0; j < NbCourbes; j++) {
-		// c'est stupide... j'ai inversé range et domain dans 1.52
+		// c'est stupide... j'ai inversé range et domain dans 1.52 par rapport a psto et read/write
 		// NE PAS INVERSER c'est trop tard :-(
 		tmpArray[i++] = fctns[j].range[0];
 		tmpArray[i++] = fctns[j].range[1];
@@ -2541,6 +2552,11 @@ function read(filename)
 		var tmpLine = LectureNextLigne(fichier);
 		if (tmpLine != "ej.function format") {
 			perror("can't read this file format");
+			
+			// suppression des objets opendialog...
+			if (OpendialogPrepend)
+					DeleteReadThings();
+
 			return;
 		}
 				
@@ -2578,7 +2594,7 @@ function read(filename)
 		}
 	
 		c = 0;
-		while ( fichier.position < fichier.eof ) {
+		while ( fichier.position < fichier.eof) {
 			tmpLine = LectureNextLigne(fichier);
 			if (tmpLine == "")
 				break;
@@ -2591,7 +2607,7 @@ function read(filename)
 			fctns[c].name = tmpLine[idx++];
 			
 			// depuis la version 1.52 domaine contient deux limites.
-			if (FunctionVersionCheck == 1 )
+			if (FunctionVersionCheck == 1)
 				fctns[c].domain[0] = 0;
 			else
 				fctns[c].domain[0] = parseFloat(tmpLine[idx++]);
@@ -2646,9 +2662,9 @@ function read(filename)
 		outlet(DUMPOUT, "read", filename, -1);
 	}
 	
-	if (OpendialogPrepend) {
+	// suppression des objets opendialog...
+	if (OpendialogPrepend)
 			DeleteReadThings();
-	}
 }
 
 function write(filename)
