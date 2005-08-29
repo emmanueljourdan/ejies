@@ -197,7 +197,9 @@ function outputidle(v)
 		refresh();
 		if (v) // on se sert du idle 0 pour envoyer la valeur quand on sort de la boite
 			KeyboardInput(1);
+		
 		outlet(1, v);
+		
 		if (! v)
 			KeyboardInput(0);
 	}
@@ -243,9 +245,9 @@ function getroundmode()
 	outlet(2, "roundmode", RoundValue);
 }
 
-function getval()
+function sendval()
 {
-	outlet(2, "val", MyVal);
+	messnamed("ej.numbox-keyboard", MyVal);
 }
 
 function onresize(w,h)
@@ -379,6 +381,9 @@ function getinitvalue()
 
 function args4insp()
 {
+	perror("since 1.52 the parameters are embed with the patcher. Use the inspector insteed.");
+	return;
+
 	var MsgArgs = new Array(25);
 	MsgArgs[0] = "args4insp";
 	for ( i = 0; i < ColorList.length; i++) {
@@ -396,6 +401,22 @@ function args4insp()
 	MsgArgs[23] = ChangeState;
 	MsgArgs[24] = MouseUpState;
 	outlet(2, MsgArgs);
+}
+
+function select()
+{
+	// positionne le curseur dans le coin en bas ˆ droite de l'objet
+	max.pupdate(this.patcher.wind.location[0] + box.rect[2] - 3, this.patcher.wind.location[1] + box.rect[3] - 3);
+	outputidle(1);
+}
+
+function tab()
+{
+	LastIdle = inside = 0;
+	draw();
+	refresh();
+	outlet(1, 0);
+	outlet(2, "select")
 }
 
 function setvalueof(v)
@@ -511,6 +532,15 @@ function KeyboardInput(v)
 {
 	if (v && this.patcher.locked) {
 		if (KeyboardError) {
+			// unselect others objects
+			var NumericBoite = this.patcher.newobject("number", 0, 0, 35, 9, 0, 0, 0, 3);
+			NumericBoite.hidden = 1;
+			NumericBoite.message("select");
+			this.patcher.remove(NumericBoite);
+
+			// si d'autres objets ej.numbox-keyboard tra”nent, il ne doivent pas recevoir les touches du clavier
+			messnamed("ej.numbox-keyboard", "stop");
+			
 			keyboard = this.patcher.newdefault(box.rect[0], box.rect[1] - 25, "ej.numbox-keyboard.pat");
 			// a serait bien d'Žviter le nommage...
 			// create "unique" name
@@ -520,9 +550,10 @@ function KeyboardInput(v)
 			TempName += TempDate.getUTCHours();
 			TempName += TempDate.getUTCMinutes();
 			TempName += TempDate.getUTCSeconds();
+			TempName += TempDate.getUTCMilliseconds();
 
 			keyboard.varname = TempName;
-			this.patcher.script("hide", TempName);
+			this.patcher.script("hide", TempName);	// hidden ne marche pas car c'est un subpatcher :-(
 			
 			if (keyboard.maxclass == "bogus") {
 				perror("check the installation: ej.numbox-keyboard.pat is missing in the ejies'help folder");
@@ -530,10 +561,12 @@ function KeyboardInput(v)
 				return;
 			}
 			
+			// connect ej.numbox-keyboard.pat to this.box
 			this.patcher.hiddenconnect(this.box, 1, keyboard, 0);
-			this.patcher.hiddenconnect(this.box, 2, keyboard, 1);
 			this.patcher.hiddenconnect(keyboard, 0, this.box, 0);
-			getval();	// envoie la valeur actuelle
+
+			sendval();	// envoie la valeur actuelle -> ej.numbox-keyboard.pat
+			
 		} else
 			return;
 	} else
@@ -590,13 +623,13 @@ ondrag.local = 1 ;	// private
 
 function onidle(x,y,but,cmd,shift,capslock,option,ctrl)
 {
-	outlet(1,outputidle(1));
+	outlet(1, outputidle(1));
 }
 onidle.local = 1; // private
 
 function onidleout(x,y,but,cmd,shift,capslock,option,ctrl)
 {
-	outlet(1,outputidle(0));
+	outlet(1, outputidle(0));
 }
 onidleout.local = 1;
 
