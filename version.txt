@@ -1,16 +1,30 @@
 ejies Ñ Version history
 
-******************
+*******************
 1.53: X August 2005
 This version requires MaxMSP 4.5.5 or higher.
 
+Bug correction:
+ej.function.js: cursor option was global to all the ej.functions (Thanks Thomas)
+ej.function.js: recalled correctly name/domain/range of each functions while copying the object (Thanks Thomas)
+ej.function.js: read bug fixed (if a non valid file was open, the opendialog hack was not deleted)
+ej.function.js: {name of the function} {get message} doesn't produce any errormessage anymore
+splay~: message input optimisations (that means it should work now...)
+
 Improvements:
 ej.function.js: clear allows argument(s) to delete one or more point(s)
+ej.function.js: new mouseidle and mouse report feature (report [x, y, button, selected/idle point] to the dumpout outlet)
+ej.function.js: added some getthings (getnotifyrecalled, getmousereport)
+ej.function.js: new addpoints feature which allows you to add many points at the same time (That's for Thomas)
+ej.function.js: removedupplicate may be faster when there's a lot of points or when there's nothing to remove
 ej.numbox.js: draw optimisations (on loading)
+ej.numbox.js: new select message
+ej.numbox.js: now report the tab key (send select to the dumpout oultet)
 ej.mout~: now support up to 16 channels, the position of 0 is now between the left and right front speaker.
 
 
-******************
+
+*******************
 1.52: 4 August 2005
 This version requires MaxMSP 4.5.5 or higher.
 
@@ -35,7 +49,7 @@ ej.function.js: bang, int/float, and next message are now in the high priority t
 ej.function.js: draw improvements (the drawing operations appears less often)
 ej.function.js: object configuration is now saved in the patcher
 ej.function.js: cursor changes when you edit points (autocursor mode)
-ej.function.js: set limit to 2047 points (the js array is limited to 4095 items, for being sent to an outlet)
+ej.function.js: listdump set limit to 2047 points (the js array is limited to 4095 items, for being sent to an outlet)
 ej.function.js: new ghost & getghost messages to set/get the transparency of the background functions and the transparency of the grid
 ej.function.js: point display as framecircle when it's y value is equal to 0 (like the function object)
 ej.function.js: new bordersync feature wich keep the first and last points at the same y position (Thanks Vlad)
@@ -49,7 +63,7 @@ splay~: dropfile added (you can drop a sound file on the window to select the so
 
 
 
-******************
+*******************
 1.51: 26 April 2005
 Bug corrections:
 ej.function.js: crash when using message all dump (Thanks Alexis)
@@ -64,7 +78,7 @@ splay~: english text...
 
 
 
-******************
+*******************
 1.5: 6 April 2005
 ej.function.js: multi bpf editor
 ejies-Overview: ... with version checker (Jitter and internet access required)
@@ -74,13 +88,13 @@ jit.fullscreen: correction of a stupid bug...
 
 
 
-******************
+*******************
 1.42: 14 Fev 2005
 ej.vdb-sig~: Variable delay without clicks or transposition (delay as signal)
 
 
 
-******************
+*******************
 1.41: 11 Fev 2005
 ej.vdb~: Variable delay without clicks or transposition
 
@@ -89,7 +103,7 @@ stout~: using umenu instead of ubumenu (better on windows)
 
 
 
-******************
+*******************
 1.4: 9 Fev 2005
 ej.cc.js: new JavaScript which allows you to change the objecs colors
 ej.cn.js: new JavaScript which allows you to change the name of a named object
@@ -106,13 +120,13 @@ ej.numbox: is now able to display -inf and +inf
 
 
 
-******************
+*******************
 1.31: Nov 2004
 AddShortcuts2Max.command: adding shortcuts for New Text File.
 
 
 
-******************
+*******************
 1.3: 21 Oct 2004
 help files updated
 ej.dn.js: new JavaScript object which display (open the patcher) a named object
@@ -127,7 +141,7 @@ jit.fullscreen: mousestate disable while working with only one screen
 
 
 
-******************
+*******************
 1.2: 14 Sep 2004
 ej.numbox.js: new JavaScript object (should be placed in C74:/jsui-library/)
 ej.lui.js: new JavaScript object which load a jsui object (ej.numbox.js for instance)
@@ -141,7 +155,7 @@ Bug corrections:
 
 
 
-******************
+*******************
 1.1: (Juilly 2004)
 New JavaScripts objects: ej.4m.js, ej.lock.js, ej.nthru.js
 Bug corrections:
@@ -151,12 +165,12 @@ Bug corrections:
 
 
 
-******************
+*******************
 1.0: Initial release (mars 2004)
 
 
 
-******************
+*******************
 Contact:
 manu(at)e--j.com
 emmanuel.jourdan(at)ircam.fr
