@@ -251,6 +251,7 @@ function anything()
 {
 	var c;
 	var NeedUpdate = -1;
+	var OldRedrawState = RedrawEnable;
 	
 	for (c = 0; c < NbCourbes; c++) {
 		if ( messagename == fctns[c].name ) {
@@ -261,6 +262,7 @@ function anything()
 		
 	if (NeedUpdate == -1) {	// si -1 c'est que a ne correspond pas ˆ un nom de function
 		perror("doesn't understand", messagename);
+		RedrawEnable = OldRedrawState;
 		return;
 	}
 
@@ -268,6 +270,8 @@ function anything()
 		notifyclients();
 	if (NeedUpdate & 1 == 1)
 		draw();
+	
+	RedrawEnable = OldRedrawState;
 }
 
 function onresize(w,h)
@@ -1219,6 +1223,7 @@ MyUnfix.local = 1;
 function all()
 {
 	var i, NeedDraw, NeedNotify, tmp;
+	var OldRedrawState = RedrawEnable;
 	NeedNotify = 0;
 	NeedDraw = 0;
 	DisplayOneTime = 1;
@@ -1235,6 +1240,8 @@ function all()
 		notifyclients();
 	if (NeedDraw)
 		draw();
+
+	RedrawEnable = OldRedrawState;
 }
 
 function addpoints()
