@@ -4,6 +4,9 @@ ejies Ñ Version history
 1.53: X August 2005
 This version requires MaxMSP 4.5.5 or higher.
 
+New:
+Installation.command: (MacOS X only), install ejies for you. You can "bypass" the installation of the externals/help files.
+
 Bug correction:
 ej.function.js: cursor option was global to all the ej.functions (Thanks Thomas)
 ej.function.js: recalled correctly name/domain/range of each functions while copying the object (Thanks Thomas)
