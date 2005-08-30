@@ -40,10 +40,10 @@ if [ -e "/Applications/MaxMSP 4.5/" ] ; then
 	/Developer/Tools/CpMac -r $DossierDeLInstalleur/ejies-insp/* /Applications/MaxMSP*/patches/inspectors/ && echo -ne "... done.\n"
 fi
 
-echo -ne "Would you like to install the externals and the help files? (Y/N) "
+echo -ne "\nWould you like to install the externals and the help files? (Y/N) "
 read Reponse
 
-if [ $Reponse == "O" ] ; then
+if [ $Reponse == "Y" ] ; then
 	echo -ne "- objects (/Library/Application Support/Cycling '74/externals/ejies-obj)"
 	/Developer/Tools/CpMac -r $DossierDeLInstalleur/ejies-obj ejies-obj && echo -ne "... done.\n"
 
@@ -51,23 +51,31 @@ if [ $Reponse == "O" ] ; then
 		echo -ne "- help files (/Applications/MaxMSP*/max-help/ejies-help)"
 		/Developer/Tools/CpMac -r $DossierDeLInstalleur/ejies-help /Applications/MaxMSP*/max-help/ejies-help && echo -ne "... done.\n"
 	fi
-
+elif
+	echo -ne "I can understand that... but you'll have to install it yourself!\n"
 fi
 
-echo -ne "\n\nInstalling the shortcuts now..."
-echo "- Removing old shorcuts... (if needed)"
-defaults delete com.cycling74.Max NSUserKeyEquivalents 2> /dev/null
 
-sleep 0.5 
-echo "- Adding new shorcuts..."
-defaults write com.cycling74.Max NSUserKeyEquivalents -dict-add "Restore Origin" "@~R" "Set Origin" "@~S" "Open As Text…" "@~O" "Save As…" "@\$S" Clear "~X" "Paste Replace" "@~V" "Lock Background" "@~L" Redo "@~Z" "Text" "@~N" "New from Clipboard" "@\$N" "Encapsulate" "@\$E" "De-encapsulate" "@\$D"
+echo -ne "\nWould you like to install the shortcuts? (Y/N) "
+read AutreReponse
 
-echo "- Shortcuts added."
+if [ $AutreReponse == "Y" ] ; then
+	echo -ne "\n\nInstalling the shortcuts now...\n"
+	echo "- Removing old shorcuts... (if needed)"
+	defaults delete com.cycling74.Max NSUserKeyEquivalents 2> /dev/null
+	
+	sleep 0.5 
+	echo "- Adding new shorcuts..."
+	defaults write com.cycling74.Max NSUserKeyEquivalents -dict-add "Restore Origin" "@~R" "Set Origin" "@~S" "Open As Text…" "@~O" "Save As…" "@\$S" Clear "~X" "Paste Replace" "@~V" "Lock Background" "@~L" Redo "@~Z" "Text" "@~N" "New from Clipboard" "@\$N" "Encapsulate" "@\$E" "De-encapsulate" "@\$D"
+	
+	echo -ne "- Shortcuts added.\n"
+	
+	echo -ne "To revert, remove the ~/Library/Preferences/com.cycling74.Max.plist file.\n"
+	
+	sleep 0.5
+	echo -e "The new shortcuts will be available the next time you start MaxMSP.\n\n"
+fi
 
-echo "" # saut de ligne
-echo "To revert, remove the ~/Library/Preferences/com.cycling74.Max.plist file."
-
-sleep 0.5
-echo -e "The new shortcuts will be available the next time you start MaxMSP.\n\n"
+echo -ne "\n\nend of the installation... enjoy!\n"
 
 exit 0
