@@ -17,7 +17,7 @@ PathDeLInstalleur=$0
 DossierDeLInstalleur=$(dirname $PathDeLInstalleur)
 
 cd /Library/Application\ Support/Cycling\ \'74/
-
+pwd
 echo -ne "installing:\n"
 
 echo -ne "- init files (/Library/Application Support/Cycling '74/init/)"
@@ -44,14 +44,15 @@ echo -ne "\nWould you like to install the externals and the help files? (Y/N) "
 read Reponse
 
 if [ $Reponse == "Y" ] ; then
+	echo -ne "installing:\n"
 	echo -ne "- objects (/Library/Application Support/Cycling '74/externals/ejies-obj)"
-	/Developer/Tools/CpMac -r $DossierDeLInstalleur/ejies-obj ejies-obj && echo -ne "... done.\n"
+	/Developer/Tools/CpMac -r $DossierDeLInstalleur/ejies-obj externals/ && echo -ne "... done.\n"
 
 	if [ -e "/Applications/MaxMSP 4.5/" ] ; then
 		echo -ne "- help files (/Applications/MaxMSP*/max-help/ejies-help)"
-		/Developer/Tools/CpMac -r $DossierDeLInstalleur/ejies-help /Applications/MaxMSP*/max-help/ejies-help && echo -ne "... done.\n"
+		/Developer/Tools/CpMac -r $DossierDeLInstalleur/ejies-help /Applications/MaxMSP*/max-help/ && echo -ne "... done.\n"
 	fi
-elif
+else
 	echo -ne "I can understand that... but you'll have to install it yourself!\n"
 fi
 
@@ -60,15 +61,14 @@ echo -ne "\nWould you like to install the shortcuts? (Y/N) "
 read AutreReponse
 
 if [ $AutreReponse == "Y" ] ; then
-	echo -ne "\n\nInstalling the shortcuts now...\n"
+	echo -ne "installing the shortcuts now:\n"
 	echo "- Removing old shorcuts... (if needed)"
 	defaults delete com.cycling74.Max NSUserKeyEquivalents 2> /dev/null
 	
 	sleep 0.5 
-	echo "- Adding new shorcuts..."
-	defaults write com.cycling74.Max NSUserKeyEquivalents -dict-add "Restore Origin" "@~R" "Set Origin" "@~S" "Open As Text…" "@~O" "Save As…" "@\$S" Clear "~X" "Paste Replace" "@~V" "Lock Background" "@~L" Redo "@~Z" "Text" "@~N" "New from Clipboard" "@\$N" "Encapsulate" "@\$E" "De-encapsulate" "@\$D"
+	echo -ne "- Adding new shorcuts"
+	(defaults write com.cycling74.Max NSUserKeyEquivalents -dict-add "Restore Origin" "@~R" "Set Origin" "@~S" "Open As Text…" "@~O" "Save As…" "@\$S" Clear "~X" "Paste Replace" "@~V" "Lock Background" "@~L" Redo "@~Z" "Text" "@~N" "New from Clipboard" "@\$N" "Encapsulate" "@\$E" "De-encapsulate" "@\$D") && echo -ne "... done.\n"
 	
-	echo -ne "- Shortcuts added.\n"
 	
 	echo -ne "To revert, remove the ~/Library/Preferences/com.cycling74.Max.plist file.\n"
 	
@@ -77,5 +77,6 @@ if [ $AutreReponse == "Y" ] ; then
 fi
 
 echo -ne "\n\nend of the installation... enjoy!\n"
+echo -ne "(you can quit the Terminal now...)\n"
 
 exit 0
