@@ -22,7 +22,8 @@ ej.function.js: new addpoints feature which allows you to add many points at the
 ej.function.js: removedupplicate may be faster when there's a lot of points or when there's nothing to remove
 ej.numbox.js: draw optimisations (on loading)
 ej.numbox.js: new select message
-ej.numbox.js: now report the tab key (send select to the dumpout oultet)
+ej.numbox.js: now report the tab key (send select to the dumpout outlet)
+ej.numbox-insp: allows you to activate/deactivate the display of the border
 ej.mout~: now support up to 16 channels, the position of 0 is now between the left and right front speaker.
 
 
