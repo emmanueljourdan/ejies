@@ -44,6 +44,7 @@ var MyVal = 0;
 var keyboard = -1;					// utilisŽ pour l'entrŽe au clavier
 var RedrawEnable = 0;
 var KeyboardError = 1;
+var AllowKeyboardState = 0;
 
 border = 0;
 sketch.fsaa = 0;
@@ -445,6 +446,7 @@ function save()
 	embedmessage("initvalue", DefaultValue);
 	embedmessage("change", ChangeState);
 	embedmessage("mouseup", MouseUpState);
+	embedmessage("allowkeyboard", AllowKeyboardState);
 	embedmessage("redrawon");
 }
 
@@ -528,52 +530,59 @@ function cursor(c)
 }
 cursor.local = 1;
 
+function allowkeyboard(v)
+{
+	AllowKeyboardState = v;
+}
+
 function KeyboardInput(v)
 {
-	if (v && this.patcher.locked) {
-		if (KeyboardError) {
-			// unselect others objects
-			var NumericBoite = this.patcher.newobject("number", -100, -100, 35, 9, 0, 0, 0, 3);
-			NumericBoite.hidden = 1;
-			NumericBoite.message("select");
-			this.patcher.remove(NumericBoite);
-
-			// si d'autres objets ej.numbox-keyboard tra”nent, il ne doivent pas recevoir les touches du clavier
-			messnamed("ej.numbox-keyboard", "stop");
-			
-			keyboard = this.patcher.newdefault(-100, -100, "ej.numbox-keyboard.pat");
-			// a serait bien d'Žviter le nommage...
-			// create "unique" name
-			var TempName = "num-";
-			var TempDate = new Date();
-			TempName += TempDate.getUTCDay();
-			TempName += TempDate.getUTCHours();
-			TempName += TempDate.getUTCMinutes();
-			TempName += TempDate.getUTCSeconds();
-			TempName += TempDate.getUTCMilliseconds();
-
-			keyboard.varname = TempName;
-			this.patcher.script("hide", TempName);	// hidden ne marche pas car c'est un subpatcher :-(
-			
-			if (keyboard.maxclass == "bogus") {
-				perror("check the installation: ej.numbox-keyboard.pat is missing in the ejies'help folder");
-				KeyboardError = 0;
+	if (AllowKeyboardState) {
+		if (v && this.patcher.locked) {
+			if (KeyboardError) {
+				// unselect others objects
+				var NumericBoite = this.patcher.newobject("number", -100, -100, 35, 9, 0, 0, 0, 3);
+				NumericBoite.hidden = 1;
+				NumericBoite.message("select");
+				this.patcher.remove(NumericBoite);
+	
+				// si d'autres objets ej.numbox-keyboard tra”nent, il ne doivent pas recevoir les touches du clavier
+				messnamed("ej.numbox-keyboard", "stop");
+				
+				keyboard = this.patcher.newdefault(-100, -100, "ej.numbox-keyboard.pat");
+				// a serait bien d'Žviter le nommage...
+				// create "unique" name
+				var TempName = "num-";
+				var TempDate = new Date();
+				TempName += TempDate.getUTCDay();
+				TempName += TempDate.getUTCHours();
+				TempName += TempDate.getUTCMinutes();
+				TempName += TempDate.getUTCSeconds();
+				TempName += TempDate.getUTCMilliseconds();
+	
+				keyboard.varname = TempName;
+				this.patcher.script("hide", TempName);	// hidden ne marche pas car c'est un subpatcher :-(
+				
+				if (keyboard.maxclass == "bogus") {
+					perror("check the installation: ej.numbox-keyboard.pat is missing in the ejies'help folder");
+					KeyboardError = 0;
+					return;
+				}
+				
+				// connect ej.numbox-keyboard.pat to this.box
+				this.patcher.hiddenconnect(this.box, 1, keyboard, 0);
+				this.patcher.hiddenconnect(keyboard, 0, this.box, 0);
+	
+				sendval();	// envoie la valeur actuelle -> ej.numbox-keyboard.pat
+				
+			} else
 				return;
-			}
-			
-			// connect ej.numbox-keyboard.pat to this.box
-			this.patcher.hiddenconnect(this.box, 1, keyboard, 0);
-			this.patcher.hiddenconnect(keyboard, 0, this.box, 0);
-
-			sendval();	// envoie la valeur actuelle -> ej.numbox-keyboard.pat
-			
 		} else
-			return;
-	} else
-		if (keyboard != -1) {	// si keyboard n'existe pas... il ne faut pas vouloir le supprimer
-			this.patcher.remove(keyboard);
-			keyboard = -1;
-		}
+			if (keyboard != -1) {	// si keyboard n'existe pas... il ne faut pas vouloir le supprimer
+				this.patcher.remove(keyboard);
+				keyboard = -1;
+			}
+	}
 }
 KeyboardInput.local = 1;
 
