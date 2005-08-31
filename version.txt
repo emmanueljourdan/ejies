@@ -26,7 +26,7 @@ ej.numbox.js: now report the tab key (send select to the dumpout outlet)
 ej.numbox.js: keyboard input is quite invisible... the ej.numbox-keyboard.pat patch is created outside the patch, so it doesn't flash anymore.
 ej.numbox-insp: allows you to activate/deactivate the display of the border
 ej.numbox-insp: allows you to activate/deactivate the keyboard input
-ej.mout~: now support up to 16 channels, the position of 0 is now between the left and right front speaker.
+ej.mout~: now support up to 16 channels, the position of 0 is now between the left and right front speakers.
 
 
 
