@@ -34,8 +34,15 @@ Abstractions:
 
 Other:
 ¥ AddShortcuts2Max.command: Bash script (MacOS X only) which add some shortcuts to MaxMSP.
+¥ Installation.command: Bash script (MacOS X only) which allows you to install the ejies.
 
-Installation:
+MacOS X Installation:
+- Double click on Installation.command and follow the instructions...
+- You'll be asked for an automatic installation of the externals and the help files: you can disable the automatic installation by answering N (means no...) to the question.
+- The Installation.command allows you to install also the shortcuts (same as AddShortcuts2Max.command)
+- At the end of the installation you can quit the Terminal application.
+
+Windows Installation:
 - put the CONTENTS of the ejies-extras folder in the ../MaxMSP 4.5/patches/extras folder
 - put the CONTENTS of the ejies-init folder in the C74:/init folder
 - put the CONTENTS of the ejies-jsui folder in the C74:/jsui-library folder
