@@ -40,7 +40,7 @@ if [ -e "/Applications/MaxMSP 4.5/" ] ; then
 	/Developer/Tools/CpMac -r $DossierDeLInstalleur/ejies-insp/* /Applications/MaxMSP*/patches/inspectors/ && echo -ne "... done.\n"
 fi
 
-echo -ne "\nWould you like to install the externals and the help files? (Y/N) "
+echo -ne "\nWould you like to install the externals and the help files in the standart places (C74:/externals/ and MaxMSP 4.5/max-help)? (Y/N) "
 read Reponse
 
 if [ $Reponse == "Y" ] ; then
