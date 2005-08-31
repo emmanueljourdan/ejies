@@ -533,7 +533,7 @@ function KeyboardInput(v)
 	if (v && this.patcher.locked) {
 		if (KeyboardError) {
 			// unselect others objects
-			var NumericBoite = this.patcher.newobject("number", 0, 0, 35, 9, 0, 0, 0, 3);
+			var NumericBoite = this.patcher.newobject("number", -100, -100, 35, 9, 0, 0, 0, 3);
 			NumericBoite.hidden = 1;
 			NumericBoite.message("select");
 			this.patcher.remove(NumericBoite);
@@ -541,7 +541,7 @@ function KeyboardInput(v)
 			// si d'autres objets ej.numbox-keyboard traînent, il ne doivent pas recevoir les touches du clavier
 			messnamed("ej.numbox-keyboard", "stop");
 			
-			keyboard = this.patcher.newdefault(box.rect[0], box.rect[1] - 25, "ej.numbox-keyboard.pat");
+			keyboard = this.patcher.newdefault(-100, -100, "ej.numbox-keyboard.pat");
 			// ça serait bien d'éviter le nommage...
 			// create "unique" name
 			var TempName = "num-";
