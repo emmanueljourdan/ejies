@@ -259,10 +259,11 @@ function anything()
 			break;
 		}
 	}
+
+	RedrawEnable = OldRedrawState;
 		
 	if (NeedUpdate == -1) {	// si -1 c'est que a ne correspond pas ˆ un nom de function
 		perror("doesn't understand", messagename);
-		RedrawEnable = OldRedrawState;
 		return;
 	}
 
@@ -270,8 +271,6 @@ function anything()
 		notifyclients();
 	if (NeedUpdate & 1 == 1)
 		draw();
-	
-	RedrawEnable = OldRedrawState;
 }
 
 function onresize(w,h)
@@ -1236,12 +1235,12 @@ function all()
 			NeedDraw = tmp & 1 > 0 ? 1 : 0;
 	}
 
+	RedrawEnable = OldRedrawState;
+
 	if (NeedNotify)
 		notifyclients();
 	if (NeedDraw)
 		draw();
-
-	RedrawEnable = OldRedrawState;
 }
 
 function addpoints()
