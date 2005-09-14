@@ -1,6 +1,16 @@
 ejies Ñ Version history
 
 *******************
+1.54b1: 1 Sep 2005
+This version requires MaxMSP 4.5.5 or higher.
+
+Improvements:
+ej.function.js: new dumpmatrix message (send a jitter matrix to the dump outlet)
+
+
+
+
+*******************
 1.53: 1 Sep 2005
 This version requires MaxMSP 4.5.5 or higher.
 

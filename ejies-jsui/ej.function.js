@@ -1131,6 +1131,25 @@ function MyDump(courbe, sendname)
 }
 MyDump.local = 1;
 
+function MyDumpMatrix(courbe)
+{
+	var p;
+
+
+	// il faut au moins un point pour sortir
+	if (courbe.np) {
+		var Matrix = new JitterMatrix(1, "float32", 2, courbe.np);
+		
+		for (p = 0; p < courbe.np; p++) {
+			Matrix.setcell2d(0, p, courbe.pa[p].valx);
+			Matrix.setcell2d(1, p, courbe.pa[p].valy);
+		}
+		
+		outlet(DUMP_OUTLET, "jit_matrix", Matrix.name);
+	}
+}
+MyDumpMatrix.local = 1;
+
 function MyListDump(courbe, sendname)
 {
 /* 	var tmpF = courbe; */
@@ -1437,6 +1456,22 @@ function dump()
 		MyDump(fctns[current], arguments[0]);
 	else
 		MyDump(fctns[current]);
+}
+
+function dumpmatrix()
+{
+	if (arguments.length) {
+		var c;
+		for (c = 0; c < NbCourbes; c++) {
+			if (arguments[0] == fctns[c].name) {
+				MyDumpMatrix(fctns[c]);
+				return;
+			}
+		}
+		// message d'erreur si le nom de la fonction n'est pas valide
+		perror(arguments[0], "is not a function, dumpmatrix aborted.");
+	} else
+		MyDumpMatrix(fctns[current]);	// 
 }
 
 function listdump()
@@ -2757,5 +2792,5 @@ function write(filename)
 
 resetall();
 
-/* autowatch = 1; */
-/* post("compiled...\n"); */
+autowatch = 1;
+post("compiled...\n");
