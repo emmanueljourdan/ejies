@@ -21,23 +21,23 @@ pwd
 echo -ne "installing:\n"
 
 echo -ne "- init files (/Library/Application Support/Cycling '74/init/)"
-/Developer/Tools/CpMac -r $DossierDeLInstalleur/ejies-init/* init/ && echo -ne "... done.\n"
+cp -R $DossierDeLInstalleur/ejies-init/* init/ && echo -ne "... done.\n"
 
 echo -ne "- jsui files (/Library/Application Support/Cycling '74/jsui-library/)"
-/Developer/Tools/CpMac -r $DossierDeLInstalleur/ejies-jsui/* jsui-library/ && echo -ne "... done.\n"
+cp -R $DossierDeLInstalleur/ejies-jsui/* jsui-library/ && echo -ne "... done.\n"
 
 echo -ne "- jsextensions file (/Library/Application Support/Cycling '74/jsextensions/)"
-/Developer/Tools/CpMac -r $DossierDeLInstalleur/ejies-jsextensions/* jsextensions/ && echo -ne "... done.\n"
+cp -R $DossierDeLInstalleur/ejies-jsextensions/* jsextensions/ && echo -ne "... done.\n"
 
 if [ -e "/Applications/MaxMSP 4.5/" ] ; then
 	echo -ne "- extras file (/Applications/MaxMSP*/patches/extras/)"
-	/Developer/Tools/CpMac -r $DossierDeLInstalleur/ejies-extras/* /Applications/MaxMSP*/patches/extras/ && echo -ne "... done.\n"
+	cp -R $DossierDeLInstalleur/ejies-extras/* /Applications/MaxMSP*/patches/extras/ && echo -ne "... done.\n"
 
 	echo -ne "- prototypes (/Applications/MaxMSP*/patches/object-prototypes/)"
-	/Developer/Tools/CpMac -r $DossierDeLInstalleur/ejies-prototypes/* /Applications/MaxMSP*/patches/object-prototypes/ && echo -ne "... done.\n"
+	cp -R $DossierDeLInstalleur/ejies-prototypes/* /Applications/MaxMSP*/patches/object-prototypes/ && echo -ne "... done.\n"
 
 	echo -ne "- inspectors (/Applications/MaxMSP*/patches/inspectors)"
-	/Developer/Tools/CpMac -r $DossierDeLInstalleur/ejies-insp/* /Applications/MaxMSP*/patches/inspectors/ && echo -ne "... done.\n"
+	cp -R $DossierDeLInstalleur/ejies-insp/* /Applications/MaxMSP*/patches/inspectors/ && echo -ne "... done.\n"
 fi
 
 echo -ne "\nWould you like to install the externals and the help files in the standart places (C74:/externals/ and MaxMSP 4.5/max-help)? (Y/N) "
@@ -46,11 +46,11 @@ read Reponse
 if [ $Reponse == "Y" ] ; then
 	echo -ne "installing:\n"
 	echo -ne "- objects (/Library/Application Support/Cycling '74/externals/ejies-obj)"
-	/Developer/Tools/CpMac -r $DossierDeLInstalleur/ejies-obj externals/ && echo -ne "... done.\n"
+	cp -R $DossierDeLInstalleur/ejies-obj externals/ && echo -ne "... done.\n"
 
 	if [ -e "/Applications/MaxMSP 4.5/" ] ; then
 		echo -ne "- help files (/Applications/MaxMSP*/max-help/ejies-help)"
-		/Developer/Tools/CpMac -r $DossierDeLInstalleur/ejies-help /Applications/MaxMSP*/max-help/ && echo -ne "... done.\n"
+		cp -R $DossierDeLInstalleur/ejies-help /Applications/MaxMSP*/max-help/ && echo -ne "... done.\n"
 	fi
 else
 	echo -ne "I can understand that... but you'll have to install it yourself!\n"
