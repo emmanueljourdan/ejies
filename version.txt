@@ -6,7 +6,7 @@ This version requires MaxMSP 4.5.5 or higher.
 
 Improvements:
 ej.function.js: new dumpmatrix message (send a jitter matrix to the dump outlet)
-Installation.command: now use cp instead of CpMac... there's no resources...
+Installation.command: now use cp instead of CpMac... it should work on any macintosh now.
 
 
 
