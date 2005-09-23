@@ -1,16 +1,19 @@
 ejies Ñ Version history
 
 *******************
-1.54b2: X Sep 2005
+1.54b3: 23 Sep 2005
 This version requires MaxMSP 4.5.5 or higher.
 
 New:
-ej.led.js: new jsui... which does the same as the standart LED object
+ej.led.js: new jsui... which does the same as the standard LED object / button object.
 
 Improvements:
 ej.function.js: new dumpmatrix message (send a jitter matrix to the dump outlet)
 Installation.command: now use cp instead of CpMac... it should work on any macintosh now.
-
+stout~: new wopen & wclose messages to avoid using pcontrol for that purpose
+stout~: float input define gain as dB
+splay~: new wopen & wclose messages to avoid using pcontrol for that purpose
+splay~: can now play sound files up to 24 channels
 
 
 *******************
