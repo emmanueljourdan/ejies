@@ -1,6 +1,7 @@
 /*
 	ej.led.js by Emmanuel Jourdan, Ircam - 09 2004
 	an alternative led...
+	since 1.54b3: mode button added
 */
 
 // Global Code
@@ -25,6 +26,7 @@ var MyTask = new Task();
 var ColorList =[MyBrgb, MyBrgb2, MyFrgb, MyFrgb2];
 var RedrawEnable;
 var CircleRatio = 0.75;
+var LedMode = 0;
 const MIN_SIZE = 15;
 const DUMP_OUTLET = 1;
 border = 0;
@@ -70,32 +72,43 @@ function bang()
 	draw();
 
 	WaitAndStop();
-	outlet(0, LastValue);
+	
+	if (LedMode == 1)
+		outlet(0, "bang");
+	else
+		outlet(0, LastValue);
 }
 
 function msg_float(v)
 {
-	if (v == 0) {
-		Flash = 0;
-		LastValue = 0;
-	} else {
-		Flash = 1;
-		LastValue = 1;
+	if (LedMode)
+		bang();
+	else {
+		if (v == 0) {
+			Flash = 0;
+			LastValue = 0;
+		} else {
+			Flash = 1;
+			LastValue = 1;
+		}
+		SendValue();
+		draw();
 	}
-	SendValue();
-	draw();
 }
 
 function set(v)
 {
-	if (v == 0) {
-		Flash = 0;
-		LastValue = 0;
-	} else {
-		Flash = 1;
-		LastValue = 1;
+	// ignore if it's in button mode
+	if (! LedMode) {
+		if (v == 0) {
+			Flash = 0;
+			LastValue = 0;
+		} else {
+			Flash = 1;
+			LastValue = 1;
+		}
+		draw();
 	}
-	draw();
 }
 
 function blinktime(v)
@@ -113,6 +126,7 @@ function WaitAndStop()
 	MyTask.interval = FlashTime;
 	MyTask.repeat(1);
 }
+WaitAndStop.local = 1;
 
 function PutItOff()
 {
@@ -121,6 +135,7 @@ function PutItOff()
 		draw();
 	}
 }
+PutItOff.local = 1;
 
 function ForceDisplay() 
 {
@@ -131,8 +146,13 @@ ForceDisplay.local = 1;
 
 function mode(v)
 {
-	Flash = v;
-	draw();
+	if ( v == 0 || v == 1) {
+		LedMode = v;
+		Flash = 0;
+		LastValue = 0;
+		ForceDisplay();
+	} else
+		perror("bad arguement for message mode");
 }
 
 function pict(v)
@@ -220,6 +240,7 @@ function save()
 {
 /* 	save states */
 	embedmessage("redrawoff");
+	embedmessage("mode", LedMode);
 	embedmessage("circlesize", CircleRatio);
 	embedmessage("blinktime", FlashTime);
 	embedmessage("brgb", Math.floor(MyBrgb[0]*255), Math.floor(MyBrgb[1]*255), Math.floor(MyBrgb[2]*255));
@@ -244,7 +265,7 @@ function frgb(r,g,b)
 	MyFrgb[0] = r/255.;
 	MyFrgb[1] = g/255.;
 	MyFrgb[2] = b/255.;
-	draw();
+	ForceDisplay();
 }
 
 function frgb2(r,g,b)
@@ -252,7 +273,7 @@ function frgb2(r,g,b)
 	MyFrgb2[0] = r/255.;
 	MyFrgb2[1] = g/255.;
 	MyFrgb2[2] = b/255.;
-	draw();
+	ForceDisplay();
 }
 
 function brgb(r,g,b)
@@ -260,7 +281,7 @@ function brgb(r,g,b)
 	MyBrgb[0] = r/255.;
 	MyBrgb[1] = g/255.;
 	MyBrgb[2] = b/255.;
-	draw();
+	ForceDisplay();
 }
 
 function brgb2(r,g,b)
@@ -268,7 +289,7 @@ function brgb2(r,g,b)
 	MyBrgb2[0] = r/255.;
 	MyBrgb2[1] = g/255.;
 	MyBrgb2[2] = b/255.;
-	draw();
+	ForceDisplay();
 }
 
 function getbrgb() { getcolor("brgb", 0); }
@@ -293,15 +314,19 @@ getcolor.local = 1;	// private
 
 function onclick()
 {
-	if (Flash == LastValue) {
-		Flash = 1 - Flash;
-		LastValue = 1 - LastValue;
-	} else {
-		Flash = 1 - Flash;
-		LastValue = Flash;
+	if (LedMode)
+		bang();
+	else {	
+		if (Flash == LastValue) {
+			Flash = 1 - Flash;
+			LastValue = 1 - LastValue;
+		} else {
+			Flash = 1 - Flash;
+			LastValue = Flash;
+		}
+		SendValue();
+		draw();
 	}
-	SendValue();
-	draw();
 }
 
 redrawon();
