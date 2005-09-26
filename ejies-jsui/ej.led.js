@@ -2,6 +2,13 @@
 	ej.led.js by Emmanuel Jourdan, Ircam - 09 2004
 	an alternative led...
 	since 1.54b3: mode button added
+	
+	$Revision: 1.4 $
+	$Date: 2005/09/26 14:56:55 $
+	$Author: jourdan $
+	$Name:  $
+	$Id: ej.led.js,v 1.4 2005/09/26 14:56:55 jourdan Exp $
+
 */
 
 // Global Code
