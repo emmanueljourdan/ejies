@@ -1,7 +1,10 @@
 /*
 	ej.nthru.js by Emmanuel Jourdan, Ircam - 05 2004
 	Ce truc ne fait rien	 :-)
- */
+ 
+	$Revision: 1.3 $
+	$Date: 2005/09/26 15:15:57 $
+*/
 
 // global code
 

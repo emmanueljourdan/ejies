@@ -1,6 +1,9 @@
 /*
 	ej.cn.js (change name) by Emmanuel Jourdan, Ircam - 12 2004
 	Allows you to rename any named object.
+
+	$Revision: 1.3 $
+	$Date: 2005/09/26 15:15:57 $
  */
 
 // global code

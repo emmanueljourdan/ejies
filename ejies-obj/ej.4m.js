@@ -1,7 +1,10 @@
 /*
 	ej.4m.js by Emmanuel Jourdan, Ircam Ñ 06 2004
 	output the min, median, mean, maximum on a int/float stream
- */
+ 
+	$Revision: 1.3 $
+	$Date: 2005/09/26 15:15:57 $
+*/
 
 // global code
 var ejies = new EjiesUtils();				// lien vers ejies-extension.js

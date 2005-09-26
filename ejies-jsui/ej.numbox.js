@@ -1,6 +1,9 @@
 /*
 	ej.numbox.js by Emmanuel Jourdan, Ircam - 08 2004
 	an alternative number box.
+
+	$Revision: 1.11 $
+	$Date: 2005/09/26 15:15:57 $
 */
 
 // Global Code

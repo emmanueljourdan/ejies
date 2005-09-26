@@ -1,6 +1,9 @@
 /*
 	ej.lui.js by Emmanuel Jourdan, Ircam Ñ 09 2004
 	lui means Load jsUI...
+
+	$Revision: 1.6 $
+	$Date: 2005/09/26 15:15:57 $
  */
 
 // global code

@@ -1,6 +1,9 @@
 /*
 	ej.dn.js by Emmanuel Jourdan, Ircam Ñ 09 2004
 	display named objets (open the subpatcher)
+
+	$Revision: 1.3 $
+	$Date: 2005/09/26 15:15:57 $
  */
 
 // global code

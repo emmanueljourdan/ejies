@@ -1,6 +1,9 @@
 /*
 	ej.op.js by Emmanuel Jourdan, Ircam Ñ 09 2004
 	open patchers
+
+	$Revision: 1.3 $
+	$Date: 2005/09/26 15:15:57 $
  */
 
 // global code

@@ -1,6 +1,9 @@
 /* 
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
+
+	$Revision: 1.43 $
+	$Date: 2005/09/26 15:15:57 $
 */
 
 // global code
