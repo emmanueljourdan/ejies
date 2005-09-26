@@ -3,12 +3,8 @@
 	an alternative led...
 	since 1.54b3: mode button added
 	
-	$Revision: 1.4 $
-	$Date: 2005/09/26 14:56:55 $
-	$Author: jourdan $
-	$Name:  $
-	$Id: ej.led.js,v 1.4 2005/09/26 14:56:55 jourdan Exp $
-
+	$Revision: 1.5 $
+	$Date: 2005/09/26 15:12:29 $
 */
 
 // Global Code
