@@ -56,7 +56,7 @@ function draw()
 		else
 			glcolor(MyFrgb);
 		
-			circle(CircleRatio);
+		sphere(CircleRatio);
 	}
 
 	OldFlash = Flash;
