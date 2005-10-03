@@ -1,4 +1,4 @@
-e j i e s (version 1.53)
+e j i e s (version 1.54)
 by Emmanuel Jourdan, Ircam
 This version requires MaxMSP 4.5.5 or higher.
 
@@ -15,8 +15,9 @@ JS:
 ¥ ej.route.js: route data types
 
 JSUI:
-¥ ej.numbox.js: an alternative number box
 ¥ ej.function.js: multi bpf editor (compatible with the function object)
+¥ ej.led.js: new jsui... which does the same as the standard LED object / button object
+¥ ej.numbox.js: an alternative number box
 
 Abstractions:
 ¥ ej.dialog: alternative dialog box for text entry
