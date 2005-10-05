@@ -3,8 +3,8 @@
 	an alternative led...
 	since 1.54b3: mode button added
 	
-	$Revision: 1.5 $
-	$Date: 2005/09/26 15:12:29 $
+	$Revision: 1.6 $
+	$Date: 2005/10/05 16:53:19 $
 */
 
 // Global Code
@@ -97,6 +97,14 @@ function msg_float(v)
 		SendValue();
 		draw();
 	}
+}
+
+function anything()
+{
+	if (LedMode)
+		bang();
+	else
+		perror("doesn't understand", messagename);
 }
 
 function set(v)
@@ -234,7 +242,7 @@ forcesize.local = 1; //private
 
 function perror()
 {
-	ejies.scriptname = "ej.numbox.js";
+	ejies.scriptname = "ej.led.js";
 	ejies.perror(arguments);
 }
 perror.local = 1;

@@ -5,6 +5,7 @@ max oblist ejies "js ej.cycle";
 max oblist ejies "js ej.dialog";
 max oblist ejies "js ej.lock";
 max oblist ejies "js ej.lui ej.function.js";
+max oblist ejies "js ej.lui ej.led.js";
 max oblist ejies "js ej.lui ej.numbox.js";
 max oblist ejies "js ej.nthru";
 max oblist ejies "js ej.op";
