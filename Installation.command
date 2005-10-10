@@ -16,18 +16,22 @@ echo -ne "This command line will install the ejies for you...\n"
 PathDeLInstalleur=$0
 DossierDeLInstalleur=$(dirname $PathDeLInstalleur)
 
-cd /Library/Application\ Support/Cycling\ \'74/
-pwd
-echo -ne "installing:\n"
-
-echo -ne "- init files (/Library/Application Support/Cycling '74/init/)"
-cp -R $DossierDeLInstalleur/ejies-init/* init/ && echo -ne "... done.\n"
-
-echo -ne "- jsui files (/Library/Application Support/Cycling '74/jsui-library/)"
-cp -R $DossierDeLInstalleur/ejies-jsui/* jsui-library/ && echo -ne "... done.\n"
-
-echo -ne "- jsextensions file (/Library/Application Support/Cycling '74/jsextensions/)"
-cp -R $DossierDeLInstalleur/ejies-jsextensions/* jsextensions/ && echo -ne "... done.\n"
+if [ -e /Library/Application\ Support/Cycling\ \'74/ ] ; then
+	cd /Library/Application\ Support/Cycling\ \'74/
+	pwd
+	echo -ne "installing:\n"
+	
+	echo -ne "- init files (/Library/Application Support/Cycling '74/init/)"
+	cp -R $DossierDeLInstalleur/ejies-init/* init/ && echo -ne "... done.\n"
+	
+	echo -ne "- jsui files (/Library/Application Support/Cycling '74/jsui-library/)"
+	cp -R $DossierDeLInstalleur/ejies-jsui/* jsui-library/ && echo -ne "... done.\n"
+	
+	echo -ne "- jsextensions file (/Library/Application Support/Cycling '74/jsextensions/)"
+	cp -R $DossierDeLInstalleur/ejies-jsextensions/* jsextensions/ && echo -ne "... done.\n"
+else
+	echo -ne "Sorry, /Library/Application\ Support/Cycling\ \'74/ doen't exist. Init, jsui and jsextensions can't be installed.\n"
+fi
 
 if [ -e "/Applications/MaxMSP 4.5/" ] ; then
 	echo -ne "- extras file (/Applications/MaxMSP*/patches/extras/)"
@@ -38,16 +42,20 @@ if [ -e "/Applications/MaxMSP 4.5/" ] ; then
 
 	echo -ne "- inspectors (/Applications/MaxMSP*/patches/inspectors)"
 	cp -R $DossierDeLInstalleur/ejies-insp/* /Applications/MaxMSP*/patches/inspectors/ && echo -ne "... done.\n"
+else
+	echo -ne "Sorry, /Applications/MaxMSP 4.5/ doesn't exist. Extra, prototypes and inspectors can't be installed.\n"
 fi
 
 echo -ne "\nWould you like to install the externals and the help files in the standart places (C74:/externals/ and MaxMSP 4.5/max-help)? (Y/N) "
 read Reponse
 
 if [ $Reponse == "Y" ] ; then
-	echo -ne "installing:\n"
-	echo -ne "- objects (/Library/Application Support/Cycling '74/externals/ejies-obj)"
-	cp -R $DossierDeLInstalleur/ejies-obj externals/ && echo -ne "... done.\n"
-
+	if [ -e /Library/Application\ Support/Cycling\ \'74/ ] ; then
+		echo -ne "installing:\n"
+		echo -ne "- objects (/Library/Application Support/Cycling '74/externals/ejies-obj)"
+		cp -R $DossierDeLInstalleur/ejies-obj externals/ && echo -ne "... done.\n"
+	fi
+	
 	if [ -e "/Applications/MaxMSP 4.5/" ] ; then
 		echo -ne "- help files (/Applications/MaxMSP*/max-help/ejies-help)"
 		cp -R $DossierDeLInstalleur/ejies-help /Applications/MaxMSP*/max-help/ && echo -ne "... done.\n"
@@ -61,6 +69,7 @@ echo -ne "\nWould you like to install the shortcuts? (Y/N) "
 read AutreReponse
 
 if [ $AutreReponse == "Y" ] ; then
+	# code from AddShortcuts2Max.command
 	echo -ne "installing the shortcuts now:\n"
 	echo "- Removing old shorcuts... (if needed)"
 	defaults delete com.cycling74.Max NSUserKeyEquivalents 2> /dev/null
