@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.43 $
-	$Date: 2005/09/26 15:15:57 $
+	$Revision: 1.44 $
+	$Date: 2005/10/21 15:17:07 $
 */
 
 // global code
@@ -2651,6 +2651,10 @@ function read(filename)
 			var p;
 			var NeedUpdate = 0;
 			fctns[c].name = tmpLine[idx++];
+
+			// some people loves to put spaces in names...
+			while ( isNaN(parseFloat(tmpLine[idx])) )
+				fctns[c].name += " " + tmpLine[idx++];
 			
 			// depuis la version 1.52 domaine contient deux limites.
 			if (FunctionVersionCheck == 1)
@@ -2795,5 +2799,5 @@ function write(filename)
 
 resetall();
 
-/* autowatch = 1; */
-/* post("compiled...\n"); */
+autowatch = 1;
+post("compiled...\n");
