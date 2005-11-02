@@ -7,7 +7,6 @@ This version requires MaxMSP 4.5.5 or higher.
 New:
 ej.led.js: new jsui... which does the same as the standard LED object / button object.
 Uninstall.command: uninstaller utility (but why would you need that? :-) )
-picture collection: aqua pictctrl with prototypes.
 
 Improvements:
 ej.dialog: ignore click on the picture
