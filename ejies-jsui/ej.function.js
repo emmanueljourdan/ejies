@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.45 $
-	$Date: 2005/11/02 10:39:09 $
+	$Revision: 1.46 $
+	$Date: 2005/11/03 14:17:07 $
 */
 
 // global code
@@ -2901,5 +2901,5 @@ function write(filename)
 
 resetall();
 
-autowatch = 1;
-post("compiled...\n");
+/* autowatch = 1; */
+/* post("compiled...\n"); */
