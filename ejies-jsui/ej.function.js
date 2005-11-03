@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.47 $
-	$Date: 2005/11/03 15:35:00 $
+	$Revision: 1.48 $
+	$Date: 2005/11/03 15:41:44 $
 */
 
 // global code
@@ -1580,7 +1580,7 @@ function clearsustain()
 	else
 		perror("extra arguments for message clearsustain");
 
-	notifyclents();
+	notifyclients();
 	drawFunctions();
 }
 
