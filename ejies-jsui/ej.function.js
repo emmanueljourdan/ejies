@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.46 $
-	$Date: 2005/11/03 14:17:07 $
+	$Revision: 1.47 $
+	$Date: 2005/11/03 15:35:00 $
 */
 
 // global code
@@ -1569,7 +1569,7 @@ function clear()
 	else
 		MyClear(fctns[current], arguments);
 
-	notifyclents();
+	notifyclients();
 	drawFunctions();
 }
 
