@@ -9,10 +9,12 @@ ej.led.js: new jsui... which does the same as the standard LED object / button o
 Uninstall.command: uninstaller utility (but why would you need that? :-) )
 prototypes: for pictctrl cancel and ok aqua button
 
+Bug correction:
+ej.function.js: fix bug with if there's space in a name of function (Thanks Thomas)
+
 Improvements:
 ej.dialog: ignore click on the picture
 ej.function.js: new dumpmatrix message (send a jitter matrix to the dump outlet)
-ej.function.js: fix bug with if there's space in a name of function (Thanks Thomas)
 ej.function.js: drawing stuff completely rewritten (using 2 sketch: displaying point values should be faster)
 Installation.command: now use cp instead of CpMac... it should work on any macintosh now
 Installation.command: check for the C74 and Applications/MaxMSP 4.5 existence before installing
