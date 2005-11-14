@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.48 $
-	$Date: 2005/11/03 15:41:44 $
+	$Revision: 1.49 $
+	$Date: 2005/11/14 11:20:59 $
 */
 
 // global code
@@ -131,8 +131,8 @@ init.local = 1;
 //////////////// Fonctions Affichage ///////////////
 function draw()
 {
-	if (! RedrawEnable)
-		return;
+/* 	if (! RedrawEnable) */
+/* 		return; */
 	
 /* 	with ( sketch ) { */
 /* 		// on efface tout */
@@ -153,23 +153,29 @@ draw.local = 1;
 
 function drawAll()
 {
-	SpriteText();
-	SpriteFunctions();
-	draw();
+	if (RedrawEnable) {
+		SpriteText();
+		SpriteFunctions();
+		draw();
+	}
 }
 drawAll.local = 1;
 
 function drawText()
 {
-	SpriteText();
-	draw();
+	if (RedrawEnable) {
+		SpriteText();
+		draw();
+	}
 }
 drawText.local = 1;
 
 function drawFunctions()
 {
-	SpriteFunctions();
-	draw();
+	if (RedrawEnable) {
+		SpriteFunctions();
+		draw();
+	}
 }
 drawFunctions.local = 1;
 
@@ -936,10 +942,8 @@ function RedrawOrNot(v)
 		RedrawOrNot.LastValue = v;
 		if ( v == -1 )
 			WaitALittleBit()
-		else {
-			SpriteText();
-			draw(); 		// si pas de point sélectionné on attend un peu avant de faire draw()
-		}
+		else
+			drawText(); 		// si pas de point sélectionné on attend un peu avant de faire draw()
 	}
 }
 RedrawOrNot.local = 1;
@@ -1050,7 +1054,7 @@ ArgsParser.local = 1;
 function WaitALittleBit()
 {
 	// attend 750ms avant de redessiner
-	tsk = new Task(function() { if (! tsk.running) { SpriteText(); draw(); } }, this);
+	tsk = new Task(function() { if (! tsk.running) drawText(); }, this);
 	tsk.interval = 750;
 	tsk.repeat(1);
 }
@@ -1760,7 +1764,7 @@ function sustain()
 		perror("bad arguments for message sustain");
 }
 
-function brgb() { SetColor(fctns[current], "brgb", arguments); drawFunctions(); }
+function brgb() { SetColor(fctns[current], "brgb", arguments); drawAll(); }
 function frgb() { SetColor(fctns[current], "frgb", arguments); drawFunctions(); }
 function rgb2() { SetColor(fctns[current], "rgb2", arguments); drawFunctions(); }
 function rgb3() { SetColor(fctns[current], "rgb3", arguments); drawFunctions(); }
@@ -1851,7 +1855,7 @@ function redrawoff() { RedrawEnable = 0; }
 function redrawon()
 {
 	RedrawEnable = 1;
-	draw();
+	drawAll();
 }
 
 function resetall()
@@ -1896,7 +1900,7 @@ function defaults()
 		fctns[c].rgb5 =[0.5,0.5,0.5];
 	}
 	
-	draw();	// si c'est utilisé dans la fonction save(), draw est désactivé automatiquement (RedrawEnable = 0);
+	drawAll();	// si c'est utilisé dans la fonction save(), draw est désactivé automatiquement (RedrawEnable = 0);
 }
 
 function removeduplicate()
@@ -2025,8 +2029,6 @@ MyZoomOut.local = 1;
 //////////////// Fonctions Mouse ///////////////
 function onidle(x,y,but,cmd,shift,capslock,option,ctrl)
 {
-//	DisplayCursor(Math.round((x-8)/200 * 10));
-//	return;
 	var OldIdlePoint = IdlePoint;
 	IdlePoint = -1;
 
@@ -2140,8 +2142,6 @@ function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 	var tmpF = fctns[current];
 	var borderthing = -1;
 
-	y = yOffset(y);
-
 	if (AllowEdit == 0 || tmpF.display == 0)
 		return;
 
@@ -2149,10 +2149,12 @@ function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 		EditedWithMouse();	// quand c'est delete c'est fait dans onidle()
 		SelectedPoint = -2;	// si on a relâché c'est qu'il n'y a plus de points sélectionnés.
 		onidle(x,y, 0);		// tout pareil...
-		draw();
+/* 		drawText(); */
 		return;
 	}
 	
+	y = yOffset(y); // ne pas le mettre avant sinon onidle ne reçoit pas les bons coordonnées y
+
 	if (MouseReportState)
 		outlet(DUMPOUT, "mouse", 	ejies.clip(x2val(fctns[current], x), fctns[current].domain[0], fctns[current].domain[1]),
 									ejies.clip(y2val(fctns[current], y), fctns[current].range[0], fctns[current].range[1]),
