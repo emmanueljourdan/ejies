@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.51 $
-	$Date: 2005/11/15 11:12:02 $
+	$Revision: 1.52 $
+	$Date: 2005/11/15 18:23:27 $
 */
 
 // global code
@@ -159,7 +159,6 @@ function drawAll()
 		draw();
 	}
 }
-drawAll.local = 1;
 
 function drawText()
 {
