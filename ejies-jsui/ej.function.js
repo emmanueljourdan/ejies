@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.49 $
-	$Date: 2005/11/14 11:20:59 $
+	$Revision: 1.50 $
+	$Date: 2005/11/15 10:31:44 $
 */
 
 // global code
@@ -110,6 +110,7 @@ function Courbe(name)
 	this.PixelDomain;			// ...
 	this.PixelRange;			// ...
 	this.NextFrom = 0;			// utilisé pour le message next
+	this.OnePointAtZero = 0;	// 1 si un des points de la courbe à 0 pour valeur y
 }
 Courbe.local = 1;
 
@@ -149,7 +150,6 @@ function draw()
 /* 	post("draw operation completed\n"); */
 	refresh();
 }
-draw.local = 1;
 
 function drawAll()
 {
@@ -269,6 +269,7 @@ function SpriteFunctions()
 					var tmpTransparency = c == current ? 1 : Ghostness;
 					glcolor(fctns[c]["frgb"], tmpTransparency);
 	
+					fctns[c].OnePointAtZero = 0;
 					for (i = 0; i < fctns[c].np; i++) {							
 						moveto(screentoworld(fctns[c]["pa"][i].x,fctns[c]["pa"][i].y ));
 						
@@ -278,9 +279,10 @@ function SpriteFunctions()
 							glcolor(fctns[c]["frgb"], tmpTransparency);
 						}
 						else {
-							if (fctns[c]["pa"][i].valy == 0)
+							if (fctns[c]["pa"][i].valy == 0) {
+								fctns[c].OnePointAtZero = 1;
 								framecircle(5 / SketchFunctions.size[1]); // 5 pixels le point...
-							else
+							} else
 								circle(5 / SketchFunctions.size[1]); // 5 pixels le point...
 						}
 					}
@@ -995,8 +997,8 @@ function ArgsParser(courbe, msg, a)
 							else
 								perror("bad argument(s) for message setdomain"); 
 							NeedNotify++; tmpReturn++; break;
-		case "range":		redrawoff(); if (a.length == 3) { range(a[1], a[2], courbe);};  NeedDraw++; NeedNotify++; tmpReturn++; break;
-		case "setrange":	if (a.length == 3) { setrange(a[1], a[2], courbe);} ; NeedNotify++; tmpReturn++; break;
+		case "range":		if (a.length == 3) { redrawoff(); range(a[1], a[2], courbe);  NeedDraw++; NeedNotify++; tmpReturn++;} break;
+		case "setrange":	if (a.length == 3) { setrange(a[1], a[2], courbe); ; NeedNotify++; tmpReturn++;} break;
 		case "zoom_x":		redrawoff(); zoom_x(a[1], a[2], courbe); NeedDraw++; tmpReturn++; break;
 		case "zoom_y":		redrawoff(); zoom_y(a[1], a[2], courbe); NeedDraw++; tmpReturn++; break;
 		case "zoomout":		redrawoff(); MyZoomOut(courbe); NeedDraw++; tmpReturn++; break;
@@ -1803,7 +1805,11 @@ function setdomain()
 				return;
 	}
 	
-	notifyclients();	// pas besoin d'un draw ça ne change pas la position des points.
+	notifyclients();
+
+	// Si la grille est activée, changer le domain doit redessiner la grille
+	if (GridMode)
+		drawFunctions();
 }
 
 function range(a, b, courbe)
@@ -1831,6 +1837,7 @@ function setrange(a, b, courbe)
 {
 	var tmpF = CurrentOrArgument(courbe, arguments, 2);
 	var i;
+	var NeedDraw = 0;
 
 	if ( (b - a)  < 0) {
 		perror("bad values for message setrange: min must be lower than max");
@@ -1843,9 +1850,15 @@ function setrange(a, b, courbe)
 	
 	for (i = 0; i < tmpF.np; i++) {
 		tmpF.pa[i].valy = y2val(tmpF, tmpF.pa[i].y);
+		if (tmpF.pa[i].valy == 0)
+			NeedDraw++;
 	}
 
 	notifyclients();
+
+	// NeedDraw contient le résultat de la nouvelle courbe (y a t'il un point avec y=0) OnePointAtZero c'est l'état d'avant.
+	if (NeedDraw || tmpF.OnePointAtZero)
+		drawFunctions();
 }
 
 function fswitch() { SwitchCurrent(); }
