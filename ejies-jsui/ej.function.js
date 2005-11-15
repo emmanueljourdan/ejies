@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.50 $
-	$Date: 2005/11/15 10:31:44 $
+	$Revision: 1.51 $
+	$Date: 2005/11/15 11:12:02 $
 */
 
 // global code
@@ -74,7 +74,7 @@ if (max.version < 455)
 if (box.rect[2] - box.rect[0] == 64 && box.rect[3] - box.rect[1] == 64) {
 	// numbox a ŽtŽ crŽŽe ˆ partie de jsui : dimensions = 64*64
 	init();
-	post(current, "\n");
+//	post(current, "\n");
 	onresize(200,100);
 }
 
