@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.54 $
-	$Date: 2005/11/17 15:57:52 $
+	$Revision: 1.55 $
+	$Date: 2005/11/17 18:06:05 $
 */
 
 // global code
@@ -60,6 +60,9 @@ var BorderSyncState;
 var CursorChange;
 var NotifyRecalledState;	// utilise pour l'envoi d'un message lors du rappel pattr
 var MouseReportState;
+
+drawText.display = 0;
+drawFunctions.display = 0;
 
 var SketchFunctions = new Sketch(BoxWidth, BoxHeight - LegendStateBordure);
 var SketchText = new Sketch(BoxWidth, LegendStateBordure);
@@ -157,7 +160,12 @@ function drawAll()
 		SpriteText();
 		SpriteFunctions();
 		draw();
+		drawText.display = 0;
+		drawFunctions.display = 0;
+		return;
 	}
+	drawText.display++;
+	drawFunctions.display++;
 }
 
 function drawText()
@@ -165,7 +173,10 @@ function drawText()
 	if (RedrawEnable) {
 		SpriteText();
 		draw();
+		drawText.display = 0;
+		return;
 	}
+	drawText.display++;
 }
 drawText.local = 1;
 
@@ -174,7 +185,10 @@ function drawFunctions()
 	if (RedrawEnable) {
 		SpriteFunctions();
 		draw();
+		drawFunctions.display = 0;
+		return;
 	}
+	drawFunctions.display++;
 }
 drawFunctions.local = 1;
 
@@ -183,7 +197,7 @@ function SpriteText()
 	if ( ! LegendState )
 		return;		// si la légende n'est pas présente, on ne fait rien
 
-	post("SpriteText\n");
+/* 	post("SpriteText\n"); */
 	var tmpF = fctns[current]; // ça prend moins de place
 	
 	with ( SketchText ) {
@@ -316,7 +330,6 @@ msg_float.immediate = 1;
 function list()
 {
 	ArgsParser(fctns[current], "list", arguments)
-/* 	UpdateDisplay(); */
 	notifyclients();
 	drawFunctions();
 }
@@ -324,26 +337,35 @@ function list()
 function anything()
 {
 	var c;
-	var NeedUpdate = -1;
+	var tmp = -1;
 	var OldRedrawState = RedrawEnable;
+	
+	redrawoff();	// désactive l'affichage pendont qu'on travaille...
 	
 	for (c = 0; c < NbCourbes; c++) {
 		if ( messagename == fctns[c].name ) {
-			NeedUpdate = ArgsParser(fctns[c], messagename, arguments);
+			tmp = ArgsParser(fctns[c], messagename, arguments);
 			break;
 		}
 	}
 
-	RedrawEnable = OldRedrawState;
+	RedrawEnable = OldRedrawState;	// retour à l'état initial
 		
-	if (NeedUpdate == -1) {	// si -1 c'est que ça ne correspond pas à un nom de function
-		perror("doesn't understand", messagename);
+	if (tmp == -1) {	// si -1 c'est que ça ne correspond pas à un nom de function ou de message
+		perror("doesn't understand", messagename, "(bad function name or message name)");
 		return;
 	}
 
-	if (NeedUpdate & 2 == 2)
+	// pattr notification
+	if (tmp == 1)
 		notifyclients();
-	if (NeedUpdate & 1 == 1)
+
+	// affichage si besoin est.
+	if ( (drawFunctions.display + drawText.display) == 2)
+		drawAll();
+	else if (drawText.display)
+		drawText();
+	else if (drawFunctions.display)
 		drawFunctions();
 }
 
@@ -661,6 +683,11 @@ function MySetDomain(start, stop, courbe)
 		courbe.pa[i].valx = x2val(courbe, courbe.pa[i].x);
 	}
 
+	// Si la grille est activée, changer le domain doit redessiner la grille
+	if (GridMode) {
+		drawFunctions();
+		post("appel à dessin\n");
+	}
 }
 MySetDomain.local = 1;
 
@@ -951,43 +978,42 @@ RedrawOrNot.local = 1;
 
 function ArgsParser(courbe, msg, a) 
 {
-	var tmpReturn = -1;
-	var NeedDraw = 0;	// pour savoir si on doit réafficher
-	var NeedNotify = 0;	// pour savoir si on doit mettre à jour psto
+/* 	var tmpReturn = -1; */
+/* 	var NeedDraw = 0;	// pour savoir si on doit réafficher */
+	var NeedNotify = -1;	// pour savoir si on doit mettre à jour psto
 
 	if ( typeof(a[0]) == "number") {
 	// en fonction du nombre d'arguments 1 (interpolationX-Y) 2 (AddPoint) 3 (MovePoint)
 		switch (a.length) {
 			case 1: Interpolation(courbe, a[0]); break;
-			case 2: AddPoint(courbe, val2x(courbe, a[0]), val2y(courbe, a[1])); NeedDraw++; NeedNotify++; break;
-			case 3: MovePoint(courbe, a[0], a[1], a[2]); NeedDraw++; NeedNotify++; break;
+			case 2: AddPoint(courbe, val2x(courbe, a[0]), val2y(courbe, a[1])); NeedNotify++; break;
+			case 3: MovePoint(courbe, a[0], a[1], a[2]); NeedNotify++; break;
 			default: perror("too many arguments for message", msg); break;
 		}
-		return ( (NeedNotify > 0 ? 2 : 0) + (NeedDraw > 0 ? 1 : 0) );	// sort de la fonction
+		return ( NeedNotify != -1 ? 1 : 0 );	// sort de la fonction
 	}
 
 	switch (a[0]) {
-		case "bang":		line(courbe); tmpReturn++; break;
-		case "clear":		redrawoff(); a.length == 1 ? MyClear(courbe) : MyClear(courbe, a); NeedDraw++; NeedNotify++; tmpReturn++; break;
-		case "clearsustain":	redrawoff(); MyClearSustain(courbe); NeedDraw++; NeedNotify++; tmpReturn++; break;
-		case "dump":		a.length == 2 ? MyDump(courbe, a[1]) : MyDump(courbe); tmpReturn++; break;
-		case "listdump":	a.length == 2 ? MyListDump(courbe, a[1]) : MyListDump(courbe); tmpReturn++; break;
-		case "addpoints":	MyAddPoints(courbe, a); NeedDraw++; NeedNotify++; tmpReturn++; break;
-		case "fix":			if (a.length == 3) { FixPoint(courbe, a[1], a[2]); } ; NeedNotify++; tmpReturn++; break;
-		case "unfix":		MyUnfix(courbe); NeedNotify++; tmpReturn++; break;
-		case "name":		redrawoff(); if (a.length == 2) { MyName(courbe, a[1]);} ; getname(); NeedDraw++; NeedNotify++; tmpReturn++; break;
-		case "next":		MyNext(courbe); tmpReturn++; break;
-		case "nth":			if (a.length == 2) { MyNth(a[1], courbe); } ; tmpReturn++; break;
-		case "sustain":		redrawoff(); if (a.length == 3) { MySustain(a[1], a[2], courbe); } ; NeedDraw++; NeedNotify++; tmpReturn++; break;
+		case "bang":		line(courbe); break;
+		case "clear":		a.length == 1 ? MyClear(courbe) : MyClear(courbe, a); NeedNotify++; break;
+		case "clearsustain":	MyClearSustain(courbe); NeedNotify++; break;
+		case "dump":		a.length == 2 ? MyDump(courbe, a[1]) : MyDump(courbe); break;
+		case "listdump":	a.length == 2 ? MyListDump(courbe, a[1]) : MyListDump(courbe); break;
+		case "addpoints":	MyAddPoints(courbe, a); NeedNotify++; break;
+		case "fix":			if (a.length == 3) { FixPoint(courbe, a[1], a[2]); } ; NeedNotify++; break;
+		case "unfix":		MyUnfix(courbe); NeedNotify++; break;
+		case "name":		if (a.length == 2) { MyName(courbe, a[1]);} ; getname(); NeedNotify++; break;
+		case "next":		MyNext(courbe); break;
+		case "nth":			if (a.length == 2) { MyNth(a[1], courbe); } ; break;
+		case "sustain":		if (a.length == 3) { MySustain(a[1], a[2], courbe); } ; NeedNotify++; break;
 		case "domain":
-							redrawoff(); 
 							if (a.length == 2)
 								MyDomain(0, a[1], courbe);
 							else if (a.length == 3)
 								MyDomain(a[1], a[2], courbe);
 							else
 								perror("bad argument(s) for message domain"); 
-							NeedDraw++; NeedNotify++; tmpReturn++; break;
+							NeedNotify++; break;
 		case "setdomain":	
 							if (a.length == 2)
 								MySetDomain(0, a[1], courbe);
@@ -995,44 +1021,43 @@ function ArgsParser(courbe, msg, a)
 								MySetDomain(a[1], a[2], courbe);
 							else
 								perror("bad argument(s) for message setdomain");
-							if (GridMode) NeedDraw++;
-							NeedNotify++; tmpReturn++; break;
-		case "range":		if (a.length == 3) { redrawoff(); range(a[1], a[2], courbe);  NeedDraw++; NeedNotify++; tmpReturn++;} break;
-		case "setrange":	if (a.length == 3) { setrange(a[1], a[2], courbe); ; NeedNotify++; tmpReturn++;} break;
-		case "zoom_x":		redrawoff(); zoom_x(a[1], a[2], courbe); NeedDraw++; tmpReturn++; break;
-		case "zoom_y":		redrawoff(); zoom_y(a[1], a[2], courbe); NeedDraw++; tmpReturn++; break;
-		case "zoomout":		redrawoff(); MyZoomOut(courbe); NeedDraw++; tmpReturn++; break;
-		case "autodomain":	redrawoff(); MyAutoDomain(courbe); NeedDraw++; NeedNotify++; tmpReturn++; break;
-		case "autorange":	redrawoff(); MyAutoRange(courbe); NeedDraw++; NeedNotify++; tmpReturn++; break;
-		case "removeduplicate": 	if ( MyRemoveDuplicate(courbe)) { redrawoff(); NeedDraw++; NeedNotify++; } tmpReturn++; break;
-		case "smooth":		redrawoff(); MySmooth(courbe); NeedDraw++; NeedNotify++; tmpReturn++; break;
-		case "gridstep":	redrawoff(); if (a.length == 2) { MyGridStep(courbe, a[1]); }; NeedDraw++; NeedNotify++; tmpReturn++; break;
-		case "brgb":		redrawoff(); SetColor(courbe, "brgb", a[1], a[2], a[3]); NeedDraw++; tmpReturn++; break;
-		case "frgb":		redrawoff(); SetColor(courbe, "frgb", a[1], a[2], a[3]); NeedDraw++; tmpReturn++; break;
-		case "rgb2":		redrawoff(); SetColor(courbe, "rgb2", a[1], a[2], a[3]); NeedDraw++; tmpReturn++; break;
-		case "rgb3":		redrawoff(); SetColor(courbe, "rgb3", a[1], a[2], a[3]); NeedDraw++; tmpReturn++; break;
-		case "rgb4":		redrawoff(); SetColor(courbe, "rgb4", a[1], a[2], a[3]); NeedDraw++; tmpReturn++; break;
-		case "rgb5":		redrawoff(); SetColor(courbe, "rgb5", a[1], a[2], a[3]); NeedDraw++; tmpReturn++; break;
+							NeedNotify++; break;
+		case "range":		if (a.length == 3) { range(a[1], a[2], courbe);  NeedNotify++; } break;
+		case "setrange":	if (a.length == 3) { setrange(a[1], a[2], courbe); ; NeedNotify++; } break;
+		case "zoom_x":		zoom_x(a[1], a[2], courbe); break;
+		case "zoom_y":		zoom_y(a[1], a[2], courbe); break;
+		case "zoomout":		MyZoomOut(courbe); break;
+		case "autodomain":	MyAutoDomain(courbe); NeedNotify++; break;
+		case "autorange":	MyAutoRange(courbe); NeedNotify++; break;
+		case "removeduplicate": 	if ( MyRemoveDuplicate(courbe)) { NeedNotify++; } break;
+		case "smooth":		MySmooth(courbe); NeedNotify++; break;
+		case "gridstep":	if (a.length == 2) { MyGridStep(courbe, a[1]); }; NeedNotify++; break;
+		case "brgb":		SetColor(courbe, "brgb", a[1], a[2], a[3]); break;
+		case "frgb":		SetColor(courbe, "frgb", a[1], a[2], a[3]); break;
+		case "rgb2":		SetColor(courbe, "rgb2", a[1], a[2], a[3]); break;
+		case "rgb3":		SetColor(courbe, "rgb3", a[1], a[2], a[3]); break;
+		case "rgb4":		SetColor(courbe, "rgb4", a[1], a[2], a[3]); break;
+		case "rgb5":		SetColor(courbe, "rgb5", a[1], a[2], a[3]); break;
 
 
-		case "pastefunction":	redrawoff(); MyPasteFunction(courbe); NeedDraw++; NeedNotify++; tmpReturn++; break;
-		case "pastecolors":	redrawoff(); MyPasteColors(courbe); NeedDraw++; tmpReturn++; break;
+		case "pastefunction":	MyPasteFunction(courbe); NeedNotify++; break;
+		case "pastecolors":	MyPasteColors(courbe); break;
 
 		// get things
-		case "getdomain":	getdomain(courbe); tmpReturn++; break;
-		case "getrange":	getrange(courbe); tmpReturn++; break;
-		case "getfix":		getfix(courbe); tmpReturn++; break;
-		case "getsustain":	getsustain(courbe); tmpReturn++; break;
-		case "getgridstep":	getgridstep(courbe); tmpReturn++; break;
-		case "getbrgb":		GetColor(courbe, "brgb"); tmpReturn++; break;
-		case "getfrgb":		GetColor(courbe, "frgb"); tmpReturn++; break;
-		case "getrgb2":		GetColor(courbe, "rgb2"); tmpReturn++; break;
-		case "getrgb3":		GetColor(courbe, "rgb3"); tmpReturn++; break;
-		case "getrgb4":		GetColor(courbe, "rgb4"); tmpReturn++; break;
-		case "getrgb5":		GetColor(courbe, "rgb5"); tmpReturn++; break;
-		case "getnbpoints":	getnbpoints(courbe); tmpReturn++; break;
-		case "getzoom_x":	getzoom_x(courbe); tmpReturn++; break;
-		case "getzoom_y":	getzoom_y(courbe); tmpReturn++; break;
+		case "getdomain":	getdomain(courbe); break;
+		case "getrange":	getrange(courbe); break;
+		case "getfix":		getfix(courbe); break;
+		case "getsustain":	getsustain(courbe); break;
+		case "getgridstep":	getgridstep(courbe); break;
+		case "getbrgb":		GetColor(courbe, "brgb"); break;
+		case "getfrgb":		GetColor(courbe, "frgb"); break;
+		case "getrgb2":		GetColor(courbe, "rgb2"); break;
+		case "getrgb3":		GetColor(courbe, "rgb3"); break;
+		case "getrgb4":		GetColor(courbe, "rgb4"); break;
+		case "getrgb5":		GetColor(courbe, "rgb5"); break;
+		case "getnbpoints":	getnbpoints(courbe); break;
+		case "getzoom_x":	getzoom_x(courbe); break;
+		case "getzoom_y":	getzoom_y(courbe); break;
 
 		default: 			// message d'erreurs en fonction du type de message all ou pas
 							if (msg == "all") {
@@ -1040,16 +1065,17 @@ function ArgsParser(courbe, msg, a)
 									perror("bad arguments for message all");
 									DisplayOneTime = 0;
 								}
-							} else
-								perror("doesn't understand", msg);
-							tmpReturn++;
+							} else {
+								perror("doesn't understand", a[0]);
+								return 0;
+							}
 							break;
 	}
 	
-	if (tmpReturn == -1)
+	if (NeedNotify == -1)
 		return -1;
 	else
-		return ( (NeedNotify > 0 ? 2 : 0) + (NeedDraw > 0 ? 1 : 0) );
+		return 1;
 }
 ArgsParser.local = 1;
 
@@ -1322,26 +1348,32 @@ MyUnfix.local = 1;
 //////////////// Fonctions "Extérieures" ///////////////
 function all()
 {
-	var i, NeedDraw, NeedNotify, tmp;
+	var i, NeedNotify, tmp;
 	var OldRedrawState = RedrawEnable;
 	NeedNotify = 0;
-	NeedDraw = 0;
 	DisplayOneTime = 1;
+	
+	RedrawEnable = 0;
 	
 	for (i = 0, tmp = 0; i < NbCourbes; i++) {
 		tmp = ArgsParser(fctns[i], "all" , arguments, "\n");
 		if (NeedNotify == 0)
-			NeedNotify = tmp & 2 > 0 ? 1 : 0;
-		if (NeedDraw == 0)
-			NeedDraw = tmp & 1 > 0 ? 1 : 0;
+			NeedNotify = tmp != -1 ? 1 : 0;
 	}
 
 	RedrawEnable = OldRedrawState;
 
+	// pattr notification
 	if (NeedNotify)
 		notifyclients();
-	if (NeedDraw)
+		
+	// affichage
+	if ( (drawFunctions.display + drawText.display) == 2)
 		drawAll();
+	else if (drawText.display)
+		drawText();
+	else if (drawFunctions.display)
+		drawFunctions();
 }
 
 function addpoints()
@@ -1806,10 +1838,6 @@ function setdomain()
 	}
 	
 	notifyclients();
-
-	// Si la grille est activée, changer le domain doit redessiner la grille
-	if (GridMode)
-		drawFunctions();
 }
 
 function range(a, b, courbe)
@@ -2916,5 +2944,5 @@ function write(filename)
 
 resetall();
 
-autowatch = 1;
-post("compiled...\n");
+/* autowatch = 1; */
+/* post("compiled...\n"); */

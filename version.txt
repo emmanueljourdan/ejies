@@ -19,6 +19,7 @@ Improvements:
 ej.dialog: ignore click on the picture
 ej.function.js: new dumpmatrix message (send a jitter matrix to the dump outlet)
 ej.function.js: drawing stuff completely rewritten (using 2 sketch: displaying point values should be faster)
+ej.function.js: many code improvements
 Installation.command: now use cp instead of CpMac... it should work on any macintosh now
 Installation.command: check for the C74 and Applications/MaxMSP 4.5 existence before installing
 jit.fullsreen: completly rewritten (should work whatever the position of the second display is)
