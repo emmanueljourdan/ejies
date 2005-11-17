@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.53 $
-	$Date: 2005/11/17 15:56:20 $
+	$Revision: 1.54 $
+	$Date: 2005/11/17 15:57:52 $
 */
 
 // global code
@@ -60,8 +60,6 @@ var BorderSyncState;
 var CursorChange;
 var NotifyRecalledState;	// utilise pour l'envoi d'un message lors du rappel pattr
 var MouseReportState;
-drawFunctions.state = 0;
-drawText.state = 0;
 
 var SketchFunctions = new Sketch(BoxWidth, BoxHeight - LegendStateBordure);
 var SketchText = new Sketch(BoxWidth, LegendStateBordure);
@@ -164,24 +162,18 @@ function drawAll()
 
 function drawText()
 {
-	drawText.state++;
-
 	if (RedrawEnable) {
 		SpriteText();
 		draw();
-		drawText.state = 0;
 	}
 }
 drawText.local = 1;
 
 function drawFunctions()
 {
-	drawFunctions.state++;
-
 	if (RedrawEnable) {
 		SpriteFunctions();
 		draw();
-		drawFunctions.state = 0;
 	}
 }
 drawFunctions.local = 1;
@@ -238,7 +230,7 @@ SpriteText.local = 1;
 
 function SpriteFunctions()
 {
-	post("SpriteFunctions\n");
+/* 	post("SpriteFunctions\n"); */
 	var c, i;
 	var tmpF = fctns[current];
 	
@@ -1336,8 +1328,6 @@ function all()
 	NeedDraw = 0;
 	DisplayOneTime = 1;
 	
-	RedrawEnable = 0;
-	
 	for (i = 0, tmp = 0; i < NbCourbes; i++) {
 		tmp = ArgsParser(fctns[i], "all" , arguments, "\n");
 		if (NeedNotify == 0)
@@ -1348,15 +1338,10 @@ function all()
 
 	RedrawEnable = OldRedrawState;
 
-	if (! drawText.state)
-		drawText();
-	if (! drawFunctions.state)
-		drawFunctions();
-
 	if (NeedNotify)
 		notifyclients();
-/* 	if (NeedDraw) */
-/* 		drawAll(); */
+	if (NeedDraw)
+		drawAll();
 }
 
 function addpoints()
@@ -2931,5 +2916,5 @@ function write(filename)
 
 resetall();
 
-/* autowatch = 1; */
-/* post("compiled...\n"); */
+autowatch = 1;
+post("compiled...\n");
