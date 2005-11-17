@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.55 $
-	$Date: 2005/11/17 18:06:05 $
+	$Revision: 1.56 $
+	$Date: 2005/11/17 18:20:34 $
 */
 
 // global code
@@ -850,6 +850,8 @@ function MySmooth(courbe)
 		courbe.pa[i].valy = courbe.pa[i-1].valy*0.15 + courbe.pa[i].valy*0.7 + courbe.pa[i+1].valy*0.15;
 		courbe.pa[i].y = val2y(courbe, courbe.pa[i].valy);
 	}
+
+	drawFunctions();
 }
 MySmooth.local = 1;
 
@@ -1957,7 +1959,6 @@ function smooth()
 {
 	MySmooth(fctns[current]);
 	notifyclients();
-	drawFunctions();
 }
 
 function copycolors()
