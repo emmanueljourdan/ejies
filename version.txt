@@ -1,7 +1,7 @@
 ejies Ñ Version history
 
 *******************
-1.54b11: 17 Nov 2005
+1.54b11: 21 Nov 2005
 This version requires MaxMSP 4.5.5 or higher.
 
 New:
