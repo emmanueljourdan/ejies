@@ -1,13 +1,14 @@
 ejies Ñ Version history
 
 *******************
-1.54b10: 17 Nov 2005
+1.54b11: 17 Nov 2005
 This version requires MaxMSP 4.5.5 or higher.
 
 New:
 ej.led.js: new jsui... which does the same as the standard LED object / button object
 Uninstall.command: uninstaller utility (but why would you need that? :-) )
 prototypes: for pictctrl cancel and ok aqua button
+License file added...
 
 Bug correction:
 ej.function.js: fix bug with if there's space in a name of function (Thanks Thomas)
