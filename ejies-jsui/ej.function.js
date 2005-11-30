@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.57 $
-	$Date: 2005/11/21 16:21:53 $
+	$Revision: 1.58 $
+	$Date: 2005/11/30 15:12:36 $
 */
 
 // global code
@@ -209,7 +209,7 @@ function SpriteText()
 	if ( ! LegendState )
 		return;		// si la légende n'est pas présente, on ne fait rien
 
-/* 	post("SpriteText\n"); */
+	post("SpriteText\n");
 	var tmpF = fctns[current]; // ça prend moins de place
 	
 	with ( SketchText ) {
@@ -256,7 +256,7 @@ SpriteText.local = 1;
 
 function SpriteFunctions()
 {
-/* 	post("SpriteFunctions\n"); */
+	post("SpriteFunctions\n");
 	var c, i;
 	var tmpF = fctns[current];
 	
@@ -1331,7 +1331,13 @@ MyListDump.local = 1;
 
 function MyName(courbe, name)
 {
-	courbe.name = name;
+	if (typeof(name) == "string")
+		courbe.name = name;
+	else {
+		perror("function name must be a symbol");
+		return;
+	}
+	
 	DoNotify();
 	drawText();
 }

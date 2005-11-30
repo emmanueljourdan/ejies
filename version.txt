@@ -1,7 +1,7 @@
 ejies Ñ Version history
 
 *******************
-1.54b12: 23 Nov 2005
+1.54b13: 30 Nov 2005
 This version requires MaxMSP 4.5.5 or higher.
 
 New:
@@ -21,6 +21,7 @@ ej.dialog: ignore click on the picture
 ej.function.js: new dumpmatrix message (send a jitter matrix to the dump outlet)
 ej.function.js: drawing stuff completely rewritten (using 2 sketch: displaying point values should be faster)
 ej.function.js: many code improvements
+ej.function.js inspector: not allows you to use number as function name (which has never been possible)
 Installation.command: now use cp instead of CpMac... it should work on any macintosh now
 Installation.command: check for the C74 and Applications/MaxMSP 4.5 existence before installing
 jit.fullsreen: completly rewritten (should work whatever the position of the second display is)
