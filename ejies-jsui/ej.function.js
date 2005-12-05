@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.59 $
-	$Date: 2005/11/30 17:58:39 $
+	$Revision: 1.60 $
+	$Date: 2005/12/05 12:00:24 $
 */
 
 // global code
@@ -166,8 +166,8 @@ function drawAll()
 		drawText.display = 0;
 		drawFunctions.display = 0;
 	} else {
-		drawText.display++;
-		drawFunctions.display++;
+		drawText.display = 1;
+		drawFunctions.display = 1;
 	}
 }
 
@@ -178,7 +178,7 @@ function drawText()
 		draw();
 		drawText.display = 0;
 	} else
-		drawText.display++;
+		drawText.display = 1;
 }
 drawText.local = 1;
 
@@ -189,7 +189,7 @@ function drawFunctions()
 		draw();
 		drawFunctions.display = 0;
 	} else
-		drawFunctions.display++;
+		drawFunctions.display = 1;
 }
 drawFunctions.local = 1;
 
@@ -200,7 +200,7 @@ function DoNotify()
 		notifyclients();
 		DoNotify.done = 0;
 	} else
-		DoNotify.done++;
+		DoNotify.done = 1;
 }
 DoNotify.local = 1;
 
@@ -1056,12 +1056,12 @@ function ArgsParser(courbe, msg, a)
 		case "removeduplicate": 	MyRemoveDuplicate(courbe); break;
 		case "smooth":		MySmooth(courbe); break;
 		case "gridstep":	if (a.length == 2) { MyGridStep(courbe, a[1]); }; break;
-		case "brgb":		SetColor(courbe, "brgb", a[1], a[2], a[3]); break;
-		case "frgb":		SetColor(courbe, "frgb", a[1], a[2], a[3]); break;
-		case "rgb2":		SetColor(courbe, "rgb2", a[1], a[2], a[3]); break;
-		case "rgb3":		SetColor(courbe, "rgb3", a[1], a[2], a[3]); break;
-		case "rgb4":		SetColor(courbe, "rgb4", a[1], a[2], a[3]); break;
-		case "rgb5":		SetColor(courbe, "rgb5", a[1], a[2], a[3]); break;
+		case "brgb":		SetColor(courbe, "brgb", a[1], a[2], a[3]); drawAll(); break;
+		case "frgb":		SetColor(courbe, "frgb", a[1], a[2], a[3]); drawFunctions(); break;
+		case "rgb2":		SetColor(courbe, "rgb2", a[1], a[2], a[3]); drawFunctions(); break;
+		case "rgb3":		SetColor(courbe, "rgb3", a[1], a[2], a[3]); drawFunctions(); break;
+		case "rgb4":		SetColor(courbe, "rgb4", a[1], a[2], a[3]); drawText(); break;
+		case "rgb5":		SetColor(courbe, "rgb5", a[1], a[2], a[3]); drawFunctions(); break;
 
 
 		case "pastefunction":	MyPasteFunction(courbe); break;
