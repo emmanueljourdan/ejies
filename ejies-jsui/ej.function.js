@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.60 $
-	$Date: 2005/12/05 12:00:24 $
+	$Revision: 1.61 $
+	$Date: 2005/12/08 16:25:10 $
 */
 
 // global code
@@ -61,7 +61,7 @@ var BorderSyncState;
 var CursorChange;
 var NotifyRecalledState;	// utilise pour l'envoi d'un message lors du rappel pattr
 var MouseReportState;
-
+swapPoints.tmp = new Point();
 drawText.display = 0;
 drawFunctions.display = 0;
 DoNotify.done = 0;
@@ -640,7 +640,7 @@ function MyAddPoints(courbe, liste)
 		courbe.pa[courbe.np++] = new Point( val2x(courbe, liste[i]), val2y(courbe, liste[i+1]), liste[i], liste[i+1]);
 	}
 	
-	SortBulle(courbe);
+	sortingPoints(courbe);
 	drawFunctions();
 	DoNotify();
 }
@@ -938,7 +938,7 @@ function MovePoint(courbe, lequel, newx, newy)
 	courbe.pa[lequel].x = val2x(courbe, newx);
 	courbe.pa[lequel].y = val2y(courbe, newy);
 
-	SortBulle(courbe);	// il faut maintenant remettre tous les points dans l'ordre
+	sortingPoints(courbe);	// il faut maintenant remettre tous les points dans l'ordre
 	ApplyAutoSustain();
 }
 MovePoint.local = 1;
@@ -964,8 +964,18 @@ function CurrentOrArgument(c, a, combien)
 }
 CurrentOrArgument.local = 1;
 
+function sortingPoints(courbe)
+{
+	if (courbe.np < 7)
+		insertSort(courbe, 0, courbe.np - 1);
+	else
+		quickSort(courbe, 0, courbe.np - 1);
+}
+sortingPoints.local = 1;
+
 function SortBulle(courbe)
 {
+	// plus utilisŽe...
 	// la mŽthode bulle pour mettre dans l'ordre... :-)
 	var i, bulle;
 	var max = courbe.np - 2;
@@ -976,17 +986,64 @@ function SortBulle(courbe)
 		
 		for (i=0; i <= max; i++) {
 			if ( courbe.pa[i].x > courbe.pa[i+1].x ) {
-				tmp = courbe.pa[i];
-				courbe.pa[i] = courbe.pa[i+1];
-				courbe.pa[i+1] = tmp;
+				swapPoints(courbe, i, i + 1);
 				bulle = 1;
 			}
 		}
 	} while (bulle);
 	
-	ApplyAutoSustain();
 }
 SortBulle.local = 1;
+
+function insertSort(courbe, l, r)
+{
+	// si il y a moins de 7 points, insert est plus rapide
+	var i = 0;
+	var j;
+	var key = new Point();
+
+	for (j = l + 1; j <= r; j++) {
+		key = courbe.pa[j];
+		i = j - 1;
+		while ((i >= l) && (courbe.pa[i].x > key.x)) {
+			courbe.pa[i + 1] = courbe.pa[i];
+			i = i - 1;
+		}
+		courbe.pa[i + 1] = key;
+	}
+}
+insertSort.local = 1;
+
+function quickSort(courbe, g, d)
+{
+	// recursif et tout et tout...
+	// merci wikipedia...
+	var i, j, v;
+	
+	if (d > g) {
+		v = courbe.pa[d].x;
+		i = g - 1;
+		j = d;
+		while(true) {
+			while ((++i <= d) && (courbe.pa[i].x < v)) { ; };
+			while ((--j >= g) && (courbe.pa[j].x > v)) { ; };
+			if (i >= j) break;
+			swapPoints(courbe, i, j);
+		}
+		swapPoints(courbe, i, d);
+		quickSort(courbe, g, i-1);
+		quickSort(courbe, i+1, d);
+	}
+}
+quickSort.local = 1;
+
+function swapPoints(courbe, num1, num2)
+{
+	swapPoints.tmp = courbe.pa[num1];
+	courbe.pa[num1] = courbe.pa[num2];
+	courbe.pa[num2] = swapPoints.tmp;
+}
+swapPoints.local = 1;
 
 function RedrawOrNot(v)
 {
@@ -1283,10 +1340,10 @@ function MyDumpMatrix(courbe)
 		var Matrix = new JitterMatrix(1, "float32", 2, courbe.np);
 		
 		for (p = 0; p < courbe.np; p++) {
-/* 			Matrix.setcell2d(0, p, courbe.pa[p].valx); */
-/* 			Matrix.setcell2d(1, p, courbe.pa[p].valy); */
-			Matrix.setcell2d(0, p, courbe.pa[p].x);
-			Matrix.setcell2d(1, p, courbe.pa[p].y);
+			Matrix.setcell2d(0, p, courbe.pa[p].valx);
+			Matrix.setcell2d(1, p, courbe.pa[p].valy);
+/* 			Matrix.setcell2d(0, p, courbe.pa[p].x); */
+/* 			Matrix.setcell2d(1, p, courbe.pa[p].y); */
 		}
 		
 		outlet(DUMP_OUTLET, "jit_matrix", Matrix.name);
