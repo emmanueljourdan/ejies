@@ -2,8 +2,8 @@
 	ej.4m.js by Emmanuel Jourdan, Ircam Ñ 06 2004
 	output the min, median, mean, maximum on a int/float stream
  
-	$Revision: 1.3 $
-	$Date: 2005/09/26 15:15:57 $
+	$Revision: 1.4 $
+	$Date: 2005/12/09 12:04:29 $
 */
 
 // global code
@@ -20,7 +20,10 @@ setoutletassist(4, "list of values / dumpout");
 
 var WindowReset = 0;
 var a = new Array(5);
+var b = new Array(5);
 var VerboseOrNot = 0;
+var SommeDesValeurs = 0;
+var i;
 
 // argument s'il est connu, spŽcifie la taille de fentre
 if (jsarguments.length > 1 ) {
@@ -82,9 +85,9 @@ function clear() { reset() ;} // alias
 
 function somme()
 {
-	var SommeDesValeurs = 0;
-	for (i=0; i< a.length; i++) {
-		SommeDesValeurs += a[i].valueOf();
+	SommeDesValeurs = 0;
+	for (i = 0; i< a.length; i++) {
+		SommeDesValeurs += a[i]/* .valueOf() */;
 	}
 	return SommeDesValeurs;
 }
@@ -98,7 +101,7 @@ function verbose(a)
 function sortie(v)
 {
 	// copie de a dans b
-	var b = new Array(a.length);
+	b = new Array(a.length);
 	for (i=0 ; i < b.length ; i++) {
 		b[i] = a[i];
 	}
@@ -117,14 +120,12 @@ sortie.local = 1; // on ne peut pas appeler la fonction depuis max
 
 function getwindow()
 {
-	var WindowMessage = new Array("window", a.length); 
-	outlet(4, WindowMessage);
+	outlet(4, "window", a.length);
 }
 
 function getverbose()
 {
-	var WindowMessage = new Array("verbose", VerboseOrNot); 
-	outlet(4, WindowMessage);
+	outlet(4, "verbose", VerboseOrNot);
 }
 
 function perror()
