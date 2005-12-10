@@ -2,8 +2,8 @@
 	ej.numbox.js by Emmanuel Jourdan, Ircam - 08 2004
 	an alternative number box.
 
-	$Revision: 1.11 $
-	$Date: 2005/09/26 15:15:57 $
+	$Revision: 1.12 $
+	$Date: 2005/12/10 17:20:32 $
 */
 
 // Global Code
@@ -44,10 +44,11 @@ var ChangeState = 0;
 var MouseUpState = 0;
 var TempValue;					// utilsé pour la fonction change
 var MyVal = 0;
-var keyboard = -1;					// utilisé pour l'entrée au clavier
+var keyboard = -1;				// utilisé pour l'entrée au clavier
 var RedrawEnable = 0;
 var KeyboardError = 1;
 var AllowKeyboardState = 0;
+var NumericBoite; 				// utilisé dans unselect
 
 border = 0;
 sketch.fsaa = 0;
@@ -414,6 +415,14 @@ function select()
 	outputidle(1);
 }
 
+function unselect()
+{
+	NumericBoite = this.patcher.newobject("number", -100, -100, 35, 9, 0, 0, 0, 3);
+	NumericBoite.hidden = 1;
+	NumericBoite.message("select");
+	this.patcher.remove(NumericBoite);
+}
+
 function tab()
 {
 	LastIdle = inside = 0;
@@ -544,11 +553,8 @@ function KeyboardInput(v)
 		if (v && this.patcher.locked) {
 			if (KeyboardError) {
 				// unselect others objects
-				var NumericBoite = this.patcher.newobject("number", -100, -100, 35, 9, 0, 0, 0, 3);
-				NumericBoite.hidden = 1;
-				NumericBoite.message("select");
-				this.patcher.remove(NumericBoite);
-	
+				unselect();
+				
 				// si d'autres objets ej.numbox-keyboard traînent, il ne doivent pas recevoir les touches du clavier
 				messnamed("ej.numbox-keyboard", "stop");
 				
