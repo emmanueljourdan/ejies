@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.61 $
-	$Date: 2005/12/08 16:25:10 $
+	$Revision: 1.62 $
+	$Date: 2005/12/13 15:50:54 $
 */
 
 // global code
@@ -648,6 +648,11 @@ MyAddPoints.local = 1;
 
 function MyDomain(start, stop, courbe)
 {
+	if (start >= stop) {
+		perror("bad values for message domain: min must be lower than max");
+		return;
+	}
+	
 	var i;
 
 	courbe.domain[0] = start;
@@ -688,6 +693,11 @@ MyThings2Zoom.local = 1;
 
 function MySetDomain(start, stop, courbe)
 {
+	if (start >= stop) {
+		perror("bad values for message domain: min must be lower than max");
+		return;
+	}
+
 	var i;
 	
 	courbe.domain[0] = start;
@@ -1905,13 +1915,13 @@ function setdomain()
 
 function range(a, b, courbe)
 {
-	var tmpF = CurrentOrArgument(courbe, arguments, 2);
-	var i;
-	
-	if ( (b - a)  < 0) {
+	if ( b >= a) {
 		perror("bad values for message range: min must be lower than max");
 		return ;
 	}
+
+	var tmpF = CurrentOrArgument(courbe, arguments, 2);
+	var i;
 	
 	tmpF.range = [a, b];
 	MyRange2Zoom(tmpF);
@@ -1927,14 +1937,14 @@ function range(a, b, courbe)
 
 function setrange(a, b, courbe)
 {
-	var tmpF = CurrentOrArgument(courbe, arguments, 2);
-	var i;
-	var NeedDraw = 0;
-
 	if ( (b - a)  < 0) {
 		perror("bad values for message setrange: min must be lower than max");
 		return ;
 	}
+
+	var tmpF = CurrentOrArgument(courbe, arguments, 2);
+	var i;
+	var NeedDraw = 0;
 	
 	tmpF.range = [a, b];
 	MyRange2Zoom(tmpF);
