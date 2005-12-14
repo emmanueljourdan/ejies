@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.62 $
-	$Date: 2005/12/13 15:50:54 $
+	$Revision: 1.63 $
+	$Date: 2005/12/14 16:06:44 $
 */
 
 // global code
@@ -1915,7 +1915,7 @@ function setdomain()
 
 function range(a, b, courbe)
 {
-	if ( b >= a) {
+	if ( a >= b) {
 		perror("bad values for message range: min must be lower than max");
 		return ;
 	}
@@ -1937,7 +1937,7 @@ function range(a, b, courbe)
 
 function setrange(a, b, courbe)
 {
-	if ( (b - a)  < 0) {
+	if ( a >= b) {
 		perror("bad values for message setrange: min must be lower than max");
 		return ;
 	}
