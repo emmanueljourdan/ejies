@@ -1,5 +1,5 @@
 #!/bin/bash
-# This file must be saved in UTF-8
+# This file must be saved in UTF-8 (because of the sortcuts)
 
 clear
 
