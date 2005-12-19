@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.63 $
-	$Date: 2005/12/14 16:06:44 $
+	$Revision: 1.64 $
+	$Date: 2005/12/19 19:14:26 $
 */
 
 // global code
@@ -1117,6 +1117,9 @@ function ArgsParser(courbe, msg, a)
 		case "setrange":	if (a.length == 3) { setrange(a[1], a[2], courbe); } break;
 		case "zoom_x":		zoom_x(a[1], a[2], courbe); break;
 		case "zoom_y":		zoom_y(a[1], a[2], courbe); break;
+		case "normalize":	MyNormalize(courbe); break;
+		case "normalize_x":		MyNormalizeX(courbe); break;
+		case "normalize_y":		MyNormalizeY(courbe); break;
 		case "zoomout":		MyZoomOut(courbe); break;
 		case "autodomain":	MyAutoDomain(courbe); break;
 		case "autorange":	MyAutoRange(courbe); break;
@@ -1533,15 +1536,134 @@ function autosustain(v)
 	AutoSustain = v;
 }
 
-function autorange()
-{
-	MyAutoRange(fctns[current]);
-}
+function autorange()	{	MyAutoRange(fctns[current]);	}
+function autodomain()	{	MyAutoDomain(fctns[current]);	}
+function normalize()	{	MyNormalize(fctns[current]);	}
+function normalize_x()	{	MyNormalizeX(fctns[current]);	}
+function normalize_y()	{	MyNormalizeY(fctns[current]);	}
 
-function autodomain()
+function MyNormalizeX(courbe)
 {
-	MyAutoDomain(fctns[current]);
+	if (courbe.np < 2)
+		return;
+
+	var min = courbe.domain[1]
+	var max = courbe.domain[0];
+	var i;
+	
+	for (i = 0 ; i < courbe.np; i++) {
+		if (courbe.pa[i].valx < min)
+			min = courbe.pa[i].valx;
+		if (courbe.pa[i].valx > max)
+			max = courbe.pa[i].valx;
+	}
+	
+	if (min != max) {
+		ApplyNormalizeX(courbe, min, max);
+		DoNotify();
+		drawFunctions();
+	}
 }
+MyNormalizeX.local = 1;
+
+function ApplyNormalizeX(courbe, min, max)
+{
+	// method used in MyNormalize and MyNormalizeX
+	var range = (courbe.domain[1] - courbe.domain[0]) / (max - min);
+	var offset = 0 - min;
+
+	for (i = 0; i < courbe.np; i++) {
+		courbe.pa[i].valx = (courbe.pa[i].valx + offset) * range - (0 - courbe.domain[0]);
+		courbe.pa[i].x = val2x(courbe, courbe.pa[i].valx);
+	}
+}
+ApplyNormalizeX.local = 1;
+
+function MyNormalizeY(courbe)
+{
+	if (courbe.np < 2)
+		return;
+		
+	var min = courbe.range[1]
+	var max = courbe.range[0];
+	var i;
+	
+	for (i = 0 ; i < courbe.np; i++) {
+		if (courbe.pa[i].valy < min)
+			min = courbe.pa[i].valy;
+		if (courbe.pa[i].valy > max)
+			max = courbe.pa[i].valy;
+	}
+	
+	if (min != max) {
+		ApplyNormalizeY(courbe, min, max);	
+		DoNotify();
+		drawFunctions();
+	}
+}
+MyNormalizeY.local = 1;
+
+function ApplyNormalizeY(courbe, min, max)
+{
+	// method used in MyNormalize and MyNormalizeY
+	var range = (courbe.range[1] - courbe.range[0]) / (max - min);
+	var offset = 0 - min;
+
+	for (i = 0; i < courbe.np; i++) {
+		courbe.pa[i].valy = (courbe.pa[i].valy + offset) * range - (0 - courbe.range[0]);
+		courbe.pa[i].y = val2y(courbe, courbe.pa[i].valy);
+	}
+}
+ApplyNormalizeY.local = 1;
+
+function MyNormalize(courbe)
+{
+	if (courbe.np < 2)
+		return;
+
+	var minX = courbe.domain[1]
+	var maxX = courbe.domain[0];
+	var minY = courbe.range[1]
+	var maxY = courbe.range[0];
+	var i;
+	
+	// process in one loop
+	for (i = 0 ; i < courbe.np; i++) {
+		if (courbe.pa[i].valy < minY)
+			minY = courbe.pa[i].valy;
+		if (courbe.pa[i].valy > maxY)
+			maxY = courbe.pa[i].valy;
+		if (courbe.pa[i].valx < minX)
+			minX = courbe.pa[i].valx;
+		if (courbe.pa[i].valx > maxX)
+			maxX = courbe.pa[i].valx;
+	}
+	
+	if (minX == maxX && minY == maxY)
+		return;	//two points at the same xy min/max
+	if (minX == maxX)
+		ApplyNormalizeY(courbe, minY, maxY);	// points have the same X min/max position so process only a normalize on Y
+	else if (minY == maxY)
+			ApplyNormalizeX(courbe, minX, maxX);// points have the same Y min/max position so process only a normalize on X
+	else
+	{
+		// most current case
+		var rangeX = (courbe.domain[1] - courbe.domain[0]) / (maxX - minX);
+		var offsetX = 0 - minX;
+		var rangeY = (courbe.range[1] - courbe.range[0]) / (maxY - minY);
+		var offsetY = 0 - minY;
+		
+		for (i = 0; i < courbe.np; i++) {
+			courbe.pa[i].valx = (courbe.pa[i].valx + offsetX) * rangeX - (0 - courbe.domain[0]);
+			courbe.pa[i].x = val2x(courbe, courbe.pa[i].valx);
+			courbe.pa[i].valy = (courbe.pa[i].valy + offsetY) * rangeY - (0 - courbe.range[0]);
+			courbe.pa[i].y = val2y(courbe, courbe.pa[i].valy);
+		}
+	}
+	DoNotify();
+	drawFunctions();
+}
+MyNormalize.local = 1;
 
 function autocursor(v)
 {

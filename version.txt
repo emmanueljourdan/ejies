@@ -24,6 +24,7 @@ ej.function.js: drawing stuff completely rewritten (using 2 sketch: displaying p
 ej.function.js: many code improvements
 ej.function.js: new sorting algorithm (using Insert or Quick sort), which are a lot faster
 ej.function.js: error checking of domain values (Thanks Thijs)
+ej.function.js: new normalize_x, normalize_y and normalize messages to scale the points to the domain/range.
 ej.function.js inspector: not allows you to use number as function name (which has never been possible)
 ej.numbox.js: new unselect message, which deselect other number boxes
 Installation.command: now use cp instead of CpMac... it should work on any macintosh now
