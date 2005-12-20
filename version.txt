@@ -1,7 +1,7 @@
 ejies Ñ Version history
 
 *******************
-1.54b16: 14 Dec 2005
+1.54rc1: 19 Dec 2005
 This version requires MaxMSP 4.5.5 or higher.
 
 New:
@@ -11,7 +11,7 @@ prototypes: for pictctrl cancel and ok aqua button
 Uninstall.command: uninstaller utility (but why would you need that? :-) )
 
 Bug correction:
-ej.function.js: fix bug with if there's space in a name of function (Thanks Thomas)
+ej.function.js: fix bug with if there's space in a name of function, while using read (Thanks Thomas)
 ej.function.js: redraw the function after a setdomain if the grid is enable (Thanks Thomas)
 ej.function.js: framecircle correctly redrawn after a setrange message
 ej.function.js: redraw after changing the domain (with setdomain) if the grid is on

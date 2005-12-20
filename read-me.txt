@@ -21,6 +21,7 @@ JSUI:
 
 Abstractions:
 ¥ ej.dialog: alternative dialog box for text entry
+¥ ej.line: multi-segment line
 ¥ ej.mout~: panpot on multiple output
 ¥ ej.vdb~: Variable delay without clicks or transposition (cheaper than vdb~ in the Bennies)
 ¥ ej.vdb-sig~: Same as ej.vdb~ but accepts signal as delay time

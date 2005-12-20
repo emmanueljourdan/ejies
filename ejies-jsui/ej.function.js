@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.64 $
-	$Date: 2005/12/19 19:14:26 $
+	$Revision: 1.65 $
+	$Date: 2005/12/20 17:29:48 $
 */
 
 // global code
@@ -65,6 +65,7 @@ swapPoints.tmp = new Point();
 drawText.display = 0;
 drawFunctions.display = 0;
 DoNotify.done = 0;
+RedrawOrNot.DidYouDraw = 0;
 
 var SketchFunctions = new Sketch(BoxWidth, BoxHeight - LegendStateBordure);
 var SketchText = new Sketch(BoxWidth, LegendStateBordure);
@@ -1057,15 +1058,29 @@ swapPoints.local = 1;
 
 function RedrawOrNot(v)
 {
-	if (v != RedrawOrNot.LastValue) {
+	if ( v == -1) {
+		tsk.cancel();		// arrêt de la task précédente
+		WaitALittleBit();	// si pas de point sélectionné on attend un peu avant de faire draw()
+	} else {
+		if (RedrawOrNot.DidYouDraw == 0 || v != RedrawOrNot.LastValue) { // soit l'affichage a déjà été fait (== 0), soit le point est différent
+			drawText();
+			RedrawOrNot.DidYouDraw = 1;
+		}
+		tsk.cancel();
 		RedrawOrNot.LastValue = v;
-		if ( v == -1 )
-			WaitALittleBit()
-		else
-			drawText(); 		// si pas de point sélectionné on attend un peu avant de faire draw()
 	}
 }
 RedrawOrNot.local = 1;
+
+function WaitALittleBit()
+{
+	tsk.cancel();
+	// attend 750ms avant de redessiner
+	tsk = new Task(function() { if (! tsk.running) { drawText(); RedrawOrNot.DidYouDraw = 0; }  }, this);
+	tsk.interval = 750;
+	tsk.repeat(1);
+}
+WaitALittleBit.local = 1;
 
 function ArgsParser(courbe, msg, a) 
 {
@@ -1172,15 +1187,6 @@ function ArgsParser(courbe, msg, a)
 /* 		return 1; */
 }
 ArgsParser.local = 1;
-
-function WaitALittleBit()
-{
-	// attend 750ms avant de redessiner
-	tsk = new Task(function() { if (! tsk.running) drawText(); }, this);
-	tsk.interval = 750;
-	tsk.repeat(1);
-}
-WaitALittleBit.local = 1;
 
 function FixPoint(courbe, WhichPoint, state)
 {
