@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.65 $
-	$Date: 2005/12/20 17:29:48 $
+	$Revision: 1.66 $
+	$Date: 2005/12/21 11:42:38 $
 */
 
 // global code
@@ -29,7 +29,7 @@ var g = new Global("ej.function");	// utilisé par dump & listdump
 g["copy"] = new Array();			// Utilisé pour le copier-coller
 g["copycolors"] = new Array();		// Utilisé pour le copier-coller des couleurs
 var NbCourbes = 1;
-var fctns = new Array();
+var f = new Array();
 var Tolerance = 4;
 var Bordure = 4;
 var LegendStateBordure = 12;
@@ -37,7 +37,7 @@ var BoxWidth = box.rect[2] - box.rect[0];
 var BoxHeight = box.rect[3] - box.rect[1] ;
 var PixelDomain;
 var PixelRange;
-var current = 0;
+var front = 0;	// c'est plus court que "current"
 var LegendState;
 var GridMode;
 var Snap2GridState;
@@ -66,6 +66,8 @@ drawText.display = 0;
 drawFunctions.display = 0;
 DoNotify.done = 0;
 RedrawOrNot.DidYouDraw = 0;
+var tskDraw = new Task();
+var tskDel = new Task();
 
 var SketchFunctions = new Sketch(BoxWidth, BoxHeight - LegendStateBordure);
 var SketchText = new Sketch(BoxWidth, LegendStateBordure);
@@ -81,7 +83,7 @@ if (max.version < 455)
 if (box.rect[2] - box.rect[0] == 64 && box.rect[3] - box.rect[1] == 64) {
 	// numbox a été créée à partie de jsui : dimensions = 64*64
 	init();
-//	post(current, "\n");
+//	post(front, "\n");
 	onresize(200,100);
 }
 
@@ -126,12 +128,12 @@ function init()
 	var c;
 	
 	for (c = 0; c < NbCourbes; c++) {
-		fctns[c] = new Courbe("function" + c);
+		f[c] = new Courbe("function" + c);
 	}
 	
 	// suppression des éventuelles courbes en trop (par resetall)
-	while (fctns.length > NbCourbes) {
-		fctns.splice(fctns.length - 1, 1);
+	while (f.length > NbCourbes) {
+		f.splice(f.length - 1, 1);
 	}
 }
 init.local = 1;
@@ -139,15 +141,6 @@ init.local = 1;
 //////////////// Fonctions Affichage ///////////////
 function draw()
 {
-/* 	if (! RedrawEnable) */
-/* 		return; */
-	
-/* 	with ( sketch ) { */
-/* 		// on efface tout */
-/* 		glclearcolor(1, 0, 0); */
-/* 		glclear(); */
-/* 	} */
-	
 	if ( LegendState ) {
 		sketch.copypixels(SketchFunctions, 0, LegendStateBordure);
 		sketch.copypixels(SketchText);
@@ -211,10 +204,10 @@ function SpriteText()
 		return;		// si la légende n'est pas présente, on ne fait rien
 
 /* 	post("SpriteText\n"); */
-	var tmpF = fctns[current]; // ça prend moins de place
+/* 	var tmpF = f[front]; // ça prend moins de place */
 	
 	with ( SketchText ) {
-		glclearcolor(tmpF.brgb);
+		glclearcolor(f[front].brgb);
 		glclear();
 
 		if ( LegendState ) {
@@ -223,31 +216,31 @@ function SpriteText()
 			font("Arial");
 			fontsize(11);
 			textalign("right","center");
-			glcolor(tmpF.rgb4);
+			glcolor(f[front].rgb4);
 			
 			if ( BoxWidth < 130 && (SelectedPoint >= 0  || IdlePoint >= 0) ) { ;} //
 			else {
-				if (tmpF.display)
-					text(tmpF.name);
+				if (f[front].display)
+					text(f[front].name);
 				else
-					text("("+tmpF.name+")");
+					text("("+f[front].name+")");
 			}
 	
-			if (tmpF.np > 0 && (SelectedPoint >= 0  || IdlePoint >= 0)) {
+			if (f[front].np > 0 && (SelectedPoint >= 0  || IdlePoint >= 0)) {
 				var WhichPoint = (SelectedPoint >=0 ) ? SelectedPoint : IdlePoint ;
 	
-				if ( WhichPoint < tmpF.np) {
+				if ( WhichPoint < f[front].np) {
 					var sep = " ";
-					if (tmpF.pa[WhichPoint].fix)
+					if (f[front].pa[WhichPoint].fix)
 						sep = "=";
 	
 					fontsize(10);
 					textalign("left","center");
 					moveto(-(SketchText.size[0] - Bordure)/SketchText.size[1],(SketchText.size[1] - LegendStateBordure - Bordure)/SketchText.size[1]);
 					if (TimeFlag)
-						text("X" + sep + MyDomain2String(tmpF["pa"][WhichPoint].valx) + " Y" + sep + tmpF["pa"][WhichPoint].valy.toFixed(2));
+						text("X" + sep + MyDomain2String(f[front]["pa"][WhichPoint].valx) + " Y" + sep + f[front]["pa"][WhichPoint].valy.toFixed(2));
 					else
-						text("X" + sep + tmpF["pa"][WhichPoint].valx.toFixed(2) + " Y" + sep + tmpF["pa"][WhichPoint].valy.toFixed(2));
+						text("X" + sep + f[front]["pa"][WhichPoint].valx.toFixed(2) + " Y" + sep + f[front]["pa"][WhichPoint].valy.toFixed(2));
 				}
 			}
 		}
@@ -259,54 +252,54 @@ function SpriteFunctions()
 {
 /* 	post("SpriteFunctions\n"); */
 	var c, i;
-	var tmpF = fctns[current];
+/* 	var tmpF = f[front]; */
 	
 	with ( SketchFunctions ) {
-		glclearcolor(tmpF.brgb);
+		glclearcolor(f[front].brgb);
 		glclear();
 		
 		// dessine la grille
 		if ( GridMode ) {
-			glcolor(tmpF["rgb5"], Ghostness);
+			glcolor(f[front]["rgb5"], Ghostness);
 			
-			for (i = 0; i < (((tmpF.domain[1] - tmpF.domain[0]) / tmpF.GridStep)+1); i++) {
-			linesegment( screentoworld(val2x(tmpF, i*tmpF.GridStep + tmpF.domain[0]), val2y(tmpF, tmpF.range[0]) ),
-				screentoworld( val2x(tmpF, i*tmpF.GridStep + tmpF.domain[0]), val2y(tmpF, tmpF.range[1]) ) );
+			for (i = 0; i < (((f[front].domain[1] - f[front].domain[0]) / f[front].GridStep)+1); i++) {
+			linesegment( screentoworld(val2x(f[front], i*f[front].GridStep + f[front].domain[0]), val2y(f[front], f[front].range[0]) ),
+				screentoworld( val2x(f[front], i*f[front].GridStep + f[front].domain[0]), val2y(f[front], f[front].range[1]) ) );
 			}
 		}
 	
 		for (c = 0; c < NbCourbes; c++) {
-			if (fctns[c].np > 0) {
+			if (f[c].np > 0) {
 
 				// dessine les segments
-				if ( fctns[c].display ) {
-					glcolor(fctns[c]["rgb2"], (c == current ? 1 : Ghostness));
+				if ( f[c].display ) {
+					glcolor(f[c]["rgb2"], (c == front ? 1 : Ghostness));
 							
-					moveto(screentoworld(fctns[c]["pa"][0].x,fctns[c]["pa"][0].y ));
+					moveto(screentoworld(f[c]["pa"][0].x,f[c]["pa"][0].y ));
 					
-					for (i = 0; i < (fctns[c].np - 1); i++) {
-						lineto(screentoworld(fctns[c]["pa"][i+1].x,fctns[c]["pa"][i+1].y ));
+					for (i = 0; i < (f[c].np - 1); i++) {
+						lineto(screentoworld(f[c]["pa"][i+1].x,f[c]["pa"][i+1].y ));
 					}
 				}
 				
 				// dessine les points de la courbe active ou de toutes les courbes si HiddenPointDisplay est activé
-				if ( fctns[c].display && ((c == current) || HiddenPointDisplay) ) {
+				if ( f[c].display && ((c == front) || HiddenPointDisplay) ) {
 					// dessine les points
-					var tmpTransparency = c == current ? 1 : Ghostness;
-					glcolor(fctns[c]["frgb"], tmpTransparency);
+					var tmpTransparency = c == front ? 1 : Ghostness;
+					glcolor(f[c]["frgb"], tmpTransparency);
 	
-					fctns[c].OnePointAtZero = 0;
-					for (i = 0; i < fctns[c].np; i++) {							
-						moveto(screentoworld(fctns[c]["pa"][i].x,fctns[c]["pa"][i].y ));
+					f[c].OnePointAtZero = 0;
+					for (i = 0; i < f[c].np; i++) {							
+						moveto(screentoworld(f[c]["pa"][i].x,f[c]["pa"][i].y ));
 						
-						if ( fctns[c]["pa"][i].sustain) {
-							glcolor(fctns[c]["rgb3"], tmpTransparency);
+						if ( f[c]["pa"][i].sustain) {
+							glcolor(f[c]["rgb3"], tmpTransparency);
 							circle(5 / BoxHeight); // 5 pixels le point...
-							glcolor(fctns[c]["frgb"], tmpTransparency);
+							glcolor(f[c]["frgb"], tmpTransparency);
 						}
 						else {
-							if (fctns[c]["pa"][i].valy == 0) {
-								fctns[c].OnePointAtZero = 1;
+							if (f[c]["pa"][i].valy == 0) {
+								f[c].OnePointAtZero = 1;
 								framecircle(5 / SketchFunctions.size[1]); // 5 pixels le point...
 							} else
 								circle(5 / SketchFunctions.size[1]); // 5 pixels le point...
@@ -330,19 +323,19 @@ function val2y(courbe, valy) {	return ( ((courbe.ZoomY[1] - valy) / courbe.Pixel
 //////////////// Fonctions standart ///////////////
 function bang()
 {
-	line(fctns[current]);
+	line(f[front]);
 }
 bang.immediate = 1;
 
 function msg_float(v)
 {
-	Interpolation(fctns[current], v);
+	Interpolation(f[front], v);
 }
 msg_float.immediate = 1;
 
 function list()
 {
-	ArgsParser(fctns[current], "list", arguments)
+	ArgsParser(f[front], "list", arguments)
 	DoNotify();
 	drawFunctions();
 }
@@ -356,8 +349,8 @@ function anything()
 	redrawoff();	// désactive l'affichage pendont qu'on travaille...
 	
 	for (c = 0; c < NbCourbes; c++) {
-		if ( messagename == fctns[c].name ) {
-			tmp = ArgsParser(fctns[c], messagename, arguments);
+		if ( messagename == f[c].name ) {
+			tmp = ArgsParser(f[c], messagename, arguments);
 			break;
 		}
 	}
@@ -427,12 +420,12 @@ function LectureInspector()
 		TimeFlag = jsarguments[idx++];
 		
 		for (i = 0; i < NbCourbes; i++) {
-			for (j = 0; j < 3; j++) { fctns[i].brgb[j] = jsarguments[idx++] / 255; }
-			for (j = 0; j < 3; j++) { fctns[i].frgb[j] = jsarguments[idx++] / 255; }
-			for (j = 0; j < 3; j++) { fctns[i].rgb2[j] = jsarguments[idx++] / 255; }
-			for (j = 0; j < 3; j++) { fctns[i].rgb3[j] = jsarguments[idx++] / 255; }
-			for (j = 0; j < 3; j++) { fctns[i].rgb4[j] = jsarguments[idx++] / 255; }
-			for (j = 0; j < 3; j++) { fctns[i].rgb5[j] = jsarguments[idx++] / 255; }
+			for (j = 0; j < 3; j++) { f[i].brgb[j] = jsarguments[idx++] / 255; }
+			for (j = 0; j < 3; j++) { f[i].frgb[j] = jsarguments[idx++] / 255; }
+			for (j = 0; j < 3; j++) { f[i].rgb2[j] = jsarguments[idx++] / 255; }
+			for (j = 0; j < 3; j++) { f[i].rgb3[j] = jsarguments[idx++] / 255; }
+			for (j = 0; j < 3; j++) { f[i].rgb4[j] = jsarguments[idx++] / 255; }
+			for (j = 0; j < 3; j++) { f[i].rgb5[j] = jsarguments[idx++] / 255; }
 		}
 		return;
 	}
@@ -545,27 +538,25 @@ MyDomain2String.local = 1;
 
 function line(courbe)
 {
-	var tmpF = courbe;
-
 	var tmpArray = new Array();
 	var i, idx;
 	
-	if ( ! tmpF.np)
+	if ( ! courbe.np)
 		return;		// si pas de point... pas de line... pas de bras... pas de chocolat...
 	
-	tmpF.NextFrom = 0;
+	courbe.NextFrom = 0;
 
-	for (i = 1, idx = 0; i < tmpF.np; i++) {
-		tmpArray[idx++] = tmpF.pa[i].valy;
-		tmpArray[idx++] = tmpF.pa[i].valx - tmpF.pa[i-1].valx;
-		if (tmpF.pa[i].sustain) {
-			tmpF.NextFrom = i;
+	for (i = 1, idx = 0; i < courbe.np; i++) {
+		tmpArray[idx++] = courbe.pa[i].valy;
+		tmpArray[idx++] = courbe.pa[i].valx - courbe.pa[i-1].valx;
+		if (courbe.pa[i].sustain) {
+			courbe.NextFrom = i;
 			break;
 		}
 	}
 	
-	outlet(LINE_OUTLET, tmpF.name, tmpF.pa[0].valy);
-	outlet(LINE_OUTLET, tmpF.name, tmpArray);
+	outlet(LINE_OUTLET, courbe.name, courbe.pa[0].valy);
+	outlet(LINE_OUTLET, courbe.name, tmpArray);
 }
 line.local = 1;
 
@@ -605,9 +596,9 @@ function ValRecalculate()
 	var c,i;
 	
 	for (c = 0; c < NbCourbes; c++) {
-		for (i = 0; i < fctns[c].np; i++) {
-			fctns[c]["pa"][i].x = val2x(fctns[c], fctns[c]["pa"][i].valx);
-			fctns[c]["pa"][i].y = val2y(fctns[c], fctns[c]["pa"][i].valy);
+		for (i = 0; i < f[c].np; i++) {
+			f[c]["pa"][i].x = val2x(f[c], f[c]["pa"][i].valx);
+			f[c]["pa"][i].y = val2y(f[c], f[c]["pa"][i].valy);
 		}
 	}
 }
@@ -618,14 +609,14 @@ function ApplyAutoSustain()
 	var i, c;
 	if ( AutoSustain ) {
 		for (c = 0; c < NbCourbes; c++) {
-			for (i = 0; i < fctns[c].np; i++) {
-				if (fctns[c].np < 3)
+			for (i = 0; i < f[c].np; i++) {
+				if (f[c].np < 3)
 					break;
 
-				if (i == fctns[c].np - 2)
-					fctns[c].pa[i].sustain = 1;
+				if (i == f[c].np - 2)
+					f[c].pa[i].sustain = 1;
 				else
-					fctns[c].pa[i].sustain = 0;
+					f[c].pa[i].sustain = 0;
 			}
 		}
 	}
@@ -642,8 +633,8 @@ function MyAddPoints(courbe, liste)
 	}
 	
 	sortingPoints(courbe);
-	drawFunctions();
 	DoNotify();
+	drawFunctions();
 }
 MyAddPoints.local = 1;
 
@@ -834,16 +825,16 @@ function DeleteReadThings()
 	// pour l'opération de suppression quand on vient de read...
 	// pour une raison qui m'échappe...
 	// il faut délayer...
-	tsk = new Task(function() {
-		if ( ! tsk.running) {
+	tskDel = new Task(function() {
+		if ( ! tskDel.running) {
 			var i;
 			for (i = 0; i < ReadDialogObjectRef.length; i++)
 				this.patcher.remove(ReadDialogObjectRef[i]);
 		}
 	}, this);
 		
-	tsk.interval = 100;
-	tsk.repeat(1);
+	tskDel.interval = 100;
+	tskDel.repeat(1);
 	
 	OpendialogPrepend = 0;	// réinitialisation du flag
 }
@@ -899,7 +890,7 @@ function AllPixel2Machin()
 {
 	var c;
 	for (c = 0; c < NbCourbes; c++) {
-		pixel2machin(fctns[c]);
+		pixel2machin(f[c]);
 	}
 }
 AllPixel2Machin.local = 1;
@@ -954,26 +945,26 @@ function MovePoint(courbe, lequel, newx, newy)
 }
 MovePoint.local = 1;
 
-function SwitchCurrent(sens)
+function Switchfront(sens)
 {
 		if( sens )		// avec shift on tourne dans l'autre sens
-			current = (current - 1 + NbCourbes) % NbCourbes;
+			front = (front - 1 + NbCourbes) % NbCourbes;
 		else
-			current = (current + 1) % NbCourbes;
+			front = (front + 1) % NbCourbes;
 		
-		outlet(DUMPOUT, "display", current);
+		outlet(DUMPOUT, "display", front);
 		drawAll();
 }
-SwitchCurrent.local = 1;
+Switchfront.local = 1;
 
-function CurrentOrArgument(c, a, combien)
+function frontOrArgument(c, a, combien)
 {
 	if ( a.length > combien)
 		return c;
 	else
-		return fctns[current];
+		return f[front];
 }
-CurrentOrArgument.local = 1;
+frontOrArgument.local = 1;
 
 function sortingPoints(courbe)
 {
@@ -1059,14 +1050,14 @@ swapPoints.local = 1;
 function RedrawOrNot(v)
 {
 	if ( v == -1) {
-		tsk.cancel();		// arrêt de la task précédente
+		tskDraw.cancel();		// arrêt de la task précédente
 		WaitALittleBit();	// si pas de point sélectionné on attend un peu avant de faire draw()
 	} else {
 		if (RedrawOrNot.DidYouDraw == 0 || v != RedrawOrNot.LastValue) { // soit l'affichage a déjà été fait (== 0), soit le point est différent
 			drawText();
 			RedrawOrNot.DidYouDraw = 1;
 		}
-		tsk.cancel();
+		tskDraw.cancel();
 		RedrawOrNot.LastValue = v;
 	}
 }
@@ -1074,11 +1065,11 @@ RedrawOrNot.local = 1;
 
 function WaitALittleBit()
 {
-	tsk.cancel();
+	tskDraw.cancel();
 	// attend 750ms avant de redessiner
-	tsk = new Task(function() { if (! tsk.running) { drawText(); RedrawOrNot.DidYouDraw = 0; }  }, this);
-	tsk.interval = 750;
-	tsk.repeat(1);
+	tskDraw = new Task(function() { if (! tskDraw.running) { drawText(); RedrawOrNot.DidYouDraw = 0; }  }, this);
+	tskDraw.interval = 750;
+	tskDraw.repeat(1);
 }
 WaitALittleBit.local = 1;
 
@@ -1433,7 +1424,7 @@ function SetColor(intOrcourbe, which, a, b, c)
 	var courbe = new Object();
 	
 	if (typeof(intOrcourbe) == "number")
-		courbe = fctns[intOrcourbe];
+		courbe = f[intOrcourbe];
 	else
 		courbe = intOrcourbe;
 		
@@ -1477,7 +1468,7 @@ function all()
 	NotifyEnable = 0;
 	
 	for (i = 0, tmp = 0; i < NbCourbes; i++) {
-		ArgsParser(fctns[i], "all" , arguments, "\n");
+		ArgsParser(f[i], "all" , arguments, "\n");
 	}
 
 	RedrawEnable = OldRedrawState;
@@ -1497,7 +1488,7 @@ function all()
 
 function addpoints()
 {
-	MyAddPoints(fctns[current], arrayfromargs(messagename, arguments));
+	MyAddPoints(f[front], arrayfromargs(messagename, arguments));
 }
 
 function args4insp()
@@ -1522,12 +1513,12 @@ function args4insp()
 	tmpArray[idx++] = TimeFlag;
 
 	for (i = 0; i < NbCourbes; i++) {
-		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(fctns[i].brgb[j] * 255); }
-		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(fctns[i].frgb[j] * 255); }
-		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(fctns[i].rgb2[j] * 255); }
-		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(fctns[i].rgb3[j] * 255); }
-		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(fctns[i].rgb4[j] * 255); }
-		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(fctns[i].rgb5[j] * 255); }
+		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(f[i].brgb[j] * 255); }
+		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(f[i].frgb[j] * 255); }
+		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(f[i].rgb2[j] * 255); }
+		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(f[i].rgb3[j] * 255); }
+		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(f[i].rgb4[j] * 255); }
+		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(f[i].rgb5[j] * 255); }
 	}
 
 	outlet(DUMPOUT, tmpArray);
@@ -1542,11 +1533,11 @@ function autosustain(v)
 	AutoSustain = v;
 }
 
-function autorange()	{	MyAutoRange(fctns[current]);	}
-function autodomain()	{	MyAutoDomain(fctns[current]);	}
-function normalize()	{	MyNormalize(fctns[current]);	}
-function normalize_x()	{	MyNormalizeX(fctns[current]);	}
-function normalize_y()	{	MyNormalizeY(fctns[current]);	}
+function autorange()	{	MyAutoRange(f[front]);	}
+function autodomain()	{	MyAutoDomain(f[front]);	}
+function normalize()	{	MyNormalize(f[front]);	}
+function normalize_x()	{	MyNormalizeX(f[front]);	}
+function normalize_y()	{	MyNormalizeY(f[front]);	}
 
 function MyNormalizeX(courbe)
 {
@@ -1653,7 +1644,7 @@ function MyNormalize(courbe)
 			ApplyNormalizeX(courbe, minX, maxX);// points have the same Y min/max position so process only a normalize on X
 	else
 	{
-		// most current case
+		// most front case
 		var rangeX = (courbe.domain[1] - courbe.domain[0]) / (maxX - minX);
 		var offsetX = 0 - minX;
 		var rangeY = (courbe.range[1] - courbe.range[0]) / (maxY - minY);
@@ -1686,11 +1677,11 @@ function addfunction()
 		return;
 	}
 	
-	var tmp = fctns.length;
+	var tmp = f.length;
 	
-	fctns[tmp] = new Courbe(arguments[0]);
+	f[tmp] = new Courbe(arguments[0]);
 	NbCourbes++;
-	pixel2machin(fctns[current]);
+	pixel2machin(f[front]);
 	getname();		// mise à jour du menu
 }
 
@@ -1701,9 +1692,9 @@ function insertfunction()
 		return;
 	}
 
-	fctns.splice(current, 0, new Courbe(arguments[0]));		
+	f.splice(front, 0, new Courbe(arguments[0]));		
 	NbCourbes++;
-	pixel2machin(fctns[current]);
+	pixel2machin(f[front]);
 	getname();		// mise à jour du menu
 	drawAll();		// mise à jour de l'affichage, car c'est la courbe courrante
 }
@@ -1717,10 +1708,10 @@ function deletefunction()
 		return;				// si une seule courbe on ne peut pas supprimer
 	
 	if (! arguments.length)
-		which = current;
+		which = front;
 	else {
 		for (c = 0; c < NbCourbes; c++) {
-			if (fctns[c].name == arguments[0]) {
+			if (f[c].name == arguments[0]) {
 				which = c;
 				break;
 			}
@@ -1732,17 +1723,17 @@ function deletefunction()
 		return;
 	}
 	
-	fctns.splice(which, 1);
+	f.splice(which, 1);
 	NbCourbes--;
 /* 	AllPixel2Machin(); */
 	getname();
 	
-	if (which < fctns.length)
-		current = which;
+	if (which < f.length)
+		front = which;
 	else
-		current = 0;
+		front = 0;
 
-	outlet(DUMPOUT, "display", current);
+	outlet(DUMPOUT, "display", front);
 	DoNotify();
 	drawFunctions();
 }
@@ -1781,15 +1772,15 @@ function display()
 	}
 	
 	if (typeof(arguments[0]) == "number" && arguments[0] >= 0 && arguments[0] < NbCourbes)
-		current = arguments[0];
+		front = arguments[0];
 	else {
 		for (c = 0; c < NbCourbes; c++) {
-			if (fctns[c].name == arguments[0]) {
+			if (f[c].name == arguments[0]) {
 				tmp = c;
 				break;
 			}
 		}
-		current = tmp;
+		front = tmp;
 	}
 	
 	drawAll();
@@ -1798,9 +1789,9 @@ function display()
 function dump()
 {
 	if (arguments.length)
-		MyDump(fctns[current], arguments[0]);
+		MyDump(f[front], arguments[0]);
 	else
-		MyDump(fctns[current]);
+		MyDump(f[front]);
 }
 
 function dumpmatrix()
@@ -1808,38 +1799,38 @@ function dumpmatrix()
 	if (arguments.length) {
 		var c;
 		for (c = 0; c < NbCourbes; c++) {
-			if (arguments[0] == fctns[c].name) {
-				MyDumpMatrix(fctns[c]);
+			if (arguments[0] == f[c].name) {
+				MyDumpMatrix(f[c]);
 				return;
 			}
 		}
 		// message d'erreur si le nom de la fonction n'est pas valide
 		perror(arguments[0], "is not a function, dumpmatrix aborted.");
 	} else
-		MyDumpMatrix(fctns[current]);	// 
+		MyDumpMatrix(f[front]);	// 
 }
 
 function listdump()
 {
 	// il faut tester le nombre d'argument à cause de argsparser()
 	if (arguments.length)
-		MyListDump(fctns[current], arguments[0]);
+		MyListDump(f[front], arguments[0]);
 	else
-		MyListDump(fctns[current]);
+		MyListDump(f[front]);
 }
 
 function clear()
 {
 	if (arguments.length == 0)
-		MyClear(fctns[current]);
+		MyClear(f[front]);
 	else
-		MyClear(fctns[current], arguments);
+		MyClear(f[front], arguments);
 }
 
 function clearsustain()
 {
 	if (! arguments.length)
-		MyClearSustain(fctns[current]);
+		MyClearSustain(f[front]);
 	else
 		perror("extra arguments for message clearsustain");
 }
@@ -1847,7 +1838,7 @@ function clearsustain()
 function fix()
 {
 	if (arguments.length == 2)
-		FixPoint(fctns[current], arguments[0], arguments[1]);
+		FixPoint(f[front], arguments[0], arguments[1]);
 	else
 		perror("bad arguments for message fix");
 }
@@ -1857,7 +1848,7 @@ function unfix()
 	if (arguments.length)
 		perror("extra arguments for message unfix");
 	else
-		MyUnfix(fctns[current]);
+		MyUnfix(f[front]);
 }
 
 function grid(v)
@@ -1872,7 +1863,7 @@ function grid(v)
 function nth(v)
 {
 	if (typeof(v) == "number")
-		MyNth(fctns[current], v);
+		MyNth(f[front], v);
 	else
 		perror("bad argument for message nth");
 }
@@ -1899,7 +1890,7 @@ function active()
 	
 	if (tmpArray.length == 2) {
 		if (tmpArray[1] == 0 || tmpArray[1] == 1) {
-			fctns[current].display = tmpArray[1];
+			f[front].display = tmpArray[1];
 			drawAll();
 			return;
 		} else
@@ -1908,7 +1899,7 @@ function active()
 
 	for (i = 1; i < tmpArray.length; i++) {
 		if (tmpArray[i] == 0 || tmpArray[i] == 1)
-			fctns[i-1].display = tmpArray[i];
+			f[i-1].display = tmpArray[i];
 		else {
 			perror("bad argument for message active");
 			break;
@@ -1927,7 +1918,7 @@ function snap2grid(v)
 
 function gridstep(v)
 {
-	MyGridStep(fctns[current], v);
+	MyGridStep(f[front], v);
 }
 
 function hiddenpoint(v)
@@ -1983,14 +1974,14 @@ function mousereport(v)
 
 function name(name)
 {
-	MyName(fctns[current], name);
+	MyName(f[front], name);
 	getname();	// envoie la liste des fonctions
 }
 
 function next()
 {
 	if (! arguments.length)
-		MyNext(fctns[current]);
+		MyNext(f[front]);
 	else
 		perror("extra arguments for message next");
 }
@@ -1999,26 +1990,26 @@ next.immediate = 1;
 function sustain()
 {
 	if (arguments.length == 2)
-		MySustain(arguments[0], arguments[1], fctns[current]);
+		MySustain(arguments[0], arguments[1], f[front]);
 	else
 		perror("bad arguments for message sustain");
 }
 
-function brgb() { SetColor(fctns[current], "brgb", arguments); drawAll(); }
-function frgb() { SetColor(fctns[current], "frgb", arguments); drawFunctions(); }
-function rgb2() { SetColor(fctns[current], "rgb2", arguments); drawFunctions(); }
-function rgb3() { SetColor(fctns[current], "rgb3", arguments); drawFunctions(); }
-function rgb4() { SetColor(fctns[current], "rgb4", arguments); drawText(); }
-function rgb5() { SetColor(fctns[current], "rgb5", arguments); drawFunctions(); }
+function brgb() { SetColor(f[front], "brgb", arguments); drawAll(); }
+function frgb() { SetColor(f[front], "frgb", arguments); drawFunctions(); }
+function rgb2() { SetColor(f[front], "rgb2", arguments); drawFunctions(); }
+function rgb3() { SetColor(f[front], "rgb3", arguments); drawFunctions(); }
+function rgb4() { SetColor(f[front], "rgb4", arguments); drawText(); }
+function rgb5() { SetColor(f[front], "rgb5", arguments); drawFunctions(); }
 
 function domain()
 {
 	switch (arguments.length) {
 		case 1:
-				MyDomain(0, arguments[0], fctns[current]);
+				MyDomain(0, arguments[0], f[front]);
 				break;
 		case 2:
-				MyDomain(arguments[0], arguments[1], fctns[current]);
+				MyDomain(arguments[0], arguments[1], f[front]);
 				break;
 		default:
 				perror("bad argument(s) for message domain");
@@ -2030,10 +2021,10 @@ function setdomain()
 {
 	switch (arguments.length) {
 		case 1:
-				MySetDomain(0, arguments[0], fctns[current]);
+				MySetDomain(0, arguments[0], f[front]);
 				break;
 		case 2:
-				MySetDomain(arguments[0], arguments[1], fctns[current]);
+				MySetDomain(arguments[0], arguments[1], f[front]);
 				break;
 		default:
 				perror("bad argument(s) for message setdomain");
@@ -2048,7 +2039,7 @@ function range(a, b, courbe)
 		return ;
 	}
 
-	var tmpF = CurrentOrArgument(courbe, arguments, 2);
+	var tmpF = frontOrArgument(courbe, arguments, 2);
 	var i;
 	
 	tmpF.range = [a, b];
@@ -2070,7 +2061,7 @@ function setrange(a, b, courbe)
 		return ;
 	}
 
-	var tmpF = CurrentOrArgument(courbe, arguments, 2);
+	var tmpF = frontOrArgument(courbe, arguments, 2);
 	var i;
 	var NeedDraw = 0;
 	
@@ -2091,7 +2082,7 @@ function setrange(a, b, courbe)
 		drawFunctions();
 }
 
-function fswitch() { SwitchCurrent(); }
+function fswitch() { Switchfront(); }
 
 function redrawoff() { RedrawEnable = 0; }
 
@@ -2112,7 +2103,7 @@ function resetall()
 	EditedWithMouse.state = 0;	// flag initialisation
 	PattrInterpError.flag = 0;
 	PattrTooMany.flag = 1;
-	current = 0;				// première courbe est la courbe actvie
+	front = 0;				// première courbe est la courbe actvie
 	RedrawEnable = 1;
 	NotifyEnable = 1;
 	UpdateDisplay();
@@ -2137,12 +2128,12 @@ function defaults()
 	MouseReportState = 0;
 	
 	for (c = 0; c < NbCourbes; c++) {
-		fctns[c].brgb =[0.8,0.8,0.8];
-		fctns[c].frgb =[0.32,0.32,0.32];
-		fctns[c].rgb2 =[0.42,0.42,0.42];
-		fctns[c].rgb3 =[1,0.,0.];
-		fctns[c].rgb4 =[0.2,0.2,0.2];
-		fctns[c].rgb5 =[0.5,0.5,0.5];
+		f[c].brgb =[0.8,0.8,0.8];
+		f[c].frgb =[0.32,0.32,0.32];
+		f[c].rgb2 =[0.42,0.42,0.42];
+		f[c].rgb3 =[1,0.,0.];
+		f[c].rgb4 =[0.2,0.2,0.2];
+		f[c].rgb5 =[0.5,0.5,0.5];
 	}
 	
 	drawAll();	// si c'est utilisé dans la fonction save(), draw est désactivé automatiquement (RedrawEnable = 0);
@@ -2151,12 +2142,12 @@ function defaults()
 function removeduplicate()
 {
 	// si il y a eu suppression d'élément, il y aura réaffichage.
-	MyRemoveDuplicate(fctns[current]);
+	MyRemoveDuplicate(f[front]);
 }
 
 function smooth()
 {
-	MySmooth(fctns[current]);
+	MySmooth(f[front]);
 }
 
 function copycolors()
@@ -2167,10 +2158,10 @@ function copycolors()
 	c = -1;
 	
 	if (! arguments.length)
-		c = current;
+		c = front;
 	else {
 		for (i = 0; i < NbCourbes; i++) {
-			if (fctns[i].name == arguments[0]) {
+			if (f[i].name == arguments[0]) {
 				c = i;
 				break;
 			}
@@ -2182,18 +2173,18 @@ function copycolors()
 		return;
 	}
 
-	for (j=0; j < 3; j++) { cp[idx++] = fctns[c].brgb[j]; }
-	for (j=0; j < 3; j++) { cp[idx++] = fctns[c].frgb[j]; }
-	for (j=0; j < 3; j++) { cp[idx++] = fctns[c].rgb2[j]; }
-	for (j=0; j < 3; j++) { cp[idx++] = fctns[c].rgb3[j]; }
-	for (j=0; j < 3; j++) { cp[idx++] = fctns[c].rgb4[j]; }
-	for (j=0; j < 3; j++) { cp[idx++] = fctns[c].rgb5[j]; }
+	for (j=0; j < 3; j++) { cp[idx++] = f[c].brgb[j]; }
+	for (j=0; j < 3; j++) { cp[idx++] = f[c].frgb[j]; }
+	for (j=0; j < 3; j++) { cp[idx++] = f[c].rgb2[j]; }
+	for (j=0; j < 3; j++) { cp[idx++] = f[c].rgb3[j]; }
+	for (j=0; j < 3; j++) { cp[idx++] = f[c].rgb4[j]; }
+	for (j=0; j < 3; j++) { cp[idx++] = f[c].rgb5[j]; }
 }
 
 function pastecolors()
 {
 	if (! arguments.length)
-		MyPasteColors(fctns[current]);
+		MyPasteColors(f[front]);
 	else
 		perror("extra arguments for message pastecolors");
 }
@@ -2201,7 +2192,7 @@ function pastecolors()
 function zoom_x(start, stop, courbe)
 {
 	var i;
-	var tmpF = CurrentOrArgument(courbe, arguments, 2);
+	var tmpF = frontOrArgument(courbe, arguments, 2);
 	
 	if (arguments.length == 0) {
 		start = 0;
@@ -2225,7 +2216,7 @@ function zoom_x(start, stop, courbe)
 function zoom_y(start, stop, courbe)
 {
 	var i;
-	var tmpF = CurrentOrArgument(courbe, arguments, 2);
+	var tmpF = frontOrArgument(courbe, arguments, 2);
 	
 	if (arguments.length == 0) {
 		start = 0;
@@ -2250,7 +2241,7 @@ function zoomout()
 {
 	var OldRedrawState = RedrawEnable;
 	RedrawEnable = 0;
-	MyZoomOut(fctns[current]);
+	MyZoomOut(f[front]);
 	drawFunctions();				// on ne réaffiche donc qu'à la sortie, une seule fois.
 	RedrawEnable = OldRedrawState;	// restauration de l'état de la variable d'avant son entrée dans la fonction
 }
@@ -2270,14 +2261,14 @@ function onidle(x,y,but,cmd,shift,capslock,option,ctrl)
 	var OldIdlePoint = IdlePoint;
 	IdlePoint = -1;
 
-	if (AllowEdit == 0 || fctns[current].display == 0)
+	if (AllowEdit == 0 || f[front].display == 0)
 		return;
 
 	y = yOffset(y);
 
-	for(i=0; i< fctns[current].np; i++) {
+	for(i=0; i< f[front].np; i++) {
 
-		if ( (Math.abs(x - fctns[current]["pa"][i].x) < Tolerance) && (Math.abs(y - fctns[current]["pa"][i].y) < Tolerance) ) {
+		if ( (Math.abs(x - f[front]["pa"][i].x) < Tolerance) && (Math.abs(y - f[front]["pa"][i].y) < Tolerance) ) {
 			if (ClickMove == 1)
 				DisplayCursor(5);
 			
@@ -2291,8 +2282,8 @@ function onidle(x,y,but,cmd,shift,capslock,option,ctrl)
 	}
 
 	if (MouseReportState)
-		outlet(DUMPOUT, "mouseidle", 	ejies.clip(x2val(fctns[current], x), fctns[current].domain[0], fctns[current].domain[1]),
-										ejies.clip(y2val(fctns[current], y), fctns[current].range[0], fctns[current].range[1]),
+		outlet(DUMPOUT, "mouseidle", 	ejies.clip(x2val(f[front], x), f[front].domain[0], f[front].domain[1]),
+										ejies.clip(y2val(f[front], y), f[front].range[0], f[front].range[1]),
 										but, IdlePoint);
 
 	if (IdlePoint == -1 && shift == 1) {
@@ -2320,11 +2311,11 @@ function yOffset(y)
 
 function onclick(x,y,but,cmd,shift,capslock,option,ctrl)
 {
-	var tmpF = fctns[current];
+/* 	var tmpF = f[front]; */
 
 	y = yOffset(y);
 	
-	if (AllowEdit == 0 || tmpF.display == 0) {
+	if (AllowEdit == 0 || f[front].display == 0) {
 		onidle(x, y);
 		return;
 	}
@@ -2336,14 +2327,14 @@ function onclick(x,y,but,cmd,shift,capslock,option,ctrl)
 	if (IdlePoint != -1) {
 		SelectedPoint = IdlePoint;
 		if (cmd) {
-			tmpF.pa[SelectedPoint].sustain = 1 - tmpF.pa[SelectedPoint].sustain;
+			f[front].pa[SelectedPoint].sustain = 1 - f[front].pa[SelectedPoint].sustain;
 			EditedWithMouse.state++;
 			drawFunctions();
 			return ;
 		}
 		
 		if (shift && ClickAdd) {
-			DeletePoint(tmpF, SelectedPoint);
+			DeletePoint(f[front], SelectedPoint);
 			SelectedPoint = -1;
 			ApplyAutoSustain();
 			EditedWithMouse.state++;
@@ -2361,8 +2352,8 @@ function onclick(x,y,but,cmd,shift,capslock,option,ctrl)
 	// ajout d'un point
 	if (cmd == 0 && shift == 0 && SelectedPoint == -2 && ClickAdd == 1) {
 		if ( Snap2GridState )
-			x = val2x(tmpF, Math.round((x2val(tmpF, x) - tmpF.domain[0]) / tmpF.GridStep) * tmpF.GridStep + tmpF.domain[0]);
-		SelectedPoint = AddOnePoint(tmpF, x, y);
+			x = val2x(f[front], Math.round((x2val(f[front], x) - f[front].domain[0]) / f[front].GridStep) * f[front].GridStep + f[front].domain[0]);
+		SelectedPoint = AddOnePoint(f[front], x, y);
 		ApplyAutoSustain();
 		EditedWithMouse.state++;
 		DoNotify();
@@ -2370,17 +2361,17 @@ function onclick(x,y,but,cmd,shift,capslock,option,ctrl)
 		onidle(x,y);
 	}
 	if (MouseReportState)
-		outlet(DUMPOUT, "mouse",	ejies.clip(x2val(fctns[current], x), fctns[current].domain[0], fctns[current].domain[1]),
-									ejies.clip(y2val(fctns[current], y), fctns[current].range[0], fctns[current].range[1]),
+		outlet(DUMPOUT, "mouse",	ejies.clip(x2val(f[front], x), f[front].domain[0], f[front].domain[1]),
+									ejies.clip(y2val(f[front], y), f[front].range[0], f[front].range[1]),
 									but, SelectedPoint);
 }
 
 function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 {
-	var tmpF = fctns[current];
+/* 	var tmpF = f[front]; */
 	var borderthing = -1;
 
-	if (AllowEdit == 0 || tmpF.display == 0)
+	if (AllowEdit == 0 || f[front].display == 0)
 		return;
 
 	if ( but == 0 ||  SelectedPoint < 0) {
@@ -2394,44 +2385,44 @@ function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 	y = yOffset(y); // ne pas le mettre avant sinon onidle ne reçoit pas les bons coordonnées y
 
 	if (MouseReportState)
-		outlet(DUMPOUT, "mouse", 	ejies.clip(x2val(fctns[current], x), fctns[current].domain[0], fctns[current].domain[1]),
-									ejies.clip(y2val(fctns[current], y), fctns[current].range[0], fctns[current].range[1]),
+		outlet(DUMPOUT, "mouse", 	ejies.clip(x2val(f[front], x), f[front].domain[0], f[front].domain[1]),
+									ejies.clip(y2val(f[front], y), f[front].range[0], f[front].range[1]),
 									but, SelectedPoint);
 
-	if (SelectedPoint < tmpF.np) {
-		if (tmpF["pa"][SelectedPoint].fix)
+	if (SelectedPoint < f[front].np) {
+		if (f[front]["pa"][SelectedPoint].fix)
 			return;
 			
 		if ( Snap2GridState )
-			x = val2x(tmpF, Math.round((x2val(tmpF, x) - tmpF.domain[0]) / tmpF.GridStep) * tmpF.GridStep + tmpF.domain[0]);
+			x = val2x(f[front], Math.round((x2val(f[front], x) - f[front].domain[0]) / f[front].GridStep) * f[front].GridStep + f[front].domain[0]);
 		
 		x = ejies.clip(x, Bordure, SketchFunctions.size[0] - Bordure);
 		y = ejies.clip(y, Bordure, SketchFunctions.size[1] - Bordure);
 	
-		if ( BorderSyncState == 1 && tmpF.np > 2 && ( SelectedPoint == 0 || SelectedPoint == (tmpF.np - 1 ) )) {
-			SelectedPoint == 0 ? borderthing = (tmpF.np - 1) : borderthing = 0;
+		if ( BorderSyncState == 1 && f[front].np > 2 && ( SelectedPoint == 0 || SelectedPoint == (f[front].np - 1 ) )) {
+			SelectedPoint == 0 ? borderthing = (f[front].np - 1) : borderthing = 0;
 		}
 
-		if (tmpF["np"] > 1) {
+		if (f[front]["np"] > 1) {
 
 			if (SelectedPoint == 0) {
-				x = ejies.clip(x, 0, tmpF["pa"][SelectedPoint+1].x );  
-			} else if (SelectedPoint > 0 && SelectedPoint < (tmpF["np"] - 1)) {
-				x = ejies.clip(x, tmpF["pa"][SelectedPoint-1].x, tmpF["pa"][SelectedPoint+1].x);
-			} else if (SelectedPoint == (tmpF["np"] - 1) ) {
-				x = ejies.clip(x, tmpF["pa"][SelectedPoint-1].x, SketchFunctions.size[0]);
+				x = ejies.clip(x, 0, f[front]["pa"][SelectedPoint+1].x );  
+			} else if (SelectedPoint > 0 && SelectedPoint < (f[front]["np"] - 1)) {
+				x = ejies.clip(x, f[front]["pa"][SelectedPoint-1].x, f[front]["pa"][SelectedPoint+1].x);
+			} else if (SelectedPoint == (f[front]["np"] - 1) ) {
+				x = ejies.clip(x, f[front]["pa"][SelectedPoint-1].x, SketchFunctions.size[0]);
 			}
 		}
 
 		EditedWithMouse.state++;		
-		tmpF["pa"][SelectedPoint].x = x;
-		tmpF["pa"][SelectedPoint].y = y;
-		tmpF["pa"][SelectedPoint].valx = x2val(tmpF, x);
-		tmpF["pa"][SelectedPoint].valy = y2val(tmpF, y);
+		f[front]["pa"][SelectedPoint].x = x;
+		f[front]["pa"][SelectedPoint].y = y;
+		f[front]["pa"][SelectedPoint].valx = x2val(f[front], x);
+		f[front]["pa"][SelectedPoint].valy = y2val(f[front], y);
 		
 		if (borderthing != -1) {
-			tmpF["pa"][borderthing].y = y;
-			tmpF["pa"][borderthing].valy = y2val(tmpF, y);
+			f[front]["pa"][borderthing].y = y;
+			f[front]["pa"][borderthing].valy = y2val(f[front], y);
 		}
 		
 		UpdateDisplay();
@@ -2443,31 +2434,31 @@ function ondblclick(x,y,but,cmd,shift,capslock,option,ctrl)
 	IdlePoint = -1;
 	
 	if (cmd)
-		SwitchCurrent(shift);	// avec shift on tourne dans l'autre sens
+		Switchfront(shift);	// avec shift on tourne dans l'autre sens
 }
 
 
 //////////////// Get Things ///////////////
 function getdisplay()
 {
-	outlet(DUMPOUT, "display", current);
+	outlet(DUMPOUT, "display", front);
 }
 
 function getdomain(courbe)
 {
-	var tmpF = CurrentOrArgument(courbe, arguments, 0);
+	var tmpF = frontOrArgument(courbe, arguments, 0);
 	outlet(DUMPOUT, tmpF.name, "domain", tmpF.domain);
 }
 
 function getrange(courbe)
 {
-	var tmpF = CurrentOrArgument(courbe, arguments, 0);
+	var tmpF = frontOrArgument(courbe, arguments, 0);
 	outlet(DUMPOUT, tmpF.name, "range", tmpF.range);
 }
 
 function getfix(courbe)
 {
-	var tmpF = CurrentOrArgument(courbe, arguments, 0);
+	var tmpF = frontOrArgument(courbe, arguments, 0);
 	var tmpData = new Array();
 	var i, j;
 
@@ -2482,7 +2473,7 @@ function getfix(courbe)
 
 function getsustain(courbe)
 {
-	var tmpF = CurrentOrArgument(courbe, arguments, 0);
+	var tmpF = frontOrArgument(courbe, arguments, 0);
 	var tmpData = new Array();
 	var i;
 	
@@ -2490,25 +2481,26 @@ function getsustain(courbe)
 		if ( tmpF.pa[i].sustain ) { tmpData[j++] = i; }
 	}
 	
-	if (tmpData. length != 0) { outlet(DUMPOUT, tmpF.name, "sustain", tmpData); }
+	if (tmpData. length != 0)
+		outlet(DUMPOUT, tmpF.name, "sustain", tmpData);
 }
 
 function getgridstep(courbe)
 {
-	var tmpF = CurrentOrArgument(courbe, arguments, 0);
+	var tmpF = frontOrArgument(courbe, arguments, 0);
 	outlet(DUMPOUT, tmpF.name, "gridstep", tmpF.GridStep);
 }
 
-function getbrgb() { GetColor(fctns[current], "brgb"); }
-function getfrgb() { GetColor(fctns[current], "frgb"); }
-function getrgb2() { GetColor(fctns[current], "rgb2"); }
-function getrgb3() { GetColor(fctns[current], "rgb3"); }
-function getrgb4() { GetColor(fctns[current], "rgb4"); }
-function getrgb5() { GetColor(fctns[current], "rgb5"); }
+function getbrgb() { GetColor(f[front], "brgb"); }
+function getfrgb() { GetColor(f[front], "frgb"); }
+function getrgb2() { GetColor(f[front], "rgb2"); }
+function getrgb3() { GetColor(f[front], "rgb3"); }
+function getrgb4() { GetColor(f[front], "rgb4"); }
+function getrgb5() { GetColor(f[front], "rgb5"); }
 
 function getnbpoints(courbe)
 {
-	var tmpF = CurrentOrArgument(courbe, arguments, 0);
+	var tmpF = frontOrArgument(courbe, arguments, 0);
 	outlet(DUMPOUT, tmpF.name, "nbpoints", tmpF.np);
 }
 
@@ -2537,7 +2529,7 @@ function getname()
 	outlet(DUMPOUT, "name", "clear");
 	
 	for (c = 0; c < NbCourbes; c++)
-		outlet(DUMPOUT, "name", "append", fctns[c].name);
+		outlet(DUMPOUT, "name", "append", f[c].name);
 }
 
 function getactive()
@@ -2546,21 +2538,21 @@ function getactive()
 	var tmpArray = new Array();
 	
 	for (c = 0, idx = 0; c < NbCourbes; c++) {
-		tmpArray[idx++] = fctns[c].display;
+		tmpArray[idx++] = f[c].display;
 	}
 	outlet(DUMPOUT, "active", tmpArray);
 }
 
 function getzoom_x(courbe)
 {
-	var tmpF = CurrentOrArgument(courbe, arguments, 0);
+	var tmpF = frontOrArgument(courbe, arguments, 0);
 	outlet(DUMPOUT, tmpF.name, "zoom_x",	tmpF.ZoomX[0] / (tmpF.domain[1] - tmpF.domain[0]) - tmpF.domain[0],
 											tmpF.ZoomX[1] / (tmpF.domain[1] - tmpF.domain[0]) - tmpF.domain[0]);
 }
 
 function getzoom_y(courbe)
 {
-	var tmpF = CurrentOrArgument(courbe, arguments, 0);
+	var tmpF = frontOrArgument(courbe, arguments, 0);
 	outlet(DUMPOUT, tmpF.name, "zoom_y",	tmpF.ZoomY[0] / (tmpF.range[1] - tmpF.range[0]) - tmpF.range[0],
 											tmpF.ZoomY[1] / (tmpF.range[1] - tmpF.range[0]) - tmpF.range[0]);
 }
@@ -2590,16 +2582,16 @@ function setvalueof()
 	NbCourbes = arguments[idx++];
 	
 	while (OldNbCourbes < NbCourbes) {
-		fctns[OldNbCourbes] = new Courbe();
-		MyThings2Zoom(fctns[OldNbCourbes]);
-		pixel2machin(fctns[OldNbCourbes++]);
+		f[OldNbCourbes] = new Courbe();
+		MyThings2Zoom(f[OldNbCourbes]);
+		pixel2machin(f[OldNbCourbes++]);
 	}
 
 	while (OldNbCourbes > NbCourbes) {
-		fctns.splice(--OldNbCourbes, 1);
-		// si la courbe qu'on vient de supprimer était la courbe courante... current = 0
-		if (current >= NbCourbes)
-			current = 0;
+		f.splice(--OldNbCourbes, 1);
+		// si la courbe qu'on vient de supprimer était la courbe courante... front = 0
+		if (front >= NbCourbes)
+			front = 0;
 	}
 
 	for (i = 0; i < NbCourbes; i++) {
@@ -2621,41 +2613,41 @@ function setvalueof()
 		var LastDomain, LastRangeMin, LastRangeMax;
 		var NeedUpdate = 0;
 		idx	= BeginCurve[i]
-		fctns[i].name = arguments[idx++];
+		f[i].name = arguments[idx++];
 
 		// depuis la version 1.52 domaine contient deux limites.
 		if (FunctionVersionCheck == 1 )
-			fctns[i].domain[0] = 0;
+			f[i].domain[0] = 0;
 		else
-			fctns[i].domain[0] = parseFloat(arguments[idx++]);
+			f[i].domain[0] = parseFloat(arguments[idx++]);
 
-		fctns[i].domain[1] = parseFloat(arguments[idx++]);
+		f[i].domain[1] = parseFloat(arguments[idx++]);
 
-		fctns[i].range[0] = parseFloat(arguments[idx++]);
-		fctns[i].range[1] = parseFloat(arguments[idx++]);
+		f[i].range[0] = parseFloat(arguments[idx++]);
+		f[i].range[1] = parseFloat(arguments[idx++]);
 
-		MyThings2Zoom(fctns[i]);
+		MyThings2Zoom(f[i]);
 		
-		fctns[i].GridStep = arguments[idx++];
+		f[i].GridStep = arguments[idx++];
 		
-		OldNp = fctns[i].np;
-		fctns[i].np = (arguments[i+2]);
+		OldNp = f[i].np;
+		f[i].np = (arguments[i+2]);
 
 		// création des points s'ils ne sont pas présents dans la courbe
-		while (OldNp < fctns[i].np) {
-			fctns[i]["pa"][OldNp++] = new Point();
+		while (OldNp < f[i].np) {
+			f[i]["pa"][OldNp++] = new Point();
 		}
 
 		// suppression des points n'existant plus dans la courbe
-		while (OldNp > fctns[i].np) {
-			fctns[i]["pa"].splice(--OldNp, 1);
+		while (OldNp > f[i].np) {
+			f[i]["pa"].splice(--OldNp, 1);
 		}
 
-		for (p = 0; p < fctns[i].np; p++) {
-			fctns[i]["pa"][p].valx = arguments[idx++];
-			fctns[i]["pa"][p].valy = arguments[idx++];
-			fctns[i]["pa"][p].sustain = arguments[idx] & 2 ? 1 : 0; // pas d'incrémentation
-			fctns[i]["pa"][p].fix = arguments[idx++] & 1;	// elle est faite ici.
+		for (p = 0; p < f[i].np; p++) {
+			f[i]["pa"][p].valx = arguments[idx++];
+			f[i]["pa"][p].valy = arguments[idx++];
+			f[i]["pa"][p].sustain = arguments[idx] & 2 ? 1 : 0; // pas d'incrémentation
+			f[i]["pa"][p].fix = arguments[idx++] & 1;	// elle est faite ici.
 		}
 	}
 
@@ -2684,22 +2676,22 @@ function getvalueof()
 	tmpData[idx++] = NbCourbes;
 	
 	for (i = 0; i < NbCourbes; i++) {
-		tmpData[idx++] = fctns[i].np;
+		tmpData[idx++] = f[i].np;
 	}
 	
 	for (i = 0; i < NbCourbes; i++) {
-		tmpData[idx++] = fctns[i].name;
-		tmpData[idx++] = fctns[i].domain[0];
-		tmpData[idx++] = fctns[i].domain[1];
-		tmpData[idx++] = fctns[i].range[0];
-		tmpData[idx++] = fctns[i].range[1];
-		tmpData[idx++] = fctns[i].GridStep;
+		tmpData[idx++] = f[i].name;
+		tmpData[idx++] = f[i].domain[0];
+		tmpData[idx++] = f[i].domain[1];
+		tmpData[idx++] = f[i].range[0];
+		tmpData[idx++] = f[i].range[1];
+		tmpData[idx++] = f[i].GridStep;
 
-		for (p = 0; p < fctns[i].np; p++) {
+		for (p = 0; p < f[i].np; p++) {
 			// on stocke un minimum de chose pour pouvoir mettre plus de points
-			tmpData[idx++] = fctns[i]["pa"][p].valx;
-			tmpData[idx++] = fctns[i]["pa"][p].valy;
-			tmpData[idx++] = fctns[i]["pa"][p].sustain * 2 + fctns[i]["pa"][p].fix;	// en binaire ça prend moins de place
+			tmpData[idx++] = f[i]["pa"][p].valx;
+			tmpData[idx++] = f[i]["pa"][p].valy;
+			tmpData[idx++] = f[i]["pa"][p].sustain * 2 + f[i]["pa"][p].fix;	// en binaire ça prend moins de place
 		}
 	}
 
@@ -2716,15 +2708,15 @@ function save()
 	var tmpArray = new Array();
 
 	for (i = 0; i < NbCourbes; i++)
-		tmpArray[i] = fctns[i].name;
+		tmpArray[i] = f[i].name;
 
 	for (j = 0; j < NbCourbes; j++) {
 		// c'est stupide... j'ai inversé range et domain dans 1.52 par rapport a psto et read/write
 		// NE PAS INVERSER c'est trop tard :-(
-		tmpArray[i++] = fctns[j].range[0];
-		tmpArray[i++] = fctns[j].range[1];
-		tmpArray[i++] = fctns[j].domain[0];
-		tmpArray[i++] = fctns[j].domain[1];
+		tmpArray[i++] = f[j].range[0];
+		tmpArray[i++] = f[j].range[1];
+		tmpArray[i++] = f[j].domain[0];
+		tmpArray[i++] = f[j].domain[1];
 	}
 	
 	embedmessage("CreateNFunctions", NbCourbes, tmpArray);	// required for the number of color to save
@@ -2744,12 +2736,12 @@ function save()
 	
 	
 	for (i = 0; i < NbCourbes; i++) {
-		embedmessage("SetColor", i, "brgb", Math.round(fctns[i].brgb[0] * 255), Math.round(fctns[i].brgb[1] * 255), Math.round(fctns[i].brgb[2] * 255) );
-		embedmessage("SetColor", i, "frgb", Math.round(fctns[i].frgb[0] * 255), Math.round(fctns[i].frgb[1] * 255), Math.round(fctns[i].frgb[2] * 255) );
-		embedmessage("SetColor", i, "rgb2", Math.round(fctns[i].rgb2[0] * 255), Math.round(fctns[i].rgb2[1] * 255), Math.round(fctns[i].rgb2[2] * 255) );
-		embedmessage("SetColor", i, "rgb3", Math.round(fctns[i].rgb3[0] * 255), Math.round(fctns[i].rgb3[1] * 255), Math.round(fctns[i].rgb3[2] * 255) );
-		embedmessage("SetColor", i, "rgb4", Math.round(fctns[i].rgb4[0] * 255), Math.round(fctns[i].rgb4[1] * 255), Math.round(fctns[i].rgb4[2] * 255) );
-		embedmessage("SetColor", i, "rgb5", Math.round(fctns[i].rgb5[0] * 255), Math.round(fctns[i].rgb5[1] * 255), Math.round(fctns[i].rgb5[2] * 255) );
+		embedmessage("SetColor", i, "brgb", Math.round(f[i].brgb[0] * 255), Math.round(f[i].brgb[1] * 255), Math.round(f[i].brgb[2] * 255) );
+		embedmessage("SetColor", i, "frgb", Math.round(f[i].frgb[0] * 255), Math.round(f[i].frgb[1] * 255), Math.round(f[i].frgb[2] * 255) );
+		embedmessage("SetColor", i, "rgb2", Math.round(f[i].rgb2[0] * 255), Math.round(f[i].rgb2[1] * 255), Math.round(f[i].rgb2[2] * 255) );
+		embedmessage("SetColor", i, "rgb3", Math.round(f[i].rgb3[0] * 255), Math.round(f[i].rgb3[1] * 255), Math.round(f[i].rgb3[2] * 255) );
+		embedmessage("SetColor", i, "rgb4", Math.round(f[i].rgb4[0] * 255), Math.round(f[i].rgb4[1] * 255), Math.round(f[i].rgb4[2] * 255) );
+		embedmessage("SetColor", i, "rgb5", Math.round(f[i].rgb5[0] * 255), Math.round(f[i].rgb5[1] * 255), Math.round(f[i].rgb5[2] * 255) );
 	}
 	
 	embedmessage("redrawon");	// refresh de l'affichage après la lecture des arguments
@@ -2764,15 +2756,15 @@ function CreateNFunctions(v)
 	// utilise le Nom, Range et Domain embed dans le patch
 	var i, j;
 	for (i = 0; i < v; i++) {
-		fctns[i].name = arguments[i+1];
+		f[i].name = arguments[i+1];
 	}
 	for (i = 0, j = v + 1; i <	v; i++) {
-		fctns[i].range[0] = arguments[j++];
-		fctns[i].range[1] = arguments[j++];
-		fctns[i].domain[0] = arguments[j++];
-		fctns[i].domain[1] = arguments[j++];
-		MyDomain2Zoom(fctns[i]);
-		MyRange2Zoom(fctns[i]);
+		f[i].range[0] = arguments[j++];
+		f[i].range[1] = arguments[j++];
+		f[i].domain[0] = arguments[j++];
+		f[i].domain[1] = arguments[j++];
+		MyDomain2Zoom(f[i]);
+		MyRange2Zoom(f[i]);
 	}
 	
 	LectureInspectorFlag = 1;	// comme ça il n'y a pas de scan des arguments
@@ -2785,10 +2777,10 @@ function copyfunction()
 	c = -1;
 
 	if (! arguments.length)
-		c = current;
+		c = front;
 	else {
 		for (i = 0; i < NbCourbes; i++) {
-			if (fctns[i].name == arguments[0]) {
+			if (f[i].name == arguments[0]) {
 				c = i;
 				break;
 			}
@@ -2803,29 +2795,29 @@ function copyfunction()
 	var cp = g["copy"];	// c'est moins long
 	cp.length = 0;	// "vide le presse papier"
 
-	cp[idx++] = fctns[c].np;	
-	cp[idx++] = fctns[c].name;
-	cp[idx++] = fctns[c].domain[0];
-	cp[idx++] = fctns[c].domain[1];
-	cp[idx++] = fctns[c].range[0];
-	cp[idx++] = fctns[c].range[1];
-	cp[idx++] = fctns[c].GridStep;
-	cp[idx++] = fctns[c].display;
+	cp[idx++] = f[c].np;	
+	cp[idx++] = f[c].name;
+	cp[idx++] = f[c].domain[0];
+	cp[idx++] = f[c].domain[1];
+	cp[idx++] = f[c].range[0];
+	cp[idx++] = f[c].range[1];
+	cp[idx++] = f[c].GridStep;
+	cp[idx++] = f[c].display;
 
-	for (p = 0; p < fctns[c].np; p++) {
-		cp[idx++] = fctns[c]["pa"][p].x;
-		cp[idx++] = fctns[c]["pa"][p].y;
-		cp[idx++] = fctns[c]["pa"][p].valx;
-		cp[idx++] = fctns[c]["pa"][p].valy;
-		cp[idx++] = fctns[c]["pa"][p].sustain
-		cp[idx++] = fctns[c]["pa"][p].fix;
+	for (p = 0; p < f[c].np; p++) {
+		cp[idx++] = f[c]["pa"][p].x;
+		cp[idx++] = f[c]["pa"][p].y;
+		cp[idx++] = f[c]["pa"][p].valx;
+		cp[idx++] = f[c]["pa"][p].valy;
+		cp[idx++] = f[c]["pa"][p].sustain
+		cp[idx++] = f[c]["pa"][p].fix;
 	}
 }
 
 function pastefunction()
 {
 	if (! arguments.length)
-		MyPasteFunction(fctns[current]);
+		MyPasteFunction(f[front]);
 	else
 		perror("extra arguments for message pastefunction");
 	
@@ -2846,7 +2838,7 @@ function MyPasteFunction(courbe)
 		return;
 	}
 		
-	OldNp = fctns[current].np;
+	OldNp = f[front].np;
 	courbe.np = cp[idx++];
 
 	// création des points s'ils ne sont pas présents dans la courbe
@@ -2894,27 +2886,27 @@ function insertpaste()
 	}
 		
 	// insertion de la nouvelle courbe (le nom est bidon, puisqu'on va le remplir après)
-	fctns.splice(current, 0, new Courbe("tmpName"));
+	f.splice(front, 0, new Courbe("tmpName"));
 	NbCourbes++;
 
-	fctns[current].np = cp[idx++];
-	fctns[current].name = cp[idx++];
-	fctns[current].domain[0] = cp[idx++];
-	fctns[current].domain[1] = cp[idx++];
-	fctns[current].range[0] = cp[idx++];
-	fctns[current].range[1] = cp[idx++];	
-	fctns[current].GridStep = cp[idx++];
-	fctns[current].display = cp[idx++];
+	f[front].np = cp[idx++];
+	f[front].name = cp[idx++];
+	f[front].domain[0] = cp[idx++];
+	f[front].domain[1] = cp[idx++];
+	f[front].range[0] = cp[idx++];
+	f[front].range[1] = cp[idx++];	
+	f[front].GridStep = cp[idx++];
+	f[front].display = cp[idx++];
 	
-	for (p = 0; p < fctns[current].np; p++) {
-		fctns[current]["pa"][p] = new Point(cp[idx], cp[idx+1], cp[idx+2], cp[idx+3]);
+	for (p = 0; p < f[front].np; p++) {
+		f[front]["pa"][p] = new Point(cp[idx], cp[idx+1], cp[idx+2], cp[idx+3]);
 		idx += 4;
-		fctns[current]["pa"][p].sustain = cp[idx++];
-		fctns[current]["pa"][p].fix = cp[idx++];
+		f[front]["pa"][p].sustain = cp[idx++];
+		f[front]["pa"][p].fix = cp[idx++];
 	}		
 
-	MyThings2Zoom(fctns[current]);
-	pixel2machin(fctns[current]);
+	MyThings2Zoom(f[front]);
+	pixel2machin(f[front]);
 
 	getname();		// mise à jour du menu
 	UpdateDisplay();
@@ -2962,23 +2954,23 @@ function read(filename)
 		NbCourbes = parseFloat(tmpLine[idx++]);
 		
 		while (OldNbCourbes < NbCourbes) {		// création des courbes si nécessaire
-			fctns[OldNbCourbes] = new Courbe();
-			MyThings2Zoom(fctns[OldNbCourbes]);
-			pixel2machin(fctns[OldNbCourbes++]);
+			f[OldNbCourbes] = new Courbe();
+			MyThings2Zoom(f[OldNbCourbes]);
+			pixel2machin(f[OldNbCourbes++]);
 		}
 
 		while (OldNbCourbes > NbCourbes) {		// suppression des courbes si nécessaire
-			fctns.splice(--OldNbCourbes, 1);
-			if (current >= NbCourbes)
-				current = 0;
+			f.splice(--OldNbCourbes, 1);
+			if (front >= NbCourbes)
+				front = 0;
 		}
 		
 		for (c = 0; c < NbCourbes; c++) {
-			OldNp = fctns[c].np;
-			fctns[c].np = parseFloat(tmpLine[idx++]);
+			OldNp = f[c].np;
+			f[c].np = parseFloat(tmpLine[idx++]);
 			// création ou suppression de points
-			while (OldNp < fctns[c].np) { fctns[c]["pa"][OldNp++] = new Point(); }
-			while (OldNp > fctns[c].np) { fctns[c]["pa"].splice(--OldNp, 1); }
+			while (OldNp < f[c].np) { f[c]["pa"][OldNp++] = new Point(); }
+			while (OldNp > f[c].np) { f[c]["pa"].splice(--OldNp, 1); }
 		}
 	
 		c = 0;
@@ -2992,39 +2984,39 @@ function read(filename)
 
 			var p;
 			var NeedUpdate = 0;
-			fctns[c].name = tmpLine[idx++];
+			f[c].name = tmpLine[idx++];
 
 			// some people loves to put spaces in names...
 			while ( isNaN(parseFloat(tmpLine[idx])) )
-				fctns[c].name += " " + tmpLine[idx++];
+				f[c].name += " " + tmpLine[idx++];
 			
 			// depuis la version 1.52 domaine contient deux limites.
 			if (FunctionVersionCheck == 1)
-				fctns[c].domain[0] = 0;
+				f[c].domain[0] = 0;
 			else
-				fctns[c].domain[0] = parseFloat(tmpLine[idx++]);
+				f[c].domain[0] = parseFloat(tmpLine[idx++]);
 
-			fctns[c].domain[1] = parseFloat(tmpLine[idx++]);
+			f[c].domain[1] = parseFloat(tmpLine[idx++]);
 			
-			fctns[c].range[0] = parseFloat(tmpLine[idx++]);
-			fctns[c].range[1] = parseFloat(tmpLine[idx++]);
+			f[c].range[0] = parseFloat(tmpLine[idx++]);
+			f[c].range[1] = parseFloat(tmpLine[idx++]);
 
-			MyThings2Zoom(fctns[c]);
+			MyThings2Zoom(f[c]);
 			
-			fctns[c].GridStep = parseFloat(tmpLine[idx++]);
-			fctns[c].display = parseFloat(tmpLine[idx++]);
+			f[c].GridStep = parseFloat(tmpLine[idx++]);
+			f[c].display = parseFloat(tmpLine[idx++]);
 
 			idx = 0;
 			tmpLine = LectureNextLigne(fichier);
 			tmpLine = tmpLine.split(" ");
-			for (j=0; j < 3; j++) { fctns[c].brgb[j] = tmpLine[idx++] / 255; }
-			for (j=0; j < 3; j++) { fctns[c].frgb[j] = tmpLine[idx++] / 255; }
-			for (j=0; j < 3; j++) { fctns[c].rgb2[j] = tmpLine[idx++] / 255; }
-			for (j=0; j < 3; j++) { fctns[c].rgb3[j] = tmpLine[idx++] / 255; }
-			for (j=0; j < 3; j++) { fctns[c].rgb4[j] = tmpLine[idx++] / 255; }
-			for (j=0; j < 3; j++) { fctns[c].rgb5[j] = tmpLine[idx++] / 255; }
+			for (j=0; j < 3; j++) { f[c].brgb[j] = tmpLine[idx++] / 255; }
+			for (j=0; j < 3; j++) { f[c].frgb[j] = tmpLine[idx++] / 255; }
+			for (j=0; j < 3; j++) { f[c].rgb2[j] = tmpLine[idx++] / 255; }
+			for (j=0; j < 3; j++) { f[c].rgb3[j] = tmpLine[idx++] / 255; }
+			for (j=0; j < 3; j++) { f[c].rgb4[j] = tmpLine[idx++] / 255; }
+			for (j=0; j < 3; j++) { f[c].rgb5[j] = tmpLine[idx++] / 255; }
 
-			for (p = 0; p < fctns[c].np; p++) {
+			for (p = 0; p < f[c].np; p++) {
 				idx = 0;
 				tmpLine = LectureNextLigne(fichier);
 				tmpLine = tmpLine.split(" ");
@@ -3032,10 +3024,10 @@ function read(filename)
 					perror("bad file contents");
 					break;
 				}
-				fctns[c]["pa"][p].valx = parseFloat(tmpLine[idx++]);
-				fctns[c]["pa"][p].valy = parseFloat(tmpLine[idx++]);
-				fctns[c]["pa"][p].sustain = tmpLine[idx] & 2 ? 1 : 0; // pas d'incrémentation
-				fctns[c]["pa"][p].fix = tmpLine[idx++] & 1;	// elle est faite ici.
+				f[c]["pa"][p].valx = parseFloat(tmpLine[idx++]);
+				f[c]["pa"][p].valy = parseFloat(tmpLine[idx++]);
+				f[c]["pa"][p].sustain = tmpLine[idx] & 2 ? 1 : 0; // pas d'incrémentation
+				f[c]["pa"][p].fix = tmpLine[idx++] & 1;	// elle est faite ici.
 			}
 			c++;
 		}
@@ -3093,7 +3085,7 @@ function write(filename)
 		fichier.writeline("ej.function format");
 
 		for (i = 0; i < NbCourbes; i++) {
-			tmpStr += sep + fctns[i].np;
+			tmpStr += sep + f[i].np;
 		}
 
 		if (PrintComment) { fichier.writeline("// format version number, Nb functions, Nb points function 0, Nb points function 1..."); }
@@ -3103,29 +3095,29 @@ function write(filename)
 			fichier.writeline("");
 			if (PrintComment) { fichier.writeline("// new function: name, domain, range min, range max, gridstep");	}
 			tmpStr = "";
-			tmpStr += fctns[i].name + sep;
-			tmpStr += fctns[i].domain[0] + sep;
-			tmpStr += fctns[i].domain[1] + sep;
-			tmpStr += fctns[i].range[0] + sep;
-			tmpStr += fctns[i].range[1] + sep;
-			tmpStr += fctns[i].GridStep + sep;
-			tmpStr += fctns[i].display;
+			tmpStr += f[i].name + sep;
+			tmpStr += f[i].domain[0] + sep;
+			tmpStr += f[i].domain[1] + sep;
+			tmpStr += f[i].range[0] + sep;
+			tmpStr += f[i].range[1] + sep;
+			tmpStr += f[i].GridStep + sep;
+			tmpStr += f[i].display;
 			fichier.writeline(tmpStr);		
 
 			tmpStr = "";
-			for (j=0; j < 3; j++) { tmpStr += Math.round(fctns[i].brgb[j] * 255) + sep; }
-			for (j=0; j < 3; j++) { tmpStr += Math.round(fctns[i].frgb[j] * 255) + sep; }
-			for (j=0; j < 3; j++) { tmpStr += Math.round(fctns[i].rgb2[j] * 255) + sep; }
-			for (j=0; j < 3; j++) { tmpStr += Math.round(fctns[i].rgb3[j] * 255) + sep; }
-			for (j=0; j < 3; j++) { tmpStr += Math.round(fctns[i].rgb4[j] * 255) + sep; }
-			for (j=0; j < 3; j++) { tmpStr += Math.round(fctns[i].rgb5[j] * 255) + sep; }
+			for (j=0; j < 3; j++) { tmpStr += Math.round(f[i].brgb[j] * 255) + sep; }
+			for (j=0; j < 3; j++) { tmpStr += Math.round(f[i].frgb[j] * 255) + sep; }
+			for (j=0; j < 3; j++) { tmpStr += Math.round(f[i].rgb2[j] * 255) + sep; }
+			for (j=0; j < 3; j++) { tmpStr += Math.round(f[i].rgb3[j] * 255) + sep; }
+			for (j=0; j < 3; j++) { tmpStr += Math.round(f[i].rgb4[j] * 255) + sep; }
+			for (j=0; j < 3; j++) { tmpStr += Math.round(f[i].rgb5[j] * 255) + sep; }
 			fichier.writeline(tmpStr);
 
-			for (p = 0; p < fctns[i].np; p++) {
+			for (p = 0; p < f[i].np; p++) {
 				tmpStr = "";
-				tmpStr += fctns[i]["pa"][p].valx + sep;
-				tmpStr += fctns[i]["pa"][p].valy + sep;
-				tmpStr += fctns[i]["pa"][p].sustain * 2 + fctns[i]["pa"][p].fix;	// en binaire ça prend moins de place
+				tmpStr += f[i]["pa"][p].valx + sep;
+				tmpStr += f[i]["pa"][p].valy + sep;
+				tmpStr += f[i]["pa"][p].sustain * 2 + f[i]["pa"][p].fix;	// en binaire ça prend moins de place
 				fichier.writeline(tmpStr);
 			}
 		}
