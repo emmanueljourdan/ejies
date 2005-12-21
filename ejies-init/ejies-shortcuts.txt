@@ -9,6 +9,7 @@ max shortcut dialog ej.dialog;
 max shortcut dn js ej.dn.js;
 max shortcut lock js ej.lock.js;
 max shortcut lui js ej.lui.js;
+max shortcut line ej.line;
 max shortcut nthru js ej.nthru.js;
 max shortcut op js ej.op.js;
 max shortcut route js ej.route.js;
