@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.66 $
-	$Date: 2005/12/21 11:42:38 $
+	$Revision: 1.67 $
+	$Date: 2006/01/03 13:20:13 $
 */
 
 // global code
@@ -68,6 +68,7 @@ DoNotify.done = 0;
 RedrawOrNot.DidYouDraw = 0;
 var tskDraw = new Task();
 var tskDel = new Task();
+var tmpString = new String();
 
 var SketchFunctions = new Sketch(BoxWidth, BoxHeight - LegendStateBordure);
 var SketchText = new Sketch(BoxWidth, LegendStateBordure);
@@ -203,9 +204,7 @@ function SpriteText()
 	if ( ! LegendState )
 		return;		// si la légende n'est pas présente, on ne fait rien
 
-/* 	post("SpriteText\n"); */
-/* 	var tmpF = f[front]; // ça prend moins de place */
-	
+/* 	post("SpriteText\n"); */	
 	with ( SketchText ) {
 		glclearcolor(f[front].brgb);
 		glclear();
@@ -252,7 +251,6 @@ function SpriteFunctions()
 {
 /* 	post("SpriteFunctions\n"); */
 	var c, i;
-/* 	var tmpF = f[front]; */
 	
 	with ( SketchFunctions ) {
 		glclearcolor(f[front].brgb);
@@ -446,13 +444,11 @@ UpdateDisplay.local = 1;
 function LectureNextLigne(f)
 {
 	// ignore les lignes qui contiennt mois de 4 caractères ou //
-	var tmp = new String();
-
 	do {
-		tmp = f.readline();
-	} while	(tmp.length < 4 || (tmp.search("//") != -1));
+		tmpString = f.readline();
+	} while	(tmpString.length < 4 || (tmpString.search("//") != -1));
 
-	return tmp;
+	return tmpString;
 }
 LectureNextLigne.local = 1;
 
@@ -1087,7 +1083,7 @@ function ArgsParser(courbe, msg, a)
 			case 3: MovePoint(courbe, a[0], a[1], a[2]); break;
 			default: perror("too many arguments for message", msg); break;
 		}
-		return ( NeedNotify != -1 ? 1 : 0 );	// sort de la fonction
+		return 0;	// sort de la fonction
 	}
 
 	switch (a[0]) {
@@ -2311,8 +2307,6 @@ function yOffset(y)
 
 function onclick(x,y,but,cmd,shift,capslock,option,ctrl)
 {
-/* 	var tmpF = f[front]; */
-
 	y = yOffset(y);
 	
 	if (AllowEdit == 0 || f[front].display == 0) {
@@ -2368,7 +2362,6 @@ function onclick(x,y,but,cmd,shift,capslock,option,ctrl)
 
 function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 {
-/* 	var tmpF = f[front]; */
 	var borderthing = -1;
 
 	if (AllowEdit == 0 || f[front].display == 0)
