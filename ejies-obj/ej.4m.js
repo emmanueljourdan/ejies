@@ -2,8 +2,8 @@
 	ej.4m.js by Emmanuel Jourdan, Ircam Ñ 06 2004
 	output the min, median, mean, maximum on a int/float stream
  
-	$Revision: 1.4 $
-	$Date: 2005/12/09 12:04:29 $
+	$Revision: 1.5 $
+	$Date: 2006/01/03 17:02:49 $
 */
 
 // global code
@@ -36,6 +36,11 @@ if (jsarguments.length > 2) {
 	}
 if (jsarguments.length > 3)
 	perror("extra arguments...");
+
+function loadbang()
+{
+	post("ej.4m.js is quite slow... you can now use the mxj external called ej.mmmm instead.\n");
+}
 
 function msg_float(nombre)
 {
