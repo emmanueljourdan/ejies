@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.67 $
-	$Date: 2006/01/03 13:20:13 $
+	$Revision: 1.68 $
+	$Date: 2006/01/06 20:30:19 $
 */
 
 // global code
@@ -69,6 +69,7 @@ RedrawOrNot.DidYouDraw = 0;
 var tskDraw = new Task();
 var tskDel = new Task();
 var tmpString = new String();
+var tmpRange, tmpDomain;	// utilisé dans Interp
 
 var SketchFunctions = new Sketch(BoxWidth, BoxHeight - LegendStateBordure);
 var SketchText = new Sketch(BoxWidth, LegendStateBordure);
@@ -327,7 +328,7 @@ bang.immediate = 1;
 
 function msg_float(v)
 {
-	Interpolation(f[front], v);
+	interp(f[front], v);
 }
 msg_float.immediate = 1;
 
@@ -556,9 +557,9 @@ function line(courbe)
 }
 line.local = 1;
 
-function Interpolation(courbe, v)
+function interp(courbe, v)
 {
-	var i, a, tmpRange, tmpDomain;
+//	var i, a;
 	
 	if ( courbe.np < 2 )
 		return;
@@ -573,18 +574,18 @@ function Interpolation(courbe, v)
 		return;
 	}
 	
-	for (i = 0, a = 0; i < courbe.np; i++) {
-		if (v > courbe.pa[i].valx)
-			a = i;
+	for (interp.i = 0, interp.a = 0; i < courbe.np; i++) {
+		if (v > courbe.pa[interp.i].valx)
+			interp.a = i;
 		else
 			break;
 	}
-	tmpRange = courbe.pa[a+1].valy - courbe.pa[a].valy;
-	tmpDomain = courbe.pa[a+1].valx - courbe.pa[a].valx;
+	tmpRange = courbe.pa[interp.a+1].valy - courbe.pa[interp.a].valy;
+	tmpDomain = courbe.pa[interp.a+1].valx - courbe.pa[interp.a].valx;
 	
-	outlet(INTERP_OUTLET, courbe.name, ((v - courbe.pa[a].valx) / tmpDomain) * tmpRange + courbe.pa[a].valy);
+	outlet(INTERP_OUTLET, courbe.name, ((v - courbe.pa[interp.a].valx) / tmpDomain) * tmpRange + courbe.pa[interp.a].valy);
 }
-Interpolation.local = 1;
+interp.local = 1;
 
 function ValRecalculate()
 {
@@ -1078,7 +1079,7 @@ function ArgsParser(courbe, msg, a)
 	if ( typeof(a[0]) == "number") {
 	// en fonction du nombre d'arguments 1 (interpolationX-Y) 2 (AddPoint) 3 (MovePoint)
 		switch (a.length) {
-			case 1: Interpolation(courbe, a[0]); break;
+			case 1: interp(courbe, a[0]); break;
 			case 2: AddOnePoint(courbe, val2x(courbe, a[0]), val2y(courbe, a[1])); break;
 			case 3: MovePoint(courbe, a[0], a[1], a[2]); break;
 			default: perror("too many arguments for message", msg); break;
