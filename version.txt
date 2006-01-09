@@ -1,6 +1,17 @@
 ejies Ñ Version history
 
 *******************
+1.55: Jan 2006
+This version requires MaxMSP 4.5.5 or higher.
+
+New:
+ej.mmmm: faster replacement of ej.4m.js
+ej.lchange: get the informationn of list change (works with big list, greater than 256 items)
+ej.lop: list operator (works with big list, greater than 256 items)
+
+
+
+*******************
 1.54: 21 Dec 2005
 This version requires MaxMSP 4.5.5 or higher.
 

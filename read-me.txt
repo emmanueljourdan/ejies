@@ -1,9 +1,14 @@
-e j i e s (version 1.54)
+e j i e s (version 1.55)
 by Emmanuel Jourdan, Ircam
 This version requires MaxMSP 4.5.5 or higher.
 
+Java externals:
+¥ ej.mmmm: calculate minimum, mean, median and maximum
+¥ ej.lchange: aware of list changes
+¥ ej.lop: basic mathematic operations on (big) list
+
 JS:
-¥ ej.4m.js: calculate minimum, mean, median and maximum
+¥ ej.4m.js: (obsolet) calculate minimum, mean, median and maximum
 ¥ ej.cc.js: Change object Color
 ¥ ej.cn.js: Change Name of named object
 ¥ ej.cycle.js: send value to different outlets
@@ -47,6 +52,7 @@ MacOS X Installation:
 Windows Installation:
 - put the CONTENTS of the ejies-extras folder in the ../MaxMSP 4.5/patches/extras folder
 - put the CONTENTS of the ejies-init folder in the C74:/init folder
+- put the CONTENTS of the ejies-java folder in the C74:/java/classes folder
 - put the CONTENTS of the ejies-jsui folder in the C74:/jsui-library folder
 - put the CONTENTS of the ejies-jsextensions folder in the C74:/jsextensions folder
 - put the CONTENTS of the ejies-prototypes folder in the ./MaxMSP 4.5/patches/object-protypes/ folder
