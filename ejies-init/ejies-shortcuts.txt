@@ -1,7 +1,7 @@
 max shortcut function js ej.lui.js ej.function.js;
 max shortcut led js ej.lui.js ej.led.js;
 max shortcut numbox js ej.lui.js ej.numbox.js;
-max shortcut 4m js ej.4m.js;
+max shortcut 4m mxj ej.mmmm;
 max shortcut cc js ej.cc.js;
 max shortcut cn js ej.cn.js;
 max shortcut cycle js ej.cycle.js;
@@ -20,3 +20,6 @@ max shortcut fullscreen jit.fullscreen;
 max shortcut getparam jit.getparam;
 max shortcut sp splay~;
 max shortcut st stout~;
+max shortcut lchange mxj ej.lchange;
+max shortcut lop mxj ej.lop;
+max shortcut mmmm mxj ej.mmmm;
