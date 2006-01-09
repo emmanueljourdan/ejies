@@ -29,6 +29,9 @@ if [ -e /Library/Application\ Support/Cycling\ \'74/ ] ; then
 	
 	echo -ne "- jsextensions file (/Library/Application Support/Cycling '74/jsextensions/)"
 	cp -R $DossierDeLInstalleur/ejies-jsextensions/* jsextensions/ && echo -ne "... done.\n"
+
+	echo -ne "- java externals file (/Library/Application Support/Cycling '74/java/classes)"
+	cp -R $DossierDeLInstalleur/ejies-java/* java/classes/ && echo -ne "... done.\n"
 else
 	echo -ne "Sorry, /Library/Application\ Support/Cycling\ \'74/ doen't exist. Init, jsui and jsextensions can't be installed.\n"
 fi
@@ -49,7 +52,7 @@ fi
 echo -ne "\nWould you like to install the externals and the help files in the standart places (C74:/externals/ and MaxMSP 4.5/max-help)? (Y/N) "
 read Reponse
 
-if [ $Reponse == "Y" ] ; then
+if [ $Reponse == "Y" || $Reponse == "y" ] ; then
 	if [ -e /Library/Application\ Support/Cycling\ \'74/ ] ; then
 		echo -ne "installing:\n"
 		echo -ne "- objects (/Library/Application Support/Cycling '74/externals/ejies-obj)"
@@ -68,7 +71,7 @@ fi
 echo -ne "\nWould you like to install the shortcuts? (Y/N) "
 read AutreReponse
 
-if [ $AutreReponse == "Y" ] ; then
+if [ $AutreReponse == "Y" || $AutreReponse == "y" ] ; then
 	# code from AddShortcuts2Max.command
 	echo -ne "installing the shortcuts now:\n"
 	echo "- Removing old shorcuts... (if needed)"

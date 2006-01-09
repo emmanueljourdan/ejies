@@ -33,6 +33,9 @@ if [ -e /Library/Application\ Support/Cycling\ \'74/ ] ; then
 	echo -ne "- objects (/Library/Application Support/Cycling '74/externals/ejies-obj)"
 	rm -Rf externals/ejies-obj && echo -ne "... done.\n"
 
+	echo -ne "- java externals (/Library/Application Support/Cycling '74/java/classes/ej)"
+	rm -Rf java/classes/ej && echo -ne "... done.\n"
+
 else
 	echo -ne "Sorry, /Library/Application\ Support/Cycling\ \'74/ doen't exist. Init, jsui and jsextensions can't be uninstalled.\n"
 fi
