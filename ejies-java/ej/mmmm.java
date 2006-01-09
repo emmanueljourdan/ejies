@@ -1,3 +1,11 @@
+/*
+ *	ej.mmmm by Emmanuel Jourdan, Ircam — 12 2005
+ *	output the min, median, mean, maximum on a int/float stream
+ *
+ *	$Revision: 1.2 $
+ *	$Date: 2006/01/09 18:39:52 $
+ */
+
 package ej;
 
 import com.cycling74.max.*;
@@ -5,12 +13,14 @@ import java.util.Arrays;
 
 public class mmmm extends ej
 {
-	public static boolean printedMessage;
+	private static final String[] INLET_ASSIST = new String[]{ "int/float" };
+	private static final String[] OUTLET_ASSIST = new String[]{ "minimum", "median", "mean", "maximum", "list of values / dumpout" };
 	private int window;
 	private boolean verbose;
 	private float[] a;
 	private float[] b;
 	private float[] c;
+	private double somme = 0;	// soyons fous... un double
 	private int idx;		// index du tableau ou sera stockée la prohaine valeur
 	private boolean arrayFull = false;
 	
@@ -33,16 +43,11 @@ public class mmmm extends ej
 		declareAttribute("window", null, "setWindow");
 		declareAttribute("verbose");
 
-		if (printedMessage == false) {
-			post("ej.mmm is the faster version of ej.4m");
-			printedMessage = true;
-		}
-
 		setWindow(ws);
 		verbose = verbeux;
 		
-		setInletAssist(0, "int/float");
-		setOutletAssist(new String[] { "minimum", "median", "mean", "maximum", "list of values / dumpout" } );
+		setInletAssist(INLET_ASSIST);
+		setOutletAssist(OUTLET_ASSIST);
 	}
 	
 	private void setWindow(int i)
@@ -79,6 +84,7 @@ public class mmmm extends ej
 
 	public void clear()
 	{
+		// clear is a synonym for reset();
 		reset();
 	}
 	
@@ -112,7 +118,7 @@ public class mmmm extends ej
 	private double moyenne(float tab[])
 	{
 		int i;
-		double somme = 0;	// soyons fous... un double
+		somme = 0;
 
 		for (i = 0; i < tab.length; i++) {
 			somme += tab[i];
@@ -131,8 +137,3 @@ public class mmmm extends ej
 		outlet(4, c);
 	}
 }
-
-
-
-
-

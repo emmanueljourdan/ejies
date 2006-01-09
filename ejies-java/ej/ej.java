@@ -1,10 +1,9 @@
-//
-//  ejies.java
-//  
-//
-//  Created by Emmanuel Jourdan on 28/12/05.
-//  Copyright 2005 Ircam. All rights reserved.
-//
+/*
+ *	ejies Java externals by Emmanuel Jourdan, Ircam Ñ 12 2005
+ *
+ *	$Revision: 1.2 $
+ *	$Date: 2006/01/09 18:39:52 $
+ */
 
 package ej;
 import com.cycling74.max.*;

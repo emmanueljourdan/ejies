@@ -1,16 +1,19 @@
+/*
+ *	ej.lop by Emmanuel Jourdan, Ircam — 12 2005
+ *	list operator
+ *
+ *	$Revision: 1.2 $
+ *	$Date: 2006/01/09 18:39:52 $
+ */
+
 package ej;
 
 import com.cycling74.max.*;
-import java.util.*;
 
 public class lop extends ej
 {
-	private static final String[] INLET_ASSIST = new String[]{
-		"Left Operand", "Right Operand"
-	};
-	private static final String[] OUTLET_ASSIST = new String[]{
-		"result"
-	};
+	private static final String[] INLET_ASSIST = new String[]{ "Left Operand", "Right Operand" };
+	private static final String[] OUTLET_ASSIST = new String[]{ "Result"};
 
 	private static final String[] listOperateurs = { "*", "/", "+", "-", "%", "!-", "!/", "!%", "absdiff"};
 	private static final String[] listMethods = {
@@ -18,12 +21,12 @@ public class lop extends ej
 		"calculeInvSoustraction", "calculeInvDivision", "calculeInvModulo", "calculeAbsDiff"
 	};
 
-	private float[] a = new float[2048];
-	private float[] b = new float[2048];
+	private float[] a; // = new float[2048];
+	private float[] b; // = new float[2048];
 	private float[] resultat;
 	private String op = null;
-	private boolean aSet = false;	// optimisation (!) de la mémoire...
-	private boolean bSet = false;	// optimisation (!) de la mémoire...
+	private boolean aSet = false;
+	private boolean bSet = false;
 	
 	public lop(Atom[] args)
 	{
@@ -60,7 +63,6 @@ public class lop extends ej
 	{
 		if (getInlet() == 1) {
 			bSet = true;
-			
 			b = new float[args.length];
 			
 			for (int i = 0; i < args.length; i++) {
@@ -201,11 +203,12 @@ public class lop extends ej
 	private void calcule()
 	{
 		if ( aSet == true && bSet == false) {
-			post("b n'était pas défini");
 			b = new float[a.length];
 		} else if (aSet == false && bSet == true) {
-			post("a n'était pas défini");
 			a = new float[b.length];
+		} else {
+			// a et b ne sont même pas définis... sauve qui peut...
+			return;
 		}
 
 		if (op.equals("*"))

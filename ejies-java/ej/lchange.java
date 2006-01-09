@@ -1,26 +1,28 @@
+/*
+ *	ej.lchange by Emmanuel Jourdan, Ircam Ñ 12 2005
+ *	aware of list change
+ *
+ *	$Revision: 1.2 $
+ *	$Date: 2006/01/09 18:39:52 $
+ */
+
 package ej;
 
 import com.cycling74.max.*;
-import java.util.*;
 
 public class lchange extends ej
 {
-	private static final String[] INLET_ASSIST = new String[]{
-		"Repeted"
-	};
-	private static final String[] OUTLET_ASSIST = new String[]{
-		"result if different from the last one"
-	};
+	private static final String[] INLET_ASSIST = new String[]{ "Repeted" };
+	private static final String[] OUTLET_ASSIST = new String[]{ "result if different from the last one"	};
 
-	private Atom[] lastThing = new Atom[0];
+	private Atom[] lastThing = new Atom[0];// c'est lˆ qu'on met la dernire chose
 	private int mode = 0;
 	
 	public lchange(Atom[] args)
 	{
-//		declareInlets(new int[]{DataTypes.ALL});
-//		declareOutlets(new int[]{DataTypes.ALL});
-		declareTypedIO("a", "a");
-//		createInfoOutlet(false);
+		declareInlets(new int[]{DataTypes.ALL});
+		declareOutlets(new int[]{DataTypes.ALL});
+		//		createInfoOutlet(false); // on en a besoin pour le 
 
 		declareAttribute("mode", null, "setMode");
 
@@ -51,11 +53,12 @@ public class lchange extends ej
 		} else if (a[0].isInt() && a[0].getInt() >= 0 && a[0].getInt() <= 2) {
 			mode = a[0].getInt();
 		}
-		// On ignore le fait que c'est soit du float, soit un mauvais nombre... c'est sans doute pas bien...
+		// On ignore le fait que c'est soit du float.
 	}
 	
 	private void isDifferent(String s, Atom[] args)
 	{
+		// en fonction du mode on sort des infos diffŽrentes
 		if (mode == 0)
 			outlet(0, s, args);
 		else if (mode == 1)
@@ -68,7 +71,7 @@ public class lchange extends ej
 
 	private void isEqual()
 	{
-		// mode int on envoie 1
+		// mode int on envoie 0 car c'est Žgal
 		if (mode == 2)
 			outlet(0, 0);
 	}
@@ -94,8 +97,10 @@ public class lchange extends ej
 					break;
 				}
 			}
+			// si la boucle continue jusqu'ˆ la fin, c'est que les ŽlŽments sont identiques.
 			isEqual();
 		} else {
+			// c'est diffŽrent
 			isDifferent(s, args);
 		}
 	}
