@@ -2,8 +2,8 @@
  *	ej.lop by Emmanuel Jourdan, Ircam — 12 2005
  *	list operator
  *
- *	$Revision: 1.2 $
- *	$Date: 2006/01/09 18:39:52 $
+ *	$Revision: 1.3 $
+ *	$Date: 2006/01/12 17:42:22 $
  */
 
 package ej;
@@ -43,7 +43,9 @@ public class lop extends ej
 	
 	public void bang()
 	{
-		calcule();
+		if ( aSet == true || bSet == true)
+			calcule();
+		// sinon on fait rien
 	}
    
 	public void inlet(int i)
@@ -206,9 +208,6 @@ public class lop extends ej
 			b = new float[a.length];
 		} else if (aSet == false && bSet == true) {
 			a = new float[b.length];
-		} else {
-			// a et b ne sont même pas définis... sauve qui peut...
-			return;
 		}
 
 		if (op.equals("*"))
