@@ -2,8 +2,8 @@
  *	ej.lop by Emmanuel Jourdan, Ircam — 12 2005
  *	list operator
  *
- *	$Revision: 1.3 $
- *	$Date: 2006/01/12 17:42:22 $
+ *	$Revision: 1.4 $
+ *	$Date: 2006/01/12 17:56:17 $
  */
 
 package ej;
@@ -24,7 +24,7 @@ public class lop extends ej
 	private float[] a; // = new float[2048];
 	private float[] b; // = new float[2048];
 	private float[] resultat;
-	private String op = null;
+	private String op = "*"; // il y en faut bien un par défaut
 	private boolean aSet = false;
 	private boolean bSet = false;
 	
@@ -90,7 +90,6 @@ public class lop extends ej
 		
 	public void anything(String s, Atom[] args)
 	{
-		post("anything method");
 		error("doesn't understand " + s + " " + Atom.toOneString(args));
 	}
 	
@@ -210,6 +209,7 @@ public class lop extends ej
 			a = new float[b.length];
 		}
 
+		// ça doit être possible de faire mieux...
 		if (op.equals("*"))
 			calculeProduit();
 		else if (op.equals("/"))
