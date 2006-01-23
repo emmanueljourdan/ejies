@@ -9,7 +9,8 @@ ej.mmmm: faster replacement of ej.4m.js
 ej.lchange: get the informationn of list change (works with big list, greater than 256 items)
 ej.lop: list operator (works with big list, greater than 256 items)
 
-
+Improvements:
+ej.vdb~ and ej.vdb-sig~: small improvement
 
 *******************
 1.54: 21 Dec 2005
