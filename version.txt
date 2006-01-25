@@ -1,7 +1,7 @@
 ejies Ñ Version history
 
 *******************
-1.55: Jan 2006
+1.55b: Jan 2006
 This version requires MaxMSP 4.5.5 or higher.
 
 New:
@@ -11,6 +11,8 @@ ej.lop: list operator (works with big list, greater than 256 items)
 
 Improvements:
 ej.vdb~ and ej.vdb-sig~: small improvement
+splay~: doesn't loose "signal connection style cable" anymore :-)
+
 
 *******************
 1.54: 21 Dec 2005
