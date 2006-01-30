@@ -50,10 +50,10 @@ else
 fi
 
 echo -ne "\nWould you like to install the externals and the help files in the standart places (C74:/externals/ and MaxMSP 4.5/max-help)? (Y/N) "
-read Reponse
 
-if [ $Reponse == "Y" || $Reponse == "y" ] ; then
-	if [ -e /Library/Application\ Support/Cycling\ \'74/ ] ; then
+read Reponse
+if [[ $Reponse == "Y" || $Reponse == "y" ]] ; then
+	if [ -e "/Library/Application Support/Cycling '74/" ] ; then
 		echo -ne "installing:\n"
 		echo -ne "- objects (/Library/Application Support/Cycling '74/externals/ejies-obj)"
 		cp -R $DossierDeLInstalleur/ejies-obj externals/ && echo -ne "... done.\n"
@@ -69,9 +69,9 @@ fi
 
 
 echo -ne "\nWould you like to install the shortcuts? (Y/N) "
-read AutreReponse
 
-if [ $AutreReponse == "Y" || $AutreReponse == "y" ] ; then
+read AutreReponse
+if [[ $AutreReponse == "Y" || $AutreReponse == "y" ]] ; then
 	# code from AddShortcuts2Max.command
 	echo -ne "installing the shortcuts now:\n"
 	echo "- Removing old shorcuts... (if needed)"

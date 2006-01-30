@@ -10,8 +10,10 @@ ej.lchange: get the informationn of list change (works with big list, greater th
 ej.lop: list operator (works with big list, greater than 256 items)
 
 Improvements:
-ej.vdb~ and ej.vdb-sig~: small improvement (even more faster), arguments allowed.
+Installation.command: you can reply with lower case (y or n) to the installation questions
+ej.vdb~ and ej.vdb-sig~: even more faster, arguments allowed
 splay~: doesn't loose "signal connection style cable" anymore :-)
+
 
 
 *******************

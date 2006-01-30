@@ -2,8 +2,8 @@
  *	ej.lchange by Emmanuel Jourdan, Ircam Ñ 12 2005
  *	aware of list change
  *
- *	$Revision: 1.2 $
- *	$Date: 2006/01/09 18:39:52 $
+ *	$Revision: 1.3 $
+ *	$Date: 2006/01/30 15:44:11 $
  */
 
 package ej;
@@ -22,7 +22,7 @@ public class lchange extends ej
 	{
 		declareInlets(new int[]{DataTypes.ALL});
 		declareOutlets(new int[]{DataTypes.ALL});
-		//		createInfoOutlet(false); // on en a besoin pour le 
+		//		createInfoOutlet(false); // on en a besoin pour l'attribut
 
 		declareAttribute("mode", null, "setMode");
 

@@ -2,8 +2,8 @@
  *	ej.mmmm by Emmanuel Jourdan, Ircam — 12 2005
  *	output the min, median, mean, maximum on a int/float stream
  *
- *	$Revision: 1.2 $
- *	$Date: 2006/01/09 18:39:52 $
+ *	$Revision: 1.3 $
+ *	$Date: 2006/01/30 15:44:11 $
  */
 
 package ej;
@@ -75,7 +75,7 @@ public class mmmm extends ej
 	private void addToList(float val)
 	{
 		if ( idx == (window - 1) ) {	// remet à zéro le compteur
-			a[window - 1] = val;
+			a[idx] = val;
 			idx = 0;
 			arrayFull = true;
 		} else
