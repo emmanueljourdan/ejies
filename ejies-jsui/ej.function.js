@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.68 $
-	$Date: 2006/01/06 20:30:19 $
+	$Revision: 1.69 $
+	$Date: 2006/02/08 19:17:38 $
 */
 
 // global code
@@ -559,7 +559,7 @@ line.local = 1;
 
 function interp(courbe, v)
 {
-//	var i, a;
+	var i, a;
 	
 	if ( courbe.np < 2 )
 		return;
@@ -574,16 +574,16 @@ function interp(courbe, v)
 		return;
 	}
 	
-	for (interp.i = 0, interp.a = 0; i < courbe.np; i++) {
-		if (v > courbe.pa[interp.i].valx)
-			interp.a = i;
+	for (i = 0, a = 0; i < courbe.np; i++) {
+		if (v > courbe.pa[i].valx)
+			a = i;
 		else
 			break;
 	}
-	tmpRange = courbe.pa[interp.a+1].valy - courbe.pa[interp.a].valy;
-	tmpDomain = courbe.pa[interp.a+1].valx - courbe.pa[interp.a].valx;
+	tmpRange = courbe.pa[a+1].valy - courbe.pa[a].valy;
+	tmpDomain = courbe.pa[a+1].valx - courbe.pa[a].valx;
 	
-	outlet(INTERP_OUTLET, courbe.name, ((v - courbe.pa[interp.a].valx) / tmpDomain) * tmpRange + courbe.pa[interp.a].valy);
+	outlet(INTERP_OUTLET, courbe.name, ((v - courbe.pa[a].valx) / tmpDomain) * tmpRange + courbe.pa[a].valy);
 }
 interp.local = 1;
 
