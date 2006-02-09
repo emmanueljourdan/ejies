@@ -2,64 +2,121 @@
  *	ej.lop by Emmanuel Jourdan, Ircam — 12 2005
  *	list operator
  *
- *	$Revision: 1.4 $
- *	$Date: 2006/01/12 17:56:17 $
+ *	$Revision: 1.5 $
+ *	$Date: 2006/02/09 18:57:53 $
  */
 
 package ej;
 
 import com.cycling74.max.*;
+import java.lang.reflect.*;
+//import java.lang.Exception;
+//import java.lang.Class;
 
-public class lop extends ej
+/*
+ >p: greater than(pass);
+ <p: less than(pass);
+ >=p: greater than or equal to(pass);
+ <=p: less than or equal to(pass);
+ ==p: equal(pass);
+ !=p not equal(pass)
+  */
+
+public class lop extends ej 
 {
 	private static final String[] INLET_ASSIST = new String[]{ "Left Operand", "Right Operand" };
-	private static final String[] OUTLET_ASSIST = new String[]{ "Result"};
+	private static final String[] OUTLET_ASSIST = new String[]{ "Result", "dumpout"};
 
-	private static final String[] listOperateurs = { "*", "/", "+", "-", "%", "!-", "!/", "!%", "absdiff"};
+	private static final String[] listOperateurs = { "*", "/", "+", "-", "%", "!-", "!/", "!%", "absdiff", "min", "max", "avg", ">", "<", ">=", "<=", "==", "!="};
 	private static final String[] listMethods = {
 		"calculeProduit", "calculeDivision", "calculeAddition", "calculeSoustraction", "calculeModulo",
-		"calculeInvSoustraction", "calculeInvDivision", "calculeInvModulo", "calculeAbsDiff"
+		"calculeInvSoustraction", "calculeInvDivision", "calculeInvModulo", "calculeAbsDiff",
+		"calculeMinimum", "calculeMaximum", "calculeAverage",
+		"calculeGT", "calculeLT", "calculeGTOE", "calculeLTOE", "calculeEqual", "calculeNotEqual"
 	};
 
 	private float[] a; // = new float[2048];
 	private float[] b; // = new float[2048];
 	private float[] resultat;
-	private String op = "*"; // il y en faut bien un par défaut
+	private String op = listOperateurs[0]; // il y en faut bien un par défaut
+	private String opMethod = listMethods[0];
 	private boolean aSet = false;
 	private boolean bSet = false;
+	private Class myClass;
+	private Method myMethod;
 	
 	public lop(Atom[] args)
 	{
-//		declareInlets(new int[]{DataTypes.ALL});
-//		declareOutlets(new int[]{DataTypes.ALL});
-		declareTypedIO("al", "l");
+		try {
+			myClass = Class.forName( "ej.lop" );
+		} catch (Exception e) {
+			post(e + "");
+		}
+
+		declareTypedIO("al", "la");
 		createInfoOutlet(false);
 
-		declareAttribute("op");
+		declareAttribute("op", null, "setOp");
 
 		setInletAssist(INLET_ASSIST);
 		setOutletAssist(OUTLET_ASSIST);
 	}
-	
-	public void bang()
+
+	private void setOp(Atom[] a) throws Exception
 	{
-		if ( aSet == true || bSet == true)
-			calcule();
+		int i;
+		op = a[0].getString();
+		
+		for (i = 0; i < listOperateurs.length; ) {
+			if (op.equals(listOperateurs[i])) {
+				opMethod = listMethods[i];
+				break;
+			}
+			i++;   // du coup ça sert aussi de flag pour vérifier que le nom existe bien.
+		}
+
+		// is that a true operator?
+		if (i >= listOperateurs.length)
+			error("ej.lop: " + op + " is not a valid operateur");
+		else
+			myMethod = myClass.getMethod(opMethod, null ); // null because, there's no argument
+	}
+	
+	public void getops()
+	{
+		outlet(1, "ops " + listOperateurs.toString());
+	}
+	
+	public void calcule()
+		{
+		if ( aSet == true && bSet == false) {
+			b = new float[a.length];
+		} else if (aSet == false && bSet == true) {
+			a = new float[b.length];
+		}
+		
+		try {
+			resultat = new float[a.length];
+			myMethod.invoke(this, null);
+			outlet(0, resultat);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void bang() 
+	{
+		if ( aSet == true || bSet == true) {
+			try {
+				calcule();
+			}
+			catch (Exception e) {
+				post(e + "");
+			}
+		}
 		// sinon on fait rien
 	}
-   
-	public void inlet(int i)
-	{
-		if (getInlet() == 1)
-			post("un int a été reçu");
-	}
-    
-	public void inlet(float f)
-	{
-		if (getInlet() == 1)
-			post("un float a été reçu");
-	}
-    
     
 	public void list(Atom[] args)
 	{
@@ -83,8 +140,14 @@ public class lop extends ej
 				else
 					a[i] = args[i].getFloat();
 			}
-
-			calcule();
+			
+			try {
+				calcule();
+			}
+			catch (Exception e) {
+				post(e + "");
+			}
+			
 		}
 	}
 		
@@ -93,144 +156,132 @@ public class lop extends ej
 		error("doesn't understand " + s + " " + Atom.toOneString(args));
 	}
 	
-	private void calculeAddition()
+	public void calculeAddition()
 	{
-		int i;
-		resultat = new float[a.length];
-
-		for (i = 0; i < a.length; i++) {
+		for (int i = 0; i < a.length; i++) {
 			resultat[i] = a[i] + b[i];
 		}
-		
-		outlet(0, resultat);
 	}
 
-	private void calculeSoustraction()
+	public void calculeSoustraction()
 	{
-		int i;
-		resultat = new float[a.length];
-
-		for (i = 0; i < a.length; i++) {
+		for (int i = 0; i < a.length; i++) {
 			resultat[i] = a[i] - b[i];
 		}
-		
-		outlet(0, resultat);
 	}
 
-	private void calculeInvSoustraction()
+	public void calculeInvSoustraction()
 	{
-		int i;
-		resultat = new float[a.length];
-
-		for (i = 0; i < a.length; i++) {
+		for (int i = 0; i < a.length; i++) {
 			resultat[i] = b[i] - a[i];
 		}
-		
-		outlet(0, resultat);
 	}
 
-	private void calculeProduit()
+	public void calculeProduit()
 	{
-		int i;
-		resultat = new float[a.length];
-
-		for (i = 0; i < a.length; i++) {
+		for (int i = 0; i < a.length; i++) {
 			resultat[i] = a[i] * b[i];
 		}
-		
-		outlet(0, resultat);
 	}
 
-	private void calculeAbsDiff()
+	public void calculeAbsDiff()
 	{
-		int i;
-		resultat = new float[a.length];
-
-		for (i = 0; i < a.length; i++) {
+		for (int i = 0; i < a.length; i++) {
 			resultat[i] = Math.abs(a[i] - b[i]);
 		}
-		
-		outlet(0, resultat);
 	}
 
-	private void calculeDivision()
+	public void calculeDivision()
 	{
-		int i;
-		resultat = new float[a.length];
-
-		for (i = 0; i < a.length; i++) {
+		for (int i = 0; i < a.length; i++) {
 			resultat[i] = a[i] / b[i];
 		}
-		
-		outlet(0, resultat);
 	}
 
-	private void calculeInvDivision()
+	public void calculeInvDivision()
 	{
-		int i;
-		resultat = new float[a.length];
-
-		for (i = 0; i < a.length; i++) {
+		for (int i = 0; i < a.length; i++) {
 			resultat[i] = b[i] / a[i];
 		}
-		
-		outlet(0, resultat);
 	}
 
-	private void calculeModulo()
+	public void calculeModulo()
 	{
-		int i;
-		resultat = new float[a.length];
-
-		for (i = 0; i < a.length; i++) {
+		for (int i = 0; i < a.length; i++) {
 			resultat[i] = a[i] % b[i];
 		}
-		
-		outlet(0, resultat);
 	}
 
-	private void calculeInvModulo()
+	public void calculeInvModulo()
 	{
-		int i;
-		resultat = new float[a.length];
-
-		for (i = 0; i < a.length; i++) {
+		for (int i = 0; i < a.length; i++) {
 			resultat[i] = b[i] % a[i];
 		}
-		
-		outlet(0, resultat);
 	}
-
-	private void calcule()
+	
+	public void calculeMinimum()
 	{
-		if ( aSet == true && bSet == false) {
-			b = new float[a.length];
-		} else if (aSet == false && bSet == true) {
-			a = new float[b.length];
+		for (int i = 0; i < a.length; i++) {
+			resultat[i] = Math.min(a[i], b[i]);
 		}
-
-		// ça doit être possible de faire mieux...
-		if (op.equals("*"))
-			calculeProduit();
-		else if (op.equals("/"))
-			calculeDivision();
-		else if (op.equals("+"))
-			calculeAddition();
-		else if (op.equals("-"))
-			calculeSoustraction();
-		else if (op.equals("%"))
-			calculeModulo();
-		else if (op.equals("!-"))
-			calculeInvSoustraction();
-		else if (op.equals("!/"))
-			calculeInvDivision();
-		else if (op.equals("!%"))
-			calculeInvModulo();
-		else if (op.equals("absdiff"))
-			calculeAbsDiff();
-		else
-			error(op + " is not a valid operateur");
 	}
+
+	public void calculeMaximum()
+	{
+		for (int i = 0; i < a.length; i++) {
+			resultat[i] = Math.max(a[i], b[i]);
+		}
+	}
+
+	public void calculeAverage()
+	{
+		for (int i = 0; i < a.length; i++) {
+			resultat[i] = (float) ((a[i] + b[i]) / 2.);
+		}
+	}
+
+	public void calculeGT()
+	{
+		for (int i = 0; i < a.length; i++) {
+			resultat[i] = a[i] > b[i] ? 1 : 0;
+		}
+	}
+	
+	public void calculeLT()
+	{
+		for (int i = 0; i < a.length; i++) {
+			resultat[i] = a[i] < b[i] ? 1 : 0;
+		}
+	}
+	
+	public void calculeGTOE()
+	{
+		for (int i = 0; i < a.length; i++) {
+			resultat[i] = a[i] >= b[i] ? 1 : 0;
+		}
+	}
+	
+	public void calculeLTOE()
+	{
+		for (int i = 0; i < a.length; i++) {
+			resultat[i] = a[i] <= b[i] ? 1 : 0;
+		}
+	}
+	
+	public void calculeEqual()
+	{
+		for (int i = 0; i < a.length; i++) {
+			resultat[i] = a[i] == b[i] ? 1 : 0;
+		}
+	}
+
+	public void calculeNotEqual()
+	{
+		for (int i = 0; i < a.length; i++) {
+			resultat[i] = a[i] != b[i] ? 1 : 0;
+		}
+	}
+	
 }
 
 
