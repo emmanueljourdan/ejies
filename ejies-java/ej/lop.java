@@ -4,8 +4,8 @@
  *
  *  Many thanks to Ben Nevile.
  *
- *	$Revision: 1.7 $
- *	$Date: 2006/02/10 19:22:34 $
+ *	$Revision: 1.8 $
+ *	$Date: 2006/02/10 19:59:02 $
  */
 
 package ej;
@@ -76,7 +76,7 @@ public class lop extends ej {
 		else if (tmp.equals("!="))
 			myListOperator = new ListNotEqual();
 		else if (tmp.equals(">p"))
-			myListOperator = new ListGTPass();
+			myListOperator = new ListGTP();
 		else if (tmp.equals("<p"))
 			myListOperator = new ListLTPass();
 		else if (tmp.equals(">=p"))
