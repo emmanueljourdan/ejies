@@ -2,16 +2,14 @@
  *	ej.lop by Emmanuel Jourdan, Ircam Ñ 12 2005
  *	list operator
  *
- *	$Revision: 1.5 $
- *	$Date: 2006/02/09 18:57:53 $
+ *	$Revision: 1.6 $
+ *	$Date: 2006/02/10 15:14:12 $
  */
 
 package ej;
 
 import com.cycling74.max.*;
 import java.lang.reflect.*;
-//import java.lang.Exception;
-//import java.lang.Class;
 
 /*
  >p: greater than(pass);
@@ -122,25 +120,11 @@ public class lop extends ej
 	{
 		if (getInlet() == 1) {
 			bSet = true;
-			b = new float[args.length];
-			
-			for (int i = 0; i < args.length; i++) {
-				if (args[i].isInt())
-					b[i] = args[i].getInt();
-				else
-					b[i] = args[i].getFloat();
-			}
+			b = Atom.toFloat(args);
 		} else {
 			aSet = true;
-			a = new float[args.length];
-			
-			for (int i = 0; i < args.length; i++) {
-				if (args[i].isInt())
-					a[i] = args[i].getInt();
-				else
-					a[i] = args[i].getFloat();
-			}
-			
+			a = Atom.toFloat(args);
+
 			try {
 				calcule();
 			}
@@ -155,6 +139,7 @@ public class lop extends ej
 	{
 		error("doesn't understand " + s + " " + Atom.toOneString(args));
 	}
+	
 	
 	public void calculeAddition()
 	{
