@@ -4,8 +4,8 @@
  *
  *  Many thanks to Ben Nevile.
  *
- *	$Revision: 1.9 $
- *	$Date: 2006/02/11 19:32:13 $
+ *	$Revision: 1.10 $
+ *	$Date: 2006/02/11 20:18:56 $
  */
 
 package ej;
@@ -23,7 +23,7 @@ public class lop extends ej {
 	private float[] a = new float[1];
 	private float[] b = new float[1];
 	private String op = "*"; // il y en faut bien un par défaut
-	private boolean scalarmode = true;
+	private boolean scalarmode = false;
 	private boolean autotrigger = false;
 	private boolean aSet = false;
 	private boolean bSet = false;
@@ -129,6 +129,7 @@ public class lop extends ej {
 				aSet = true;
 				a = new float[b.length];
 				Arrays.fill(a, f);
+
 				calcule();	
 			}
 		}
