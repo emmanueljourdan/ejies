@@ -4,13 +4,14 @@
  *
  *  Many thanks to Ben Nevile.
  *
- *	$Revision: 1.8 $
- *	$Date: 2006/02/10 19:59:02 $
+ *	$Revision: 1.9 $
+ *	$Date: 2006/02/11 19:32:13 $
  */
 
 package ej;
 
 import com.cycling74.max.*;
+import java.util.Arrays;
 
 public class lop extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "Left Operand", "Right Operand" };
@@ -19,9 +20,11 @@ public class lop extends ej {
 		"+", "-", "!-", "*", "absdiff", "/", "!/", "%", "!%", "min", "max", "avg",
 		">", "<", ">=", "<=", "==", "!=", ">p", "<p", ">=p", "<=p", "==p", "!=p" };
 	
-	private float[] a; // = new float[2048];
-	private float[] b; // = new float[2048];
+	private float[] a = new float[1];
+	private float[] b = new float[1];
 	private String op = "*"; // il y en faut bien un par dŽfaut
+	private boolean scalarmode = true;
+	private boolean autotrigger = false;
 	private boolean aSet = false;
 	private boolean bSet = false;
 	private ListOperator myListOperator;
@@ -31,7 +34,9 @@ public class lop extends ej {
 		createInfoOutlet(true);
 
 		declareAttribute("op", null, "setOp");
-
+		declareAttribute("autotrigger");
+		declareAttribute("scalarmode");
+		
 		setInletAssist(INLET_ASSIST);
 		setOutletAssist(OUTLET_ASSIST);
 	}
@@ -76,7 +81,7 @@ public class lop extends ej {
 		else if (tmp.equals("!="))
 			myListOperator = new ListNotEqual();
 		else if (tmp.equals(">p"))
-			myListOperator = new ListGTP();
+			myListOperator = new ListGTPass();
 		else if (tmp.equals("<p"))
 			myListOperator = new ListLTPass();
 		else if (tmp.equals(">=p"))
@@ -94,7 +99,7 @@ public class lop extends ej {
 
 		op = tmp;
 	}
-
+	
 	public void calcule() {
 		if ( aSet == true && bSet == false) {
 			b = new float[a.length];
@@ -111,14 +116,33 @@ public class lop extends ej {
 		}
 		// sinon on fait rien
 	}
-    	
-	public void list(Atom[] args) {
+	
+	public void inlet(float f) {
+		if (scalarmode == true) {
+			if (getInlet() == 1) {
+				bSet = true;
+				b = new float[a.length];
+				Arrays.fill(b, f);
+				
+				if (autotrigger == true) calcule();
+			} else {
+				aSet = true;
+				a = new float[b.length];
+				Arrays.fill(a, f);
+				calcule();	
+			}
+		}
+	}
+	
+	public void list(float[] args) {
 		if (getInlet() == 1) {
 			bSet = true;
-			b = Atom.toFloat(args);
+			b = args;
+
+			if (autotrigger == true) calcule();
 		} else {
 			aSet = true;
-			a = Atom.toFloat(args);
+			a = args;
 
 			calcule();			
 		}

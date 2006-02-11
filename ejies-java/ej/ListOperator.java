@@ -1,3 +1,7 @@
+/*
+ * normally called by ej.lop
+ */
+
 package ej;
 
 public interface ListOperator {
