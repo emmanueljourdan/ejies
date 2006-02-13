@@ -2,8 +2,8 @@
  *	ej.lchange by Emmanuel Jourdan, Ircam — 12 2005
  *	aware of list change
  *
- *	$Revision: 1.3 $
- *	$Date: 2006/01/30 15:44:11 $
+ *	$Revision: 1.4 $
+ *	$Date: 2006/02/13 11:01:05 $
  */
 
 package ej;
@@ -32,6 +32,7 @@ public class lchange extends ej
 		
 	public void anything(String s, Atom[] args)
 	{
+		// si la longueur est différente
 		if (lastThing.length != (args.length + 1)) {
 			isDifferent(s, args);
 		} else {
@@ -78,13 +79,10 @@ public class lchange extends ej
 	
 	private void updateLastThing(String s, Atom[] args)
 	{
-		// copie dans le Array qui lastThing
-		int i;
+		// copie dans la liste actuelle dans lastThing
 		lastThing = new Atom[args.length + 1];
 		lastThing[0] = Atom.newAtom(s);
-		for (i = 1; i < (args.length + 1); i++) {
-			lastThing[i] = args[i - 1];
-		}
+		System.arraycopy(args, 0, lastThing, 1, args.length);
 	}
 	
 	private void compareItems(String s, Atom[] args)
@@ -92,9 +90,9 @@ public class lchange extends ej
 		if (lastThing[0].equals(Atom.newAtom(s)) ) {
 			int i;
 			for (i = 1; i < (args.length + 1); i++) {
-				if ( ! lastThing[i].equals(args[i - 1]) ) {
+				if ( lastThing[i].equals(args[i - 1]) == false ) {
 					isDifferent(s, args);
-					break;
+					return; // c'est différent on se casse en vitesse
 				}
 			}
 			// si la boucle continue jusqu'à la fin, c'est que les éléments sont identiques.
