@@ -1,13 +1,14 @@
 ejies Ñ Version history
 
 *******************
-1.55b5: Feb 2006
+1.55b6: Feb 2006
 This version requires MaxMSP 4.5.5 or higher.
 
 New:
-ej.mmmm: faster replacement of ej.4m.js
 ej.lchange: get the informationn of list change (works with big list, greater than 256 items)
 ej.lop: list operators, works with big lists, greater than 256 items (Many thanks to Ben Nevile)
+ej.lscale: maps input range of lists to output range
+ej.mmmm: faster replacement of ej.4m.js
 
 Improvements:
 Installation.command: you can reply with lower case (y or n) to the installation questions

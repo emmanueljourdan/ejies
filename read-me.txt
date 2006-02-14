@@ -3,9 +3,10 @@ by Emmanuel Jourdan, Ircam
 This version requires MaxMSP 4.5.5 or higher.
 
 Java externals:
-¥ ej.mmmm: calculate minimum, mean, median and maximum
 ¥ ej.lchange: aware of list changes
 ¥ ej.lop: basic mathematic operations on (big) list
+¥ ej.lscale: maps input range of lists to output range
+¥ ej.mmmm: calculate minimum, mean, median and maximum
 
 JS:
 ¥ ej.4m.js: (obsolet) calculate minimum, mean, median and maximum
