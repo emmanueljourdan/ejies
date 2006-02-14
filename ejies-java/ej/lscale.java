@@ -3,8 +3,8 @@
  *	scale for lists
  *
  *
- *	$Revision: 1.1 $
- *	$Date: 2006/02/14 17:25:46 $
+ *	$Revision: 1.2 $
+ *	$Date: 2006/02/14 18:07:30 $
  */
 
 package ej;
@@ -14,7 +14,7 @@ import java.lang.reflect.*;// this time I use reflection instead of interface :-
 import java.util.Arrays;
 
 public class lscale extends ej {
-	private static final String[] INLET_ASSIST = new String[]{ "List to be scaled", "Low input value", "High input value", "Low output value", "High output value", "Exponant" };
+	private static final String[] INLET_ASSIST = new String[]{ "List to be scaled", "Low input value", "High input value", "Low output value", "High output value", "Exponent" };
 	private static final String[] OUTLET_ASSIST = new String[]{ "Scaled list"};	
 
 	private float[] a = new float[0];
