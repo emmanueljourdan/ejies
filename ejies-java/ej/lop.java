@@ -4,8 +4,8 @@
  *
  *  Many thanks to Ben Nevile.
  *
- *	$Revision: 1.10 $
- *	$Date: 2006/02/11 20:18:56 $
+ *	$Revision: 1.11 $
+ *	$Date: 2006/02/16 16:51:58 $
  */
 
 package ej;
@@ -15,10 +15,15 @@ import java.util.Arrays;
 
 public class lop extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "Left Operand", "Right Operand" };
+	private static final String[] INLET_ASSIST_UNARY = new String[]{ "List to be processed", "Nothing here, for this operator" };
 	private static final String[] OUTLET_ASSIST = new String[]{ "Result", "dumpout"};
 	private static final String[] OPERATORS_LIST = new String[] {
-		"+", "-", "!-", "*", "absdiff", "/", "!/", "%", "!%", "min", "max", "avg",
-		">", "<", ">=", "<=", "==", "!=", ">p", "<p", ">=p", "<=p", "==p", "!=p" };
+		"+", "-", "!-", "*", "abs", "absdiff", "/", "!/", "%", "!%", "min", "max", "avg",
+		">", "<", ">=", "<=", "==", "!=", ">p", "<p", ">=p", "<=p", "==p", "!=p", "sin",
+		"cos", "tan", "asin", "acos", "atan", "atan2", "ceil", "floor", "round", "exp", "ln", "log2", "log10", "pow", "sqrt" };
+	private static final String[] UNARY_OP = new String[] {
+		"abs", "sin", "cos", "tan", "asin", "acos", "atan","ceil", "floor", "round",
+		"exp", "ln", "log2", "log10", "sqrt" };
 	
 	private float[] a = new float[1];
 	private float[] b = new float[1];
@@ -33,12 +38,12 @@ public class lop extends ej {
 		declareTypedIO("al", "l");
 		createInfoOutlet(true);
 
+		setInletAssist(INLET_ASSIST);
+		setOutletAssist(OUTLET_ASSIST);
+
 		declareAttribute("op", null, "setOp");
 		declareAttribute("autotrigger");
 		declareAttribute("scalarmode");
-		
-		setInletAssist(INLET_ASSIST);
-		setOutletAssist(OUTLET_ASSIST);
 	}
 
 	private void setOp(Atom[] a) {
@@ -52,6 +57,8 @@ public class lop extends ej {
 			myListOperator = new ListInvSoustraction();
 		else if (tmp.equals("*"))
 			myListOperator = new ListProduit();
+		else if (tmp.equals("abs"))
+			myListOperator = new ListAbs();
 		else if (tmp.equals("absdiff"))
 			myListOperator = new ListAbsDiff();
 		else if (tmp.equals("/"))
@@ -92,12 +99,62 @@ public class lop extends ej {
 			myListOperator = new ListEqualPass();
 		else if (tmp.equals("!=p"))
 			myListOperator = new ListNotEqualPass();
+		else if (tmp.equals("sin"))
+			myListOperator = new ListSin();
+		else if (tmp.equals("cos"))
+			myListOperator = new ListCos();
+		else if (tmp.equals("tan"))
+			myListOperator = new ListTan();
+		else if (tmp.equals("asin"))
+			myListOperator = new ListAsin();
+		else if (tmp.equals("acos"))
+			myListOperator = new ListAcos();
+		else if (tmp.equals("atan"))
+			myListOperator = new ListAtan();
+		else if (tmp.equals("atan2"))
+			myListOperator = new ListAtan2();
+		else if (tmp.equals("ceil"))
+			myListOperator = new ListCeil();
+		else if (tmp.equals("floor"))
+			myListOperator = new ListFloor();
+		else if (tmp.equals("round"))
+			myListOperator = new ListRound();
+		else if (tmp.equals("exp"))
+			myListOperator = new ListExp();
+		else if (tmp.equals("ln"))
+			myListOperator = new ListLn();
+		else if (tmp.equals("log2"))
+			myListOperator = new ListLog2();
+		else if (tmp.equals("log10"))
+			myListOperator = new ListLog10();
+		else if (tmp.equals("pow"))
+			myListOperator = new ListPow();
+		else if (tmp.equals("sqrt"))
+			myListOperator = new ListSqrt();
 		else {
 			error("ej.lop: " + op + " is not a valid operator");
 			return;      // get out of here...
 		}
 
 		op = tmp;
+		isUnary();
+	}
+	
+	private void isUnary() {
+		// choix de l'assistance
+		boolean unaryOrNot = false;
+		
+		for (int i = 0; i < UNARY_OP.length; i++) {
+			if (op.equals(UNARY_OP[i])) {
+				unaryOrNot = true;
+				break;
+			}
+		}
+		
+		if (unaryOrNot)
+			setInletAssist(INLET_ASSIST_UNARY);
+		else
+			setInletAssist(INLET_ASSIST);
 	}
 	
 	public void calcule() {
@@ -152,7 +209,7 @@ public class lop extends ej {
 	public void getops() {
 		outlet(1, "ops", Atom.newAtom(OPERATORS_LIST));
 	}
-		
+
 	public void anything(String s, Atom[] args) {
 		error("ej.lop: doesn't understand " + s + " " + Atom.toOneString(args));
 	}
