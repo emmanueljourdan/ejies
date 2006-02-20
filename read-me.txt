@@ -6,6 +6,7 @@ Java externals:
 ¥ ej.lchange: aware of list changes
 ¥ ej.lop: basic mathematic operations on (big) list
 ¥ ej.lscale: maps input range of lists to output range
+¥ ej.lslide: smooth-out changes in list
 ¥ ej.mmmm: calculate minimum, mean, median and maximum
 
 JS:

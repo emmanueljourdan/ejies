@@ -2,16 +2,15 @@
  *	ej.lop by Emmanuel Jourdan, Ircam — 12 2005
  *	list operator
  *
- *  Many thanks to Ben Nevile.
+ *  Many thanks to Ben Nevile for performances enhacement.
  *
- *	$Revision: 1.11 $
- *	$Date: 2006/02/16 16:51:58 $
+ *	$Revision: 1.12 $
+ *	$Date: 2006/02/20 11:21:36 $
  */
 
 package ej;
-
 import com.cycling74.max.*;
-import java.util.Arrays;
+//import java.util.Arrays;
 
 public class lop extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "Left Operand", "Right Operand" };
@@ -25,8 +24,8 @@ public class lop extends ej {
 		"abs", "sin", "cos", "tan", "asin", "acos", "atan","ceil", "floor", "round",
 		"exp", "ln", "log2", "log10", "sqrt" };
 	
-	private float[] a = new float[1];
-	private float[] b = new float[1];
+	private float[] a = new float[0];
+	private float[] b = new float[0];
 	private String op = "*"; // il y en faut bien un par défaut
 	private boolean scalarmode = false;
 	private boolean autotrigger = false;
@@ -44,11 +43,24 @@ public class lop extends ej {
 		declareAttribute("op", null, "setOp");
 		declareAttribute("autotrigger");
 		declareAttribute("scalarmode");
+		declareAttribute("val", "getVal", "setVal");
 	}
 
+	private void setVal(float[] args) {
+		if (args.length == 1) {
+			bSet = true;
+			b = args;
+		}		
+	}
+	
+	private float[] getVal() {
+		return b;
+	}
+	
 	private void setOp(Atom[] a) {
 		String tmp = Atom.toOneString(a);
 		
+		// lucky I made a script to generate that :-)
 		if (tmp.equals("+"))
 			myListOperator = new ListAddition();
 		else if (tmp.equals("-"))
@@ -137,7 +149,7 @@ public class lop extends ej {
 		}
 
 		op = tmp;
-		isUnary();
+		isUnary(); // assistance changes while it's unary...
 	}
 	
 	private void isUnary() {
@@ -157,38 +169,34 @@ public class lop extends ej {
 			setInletAssist(INLET_ASSIST);
 	}
 	
-	public void calcule() {
-		if ( aSet == true && bSet == false) {
-			b = new float[a.length];
-		} else if (aSet == false && bSet == true) {
-			a = new float[b.length];
-		}
-		
-		outlet(0, myListOperator.operate(a,b));
+	private void calcule() {
+		// si c'est scalarmode ou que les deux entrées ont reçues des listes
+		if (scalarmode == false || (a.length > 1 && b.length > 1))
+			outlet(0, myListOperator.operate(a, b));
+		else if (scalarmode == true && b.length == 1)
+			outlet(0, myListOperator.operate(a, b[0]));
+		else if (scalarmode == true && a.length == 1)
+			outlet(0, myListOperator.operate(a[0], b));
+		// else : scalarmode est true mais l'une des deux listes n'est pas définie
 	}
 	
 	public void bang() {
 		if ( aSet == true || bSet == true) {
 				calcule();
 		}
-		// sinon on fait rien
 	}
-	
-	public void inlet(float f) {
-		if (scalarmode == true) {
-			if (getInlet() == 1) {
-				bSet = true;
-				b = new float[a.length];
-				Arrays.fill(b, f);
-				
-				if (autotrigger == true) calcule();
-			} else {
-				aSet = true;
-				a = new float[b.length];
-				Arrays.fill(a, f);
 
-				calcule();	
-			}
+	public void inlet(float f) {
+		if (getInlet() == 1) {
+			bSet = true;
+			b = new float[] { f };
+			
+			if (autotrigger == true) calcule();
+		} else {
+			aSet = true;
+			a = new float[] { f };
+
+			calcule();	
 		}
 	}
 	
