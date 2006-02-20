@@ -6,6 +6,7 @@ This version requires MaxMSP 4.5.6 or higher.
 
 New Java Externals:
 ej.lchange: get the informationn of list change (works with big list, greater than 256 items)
+ej.lclip: constrains a list within a certain range
 ej.lop: list operators, works with big lists, greater than 256 items (Many thanks to Ben Nevile)
 ej.lscale: maps input range of lists to output range
 ej.lslide: smooth-out changes in list

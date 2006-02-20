@@ -22,6 +22,8 @@ max oblist ejies ptt;
 max oblist ejies splay~;
 max oblist ejies stout~;
 max oblist ejies "mxj ej.lchange";
+max oblist ejies "mxj ej.lclip";
 max oblist ejies "mxj ej.lop";
 max oblist ejies "mxj ej.lscale";
+max oblist ejies "mxj ej.lslide";
 max oblist ejies "mxj ej.mmmm";
