@@ -3,8 +3,8 @@
  *	slide for lists
  *
  *
- *	$Revision: 1.1 $
- *	$Date: 2006/02/20 11:21:36 $
+ *	$Revision: 1.2 $
+ *	$Date: 2006/02/20 16:42:17 $
  */
 
 package ej;
@@ -110,7 +110,7 @@ public class lslide extends ej {
 		for (int i = 0; i < resultat.length; i++) {
 			yN_1 = resultat[i];
 
-			if (a[i] - lastA[i] > 0)
+			if (a[i] - lastA[i] >= 0)
 				resultat[i] = yN_1 + ((a[i] - yN_1) / slide_up);
 			else
 				resultat[i] = yN_1 + ((a[i] - yN_1) / slide_down);
@@ -124,8 +124,7 @@ public class lslide extends ej {
 		yN_1 = 0;
 		
 		for (int i = 0; i < resultat.length; i++) {
-			
-			if (a[i] > 0)
+			if (a[i] >= 0)
 				resultat[i] = yN_1 + ((a[i] - yN_1) / slide_up);
 			else
 				resultat[i] = yN_1 + ((a[i] - yN_1) / slide_down);
