@@ -1,17 +1,16 @@
 /*
  * class called by ej.lop
- * lucky me, this is automaticaly generated :-)
+ * lucky me, this is automatically generated :-)
+ *
  */
 
 package ej;
-
-//import com.cycling74.max.*;
 
 public class ListGTOEPass implements ListOperator {
 
 	public float[] operate(float a, float b[])
 	{
-		float resultat[] = new float[b.length];
+		float[] resultat = new float[b.length];
 		
 		for (int i = 0; i < b.length; i++)
 			resultat[i] = a >= b[i] ? a : 0;
@@ -21,7 +20,7 @@ public class ListGTOEPass implements ListOperator {
 
 	public float[] operate(float a[], float b)
 	{
-		float resultat[] = new float[a.length];
+		float[] resultat = new float[a.length];
 		
 		for (int i = 0; i < a.length; i++)
 			resultat[i] = a[i] >= b ? a[i] : 0;
