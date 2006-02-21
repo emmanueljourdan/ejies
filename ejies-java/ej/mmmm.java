@@ -2,8 +2,8 @@
  *	ej.mmmm by Emmanuel Jourdan, Ircam Ñ 12 2005
  *	output the min, median, mean, maximum on a int/float stream
  *
- *	$Revision: 1.3 $
- *	$Date: 2006/01/30 15:44:11 $
+ *	$Revision: 1.4 $
+ *	$Date: 2006/02/21 10:30:26 $
  */
 
 package ej;
@@ -15,8 +15,10 @@ public class mmmm extends ej
 {
 	private static final String[] INLET_ASSIST = new String[]{ "int/float" };
 	private static final String[] OUTLET_ASSIST = new String[]{ "minimum", "median", "mean", "maximum", "list of values / dumpout" };
+	private static final String[] OUTLET_ASSIST_LIST = new String[]{ "list of minimum, median, mean and maximum", "nothing here", "nothing here", "nothing here", "list of values / dumpout" };
 	private int window;
 	private boolean verbose;
+	private String mode = "float";
 	private float[] a;
 	private float[] b;
 	private float[] c;
@@ -25,24 +27,22 @@ public class mmmm extends ej
 	private boolean arrayFull = false;
 	
 	// si il n'y a pas d'arguments
-	public mmmm()
-	{
+	public mmmm() {
 		this(3, false);
 	}
 
 	// si il y a un argument
-	public mmmm(int ws)
-	{
+	public mmmm(int ws) {
 		this(ws, false);
 	}
 	
 	// il y a deux arguments
-	public mmmm(int ws, boolean verbeux)
-	{
+	public mmmm(int ws, boolean verbeux) {
 		declareIO(1,4);
 		declareAttribute("window", null, "setWindow");
 		declareAttribute("verbose");
-
+		declareAttribute("mode", null, "setMode");
+		
 		setWindow(ws);
 		verbose = verbeux;
 		
@@ -50,8 +50,7 @@ public class mmmm extends ej
 		setOutletAssist(OUTLET_ASSIST);
 	}
 	
-	private void setWindow(int i)
-	{
+	private void setWindow(int i) {
 		if (i < 3)
 			window = 3;
 		else
@@ -60,20 +59,27 @@ public class mmmm extends ej
 		reset();
 	}
 	
-	public void bang()
-	{
+	private void setMode(String s) {
+		if (s.equals("float")) {
+			mode = s;
+			setOutletAssist(OUTLET_ASSIST);
+		} else if (s.equals("list")) {
+			mode = s;
+			setOutletAssist(OUTLET_ASSIST_LIST);
+		}
+	}
+	
+	public void bang() {
 		sortie();
 	}
     
-	public void inlet(float f)
-	{
+	public void inlet(float f) {
 		// reoit les int et les float
 		addToList(f);
 		sortie();
 	}
 
-	private void addToList(float val)
-	{
+	private void addToList(float val) {
 		if ( idx == (window - 1) ) {	// remet ˆ zŽro le compteur
 			a[idx] = val;
 			idx = 0;
@@ -82,14 +88,12 @@ public class mmmm extends ej
 			a[idx++] = val;
 	}
 
-	public void clear()
-	{
+	public void clear() {
 		// clear is a synonym for reset();
 		reset();
 	}
 	
-	public void reset()
-	{
+	public void reset() {
 		a = new float[window];
 		b = new float[window];
 		c = new float[window];
@@ -97,8 +101,7 @@ public class mmmm extends ej
 		arrayFull = false;
 	}
 	
-	private void sortie()
-	{
+	private void sortie() {
 		if  (! arrayFull)
 			return;
 
@@ -109,14 +112,18 @@ public class mmmm extends ej
 			outputWindow();
 
 		Arrays.sort(b);
-		outlet(3, b[b.length - 1]);
-		outlet(2, moyenne(b));
-		outlet(1, b[b.length / 2]);
-		outlet(0, b[0]);
+
+		if (mode.equals("list")) {
+			outlet(0, new float[] { b[0], b[b.length / 2], (float) moyenne(b), b[b.length - 1] } );
+		} else {
+			outlet(3, b[b.length - 1]);
+			outlet(2, (float) moyenne(b));
+			outlet(1, b[b.length / 2]);
+			outlet(0, b[0]);
+		}
 	}
         
-	private double moyenne(float tab[])
-	{
+	private double moyenne(float tab[]) {
 		int i;
 		somme = 0;
 
@@ -127,8 +134,7 @@ public class mmmm extends ej
 		return (somme / tab.length);
 	}
 	
-	private void outputWindow()
-	{
+	private void outputWindow() {
 		int i;
 		for (i = 0; i < c.length; i++) {
 			c[i] = a[(i + idx) % window];
