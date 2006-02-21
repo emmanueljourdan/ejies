@@ -4,8 +4,8 @@
  *
  *  Many thanks to Ben Nevile for performances enhacement.
  *
- *	$Revision: 1.12 $
- *	$Date: 2006/02/20 11:21:36 $
+ *	$Revision: 1.13 $
+ *	$Date: 2006/02/21 15:30:55 $
  */
 
 package ej;
@@ -17,11 +17,11 @@ public class lop extends ej {
 	private static final String[] INLET_ASSIST_UNARY = new String[]{ "List to be processed", "Nothing here, for this operator" };
 	private static final String[] OUTLET_ASSIST = new String[]{ "Result", "dumpout"};
 	private static final String[] OPERATORS_LIST = new String[] {
-		"+", "-", "!-", "*", "abs", "absdiff", "/", "!/", "%", "!%", "min", "max", "avg",
+		"+", "-", "!-", "*", "abs", "absdiff", "/", "!/", "//", "!//", "%", "!%", "min", "max", "avg",
 		">", "<", ">=", "<=", "==", "!=", ">p", "<p", ">=p", "<=p", "==p", "!=p", "sin",
-		"cos", "tan", "asin", "acos", "atan", "atan2", "ceil", "floor", "round", "exp", "ln", "log2", "log10", "pow", "sqrt" };
+		"cos", "tan", "asin", "acos", "atan", "atan2", "ceil", "floor", "round", "trunc", "exp", "ln", "log2", "log10", "pow", "sqrt" };
 	private static final String[] UNARY_OP = new String[] {
-		"abs", "sin", "cos", "tan", "asin", "acos", "atan","ceil", "floor", "round",
+		"abs", "sin", "cos", "tan", "asin", "acos", "atan", "ceil", "floor", "round", "trunc",
 		"exp", "ln", "log2", "log10", "sqrt" };
 	
 	private float[] a = new float[0];
@@ -31,6 +31,7 @@ public class lop extends ej {
 	private boolean autotrigger = false;
 	private boolean aSet = false;
 	private boolean bSet = false;
+	private boolean unaryOrNot = false;
 	private ListOperator myListOperator;
 	
 	public lop(Atom[] args)	{
@@ -77,6 +78,10 @@ public class lop extends ej {
 			myListOperator = new ListDivision();
 		else if (tmp.equals("!/"))
 			myListOperator = new ListInvDivision();
+		else if (tmp.equals("//"))
+			myListOperator = new ListIntDiv();
+		else if (tmp.equals("!//"))
+			myListOperator = new ListInvIntDiv();
 		else if (tmp.equals("%"))
 			myListOperator = new ListModulo();
 		else if (tmp.equals("!%"))
@@ -131,6 +136,8 @@ public class lop extends ej {
 			myListOperator = new ListFloor();
 		else if (tmp.equals("round"))
 			myListOperator = new ListRound();
+		else if (tmp.equals("trunc"))
+			myListOperator = new ListTrunc();
 		else if (tmp.equals("exp"))
 			myListOperator = new ListExp();
 		else if (tmp.equals("ln"))
@@ -144,7 +151,7 @@ public class lop extends ej {
 		else if (tmp.equals("sqrt"))
 			myListOperator = new ListSqrt();
 		else {
-			error("ej.lop: " + op + " is not a valid operator");
+			error("ej.lop: " + tmp + " is not a valid operator");
 			return;      // get out of here...
 		}
 
@@ -154,7 +161,7 @@ public class lop extends ej {
 	
 	private void isUnary() {
 		// choix de l'assistance
-		boolean unaryOrNot = false;
+		unaryOrNot = false;
 		
 		for (int i = 0; i < UNARY_OP.length; i++) {
 			if (op.equals(UNARY_OP[i])) {
@@ -170,8 +177,9 @@ public class lop extends ej {
 	}
 	
 	private void calcule() {
-		// si c'est scalarmode ou que les deux entrées ont reçues des listes
-		if (scalarmode == false || (a.length > 1 && b.length > 1))
+		if (unaryOrNot == true)
+			outlet(0, myListOperator.operate(a, 0)); // au lieu d'avoir encore un constructeur
+		else if (scalarmode == false || (a.length > 1 && b.length > 1))		// si c'est scalarmode ou que les deux entrées ont reçues des listes
 			outlet(0, myListOperator.operate(a, b));
 		else if (scalarmode == true && b.length == 1)
 			outlet(0, myListOperator.operate(a, b[0]));
