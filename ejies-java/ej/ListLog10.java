@@ -7,13 +7,12 @@
 package ej;
 
 public class ListLog10 implements ListOperator {
-
 	public float[] operate(float a, float b[])
 	{
 		float[] resultat = new float[b.length];
 		
 		for (int i = 0; i < b.length; i++)
-			resultat[i] = (float) (Math.log(a)/Math.log(10));
+			resultat[i] = (float) (Math.log(a) / Math.log(10));
 		
 		return resultat;
 	}
@@ -23,7 +22,7 @@ public class ListLog10 implements ListOperator {
 		float[] resultat = new float[a.length];
 		
 		for (int i = 0; i < a.length; i++)
-			resultat[i] = (float) (Math.log(a[i])/Math.log(10));
+			resultat[i] = (float) (Math.log(a[i]) / Math.log(10));
 		
 		return resultat;
 	}
@@ -34,7 +33,7 @@ public class ListLog10 implements ListOperator {
 		float resultat[] = new float[listLength];
 		
 		for (int i = 0; i < listLength; i++)
-			resultat[i] = (float) (Math.log(a[i])/Math.log(10));
+			resultat[i] = (float) (Math.log(a[i]) / Math.log(10));
 		
 		return resultat;
 	}

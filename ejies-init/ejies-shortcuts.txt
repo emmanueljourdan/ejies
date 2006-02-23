@@ -34,3 +34,5 @@ max shortcut lround mxj ej.lop @op round;
 max shortcut lscale mxj ej.lscale;
 max shortcut lslide mxj ej.lslide;
 max shortcut mmmm mxj ej.mmmm;
+max shortcut mtof mxj ej.mtof;
+max shortcut ftom mxj ej.ftom;

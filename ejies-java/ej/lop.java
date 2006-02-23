@@ -4,8 +4,8 @@
  *
  *  Many thanks to Ben Nevile for performances enhacement.
  *
- *	$Revision: 1.13 $
- *	$Date: 2006/02/21 15:30:55 $
+ *	$Revision: 1.14 $
+ *	$Date: 2006/02/23 17:33:14 $
  */
 
 package ej;
@@ -19,10 +19,11 @@ public class lop extends ej {
 	private static final String[] OPERATORS_LIST = new String[] {
 		"+", "-", "!-", "*", "abs", "absdiff", "/", "!/", "//", "!//", "%", "!%", "min", "max", "avg",
 		">", "<", ">=", "<=", "==", "!=", ">p", "<p", ">=p", "<=p", "==p", "!=p", "sin",
-		"cos", "tan", "asin", "acos", "atan", "atan2", "ceil", "floor", "round", "trunc", "exp", "ln", "log2", "log10", "pow", "sqrt" };
+		"cos", "tan", "asin", "acos", "atan", "atan2", "ceil", "floor", "round", "trunc",
+		"exp", "ln", "log2", "log10", "pow", "sqrt", "atodb", "dbtoa" };
 	private static final String[] UNARY_OP = new String[] {
 		"abs", "sin", "cos", "tan", "asin", "acos", "atan", "ceil", "floor", "round", "trunc",
-		"exp", "ln", "log2", "log10", "sqrt" };
+		"exp", "ln", "log2", "log10", "sqrt", "atodb", "dbtoa" };
 	
 	private float[] a = new float[0];
 	private float[] b = new float[0];
@@ -57,7 +58,7 @@ public class lop extends ej {
 	private float[] getVal() {
 		return b;
 	}
-	
+
 	private void setOp(Atom[] a) {
 		String tmp = Atom.toOneString(a);
 		
@@ -150,6 +151,10 @@ public class lop extends ej {
 			myListOperator = new ListPow();
 		else if (tmp.equals("sqrt"))
 			myListOperator = new ListSqrt();
+		else if (tmp.equals("atodb"))
+			myListOperator = new ListAtodb();
+		else if (tmp.equals("dbtoa"))
+			myListOperator = new ListDbtoa();
 		else {
 			error("ej.lop: " + tmp + " is not a valid operator");
 			return;      // get out of here...

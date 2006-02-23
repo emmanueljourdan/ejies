@@ -7,7 +7,6 @@
 package ej;
 
 public class ListInvModulo implements ListOperator {
-
 	public float[] operate(float a, float b[])
 	{
 		float[] resultat = new float[b.length];
