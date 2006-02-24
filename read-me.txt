@@ -1,14 +1,16 @@
-e j i e s (version 1.55)
+e j i e s (version 1.56)
 by Emmanuel Jourdan, Ircam
 This version requires MaxMSP 4.5.6 or higher.
 
 Java externals:
+¥ ej.ftom: Frequency to MIDI (with tuning adjustment, works for lists)
 ¥ ej.lchange: aware of list changes
 ¥ ej.lclip: constrains a list within a certain range
 ¥ ej.lop: basic mathematic operations on (big) list
 ¥ ej.lscale: maps input range of lists to output range
 ¥ ej.lslide: smooth-out changes in list
 ¥ ej.mmmm: calculate minimum, mean, median and maximum
+¥ ej.mtof: MIDI to Frequency (with tuning adjustment, works for lists)
 
 JS:
 ¥ ej.4m.js: (obsolet) calculate minimum, mean, median and maximum
