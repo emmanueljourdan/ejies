@@ -2,8 +2,8 @@
  *	ej.mtof by Emmanuel Jourdan, Ircam Ñ 02 2005
  *	MIDI to Frequency (with tunning adjustment)
  *
- *	$Revision: 1.1 $
- *	$Date: 2006/02/23 17:33:14 $
+ *	$Revision: 1.2 $
+ *	$Date: 2006/02/24 12:07:50 $
  */
 
 package ej;
@@ -23,12 +23,24 @@ public class mtof extends ej {
 		declareTypedIO("a", "l");
 		createInfoOutlet(true);
 		
+		argsManager(args);
 		declareAttribute("tunning", "getTunnig", "setTunnig");
 		declareAttribute("pitch_reference", "getPitchReference", "setPitchReference");
 		
 		setInletAssist(INLET_ASSIST);
 		setOutletAssist(OUTLET_ASSIST);
 	}
+	
+	private void argsManager(float[] args) {
+		switch (args.length) {
+			case 1:
+				setTunnig(args[0]);
+				break;
+			case  2:
+				setPitchReference((int) args[1]);
+				break;
+		}
+	}	
 
 	private void setTunnig(float f) {
 		if (f > 0 && f < 20000)
