@@ -1,9 +1,9 @@
 /*
  *	ej.mtof by Emmanuel Jourdan, Ircam Ñ 02 2005
- *	MIDI to Frequency (with tunning adjustment)
+ *	MIDI to Frequency (with tuning adjustment)
  *
- *	$Revision: 1.2 $
- *	$Date: 2006/02/24 12:07:50 $
+ *	$Revision: 1.3 $
+ *	$Date: 2006/02/24 15:17:09 $
  */
 
 package ej;
@@ -16,7 +16,7 @@ public class mtof extends ej {
 
 	private float[] aList = new float[0];
 	
-	private float tunning = 440;
+	private float tuning = 440;
 	private int pitch_reference = 69;
 	
 	public mtof(float[] args) {
@@ -24,7 +24,7 @@ public class mtof extends ej {
 		createInfoOutlet(true);
 		
 		argsManager(args);
-		declareAttribute("tunning", "getTunnig", "setTunnig");
+		declareAttribute("tuning", "getTunnig", "setTunnig");
 		declareAttribute("pitch_reference", "getPitchReference", "setPitchReference");
 		
 		setInletAssist(INLET_ASSIST);
@@ -44,11 +44,11 @@ public class mtof extends ej {
 
 	private void setTunnig(float f) {
 		if (f > 0 && f < 20000)
-			tunning = f;
+			tuning = f;
 	}
 	
 	private float getTunnig() {
-		return tunning;
+		return tuning;
 	}
 
 	private void setPitchReference(int i) {
@@ -66,12 +66,12 @@ public class mtof extends ej {
 	}
 	
 	public void inlet(float f) {
-		outlet(0, (float) (tunning * Math.pow(2,(f - pitch_reference)/12)) );
+		outlet(0, (float) (tuning * Math.pow(2,(f - pitch_reference)/12)) );
 	}
 
 	public void list(float[] list) {
 		for (int i = 0; i < list.length; i++) {
-			list[i] = (float) (tunning * Math.pow(2,(list[i] - pitch_reference) / 12));
+			list[i] = (float) (tuning * Math.pow(2,(list[i] - pitch_reference) / 12));
 		}
 		
 		outlet(0, list);
