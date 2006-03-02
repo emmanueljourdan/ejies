@@ -4,8 +4,8 @@
  *
  *  Many thanks to Ben Nevile for performances enhacement.
  *
- *	$Revision: 1.14 $
- *	$Date: 2006/02/23 17:33:14 $
+ *	$Revision: 1.15 $
+ *	$Date: 2006/03/02 18:54:53 $
  */
 
 package ej;
@@ -49,10 +49,10 @@ public class lop extends ej {
 	}
 
 	private void setVal(float[] args) {
-		if (args.length == 1) {
+		if (args.length > 0) {
 			bSet = true;
 			b = args;
-		}		
+		}
 	}
 	
 	private float[] getVal() {
