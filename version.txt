@@ -11,7 +11,7 @@ ej.mtof: MIDI to Frequency (with tuning adjustment, works for lists)
 Improvements:
 ej.lop: new operators (atodb, dbtoa)
 ej.lop: val @ttribute accept now more than one value
-
+jit.fullscreen: new dumpout outlet (to get the mouse position for example)
 
 
 *******************
