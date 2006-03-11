@@ -12,7 +12,7 @@ Improvements:
 ej.lop: new operators (atodb, dbtoa)
 ej.lop: val @ttribute accept now more than one value
 jit.fullscreen: new dumpout outlet (to get the mouse position for example)
-
+jit.fullscreen: fix a problem when mirror is on and the resolution of both screen is the same
 
 *******************
 1.55: 21 Feb 2006
