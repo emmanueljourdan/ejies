@@ -44,6 +44,9 @@ Abstractions:
 ¥ splay~: sound file player with interface
 ¥ stout~: control stereo (replace dac~ or ezdac~)
 
+Bpatcher:
+¥ ej.jit.preview: Patcher window with slowing down
+
 Other:
 ¥ AddShortcuts2Max.command: Bash script (MacOS X only) which add some shortcuts to MaxMSP.
 ¥ Installation.command: Bash script (MacOS X only) which allows you to install the ejies.
