@@ -13,6 +13,7 @@ max oblist ejies "js ej.route";
 max oblist ejies ej.mout~;
 max oblist ejies ej.vdb~;
 max oblist ejies ej.vdb-sig~;
+max oblist ejies ej.jit.preview;
 max oblist ejies jit.fullscreen;
 max oblist ejies jit.getparam;
 max oblist ejies kaf;
