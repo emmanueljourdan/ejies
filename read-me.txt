@@ -31,6 +31,7 @@ JSUI:
 
 Abstractions:
 ¥ ej.dialog: alternative dialog box for text entry
+¥ ej.jit.preview: (BPatcher) Patcher window with slowing down
 ¥ ej.line: multi-segment line
 ¥ ej.mout~: panpot on multiple output
 ¥ ej.vdb~: Variable delay without clicks or transposition (cheaper than vdb~ in the Bennies)
@@ -43,9 +44,6 @@ Abstractions:
 ¥ ptt: push to talk (usefull during conferences...)
 ¥ splay~: sound file player with interface
 ¥ stout~: control stereo (replace dac~ or ezdac~)
-
-Bpatcher:
-¥ ej.jit.preview: Patcher window with slowing down
 
 Other:
 ¥ AddShortcuts2Max.command: Bash script (MacOS X only) which add some shortcuts to MaxMSP.

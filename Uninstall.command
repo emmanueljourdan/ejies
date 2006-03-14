@@ -45,6 +45,7 @@ if [ -e "/Applications/MaxMSP 4.5/" ] ; then
 	rm -f /Applications/MaxMSP*/patches/extras/ejies* && echo -ne "... done.\n"
 
 	echo -ne "- prototypes (/Applications/MaxMSP*/patches/object-prototypes/)"
+	rm -f /Applications/MaxMSP*/patches/object-prototypes/bpatcher/ej.*
 	rm -f /Applications/MaxMSP*/patches/object-prototypes/jsui/ej.*
 	rm -f /Applications/MaxMSP*/patches/object-prototypes/pictctrl/ej.* && echo -ne "... done.\n"
 
