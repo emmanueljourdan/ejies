@@ -4,8 +4,8 @@
  *
  *  Many thanks to Ben Nevile for performances enhacement.
  *
- *	$Revision: 1.16 $
- *	$Date: 2006/03/28 16:30:34 $
+ *	$Revision: 1.17 $
+ *	$Date: 2006/03/28 18:29:57 $
  */
 
 package ej;
@@ -32,7 +32,7 @@ public class lop extends ej {
 	private boolean autotrigger = false;
 	private boolean aSet = false;
 	private boolean bSet = false;
-	private boolean unaryOrNot = false;
+	private boolean isUnary = false;
 	private ListOperator myListOperator;
 	
 	public lop(Atom[] args)	{
@@ -44,8 +44,8 @@ public class lop extends ej {
 
 		// premier argument défini l'opérateur
 		if (args.length > 0)
-			setOp(args[0]);
-
+			setOp(new Atom[] { args[0] });
+		
 		// arguments suivants définissent les valeurs par défaut
 		if (args.length > 1)
 			setVal(generateValFromArgs(args));
@@ -82,9 +82,9 @@ public class lop extends ej {
 		return b;
 	}
 
-	private void setOp(Atom a) {
-		String tmp = a.getString();
-		
+	private void setOp(Atom[] a) {
+		String tmp = Atom.toOneString(a);
+
 		// lucky I made a script to generate that :-)
 		if (tmp.equals("+"))
 			myListOperator = new ListAddition();
@@ -189,23 +189,23 @@ public class lop extends ej {
 	
 	private void isUnary() {
 		// choix de l'assistance
-		unaryOrNot = false;
+		isUnary = false;
 		
 		for (int i = 0; i < UNARY_OP.length; i++) {
 			if (op.equals(UNARY_OP[i])) {
-				unaryOrNot = true;
+				isUnary = true;
 				break;
 			}
 		}
 		
-		if (unaryOrNot)
+		if (isUnary)
 			setInletAssist(INLET_ASSIST_UNARY);
 		else
 			setInletAssist(INLET_ASSIST);
 	}
 	
 	private void calcule() {
-		if (unaryOrNot == true)
+		if (isUnary == true)
 			outlet(0, myListOperator.operate(a, 0)); // au lieu d'avoir encore un constructeur
 		else if (scalarmode == false || (a.length > 1 && b.length > 1))		// si c'est scalarmode ou que les deux entrées ont reçues des listes
 			outlet(0, myListOperator.operate(a, b));
