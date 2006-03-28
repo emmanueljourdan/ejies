@@ -4,8 +4,8 @@
  *
  *  Many thanks to Ben Nevile for performances enhacement.
  *
- *	$Revision: 1.15 $
- *	$Date: 2006/03/02 18:54:53 $
+ *	$Revision: 1.16 $
+ *	$Date: 2006/03/28 16:30:34 $
  */
 
 package ej;
@@ -42,12 +42,35 @@ public class lop extends ej {
 		setInletAssist(INLET_ASSIST);
 		setOutletAssist(OUTLET_ASSIST);
 
+		// premier argument défini l'opérateur
+		if (args.length > 0)
+			setOp(args[0]);
+
+		// arguments suivants définissent les valeurs par défaut
+		if (args.length > 1)
+			setVal(generateValFromArgs(args));
+		
 		declareAttribute("op", null, "setOp");
 		declareAttribute("autotrigger");
 		declareAttribute("scalarmode");
 		declareAttribute("val", "getVal", "setVal");
 	}
 
+	private float[] generateValFromArgs(Atom[] a) {
+		float[] tmp = new float[a.length - 1]; // 1 de moins car le premier est le nom de l'opérateur
+		
+		for (int i = 1; i < a.length; i++) {
+			if (a[i].isInt())
+				tmp[i-1] = a[i].getInt();
+			else if (a[i].isFloat())
+				tmp[i-1] = a[i].getFloat();
+			else
+				error("ej.lop: " + a[i].toString() + " bad argument: int/float expected");
+		}
+		
+		return tmp;
+	}
+	
 	private void setVal(float[] args) {
 		if (args.length > 0) {
 			bSet = true;
@@ -59,8 +82,8 @@ public class lop extends ej {
 		return b;
 	}
 
-	private void setOp(Atom[] a) {
-		String tmp = Atom.toOneString(a);
+	private void setOp(Atom a) {
+		String tmp = a.getString();
 		
 		// lucky I made a script to generate that :-)
 		if (tmp.equals("+"))
