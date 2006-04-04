@@ -4,13 +4,12 @@
  *
  *  Many thanks to Ben Nevile for performances enhacement.
  *
- *	$Revision: 1.17 $
- *	$Date: 2006/03/28 18:29:57 $
+ *	$Revision: 1.18 $
+ *	$Date: 2006/04/04 15:01:57 $
  */
 
 package ej;
 import com.cycling74.max.*;
-//import java.util.Arrays;
 
 public class lop extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "Left Operand", "Right Operand" };
@@ -65,7 +64,7 @@ public class lop extends ej {
 			else if (a[i].isFloat())
 				tmp[i-1] = a[i].getFloat();
 			else
-				error("ej.lop: " + a[i].toString() + " bad argument: int/float expected");
+				error("ej.lop: " + a[i].toString() + " bad argument: int/float expected");// du coup il ne va rien écrire dans tmp[i]
 		}
 		
 		return tmp;
@@ -205,10 +204,11 @@ public class lop extends ej {
 	}
 	
 	private void calcule() {
+		// si c'est unary il n'y a pas besoin de ce poser de question
 		if (isUnary == true)
 			outlet(0, myListOperator.operate(a, 0)); // au lieu d'avoir encore un constructeur
-		else if (scalarmode == false || (a.length > 1 && b.length > 1))		// si c'est scalarmode ou que les deux entrées ont reçues des listes
-			outlet(0, myListOperator.operate(a, b));
+		else if (scalarmode == false || (a.length > 1 && b.length > 1))		// si c'est pas scalarmode ou que les deux entrées ont reçues des listes
+			outlet(0, myListOperator.operate(a, b));0
 		else if (scalarmode == true && b.length == 1)
 			outlet(0, myListOperator.operate(a, b[0]));
 		else if (scalarmode == true && a.length == 1)
@@ -237,6 +237,7 @@ public class lop extends ej {
 	}
 	
 	public void list(float[] args) {
+		// beaucoup plus efficace que list(Atom[] args)
 		if (getInlet() == 1) {
 			bSet = true;
 			b = args;
