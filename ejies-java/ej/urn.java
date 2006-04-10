@@ -1,9 +1,9 @@
 /*
- *	ej.urn by Emmanuel Jourdan, Ircam — 02 2005
- *	urn data types
+ *	ej.urn by Emmanuel Jourdan, Ircam — 04 2005
+ *	like the urn object but for larger range
  *
- *	$Revision: 1.1 $
- *	$Date: 2006/04/07 10:07:32 $
+ *	$Revision: 1.2 $
+ *	$Date: 2006/04/10 13:23:59 $
  */
 
 package ej;
@@ -12,21 +12,28 @@ import com.cycling74.max.*;
 import java.util.Random; 
 
 public class urn extends ej {
-	private static final String[] INLET_ASSIST = new String[]{ "bang", "urn size" };
-	private static final String[] OUTLET_ASSIST = new String[]{ "random value", "bang when done"};
+	private static final String[] INLET_ASSIST = new String[]{ "bang Generates Random Number", "Set Range of Random Number" };
+	private static final String[] OUTLET_ASSIST = new String[]{ "Random Number Output", "bang if All Numbers in Range Chosen" };
 	private int urnSize = 0;
 	private int howManyLeft = 0;
-	private boolean[] urnTable = new boolean[urnSize];
-	private int tmpValue = 0;
-	private Random generator = new Random();
+	private int tmpValue; // utilisé pour la permutation
+	private int rIdx;     // stockera l'index donné par Random
+	private Random myRandom = new Random();
+	private int[] urnValues; // tableau qui stocke les valeurs possibles
+	private boolean autoclear = false;
+	
+	public urn(int size) {
+		this(size, 0);
+	}
 	
 	public urn(int size, int seed) {
-		declareTypedIO("ba", "ib");
-		createInfoOutlet(true);
+		declareTypedIO("bi", "ib");
+		createInfoOutlet(false);
 		
 		urnInit(size);
 		setSeed(seed);
-	
+		declareAttribute("autoclear");
+		
 		setInletAssist(INLET_ASSIST);
 		setOutletAssist(OUTLET_ASSIST);
 	}
@@ -34,8 +41,13 @@ public class urn extends ej {
 	public void bang() {
 		if (howManyLeft != 0)
 			urner();
-		else
-			outlet(1, "bang");
+		else {
+			if (autoclear) {
+				howManyLeft = urnSize;
+				urner();
+			} else
+				outlet(1, "bang");
+		}
 	}
 	
 	public void inlet(int i) {
@@ -44,58 +56,57 @@ public class urn extends ej {
 	}
 	
 	public void clear() {
-		urnClear();
+		/*
+		 * Il n'est pas nécessaire de réinitialiser le tableau,
+		 * on fiche des valeurs qui sont dedans.
+		 */
+		howManyLeft = urnSize;
 	}
 	
 	public void seed(int seed) {
 		setSeed(seed);
 	}
-		
-/*
- *
- 1. fill blackstack
- 2. get random item i from blackstack (i.e. generate an integer 1 <= i 
-									   <= blackstacksize)
- 3. move item i to whitestack
- 4. reduce size of blackstack by 1
- 5. if size balckstack =0 exit, else
- 6. move top-of-blackstack to index i
- 7. goto 2
- 
- like this *every time a getrandom routine is called one item will 
- become "white"
- and there's an exit too...
- and the case where i = blackstacksize shoudl work ok
- */
+	
+	public void sizeInfo() {
+		post("ej.urn: using " + urnSize * 4 + " bytes.");
+	}
 	
 	private void urner() {
-		do {
-			tmpValue = generator.nextInt(urnSize);
-		} while (urnTable[tmpValue] == true);
-
-		urnTable[tmpValue] = true;
-
-		outlet(0, tmpValue);
-	}
+		/*
+		 * Chaque fois qu'on demande une valeur aléatoire, la valeur est mise
+		 * à la fin du tableau (en fait à l'index de howManyLeft - 1)
+		 */
 		
-	private void urnInit(int size) {
-		urnSize = size;
-		urnTable = new boolean[size];
-		urnClear();
+		rIdx = myRandom.nextInt(howManyLeft--); // ATTENTION: on décrémente après utiliser la valeur !!!
+		tmpValue = urnValues[rIdx]; // la permutation se prépare
+		
+		outlet(0, tmpValue);
+
+		// permutation avec la fin du tableau
+		urnValues[rIdx] = urnValues[howManyLeft];
+		urnValues[howManyLeft] = tmpValue;
 	}
 	
-	private void urnClear() {
-		for (int i = 0; i < urnSize; i++) {
-			urnTable[i] = false;
-		}
-		
-		howManyLeft = urnSize;
+	private void urnInit(int size) {
+		urnSize = size;
+		urnValues = new int[size];
+
+		urnErase(); // remplissage
+		howManyLeft = urnSize; // initialisation du pointeur
+	}
+	
+	private void urnErase() {
+		for (int i = 0; i < urnSize; i++)
+			urnValues[i] = i;
 	}
 	
 	private void setSeed(int seed) {
 		if (seed < 1)
-			generator = new Random(System.currentTimeMillis());
+			myRandom = new Random(System.currentTimeMillis());
 		else
-			generator = new Random(seed);
+			myRandom = new Random(seed);
+		
+		urnErase(); // remplissage avec les valeurs par défaut
+		// howManyLeft = urnSize; // même fonctionnement que urn
 	}
 }
