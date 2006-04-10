@@ -3,8 +3,8 @@
  *	scale for lists
  *
  *
- *	$Revision: 1.2 $
- *	$Date: 2006/02/14 18:07:30 $
+ *	$Revision: 1.3 $
+ *	$Date: 2006/04/10 13:22:57 $
  */
 
 package ej;
@@ -17,7 +17,7 @@ public class lscale extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "List to be scaled", "Low input value", "High input value", "Low output value", "High output value", "Exponent" };
 	private static final String[] OUTLET_ASSIST = new String[]{ "Scaled list"};	
 
-	private float[] a = new float[0];
+	private float[] a;
 	private float[] resultat;
 	private float xMin = 0;
 	private float xMax = 127;

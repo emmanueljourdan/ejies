@@ -4,8 +4,8 @@
  *
  *  Many thanks to Ben Nevile for performances enhacement.
  *
- *	$Revision: 1.18 $
- *	$Date: 2006/04/04 15:01:57 $
+ *	$Revision: 1.19 $
+ *	$Date: 2006/04/10 13:22:57 $
  */
 
 package ej;
@@ -24,8 +24,8 @@ public class lop extends ej {
 		"abs", "sin", "cos", "tan", "asin", "acos", "atan", "ceil", "floor", "round", "trunc",
 		"exp", "ln", "log2", "log10", "sqrt", "atodb", "dbtoa" };
 	
-	private float[] a = new float[0];
-	private float[] b = new float[0];
+	private float[] a;
+	private float[] b;
 	private String op = "*"; // il y en faut bien un par défaut
 	private boolean scalarmode = false;
 	private boolean autotrigger = false;

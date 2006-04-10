@@ -2,8 +2,8 @@
  *	ej.lclip by Emmanuel Jourdan, Ircam Ñ 02 2005
  *	Constrains a list within a certain range
  *
- *	$Revision: 1.1 $
- *	$Date: 2006/02/20 15:00:29 $
+ *	$Revision: 1.2 $
+ *	$Date: 2006/04/10 13:22:57 $
  */
 
 package ej;
@@ -13,7 +13,7 @@ public class lclip extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "List to be constrained", "Minimum", "Maximum" };
 	private static final String[] OUTLET_ASSIST = new String[]{ "Constrained list output"};	
 
-	private float[] a = new float[0];
+	private float[] a ;
 	private float clipMin = 0;
 	private float clipMax = 0;
 	

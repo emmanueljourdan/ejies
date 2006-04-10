@@ -2,8 +2,8 @@
  *	ej.mtof by Emmanuel Jourdan, Ircam Ñ 02 2005
  *	MIDI to Frequency (with tuning adjustment)
  *
- *	$Revision: 1.3 $
- *	$Date: 2006/02/24 15:17:09 $
+ *	$Revision: 1.4 $
+ *	$Date: 2006/04/10 13:23:28 $
  */
 
 package ej;
@@ -14,7 +14,7 @@ public class mtof extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "MIDI note number in (int/float/list)" };
 	private static final String[] OUTLET_ASSIST = new String[]{ "Frequency out"};
 
-	private float[] aList = new float[0];
+	private float[] aList;
 	
 	private float tuning = 440;
 	private int pitch_reference = 69;
