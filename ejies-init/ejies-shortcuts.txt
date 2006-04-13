@@ -36,3 +36,6 @@ max shortcut lslide mxj ej.lslide;
 max shortcut mmmm mxj ej.mmmm;
 max shortcut mtof mxj ej.mtof;
 max shortcut ftom mxj ej.ftom;
+max shortcut urn mxj ej.urn;
+max shortcut linterp mxj ej.linterp;
+
