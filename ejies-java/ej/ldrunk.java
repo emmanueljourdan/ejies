@@ -3,8 +3,8 @@
  *	drunk for list
  *
  *
- *	$Revision: 1.2 $
- *	$Date: 2006/04/18 13:42:29 $
+ *	$Revision: 1.3 $
+ *	$Date: 2006/04/18 14:50:44 $
  */
 
 package ej;
@@ -12,13 +12,12 @@ package ej;
 import com.cycling74.max.*;
 
 public class ldrunk extends ej {
-	private static final String[] INLET_ASSIST = new String[]{ "clean list", "Random range (float/list)", "% of random", "probability of random (%)" };
-	private static final String[] OUTLET_ASSIST = new String[]{ "Drunked"};	
+	private static final String[] INLET_ASSIST = new String[]{ "clean list", "Random range (float/list)", "random step (± step / 2)", "probability of random (%)" };
+	private static final String[] OUTLET_ASSIST = new String[]{ "Drunked list"};	
 
 	private float[] range = new float[]{ 0, 127 };
 	private float step = 0;
 	private float proba = 100;
-	private float realStepSize = 0;
 	private float realProba = 1f;
 	private float[] resultat = new float[0];
 	
@@ -94,8 +93,7 @@ public class ldrunk extends ej {
 	}
 	
 	private void setStep(float f) {
-		step = Math.max(0f, Math.min(f, 100f));
-		realStepSize = step * 0.01f * (range[1] - range[0]);
+		step = Math.max(0f, Math.min(f, range[1] - range[0]));
 	}
 	
 	private void setProba(float f) {
@@ -104,10 +102,17 @@ public class ldrunk extends ej {
 	}
 	
 	private void doRandom() {
-		// + ou - step size sur chaque valeur...
+		// ± (step size / 2) sur chaque valeur...
 		for (int i = 0; i < resultat.length; i++) {
-			if (Math.random() < realProba)
-				resultat[i] = (float) Math.min(range[1], Math.max(range[0], resultat[i] + ((Math.random() - 0.5) * realStepSize)));
+			if (Math.random() < realProba) {
+				resultat[i] = resultat[i] + (float) ((Math.random() - 0.5) * step);
+				
+				// repliement si c'est en dehors du range
+				if (resultat[i] < range[0])
+					resultat[i] = Math.min((range[0] - resultat[i]) + range[0], range[1]);
+				else if (resultat[i] > range[1])
+					resultat[i] = Math.max((range[1] - resultat[i]) + range[1], range[0]);
+			}
 		}
 		
 		outlet(0, resultat);
