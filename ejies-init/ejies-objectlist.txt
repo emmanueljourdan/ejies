@@ -25,6 +25,7 @@ max oblist ejies stout~;
 max oblist ejies "mxj ej.ftom";
 max oblist ejies "mxj ej.lchange";
 max oblist ejies "mxj ej.lclip";
+max oblist ejies "mxj ej.ldrunk";
 max oblist ejies "mxj ej.linterp";
 max oblist ejies "mxj ej.lop";
 max oblist ejies "mxj ej.lscale";
