@@ -3,8 +3,8 @@
  *	simple list interpolator
  *
  *
- *	$Revision: 1.2 $
- *	$Date: 2006/04/17 18:32:27 $
+ *	$Revision: 1.3 $
+ *	$Date: 2006/04/18 13:43:01 $
  */
 
 package ej;
@@ -107,9 +107,14 @@ public class linterp extends ej {
 			if (a != null && b != null && c != null && d != null) {
 				resultat = new float[Math.min(Math.min(a.length, b.length), Math.min(c.length, d.length))];
 			
-				post(resultat.length + "");
-				for (int i = 0; i < resultat.length; i++)
-					resultat[i] = b[i] * interpFactor[0] + (1 - interpFactor[0]) * a[i] + d[i] * interpFactor[1] + (1 - interpFactor[1]) * c[i];
+				for (int i = 0; i < resultat.length; i++) {
+					resultat[i] =
+						a[i] * (1 - interpFactor[0]) * (1 - interpFactor[1]) + 
+						b[i] * interpFactor[0] * (1 - interpFactor[1]) +
+						c[i] * (1 - interpFactor[0]) * interpFactor[1] +
+						d[i] * interpFactor[0] * interpFactor[1] ;
+					
+				}
 			}
 		} else {
 			if (a != null && b != null) {
