@@ -3,8 +3,8 @@
  *	drunk for list
  *
  *
- *	$Revision: 1.3 $
- *	$Date: 2006/04/18 14:50:44 $
+ *	$Revision: 1.4 $
+ *	$Date: 2006/04/19 14:13:32 $
  */
 
 package ej;
@@ -19,6 +19,7 @@ public class ldrunk extends ej {
 	private float step = 0;
 	private float proba = 100;
 	private float realProba = 1f;
+	private boolean ignore0 = false;
 	private float[] resultat = new float[0];
 	
 	public ldrunk(float maxRange, float stepSize) {
@@ -40,6 +41,7 @@ public class ldrunk extends ej {
 		declareAttribute("range", null, "setRange");
 		declareAttribute("step", null, "setStep");
 		declareAttribute("proba", null, "setProba");
+		declareAttribute("ignore0");
 		
 		setInletAssist(INLET_ASSIST);
 		setOutletAssist(OUTLET_ASSIST);
@@ -104,17 +106,26 @@ public class ldrunk extends ej {
 	private void doRandom() {
 		// ± (step size / 2) sur chaque valeur...
 		for (int i = 0; i < resultat.length; i++) {
-			if (Math.random() < realProba) {
-				resultat[i] = resultat[i] + (float) ((Math.random() - 0.5) * step);
-				
-				// repliement si c'est en dehors du range
-				if (resultat[i] < range[0])
-					resultat[i] = Math.min((range[0] - resultat[i]) + range[0], range[1]);
-				else if (resultat[i] > range[1])
-					resultat[i] = Math.max((range[1] - resultat[i]) + range[1], range[0]);
-			}
+			if (ignore0) {
+				if (resultat[i] != 0f)
+					makeAlea(i);
+			} else
+				makeAlea(i);
 		}
 		
 		outlet(0, resultat);
 	}
+
+	private void makeAlea(int i) {
+		if (Math.random() < realProba) {
+			resultat[i] = resultat[i] + (float) ((Math.random() - 0.5) * step);
+			
+			// repliement si c'est en dehors du range
+			if (resultat[i] < range[0])
+				resultat[i] = Math.min((range[0] - resultat[i]) + range[0], range[1]);
+			else if (resultat[i] > range[1])
+				resultat[i] = Math.max((range[1] - resultat[i]) + range[1], range[0]);
+		}
+	}
+	
 }
