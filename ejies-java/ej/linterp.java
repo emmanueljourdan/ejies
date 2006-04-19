@@ -3,8 +3,8 @@
  *	simple list interpolator
  *
  *
- *	$Revision: 1.4 $
- *	$Date: 2006/04/19 17:33:27 $
+ *	$Revision: 1.5 $
+ *	$Date: 2006/04/19 17:49:11 $
  */
 
 package ej;
@@ -29,6 +29,7 @@ public class linterp extends ej {
 	private float[] resultat;
 
 	private byte mode = 0;
+	private boolean autotrigger = false;
 	
 	public linterp(String args)	{
 		if (args.equals("quad")) {
@@ -42,6 +43,7 @@ public class linterp extends ej {
 			declareTypedIO("fll", "l");
 		}
 		
+		declareAttribute("autotrigger");
 		createInfoOutlet(false);
 		
 		checkInletAssistance(); // choix de l'assistance en fonction du mode...
@@ -71,7 +73,7 @@ public class linterp extends ej {
 			case 0:
 				interpFactor = new float[] { f, f, f };
 				calcule();
-				break;
+				return;// car c'est dŽclenchŽ aussi ˆ la fin de la mŽthode
 			case 1:
 				a = new float[]{ f };
 				break;
@@ -85,6 +87,8 @@ public class linterp extends ej {
 				d = new float[]{ f };
 				break;
 		}
+		
+		if (autotrigger) calcule();
 	}
 	
 	public void list(float[] args) {
@@ -93,6 +97,7 @@ public class linterp extends ej {
 				if (mode > 0) {
 					setInterpFactor(args);
 					calcule();
+					return;
 				} else {
 					error("no list expected here (in this mode)");
 					setInterpFactor(args);
@@ -123,6 +128,8 @@ public class linterp extends ej {
 				h = args;
 				break;
 		}
+		
+		if (autotrigger) calcule();
 	}
 	
 	private void setInterpFactor(float[] args) {
