@@ -3,8 +3,8 @@
  *	drunk for list
  *
  *
- *	$Revision: 1.4 $
- *	$Date: 2006/04/19 14:13:32 $
+ *	$Revision: 1.5 $
+ *	$Date: 2006/04/19 15:37:25 $
  */
 
 package ej;
@@ -20,7 +20,9 @@ public class ldrunk extends ej {
 	private float proba = 100;
 	private float realProba = 1f;
 	private boolean ignore0 = false;
+	private boolean autoreset = false;
 	private float[] resultat = new float[0];
+	private float[] inputList = new float[0];
 	
 	public ldrunk(float maxRange, float stepSize) {
 		this(0f, maxRange, stepSize, 100f);
@@ -42,20 +44,21 @@ public class ldrunk extends ej {
 		declareAttribute("step", null, "setStep");
 		declareAttribute("proba", null, "setProba");
 		declareAttribute("ignore0");
+		declareAttribute("autoreset");
 		
 		setInletAssist(INLET_ASSIST);
 		setOutletAssist(OUTLET_ASSIST);
 	}
 		
 	public void bang() {
-		if (resultat.length > 0)
+		if (inputList.length > 0)
 			doRandom();
 	}
 	
 	public void inlet(float f) {
 		switch (getInlet()) {
 			case 0:
-				resultat = new float[]{ f };
+				inputList = new float[]{ f };
 				doRandom();
 				break;
 			case 1:
@@ -73,7 +76,7 @@ public class ldrunk extends ej {
 	public void list(float[] args) {
 		switch (getInlet()) {
 			case 0:
-				resultat = args;
+				inputList = args;
 //				doRandom();
 				break;
 			case 1:
@@ -104,6 +107,12 @@ public class ldrunk extends ej {
 	}
 	
 	private void doRandom() {
+		if (autoreset) {
+			resultat = new float[inputList.length];
+			System.arraycopy(inputList, 0, resultat, 0, inputList.length); // copie des données (la liste d'entrée reste intacte
+		} else
+			resultat = inputList; // pas de copie: c'est juste une référence
+
 		// ± (step size / 2) sur chaque valeur...
 		for (int i = 0; i < resultat.length; i++) {
 			if (ignore0) {
@@ -125,7 +134,6 @@ public class ldrunk extends ej {
 				resultat[i] = Math.min((range[0] - resultat[i]) + range[0], range[1]);
 			else if (resultat[i] > range[1])
 				resultat[i] = Math.max((range[1] - resultat[i]) + range[1], range[0]);
-		}
+		}		
 	}
-	
 }
