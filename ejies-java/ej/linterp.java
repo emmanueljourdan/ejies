@@ -3,8 +3,8 @@
  *	simple list interpolator
  *
  *
- *	$Revision: 1.6 $
- *	$Date: 2006/04/21 14:44:43 $
+ *	$Revision: 1.7 $
+ *	$Date: 2006/04/21 19:05:16 $
  */
 
 package ej;
@@ -19,15 +19,8 @@ public class linterp extends ej {
 	private static final String[] OUTLET_ASSIST = new String[]{ "interpolated list"};	
 
 	private float interpFactor[] = new float[]{ 0f };
-	private float[] a;
-	private float[] b;
-	private float[] c;
-	private float[] d;
-	private float[] e;
-	private float[] f;
-	private float[] g;
-	private float[] h;
-	private float[] resultat = new float[0];
+	private float[] a, b, c, d, e, f, g, h; // pour chaque entrŽe...
+	private float[] resultat = new float[0]; // a permet de savoir si on a fait le calcul...
 	private String buf_name = null;
 	private byte outputmode = 0;
 	
@@ -86,18 +79,10 @@ public class linterp extends ej {
 				interpFactor = new float[] { f, f, f };
 				calcule();
 				return;// car c'est dŽclenchŽ aussi ˆ la fin de la mŽthode
-			case 1:
-				a = new float[]{ f };
-				break;
-			case 2:
-				b = new float[]{ f };
-				break;
-			case 3:
-				c = new float[]{ f };
-				break;
-			case 4:
-				d = new float[]{ f };
-				break;
+			case 1: a = new float[]{ f }; break;
+			case 2: b = new float[]{ f }; break;
+			case 3: c = new float[]{ f }; break;
+			case 4: d = new float[]{ f }; break;
 		}
 		
 		if (autotrigger) calcule();
@@ -115,30 +100,14 @@ public class linterp extends ej {
 					setInterpFactor(args);
 				}
 				break;
-			case 1:
-				a = args;
-				break;
-			case 2:
-				b = args;
-				break;
-			case 3:
-				c = args;
-				break;
-			case 4:
-				d = args;
-				break;
-			case 5:
-				e = args;
-				break;
-			case 6:
-				f = args;
-				break;
-			case 7:
-				g = args;
-				break;
-			case 8:
-				h = args;
-				break;
+			case 1: a = args; break;
+			case 2: b = args; break;
+			case 3: c = args; break;
+			case 4: d = args; break;
+			case 5: e = args; break;
+			case 6: f = args; break;
+			case 7: g = args; break;
+			case 8: h = args; break;
 		}
 		
 		if (autotrigger) calcule();
@@ -222,9 +191,6 @@ public class linterp extends ej {
 	
 	private void writeToBuffer() {
 		if (buf_name != null && resultat.length > 0) {
-			float[] tmpBuffer = new float[resultat.length];
-			System.arraycopy(resultat, 0, tmpBuffer, 0, resultat.length);
-
 			MSPBuffer.poke(buf_name, resultat);
 		}
 	}
