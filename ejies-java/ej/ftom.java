@@ -2,8 +2,8 @@
  *	ej.ftom by Emmanuel Jourdan, Ircam Ñ 02 2005
  *	Frequency to MIDI (with tuning adjustment)
  *
- *	$Revision: 1.3 $
- *	$Date: 2006/04/10 13:22:57 $
+ *	$Revision: 1.4 $
+ *	$Date: 2006/04/21 17:19:57 $
  */
 
 package ej;
@@ -19,6 +19,7 @@ public class ftom extends ej {
 	private float tuning = 440;
 	private int pitch_reference = 69;
 	private char whichMode = 0;
+	private float tonSubdivision = 2;
 	
 	private int[] listInt;
 	
@@ -64,19 +65,38 @@ public class ftom extends ej {
 	private int getPitchReference() {
 		return pitch_reference;
 	}
-	
-	private void setMode(String s) {
-		// est-ce vraiment plus efficace de ne pas tester les strings ˆ chaque fois ?
-		for (char i = 0; i < LIST_MODES.length; i++) {
-			if (s.equals(LIST_MODES[i])) {
-				whichMode = i;
-				break;
+		
+	private void setMode(Atom[] a) {
+		if (a[0].isString()) {
+			if (a[0].getString().equals("float")) {
+				whichMode = 0;
+				return;
+			} else if (a[0].getString().equals("int")) {
+				whichMode = 1;
+				return;
+			} else if (a[0].getString().equals("round")) {
+				whichMode = 2;
+				return;
+			} else if (a[0].getString().equals("quarter")) {
+				whichMode = 3; 
+				tonSubdivision = 2; 
+				return;
 			}
+		} else if (a[0].isInt()) {
+			tonSubdivision = a[0].getInt() / 2f;
+			whichMode = 3;
+		} else { // je suis un float
+			tonSubdivision = (int) a[0].getInt() / 2f;
+			whichMode = 3;
 		}
+
 	}
 	
 	private String getMode() {
-		return LIST_MODES[whichMode];
+		if (whichMode < 3 || tonSubdivision == 2f)
+			return LIST_MODES[whichMode];
+		else
+			return new String((int) Math.floor(tonSubdivision * 2) + "");
 	}
 	
 	public void bang() {
@@ -116,7 +136,7 @@ public class ftom extends ej {
 				outlet(0, (int) Math.round((12 * (Math.log(f / tuning) / Math.log(2))) + pitch_reference) );
 				break;
 			case 3:
-				outlet(0, (float) (Math.round(((12 * (Math.log(f / tuning) / Math.log(2))) + pitch_reference) * 2.) / 2.) );
+				outlet(0, (float) (Math.round(((12 * (Math.log(f / tuning) / Math.log(2))) + pitch_reference) * (float) tonSubdivision) / (float) tonSubdivision) );
 				break;
 		}
 	}
@@ -152,7 +172,7 @@ public class ftom extends ej {
 	private void calculeListQuarter(float[] list) {
 		for (int i = 0; i < list.length; i++) {
 			// (arrondis(resultat * 2) / 2) 
-			list[i] = (float) (Math.round(((12 * (Math.log(list[i] / tuning) / Math.log(2))) + pitch_reference) * 2.) / 2.);
+			list[i] = (float) (Math.round(((12 * (Math.log(list[i] / tuning) / Math.log(2))) + pitch_reference) * (float) tonSubdivision) / (float) tonSubdivision);
 		}
 		
 		outlet(0, list);
