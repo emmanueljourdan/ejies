@@ -3,13 +3,14 @@
  *	simple list interpolator
  *
  *
- *	$Revision: 1.5 $
- *	$Date: 2006/04/19 17:49:11 $
+ *	$Revision: 1.6 $
+ *	$Date: 2006/04/21 14:44:43 $
  */
 
 package ej;
 
 import com.cycling74.max.*;
+import com.cycling74.msp.*;
 
 public class linterp extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "interpolation factor (0. = A -> 1. = B)", "List A", "List B" };
@@ -26,8 +27,10 @@ public class linterp extends ej {
 	private float[] f;
 	private float[] g;
 	private float[] h;
-	private float[] resultat;
-
+	private float[] resultat = new float[0];
+	private String buf_name = null;
+	private byte outputmode = 0;
+	
 	private byte mode = 0;
 	private boolean autotrigger = false;
 	
@@ -43,6 +46,8 @@ public class linterp extends ej {
 			declareTypedIO("fll", "l");
 		}
 		
+		declareAttribute("outputmode", null, "setMode");
+		declareAttribute("buf_name");
 		declareAttribute("autotrigger");
 		createInfoOutlet(false);
 		
@@ -50,6 +55,13 @@ public class linterp extends ej {
 		setOutletAssist(OUTLET_ASSIST);
 	}
 	
+	private void setMode(int i) {
+		if (i >= 0 && i <= 2)
+			outputmode = (byte) i;
+		else
+			outputmode = 0;
+	}
+		
 	private void checkInletAssistance() {
 		switch (mode) {
 			case 0:
@@ -194,6 +206,26 @@ public class linterp extends ej {
 				
 		}
 
-		outlet(0, resultat);
+		switch (outputmode) {
+			case  0:
+				outlet(0, resultat);
+				break;
+			case  1:
+				writeToBuffer();
+				break;
+			case 2:
+				outlet(0, resultat);
+				writeToBuffer();
+				break;
+		}
+	}
+	
+	private void writeToBuffer() {
+		if (buf_name != null && resultat.length > 0) {
+			float[] tmpBuffer = new float[resultat.length];
+			System.arraycopy(resultat, 0, tmpBuffer, 0, resultat.length);
+
+			MSPBuffer.poke(buf_name, resultat);
+		}
 	}
 }
