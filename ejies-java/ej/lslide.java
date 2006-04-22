@@ -3,8 +3,8 @@
  *	slide for lists
  *
  *
- *	$Revision: 1.3 $
- *	$Date: 2006/04/10 13:22:57 $
+ *	$Revision: 1.4 $
+ *	$Date: 2006/04/22 16:36:09 $
  */
 
 package ej;
@@ -17,7 +17,7 @@ public class lslide extends ej {
 
 	private float[] a;
 	private float[] lastA;
-	private float[] resultat;
+	private float[] resultat = new float[0];
 	private float slide_up = 1;
 	private float slide_down = 1;
 	private float yN_1 = 0;
@@ -27,8 +27,8 @@ public class lslide extends ej {
 		declareTypedIO("aff", "l");
 		createInfoOutlet(true);
 		
-		this.slide_up = slideUp;
-		this.slide_down = slideDown;
+		setSlideUp(slideUp);
+		setSlideDown(slideDown);
 		declareAttribute("slide_up", "getSlideUp", "setSlideUp");
 		declareAttribute("slide_down", "getSlideDown", "setSlideDown");
 		
