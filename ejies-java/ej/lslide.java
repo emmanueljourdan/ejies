@@ -3,8 +3,8 @@
  *	slide for lists
  *
  *
- *	$Revision: 1.4 $
- *	$Date: 2006/04/22 16:36:09 $
+ *	$Revision: 1.5 $
+ *	$Date: 2006/04/22 17:00:44 $
  */
 
 package ej;
@@ -15,8 +15,8 @@ public class lslide extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "List to be slided :-)", "Slide Up", "Slide Down" };
 	private static final String[] OUTLET_ASSIST = new String[]{ "Slided list"};	
 
-	private float[] a;
-	private float[] lastA;
+	private float[] a = new float[0];
+	private float[] lastA = new float[0];
 	private float[] resultat = new float[0];
 	private float slide_up = 1;
 	private float slide_down = 1;
