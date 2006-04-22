@@ -13,6 +13,7 @@ ej.urn: like urn, for larger random range
 ej.jit.preview: (bpatcher) Patcher window for jitter (with slowing down)
 
 Improvements:
+ej.function.js: display with a bad argument won't cause problem
 ej.lop: new operators (atodb, dbtoa)
 ej.lop: val @ttribute accept now more than one value
 ej.lop: accepts argument(s): operator followed by value(s)

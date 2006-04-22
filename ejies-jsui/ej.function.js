@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.69 $
-	$Date: 2006/02/08 19:17:38 $
+	$Revision: 1.70 $
+	$Date: 2006/04/22 18:27:53 $
 */
 
 // global code
@@ -1762,15 +1762,16 @@ function clickmove(v)
 function display()
 {
 	var c, tmp;
-	
+
 	if ( arguments.length != 1 ) {
 		perror("missing argument for message display");
 		return;
 	}
 	
-	if (typeof(arguments[0]) == "number" && arguments[0] >= 0 && arguments[0] < NbCourbes)
-		front = arguments[0];
-	else {
+	if (typeof(arguments[0]) == "number") {
+		if (arguments[0] >= 0 && arguments[0] < NbCourbes)
+			front = arguments[0];
+	} else {
 		for (c = 0; c < NbCourbes; c++) {
 			if (f[c].name == arguments[0]) {
 				tmp = c;
@@ -1779,7 +1780,7 @@ function display()
 		}
 		front = tmp;
 	}
-	
+
 	drawAll();
 }
 
