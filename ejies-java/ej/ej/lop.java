@@ -4,8 +4,8 @@
  *
  *  Many thanks to Ben Nevile for performances enhacement.
  *
- *	$Revision: 1.1 $
- *	$Date: 2006/04/27 17:35:39 $
+ *	$Revision: 1.2 $
+ *	$Date: 2006/04/27 18:16:37 $
  */
 
 package ej;
@@ -82,6 +82,11 @@ public class lop extends ej {
 	}
 
 	private void setOp(Atom[] a) {
+		if (a.length > 1) {
+			error("extra argument for @ttribute op");
+			return;
+		}
+
 		String tmp = Atom.toOneString(a);
 
 		// lucky I made a script to generate that :-)
