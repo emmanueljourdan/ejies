@@ -3,8 +3,8 @@
  *	simple list interpolator
  *
  *
- *	$Revision: 1.7 $
- *	$Date: 2006/04/21 19:05:16 $
+ *	$Revision: 1.8 $
+ *	$Date: 2006/04/27 10:45:18 $
  */
 
 package ej;
@@ -20,24 +20,43 @@ public class linterp extends ej {
 
 	private float interpFactor[] = new float[]{ 0f };
 	private float[] a, b, c, d, e, f, g, h; // pour chaque entrŽe...
+	private float[][] listeDesListes = new float[][] { a, b, c, d, e, f, g, h };
 	private float[] resultat = new float[0]; // a permet de savoir si on a fait le calcul...
 	private String buf_name = null;
-	private byte outputmode = 0;
+	private byte combienWeight;
 	
+	private byte outputmode = 0;
 	private byte mode = 0;
 	private boolean autotrigger = false;
 	
-	public linterp(String args)	{
-		if (args.equals("quad")) {
-			this.mode = 1;
-			declareTypedIO("lllll", "l");
-		} else if (args.equals("cube")) {
-			this.mode = 2;
-			declareTypedIO("lllllllll", "l");
+	public linterp(Atom[] args)	{
+		if (args.length > 0 && args[0].isString()) {
+			// premier argument est une chaine
+			if (args[0].getString().equals("quad")) {        // mode quad
+				this.mode = 1;
+				this.combienWeight = 4;
+				declareTypedIO("lllll", "l");
+			} else if (args[0].getString().equals("cube")) { // mode cube
+				this.mode = 2;
+				this.combienWeight = 8;
+				declareTypedIO("lllllllll", "l");
+			} else if (args[0].getString().equals("weight") && args.length > 1) { // mode poids
+				if (args[1].isInt() && args[1].getInt() > 1 && args[1].getInt() <= 8) { // l'arguement doit tre un entier compris entre 2 et 8
+					this.mode = 3;
+					combienWeight = (byte) (args[1].getInt());
+					
+					declareIO(combienWeight + 1, 1); // il y a une entrŽe de plus pour les facteurs d'interpolation
+				} else
+					bail("bad argument for argument weigth (int between 1 and 8 expected)");
+			} else {
+				bail("unkown argument for ej.linterp");
+			}
 		} else {
 			this.mode = 0; // mais on le savait dŽjˆ
+			this.combienWeight = 2;
 			declareTypedIO("fll", "l");
 		}
+
 		
 		declareAttribute("outputmode", null, "setMode");
 		declareAttribute("buf_name");
@@ -97,7 +116,7 @@ public class linterp extends ej {
 					return;
 				} else {
 					error("no list expected here (in this mode)");
-					setInterpFactor(args);
+					setInterpFactor(args);   // comme on est pas rancunier on va utiliser le premier argument
 				}
 				break;
 			case 1: a = args; break;
@@ -110,41 +129,64 @@ public class linterp extends ej {
 			case 8: h = args; break;
 		}
 		
+		listeDesListes = new float[][] { a, b, c, d, e, f, g, h };
 		if (autotrigger) calcule();
 	}
 	
-	private void setInterpFactor(float[] args) {
+	private void setInterpFactor(float[] args) {			
 		/*
 		 * on met toujours trois ŽlŽments ans le tableau
 		 * comme a on a pas de problme quand on change de mode...
 		 */
-		switch (args.length) {
-			case 1:
-				interpFactor = new float[]{ args[0], args[0], args[0] };
-				break;
-			case 2:
-				interpFactor = new float[]{ args[0], args[1], 0f};
-				break;
-			default:
-				interpFactor = new float[]{ args[0], args[1], args[2] };
+		if (mode != 3) {
+			switch (args.length) {
+				case 1:
+					interpFactor = new float[]{ args[0], args[0], args[0] };
+					break;
+				case 2:
+					interpFactor = new float[]{ args[0], args[1], 0f};
+					break;
+				case 3:
+					interpFactor = args;
+					break;
+				default:
+					error("too many arguments, try the weight mode...");
+			}
+		} else {
+			interpFactor = normalize(args);
 		}
 	}
 	
-	private void calcule() {
+	private float[] normalize(float[] args) {
 		int i;
+		double max = 0;
 		
+		for (i = 0; i < args.length; i++)
+			max += args[i];
+		
+		// si la somme est Žgale ˆ 1, c'est pas la peine de le normaliser
+		if (max == 1)
+			return args;
+		
+		for (i = 0; i < args.length; i++)
+			args[i] /= max;
+		
+		return args;
+	}
+	
+	private void calcule() {
 		if (mode == 0) {
-			if (a != null && b != null) {
+			if (resultat.length > 0 || inputCheck((byte) 2)) {
 				resultat = new float[Math.min(a.length, b.length)];
 				
-				for (i = 0; i < resultat.length; i++)
+				for (int i = 0; i < resultat.length; i++)
 					resultat[i] = b[i] * interpFactor[0] + (1 - interpFactor[0]) * a[i];
 			}
 		} else if (mode == 1) {
-			if (a != null && b != null && c != null && d != null) {
+			if (resultat.length > 0 || inputCheck((byte) 4)) {
 				resultat = new float[Math.min(Math.min(a.length, b.length), Math.min(c.length, d.length))];
 
-				for (i = 0; i < resultat.length; i++) {
+				for (int i = 0; i < resultat.length; i++) {
 					resultat[i] =
 						a[i] * (1 - interpFactor[0]) * (1 - interpFactor[1]) + 
 						b[i] * interpFactor[0] * (1 - interpFactor[1]) +
@@ -153,14 +195,15 @@ public class linterp extends ej {
 					
 				}
 			}
-		} else {
-			if (a != null && b != null && c != null && d != null &&	e != null && f != null && g != null && h != null) {
+		} else if (mode == 2) {
+			// resultat.length > 0 quand on a dŽjˆ sorti quelque chose (ce qui veut dire que toutes les listes ont ŽtŽ remplies)
+			if (resultat.length > 0 || inputCheck((byte) 8)) {
 				resultat = new float[Math.min(
 											  Math.min(Math.min(a.length, b.length), Math.min(c.length, d.length)),
 											  Math.min(Math.min(e.length, f.length), Math.min(g.length, h.length))
 											  )];
 
-				for (i = 0; i < resultat.length; i++) {
+				for (int i = 0; i < resultat.length; i++) {
 					resultat[i] =
 						a[i] * (1 - interpFactor[0]) * (1 - interpFactor[1]) * (1 - interpFactor[2]) + 
 						b[i] * interpFactor[0] * (1 - interpFactor[1]) * (1 - interpFactor[2]) +
@@ -171,9 +214,21 @@ public class linterp extends ej {
 						g[i] * (1 - interpFactor[0]) * interpFactor[1] * interpFactor[2] +
 						h[i] * interpFactor[0] * interpFactor[1] * interpFactor[2];
 				}
+			}	
+		} else {
+			if (resultat.length > 0 || inputCheck((byte) Math.min(combienWeight, interpFactor.length))) {
+				resultat = new float[findSmallestList()];
+
+				int i, j;
+				for (i = j = 0; i < resultat.length; i++) {
+					resultat[i] = 0;
+					for (j = 0; j < Math.min(combienWeight, interpFactor.length); j++) {
+						resultat[i] += listeDesListes[j][i] * interpFactor[j];
+					}
+				}
 			}
-				
 		}
+		
 
 		switch (outputmode) {
 			case  0:
@@ -187,6 +242,36 @@ public class linterp extends ej {
 				writeToBuffer();
 				break;
 		}
+	}
+	
+	private boolean inputCheck(byte byteArg) {
+		// c'est pas trs ŽlŽgant...
+		byte flag = 0;
+		
+		try {
+			for (int i = 0; i < combienWeight; i++) {
+				if (listeDesListes[i].length > 0)
+					flag++;
+			}
+		} catch (Exception e) {
+		}
+
+		if (byteArg == flag)
+			return true;
+		else
+			return false;
+	}
+	
+	private int findSmallestList() {
+		int min = 0;
+
+		for (byte b = 0; b < combienWeight; b++) {
+			if (listeDesListes[b].length > min) {
+				min = listeDesListes[b].length;
+			}
+		}
+		
+		return min;
 	}
 	
 	private void writeToBuffer() {
