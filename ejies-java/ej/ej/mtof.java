@@ -2,9 +2,11 @@
  *	ej.mtof by Emmanuel Jourdan, Ircam Ñ 02 2005
  *	MIDI to Frequency (with tuning adjustment)
  *
- *	$Revision: 1.1 $
- *	$Date: 2006/04/27 16:58:16 $
+ *	$Revision: 1.2 $
+ *	$Date: 2006/04/27 18:42:22 $
  */
+
+// test de commit depuis ecplise sur mac...
 
 package ej;
 
