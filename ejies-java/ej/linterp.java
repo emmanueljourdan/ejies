@@ -3,8 +3,8 @@
  *	simple list interpolator
  *
  *
- *	$Revision: 1.8 $
- *	$Date: 2006/04/27 10:45:18 $
+ *	$Revision: 1.9 $
+ *	$Date: 2006/04/28 20:29:04 $
  */
 
 package ej;
@@ -18,12 +18,11 @@ public class linterp extends ej {
 	private static final String[] INLET_ASSIST_CUBE = new String[]{ "interpolation factor (list)", "List A", "List B", "List C", "List D", "List E", "List F", "List G", "List H" };
 	private static final String[] OUTLET_ASSIST = new String[]{ "interpolated list"};	
 
-	private float interpFactor[] = new float[]{ 0f };
-	private float[] a, b, c, d, e, f, g, h; // pour chaque entrŽe...
-	private float[][] listeDesListes = new float[][] { a, b, c, d, e, f, g, h };
+	private float interpFactor[] = null;
+	private float[][] listes = new float[8][];
 	private float[] resultat = new float[0]; // a permet de savoir si on a fait le calcul...
 	private String buf_name = null;
-	private byte combienWeight;
+	private byte combienInput;
 	
 	private byte outputmode = 0;
 	private byte mode = 0;
@@ -34,26 +33,26 @@ public class linterp extends ej {
 			// premier argument est une chaine
 			if (args[0].getString().equals("quad")) {        // mode quad
 				this.mode = 1;
-				this.combienWeight = 4;
+				this.combienInput = 4;
 				declareTypedIO("lllll", "l");
 			} else if (args[0].getString().equals("cube")) { // mode cube
 				this.mode = 2;
-				this.combienWeight = 8;
+				this.combienInput = 8;
 				declareTypedIO("lllllllll", "l");
 			} else if (args[0].getString().equals("weight") && args.length > 1) { // mode poids
 				if (args[1].isInt() && args[1].getInt() > 1 && args[1].getInt() <= 8) { // l'arguement doit tre un entier compris entre 2 et 8
 					this.mode = 3;
-					combienWeight = (byte) (args[1].getInt());
+					combienInput = (byte) (args[1].getInt());
 					
-					declareIO(combienWeight + 1, 1); // il y a une entrŽe de plus pour les facteurs d'interpolation
+					declareIO(combienInput + 1, 1); // il y a une entrŽe de plus pour les facteurs d'interpolation
 				} else
 					bail("bad argument for argument weigth (int between 1 and 8 expected)");
 			} else {
-				bail("unkown argument for ej.linterp");
+				bail("unkown argument for ej.linterp... have a look to the help file.");
 			}
 		} else {
 			this.mode = 0; // mais on le savait dŽjˆ
-			this.combienWeight = 2;
+			this.combienInput = 2;
 			declareTypedIO("fll", "l");
 		}
 
@@ -85,23 +84,53 @@ public class linterp extends ej {
 			case 2:
 				setInletAssist(INLET_ASSIST_CUBE);
 				break;
+			case 3:
+				setInletAssist(createWeightAssistance());
+				break;
 		}
+	}
+
+	private String[] createWeightAssistance() {
+		String[] theString = new String[combienInput];
+		
+		for (byte idx = 0; idx < theString.length; idx++) 
+			theString[idx] = INLET_ASSIST_CUBE[idx];
+		
+		return theString;
 	}
 	
 	public void bang() {
 		calcule();
 	}
 	
-	public void inlet(float f) {
+	private void setInput(int inlet, float args) {
+		if (inlet > 0 && inlet <= combienInput) {
+			listes[inlet - 1] = new float[]{ args };
+		}
+	}
+	
+	private void setInput(int inlet, float[] args) {
+		if (inlet > 0 && inlet <= combienInput) {
+			listes[inlet - 1] = args;
+		}
+	}
+	
+	public void inlet(float args) {
 		switch (getInlet()) {
 			case 0:
-				interpFactor = new float[] { f, f, f };
+				setInterpFactor(args);
 				calcule();
 				return;// car c'est dŽclenchŽ aussi ˆ la fin de la mŽthode
-			case 1: a = new float[]{ f }; break;
-			case 2: b = new float[]{ f }; break;
-			case 3: c = new float[]{ f }; break;
-			case 4: d = new float[]{ f }; break;
+			default:
+				setInput(getInlet(), args);
+//			case 1: a = new float[]{ args }; break;
+//			case 2: b = new float[]{ args }; break;
+//			case 3: c = new float[]{ args }; break;
+//			case 4: d = new float[]{ args }; break;
+//			case 5: e = new float[]{ args }; break;
+//			case 6: f = new float[]{ args }; break;
+//			case 7: g = new float[]{ args }; break;
+//			case 8: h = new float[]{ args }; break;
 		}
 		
 		if (autotrigger) calcule();
@@ -119,18 +148,27 @@ public class linterp extends ej {
 					setInterpFactor(args);   // comme on est pas rancunier on va utiliser le premier argument
 				}
 				break;
-			case 1: a = args; break;
-			case 2: b = args; break;
-			case 3: c = args; break;
-			case 4: d = args; break;
-			case 5: e = args; break;
-			case 6: f = args; break;
-			case 7: g = args; break;
-			case 8: h = args; break;
+			default:
+				setInput(getInlet(), args);
+//			case 1: a = args; break;
+//			case 2: b = args; break;
+//			case 3: c = args; break;
+//			case 4: d = args; break;
+//			case 5: e = args; break;
+//			case 6: f = args; break;
+//			case 7: g = args; break;
+//			case 8: h = args; break;
 		}
 		
-		listeDesListes = new float[][] { a, b, c, d, e, f, g, h };
+//		listes = new float[][] { a, b, c, d, e, f, g, h };
 		if (autotrigger) calcule();
+	}
+
+	private void setInterpFactor(float args) {
+		if (mode != 3) {
+			interpFactor = new float[]{ args, args, args };
+		} else
+			interpFactor = normalize(new float[]{ args });
 	}
 	
 	private void setInterpFactor(float[] args) {			
@@ -150,7 +188,7 @@ public class linterp extends ej {
 					interpFactor = args;
 					break;
 				default:
-					error("too many arguments, try the weight mode...");
+					error("too many arguments, you may have to try the weight mode...");
 			}
 		} else {
 			interpFactor = normalize(args);
@@ -168,6 +206,7 @@ public class linterp extends ej {
 		if (max == 1)
 			return args;
 		
+		// sinon on divise chaque ŽlŽment par le maximum
 		for (i = 0; i < args.length; i++)
 			args[i] /= max;
 		
@@ -175,55 +214,55 @@ public class linterp extends ej {
 	}
 	
 	private void calcule() {
+		if (interpFactor == null)
+			return;
+		
 		if (mode == 0) {
 			if (resultat.length > 0 || inputCheck((byte) 2)) {
-				resultat = new float[Math.min(a.length, b.length)];
+				resultat = new float[Math.min(listes[0].length, listes[1].length)];
 				
 				for (int i = 0; i < resultat.length; i++)
-					resultat[i] = b[i] * interpFactor[0] + (1 - interpFactor[0]) * a[i];
+					resultat[i] = listes[1][i] * interpFactor[0] + (1 - interpFactor[0]) * listes[0][i];
 			}
 		} else if (mode == 1) {
 			if (resultat.length > 0 || inputCheck((byte) 4)) {
-				resultat = new float[Math.min(Math.min(a.length, b.length), Math.min(c.length, d.length))];
+				resultat = new float[findSmallestList()];
 
 				for (int i = 0; i < resultat.length; i++) {
 					resultat[i] =
-						a[i] * (1 - interpFactor[0]) * (1 - interpFactor[1]) + 
-						b[i] * interpFactor[0] * (1 - interpFactor[1]) +
-						c[i] * (1 - interpFactor[0]) * interpFactor[1] +
-						d[i] * interpFactor[0] * interpFactor[1];
-					
+						listes[0][i] * (1 - interpFactor[0]) * (1 - interpFactor[1]) + 
+						listes[1][i] * interpFactor[0] * (1 - interpFactor[1]) +
+						listes[2][i] * (1 - interpFactor[0]) * interpFactor[1] +
+						listes[3][i] * interpFactor[0] * interpFactor[1];
 				}
 			}
 		} else if (mode == 2) {
 			// resultat.length > 0 quand on a dŽjˆ sorti quelque chose (ce qui veut dire que toutes les listes ont ŽtŽ remplies)
 			if (resultat.length > 0 || inputCheck((byte) 8)) {
-				resultat = new float[Math.min(
-											  Math.min(Math.min(a.length, b.length), Math.min(c.length, d.length)),
-											  Math.min(Math.min(e.length, f.length), Math.min(g.length, h.length))
-											  )];
+				resultat = new float[findSmallestList()];
 
 				for (int i = 0; i < resultat.length; i++) {
 					resultat[i] =
-						a[i] * (1 - interpFactor[0]) * (1 - interpFactor[1]) * (1 - interpFactor[2]) + 
-						b[i] * interpFactor[0] * (1 - interpFactor[1]) * (1 - interpFactor[2]) +
-						c[i] * (1 - interpFactor[0]) * interpFactor[1] * (1 - interpFactor[2]) +
-						d[i] * interpFactor[0] * interpFactor[1] * (1 - interpFactor[2]) +
-						e[i] * (1 - interpFactor[0]) * (1 - interpFactor[1]) * interpFactor[2] + 
-						f[i] * interpFactor[0] * (1 - interpFactor[1]) * interpFactor[2] +
-						g[i] * (1 - interpFactor[0]) * interpFactor[1] * interpFactor[2] +
-						h[i] * interpFactor[0] * interpFactor[1] * interpFactor[2];
+						listes[0][i] * (1 - interpFactor[0]) * (1 - interpFactor[1]) * (1 - interpFactor[2]) + 
+						listes[1][i] * interpFactor[0] * (1 - interpFactor[1]) * (1 - interpFactor[2]) +
+						listes[2][i] * (1 - interpFactor[0]) * interpFactor[1] * (1 - interpFactor[2]) +
+						listes[3][i] * interpFactor[0] * interpFactor[1] * (1 - interpFactor[2]) +
+						listes[4][i] * (1 - interpFactor[0]) * (1 - interpFactor[1]) * interpFactor[2] + 
+						listes[5][i] * interpFactor[0] * (1 - interpFactor[1]) * interpFactor[2] +
+						listes[6][i] * (1 - interpFactor[0]) * interpFactor[1] * interpFactor[2] +
+						listes[7][i] * interpFactor[0] * interpFactor[1] * interpFactor[2];
 				}
 			}	
 		} else {
-			if (resultat.length > 0 || inputCheck((byte) Math.min(combienWeight, interpFactor.length))) {
+			// quelque chose me dit que c'est le mode 3...
+			if (resultat.length > 0 || inputCheck((byte) Math.min(combienInput, interpFactor.length))) {
 				resultat = new float[findSmallestList()];
 
 				int i, j;
 				for (i = j = 0; i < resultat.length; i++) {
 					resultat[i] = 0;
-					for (j = 0; j < Math.min(combienWeight, interpFactor.length); j++) {
-						resultat[i] += listeDesListes[j][i] * interpFactor[j];
+					for (j = 0; j < Math.min(combienInput, interpFactor.length); j++) {
+						resultat[i] += listes[j][i] * interpFactor[j];
 					}
 				}
 			}
@@ -249,8 +288,8 @@ public class linterp extends ej {
 		byte flag = 0;
 		
 		try {
-			for (int i = 0; i < combienWeight; i++) {
-				if (listeDesListes[i].length > 0)
+			for (int i = 0; i < combienInput; i++) {
+				if (listes[i].length > 0)
 					flag++;
 			}
 		} catch (Exception e) {
@@ -265,9 +304,9 @@ public class linterp extends ej {
 	private int findSmallestList() {
 		int min = 0;
 
-		for (byte b = 0; b < combienWeight; b++) {
-			if (listeDesListes[b].length > min) {
-				min = listeDesListes[b].length;
+		for (byte idx = 0; idx < combienInput; idx++) {
+			if (listes[idx].length > min) {
+				min = listes[idx].length;
 			}
 		}
 		
@@ -275,6 +314,7 @@ public class linterp extends ej {
 	}
 	
 	private void writeToBuffer() {
+		// c'est pas trs compliquŽ...
 		if (buf_name != null && resultat.length > 0) {
 			MSPBuffer.poke(buf_name, resultat);
 		}
