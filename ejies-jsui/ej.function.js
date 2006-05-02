@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.70 $
-	$Date: 2006/04/22 18:27:53 $
+	$Revision: 1.71 $
+	$Date: 2006/05/02 14:18:59 $
 */
 
 // global code
@@ -1080,8 +1080,8 @@ function ArgsParser(courbe, msg, a)
 	// en fonction du nombre d'arguments 1 (interpolationX-Y) 2 (AddPoint) 3 (MovePoint)
 		switch (a.length) {
 			case 1: interp(courbe, a[0]); break;
-			case 2: AddOnePoint(courbe, val2x(courbe, a[0]), val2y(courbe, a[1])); break;
-			case 3: MovePoint(courbe, a[0], a[1], a[2]); break;
+			case 2: AddOnePoint(courbe, val2x(courbe, a[0]), val2y(courbe, a[1])); drawFunctions(); break;
+			case 3: MovePoint(courbe, a[0], a[1], a[2]); drawFunctions(); break;
 			default: perror("too many arguments for message", msg); break;
 		}
 		return 0;	// sort de la fonction
