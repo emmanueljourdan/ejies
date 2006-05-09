@@ -2,8 +2,8 @@
  *	ej.ftom by Emmanuel Jourdan, Ircam Ñ 02 2005
  *	Frequency to MIDI (with tuning adjustment)
  *
- *	$Revision: 1.4 $
- *	$Date: 2006/04/21 17:19:57 $
+ *	$Revision: 1.5 $
+ *	$Date: 2006/05/09 17:42:55 $
  */
 
 package ej;
@@ -15,11 +15,10 @@ public class ftom extends ej {
 	private static final String[] OUTLET_ASSIST = new String[]{ "Frequency out"};
 	private static final String[] LIST_MODES = new String[]{ "float", "int", "round", "quarter" };
 	
-	private float[] aList;
-	private float tuning = 440;
+	private double tuning = 440;
 	private int pitch_reference = 69;
 	private char whichMode = 0;
-	private float tonSubdivision = 2;
+	private double tonSubdivision = 2;
 	
 	private int[] listInt;
 	
@@ -53,7 +52,7 @@ public class ftom extends ej {
 	}
 	
 	private float getTunnig() {
-		return tuning;
+		return (float) tuning;
 	}
 
 	private void setPitchReference(int i) {

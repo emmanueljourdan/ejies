@@ -2,8 +2,8 @@
  *	ej.mmmm by Emmanuel Jourdan, Ircam Ñ 12 2005
  *	output the min, median, mean, maximum on a int/float stream
  *
- *	$Revision: 1.4 $
- *	$Date: 2006/02/21 10:30:26 $
+ *	$Revision: 1.5 $
+ *	$Date: 2006/05/09 17:45:35 $
  */
 
 package ej;
@@ -114,16 +114,16 @@ public class mmmm extends ej
 		Arrays.sort(b);
 
 		if (mode.equals("list")) {
-			outlet(0, new float[] { b[0], b[b.length / 2], (float) moyenne(b), b[b.length - 1] } );
+			outlet(0, new float[] { b[0], b[b.length / 2], moyenne(b), b[b.length - 1] } );
 		} else {
 			outlet(3, b[b.length - 1]);
-			outlet(2, (float) moyenne(b));
+			outlet(2, moyenne(b));
 			outlet(1, b[b.length / 2]);
 			outlet(0, b[0]);
 		}
 	}
         
-	private double moyenne(float tab[]) {
+	private float moyenne(float tab[]) {
 		int i;
 		somme = 0;
 
@@ -131,14 +131,12 @@ public class mmmm extends ej
 			somme += tab[i];
 		}
 		
-		return (somme / tab.length);
+		return (float) (somme / tab.length);
 	}
 	
 	private void outputWindow() {
-		int i;
-		for (i = 0; i < c.length; i++) {
+		for (int i = 0; i < c.length; i++)
 			c[i] = a[(i + idx) % window];
-		}
 
 		outlet(4, c);
 	}
