@@ -1,8 +1,8 @@
 /*
  *	ejies Java externals by Emmanuel Jourdan, Ircam Ñ 12 2005
  *
- *	$Revision: 1.4 $
- *	$Date: 2006/04/04 15:01:57 $
+ *	$Revision: 1.5 $
+ *	$Date: 2006/05/09 16:34:30 $
  */
 
 package ej;
@@ -16,11 +16,18 @@ public abstract class ej extends MaxObject
 	private static boolean printedMessage;
 	private static String theMessage = "ejies Java externals by Emmanuel Jourdan, Ircam";
 	
-	public void ej() {
+	public ej() {
 		if (printedMessage == false) {
 			dblclick();
 			printedMessage = true;
 		}
+	}
+	
+	public boolean isNumber(Atom a) {
+		if (a.isInt() || a.isFloat())
+			return true;
+		else
+			return false;
 	}
 	
 	public void dblclick() {
