@@ -2,8 +2,8 @@
  *	ej.lchange by Emmanuel Jourdan, Ircam — 12 2005
  *	aware of list change
  *
- *	$Revision: 1.5 $
- *	$Date: 2006/04/10 13:22:57 $
+ *	$Revision: 1.6 $
+ *	$Date: 2006/05/10 14:31:28 $
  */
 
 package ej;
@@ -15,7 +15,7 @@ public class lchange extends ej
 	private static final String[] INLET_ASSIST = new String[]{ "Repeted" };
 	private static final String[] OUTLET_ASSIST = new String[]{ "result if different from the last one"	};
 
-	private Atom[] lastThing; // c'est là qu'on met la dernière chose
+	private Atom[] lastThing = new Atom[0]; // c'est là qu'on met la dernière chose
 	private int mode = 0;
 	
 	public lchange(Atom[] args)
@@ -32,6 +32,7 @@ public class lchange extends ej
 		
 	public void anything(String s, Atom[] args)
 	{
+		post("ici");
 		// si la longueur est différente
 		if (lastThing.length != (args.length + 1)) {
 			isDifferent(s, args);
