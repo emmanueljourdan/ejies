@@ -2,8 +2,8 @@
  *	ej.lchange by Emmanuel Jourdan, Ircam — 12 2005
  *	aware of list change
  *
- *	$Revision: 1.6 $
- *	$Date: 2006/05/10 14:31:28 $
+ *	$Revision: 1.7 $
+ *	$Date: 2006/05/15 10:21:23 $
  */
 
 package ej;
@@ -32,7 +32,6 @@ public class lchange extends ej
 		
 	public void anything(String s, Atom[] args)
 	{
-		post("ici");
 		// si la longueur est différente
 		if (lastThing.length != (args.length + 1)) {
 			isDifferent(s, args);
