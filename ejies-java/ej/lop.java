@@ -4,8 +4,8 @@
  *
  *  Many thanks to Ben Nevile for performances enhacement.
  *
- *	$Revision: 1.19 $
- *	$Date: 2006/04/10 13:22:57 $
+ *	$Revision: 1.20 $
+ *	$Date: 2006/05/15 10:24:52 $
  */
 
 package ej;
@@ -208,7 +208,7 @@ public class lop extends ej {
 		if (isUnary == true)
 			outlet(0, myListOperator.operate(a, 0)); // au lieu d'avoir encore un constructeur
 		else if (scalarmode == false || (a.length > 1 && b.length > 1))		// si c'est pas scalarmode ou que les deux entrées ont reçues des listes
-			outlet(0, myListOperator.operate(a, b));0
+			outlet(0, myListOperator.operate(a, b));
 		else if (scalarmode == true && b.length == 1)
 			outlet(0, myListOperator.operate(a, b[0]));
 		else if (scalarmode == true && a.length == 1)
