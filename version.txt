@@ -1,13 +1,13 @@
 ejies — Version history
 
 *******************
-1.56b6: 22 April 2006
+1.56b7: 22 April 2006
 This version requires MaxMSP 4.5.6 or higher.
 
 New Java Externals:
 ej.ftom: Frequency to MIDI (with tuning adjustment, works for lists)
 ej.ldrunk: more than a drunk for list
-ej.linterp: more than a list interpolator (2, 4 or 8 inputs)
+ej.linterp: more than a list interpolator (up to 8 inputs)
 ej.mtof: MIDI to Frequency (with tuning adjustment, works for lists)
 ej.urn: like urn, for larger random range
 ej.jit.preview: (bpatcher) Patcher window for jitter (with slowing down)
@@ -21,6 +21,11 @@ ej.lslide: initialisation problem corrected (introduced in 1.56b4)
 jit.fullscreen: new dumpout outlet (to get the mouse position for example)
 jit.fullscreen: fix a problem when mirror is on and the resolution of both screen is the same
 ej.lscale: help file math function corrected
+
+Bug correction:
+ej.vdb~ and ej.vdb-sig~: windowing was wrong... and that's really bad... (Thanks José-Miguel)
+
+
 
 *******************
 1.55: 21 Feb 2006
