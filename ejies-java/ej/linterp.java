@@ -3,8 +3,8 @@
  *	simple list interpolator
  *
  *
- *	$Revision: 1.9 $
- *	$Date: 2006/04/28 20:29:04 $
+ *	$Revision: 1.10 $
+ *	$Date: 2006/05/16 17:05:04 $
  */
 
 package ej;
@@ -95,7 +95,7 @@ public class linterp extends ej {
 		
 		for (byte idx = 0; idx < theString.length; idx++) 
 			theString[idx] = INLET_ASSIST_CUBE[idx];
-		
+
 		return theString;
 	}
 	
