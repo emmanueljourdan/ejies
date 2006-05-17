@@ -50,7 +50,10 @@ if [ -e "/Applications/MaxMSP 4.5/" ] ; then
 	rm -f /Applications/MaxMSP*/patches/object-prototypes/pictctrl/ej.* && echo -ne "... done.\n"
 
 	echo -ne "- inspectors (/Applications/MaxMSP*/patches/inspectors)"
-	rm -f /Applications/MaxMSP*/patches/inspectors/ej.* && echo -ne "... done.\n"
+	rm -f "/Applications/MaxMSP 4.5/patches/inspectors"/ej.* && echo -ne "... done.\n"
+
+	echo -ne "- images (/Applications/MaxMSP*/patches/picts/)"
+	rm -Rf "/Applications/MaxMSP 4.5/patches/pict"/ej.* && echo -ne "... done.\n"
 
 	echo -ne "- help files (/Applications/MaxMSP*/max-help/ejies-help)"
 	rm -Rf /Applications/MaxMSP*/max-help/ejies-help && echo -ne "... done.\n"

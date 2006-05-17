@@ -38,13 +38,17 @@ fi
 
 if [ -e "/Applications/MaxMSP 4.5/" ] ; then
 	echo -ne "- extras file (/Applications/MaxMSP*/patches/extras/)"
-	cp -R $DossierDeLInstalleur/ejies-extras/* /Applications/MaxMSP*/patches/extras/ && echo -ne "... done.\n"
+	cp -R $DossierDeLInstalleur/ejies-extras/* "/Applications/MaxMSP 4.5/patches/extras/" && echo -ne "... done.\n"
 
 	echo -ne "- prototypes (/Applications/MaxMSP*/patches/object-prototypes/)"
-	cp -R $DossierDeLInstalleur/ejies-prototypes/* /Applications/MaxMSP*/patches/object-prototypes/ && echo -ne "... done.\n"
+	cp -R $DossierDeLInstalleur/ejies-prototypes/* "/Applications/MaxMSP 4.5/patches/object-prototypes/" && echo -ne "... done.\n"
 
 	echo -ne "- inspectors (/Applications/MaxMSP*/patches/inspectors)"
-	cp -R $DossierDeLInstalleur/ejies-insp/* /Applications/MaxMSP*/patches/inspectors/ && echo -ne "... done.\n"
+	cp -R $DossierDeLInstalleur/ejies-insp/* "/Applications/MaxMSP 4.5/patches/inspectors/" && echo -ne "... done.\n"
+	
+	echo -ne "- images (/Applications/MaxMSP*/patches/picts)"
+	cp $DossierDeLInstalleur/ejies-pict/* "/Applications/MaxMSP 4.5/patches/picts/" && echo -ne "... done.\n"
+	
 else
 	echo -ne "Sorry, /Applications/MaxMSP 4.5/ doesn't exist. Extra, prototypes and inspectors can't be installed.\n"
 fi
