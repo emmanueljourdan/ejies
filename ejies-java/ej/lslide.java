@@ -3,8 +3,8 @@
  *	slide for lists
  *
  *
- *	$Revision: 1.5 $
- *	$Date: 2006/04/22 17:00:44 $
+ *	$Revision: 1.6 $
+ *	$Date: 2006/05/18 17:50:48 $
  */
 
 package ej;
@@ -16,7 +16,6 @@ public class lslide extends ej {
 	private static final String[] OUTLET_ASSIST = new String[]{ "Slided list"};	
 
 	private float[] a = new float[0];
-	private float[] lastA = new float[0];
 	private float[] resultat = new float[0];
 	private float slide_up = 1;
 	private float slide_down = 1;
@@ -97,7 +96,6 @@ public class lslide extends ej {
 		// redimensionne tout le monde
 		if (resultat.length != a.length) {
 			resultat = new float[a.length];
-			lastA = new float[a.length];
 		}
 		
 		if (firstIsMade == true)
@@ -110,13 +108,12 @@ public class lslide extends ej {
 		for (int i = 0; i < resultat.length; i++) {
 			yN_1 = resultat[i];
 
-			if (a[i] - lastA[i] >= 0)
+			if (a[i] - resultat[i] >= 0)
 				resultat[i] = yN_1 + ((a[i] - yN_1) / slide_up);
 			else
 				resultat[i] = yN_1 + ((a[i] - yN_1) / slide_down);
 		}
 		
-		lastA = a;
 		outlet(0, resultat);
 	}
 	
@@ -130,7 +127,6 @@ public class lslide extends ej {
 				resultat[i] = yN_1 + ((a[i] - yN_1) / slide_down);
 		}
 		
-		lastA = a;
 		outlet(0, resultat);
 		firstIsMade = true;
 	}
