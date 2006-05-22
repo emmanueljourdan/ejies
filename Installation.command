@@ -27,7 +27,7 @@ function do46Installation {
 function doInstallation {
 	if [ -e "$C74Folder" ] ; then
 
-		if [[ maxObjectsToBeInstalled == 1 ]] ; then
+		if [[ $maxObjectsToBeInstalled == 1 ]] ; then
 			echo -ne "- objects ($C74Folder/externals/ejies-obj)"
 			cp -R $DossierDeLInstalleur/ejies-obj "$C74Folder/externals/" && echo -ne "... done.\n"
 		fi
@@ -49,7 +49,7 @@ function doInstallation {
 	
 	if [ -e "$maxAppFolder" ] ; then
 
-		if [[ maxObjectsToBeInstalled == 1 ]] ; then
+		if [[ $maxObjectsToBeInstalled == 1 ]] ; then
 			echo -ne "- help files ($maxAppFolder/max-help/ejies-help)"
 			cp -R $DossierDeLInstalleur/ejies-help "$maxAppFolder/max-help/" && echo -ne "... done.\n"
 		fi
