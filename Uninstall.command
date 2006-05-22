@@ -12,41 +12,33 @@ function remove45 {
 	C74Folder="/Library/Application Support/Cycling '74";
 	
 	doRemove;
-	
-	exit 0;
 }
 	
-function remove45 {
+function remove46 {
 	echo "Removing ejies for MaxMSP 4.6:";
 	
 	maxAppFolder="/Applications/MaxMSP 4.6";
 	C74Folder="$maxAppFolder/Cycling '74";
 	
 	doRemove;
-
-	exit 0;
 }
 
 function doRemove {
 	if [ -e "$C74Folder" ] ; then
-		cd "$C74Folder"
-		pwd
-		echo -ne "uninstalling:\n"
-		
 		echo -ne "- init files ($C74Folder/init/)"
-		rm -f init/ejies-* && echo -ne "... done.\n"
+		rm -f "$C74Folder/init"/ejies-* && echo -ne "... done.\n"
 		
 		echo -ne "- jsui files ($C74Folder/jsui-library/)"
-		rm -f jsui-library/ej.* && echo -ne "... done.\n"
+		rm -f "$C74Folder/jsui-library/"ej.* && echo -ne "... done.\n"
 		
 		echo -ne "- jsextensions file ($C74Folder/jsextensions/)"
-		rm -f jsextensions/ejies* && echo -ne "... done.\n"
+		rm -f "$C74Folder/jsextensions/"ejies* && echo -ne "... done.\n"
 	
 		echo -ne "- objects ($C74Folder/externals/ejies-obj)"
-		rm -Rf externals/ejies-obj && echo -ne "... done.\n"
+		rm -Rf "$C74Folder/externals/"ejies-obj && echo -ne "... done.\n"
 	
 		echo -ne "- java externals ($C74Folder/java/classes/ej)"
-		rm -Rf java/classes/ej && echo -ne "... done.\n"
+		rm -Rf "$C74Folder/java/classes/"ej && echo -ne "... done.\n"
 	
 	else
 		echo -ne "Sorry, $C74Folder doen't exist. Init, jsui and jsextensions can't be uninstalled.\n"
@@ -73,8 +65,22 @@ function doRemove {
 	else
 		echo -ne "Sorry, $maxAppFolder doesn't exist. Extra, prototypes and inspectors can't be uninstalled.\n"
 	fi
+	
+	echo -ne "\n";
 
 }
+
+
+################################
+# UnInstallation process
+################################
+clear
+
+echo "-------------------------"
+echo "--- ejies Uninstaller ---"
+echo "-------------------------"
+echo ""
+echo ""
 
 
 ################################
@@ -105,24 +111,14 @@ elif [[ $whichVersion == 3 ]]; then
 fi
 
 
-
 ################################
-# UnInstallation process
+#  Shortcuts
 ################################
-clear
-
-echo "-------------------------"
-echo "--- ejies Uninstaller ---"
-echo "-------------------------"
-echo ""
-echo ""
-
-
-echo "- Removing old shorcuts... (if needed)"
+echo -ne "Removing the application shorcuts... "
 defaults delete com.cycling74.Max NSUserKeyEquivalents 2> /dev/null
 defaults delete com.cycling74.MaxMSP46 NSUserKeyEquivalents 2> /dev/null
-
+echo -ne "done"
 echo -ne "\n\nend of the installation... enjoy!\n"
 echo -ne "(you can quit the Terminal now...)\n"
 
-exit 0
+exit 0;
