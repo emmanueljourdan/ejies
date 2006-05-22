@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.71 $
-	$Date: 2006/05/02 14:18:59 $
+	$Revision: 1.72 $
+	$Date: 2006/05/22 17:33:09 $
 */
 
 // global code
@@ -1330,8 +1330,7 @@ function MyDump(courbe, sendname)
 	}
 	//else -> on envoie vers un send
 	for (i = 0; i < courbe.np; i++) {
-		str = courbe.name + " " + courbe.pa[i].valx.toFixed(6) + " " + courbe.pa[i].valy.toFixed(6);
-		g.dump = str.split(" ");	// String -> Array
+		g.dump = [ courbe.name, courbe.pa[i].valx, courbe.pa[i].valy ];
 		g.sendnamed(sendname,"dump");
 	}
 }
@@ -1362,7 +1361,7 @@ function MyListDump(courbe, sendname)
 {
 /* 	var tmpF = courbe; */
 	var tmpArray = new Array();
-	var i, idx, str;
+	var i, idx;
 	
 	if (! courbe.np)
 		return;
@@ -1384,11 +1383,8 @@ function MyListDump(courbe, sendname)
 	}
 
 	// else -> on envoie vers un send
-	str = courbe.name;
-	for (i = 0; i < tmpArray.length; i++) {
-		str += " " + tmpArray[i].toFixed(6);
-	}
-	g.listdump = str.split(" ");	// String -> Array
+	tmpArray.unshift(courbe.name);
+	g.listdump = tmpArray;
 	g.sendnamed(sendname, "listdump");
 }
 MyListDump.local = 1;

@@ -19,12 +19,12 @@ ej.function.js: display with a bad argument won't cause problem
 ej.lop: new operators (atodb, dbtoa)
 ej.lop: val @ttribute accept now more than one value
 ej.lop: accepts argument(s): operator followed by value(s)
-ej.lslide: initialisation problem corrected (introduced in 1.56b4)
 jit.fullscreen: new dumpout outlet (to get the mouse position for example)
 jit.fullscreen: fix a problem when mirror is on and the resolution of both screen is the same
 ej.lscale: help file math function corrected
 
 Bug correction:
+ej.function.js: dump/listdump with the send argument and a function containing spaces works now (Thanks Richard)
 ej.lslide: slide_up/slide_down was not choose correctly (Thanks Elvio)
 ej.vdb~ and ej.vdb-sig~: windowing was wrong... and that's really bad... (Thanks José-Miguel)
 
