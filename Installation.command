@@ -31,9 +31,6 @@ function doInstallation {
 			echo -ne "- objects ($C74Folder/externals/ejies-obj)"
 			cp -R $DossierDeLInstalleur/ejies-obj "$C74Folder/externals/" && echo -ne "... done.\n"
 		fi
-
-		cd "$C74Folder";
-		pwd;
 		
 		echo -ne "- init files ($C74Folder/init/)"
 		cp -R $DossierDeLInstalleur/ejies-init/* "$C74Folder/init/" && echo -ne "... done.\n"
@@ -73,20 +70,20 @@ function doInstallation {
 		echo -ne "Sorry, $maxAppFolder/ doesn't exist. Extra, prototypes and inspectors can't be installed.\n"
 	fi
 
+	echo -ne "\n";
 }
 
 function installShortcuts {
 	# code from AddShortcuts2Max.command
-	echo -ne "installing the shortcuts now:\n"
-	echo "- Removing old shorcuts... (if needed)"
 	defaults delete com.cycling74.Max NSUserKeyEquivalents 2> /dev/null
+	defaults delete com.cycling74.MaxMSP4.6 NSUserKeyEquivalents 2> /dev/null
 	
 	sleep 0.5 
-	echo -ne "- Adding new shorcuts"
+	echo -ne "Adding application shorcuts"
 	(defaults write $preferenceFile NSUserKeyEquivalents -dict-add "Restore Origin" "@~R" "Set Origin" "@~S" "Open As Text…" "@~O" "Save As…" "@\$S" Clear "~X" "Paste Replace" "@~V" "Lock Background" "@~L" Redo "@~Z" "Text" "@~N" "New from Clipboard" "@\$N" "Encapsulate" "@\$E" "De-encapsulate" "@\$D") && echo -ne "... done.\n"
 	
 	
-	echo -ne "To revert, remove the ~/Library/Preferences/com.cycling74.Max.plist file.\n"
+	echo -ne "To revert, remove the ~/Library/Preferences/$preferenceFile.plist file.\n"
 	
 	sleep 0.5
 	echo -e "The new shortcuts will be available the next time you start MaxMSP.\n\n"
@@ -156,7 +153,7 @@ if [[ $whichVersion == 3 ]]; then
 fi
 
 # choix des objets/helps
-echo -ne "\nWould you like to install the externals and the help files in the standart places (C74:/externals/ and MaxMSP 4.5/max-help)? (Y/N) "
+echo -ne "Would you like to install the externals and the help files in the standart places (C74:/externals/ and MaxMSP 4.*/max-help)? (Y/N) "
 
 read installMaxObjects;
 if [[ $installMaxObjects == "Y" || $installMaxObjects == "y" ]] ; then
@@ -167,17 +164,17 @@ else
 fi
 
 # choix pour les shortcuts
-echo -ne "\nWould you like to install the shortcuts? (Y/N) "
+echo -ne "Would you like to install the shortcuts? (Y/N) "
 read shortcutsAnswer;
 
 
 # lance le processus d'installation
 if [[ $isInstallBothVersion == "Y" || $isInstallBothVersion == "y" ]] ; then
-		echo "il faut faire les installs deux fois";
+		echo -ne "\nThe ejies will be installed for MaxMSP 4.5 and 4.6.\n";
 		do45Installation;
 		do46Installation;
 else
-		echo "The ejies will be installed for MaxMSP 4.6 only";
+		echo -ne "\nThe ejies will be installed for MaxMSP 4.6 only.\n";
 		do46Installation;
 fi
 
@@ -188,7 +185,7 @@ fi
 
 ################################
 # Fin de l'installation
-echo -ne "\n\nend of the installation... enjoy!\n"
+echo -ne "\nend of the installation... enjoy!\n"
 echo -ne "(you can quit the Terminal now...)\n"
 
 exit 0
