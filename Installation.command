@@ -12,8 +12,6 @@ function do45Installation {
 	preferenceFile="com.cycling74.Max";
 	
 	doInstallation;
-	
-	exit 0;
 }
 	
 function do46Installation {
@@ -24,8 +22,6 @@ function do46Installation {
 	preferenceFile="com.cycling74.MaxMSP46";
 	
 	doInstallation;
-
-	exit 0;
 }
 
 function doInstallation {

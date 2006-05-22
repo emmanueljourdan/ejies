@@ -56,7 +56,7 @@ function doRemove {
 		echo -ne "- extras file ($maxAppFolder/patches/extras/)"
 		rm -f "$maxAppFolder/patches/extras/"ejies* && echo -ne "... done.\n"
 	
-		echo -ne "- prototypes (/Applications/MaxMSP*/patches/object-prototypes/)"
+		echo -ne "- prototypes ($maxAppFolder/patches/object-prototypes/)"
 		rm -f "$maxAppFolder/patches/object-prototypes/bpatcher/"ej.*
 		rm -f "$maxAppFolder/patches/object-prototypes/jsui/"ej.*
 		rm -f "$maxAppFolder/patches/object-prototypes/pictctrl/"ej.*
