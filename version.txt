@@ -14,6 +14,7 @@ ej.jit.preview: (bpatcher) Patcher window for jitter (with slowing down)
 Collection of aqua sliders with prototypes
 
 Improvements:
+Installation/Uninstallation: compatible with MaxMSP 4.6
 ej.function.js: display with a bad argument won't cause problem
 ej.lop: new operators (atodb, dbtoa)
 ej.lop: val @ttribute accept now more than one value

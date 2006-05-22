@@ -1,81 +1,85 @@
 #!/bin/bash
 # This file must be saved in UTF-8 (because of the sortcuts)
 
-clear
-
-echo "------------------------"
-echo "-- ejies Installation --"
-echo "------------------------"
-echo ""
-echo ""
-
-# sleep 1 # c'est plus long mais �a fait joli
-
-echo -ne "This command line will install the ejies for you...\n"
-
-PathDeLInstalleur=$0
-DossierDeLInstalleur=$(dirname $PathDeLInstalleur)
-
-if [ -e /Library/Application\ Support/Cycling\ \'74/ ] ; then
-	cd /Library/Application\ Support/Cycling\ \'74/
-	pwd
-	echo -ne "installing:\n"
+################################
+# Installations Methodes
+################################
+function do45Installation {
+	echo "Installing ejies for MaxMSP 4.5:";
 	
-	echo -ne "- init files (/Library/Application Support/Cycling '74/init/)"
-	cp -R $DossierDeLInstalleur/ejies-init/* init/ && echo -ne "... done.\n"
+	maxAppFolder="/Applications/MaxMSP 4.5";
+	C74Folder="/Library/Application Support/Cycling '74";
+	preferenceFile="com.cycling74.Max";
 	
-	echo -ne "- jsui files (/Library/Application Support/Cycling '74/jsui-library/)"
-	cp -R $DossierDeLInstalleur/ejies-jsui/* jsui-library/ && echo -ne "... done.\n"
+	doInstallation;
 	
-	echo -ne "- jsextensions file (/Library/Application Support/Cycling '74/jsextensions/)"
-	cp -R $DossierDeLInstalleur/ejies-jsextensions/* jsextensions/ && echo -ne "... done.\n"
-
-	echo -ne "- java externals file (/Library/Application Support/Cycling '74/java/classes)"
-	cp -R $DossierDeLInstalleur/ejies-java/* java/classes/ && echo -ne "... done.\n"
-else
-	echo -ne "Sorry, /Library/Application\ Support/Cycling\ \'74/ doen't exist. Init, jsui and jsextensions can't be installed.\n"
-fi
-
-if [ -e "/Applications/MaxMSP 4.5/" ] ; then
-	echo -ne "- extras file (/Applications/MaxMSP*/patches/extras/)"
-	cp -R $DossierDeLInstalleur/ejies-extras/* "/Applications/MaxMSP 4.5/patches/extras/" && echo -ne "... done.\n"
-
-	echo -ne "- prototypes (/Applications/MaxMSP*/patches/object-prototypes/)"
-	cp -R $DossierDeLInstalleur/ejies-prototypes/* "/Applications/MaxMSP 4.5/patches/object-prototypes/" && echo -ne "... done.\n"
-
-	echo -ne "- inspectors (/Applications/MaxMSP*/patches/inspectors)"
-	cp -R $DossierDeLInstalleur/ejies-insp/* "/Applications/MaxMSP 4.5/patches/inspectors/" && echo -ne "... done.\n"
+	exit 0;
+}
 	
-	echo -ne "- images (/Applications/MaxMSP*/patches/picts)"
-	cp $DossierDeLInstalleur/ejies-pict/* "/Applications/MaxMSP 4.5/patches/picts/" && echo -ne "... done.\n"
+function do46Installation {
+	echo "Installing ejies for MaxMSP 4.6:";
 	
-else
-	echo -ne "Sorry, /Applications/MaxMSP 4.5/ doesn't exist. Extra, prototypes and inspectors can't be installed.\n"
-fi
+	maxAppFolder="/Applications/MaxMSP 4.6";
+	C74Folder="$maxAppFolder/Cycling '74";
+	preferenceFile="com.cycling74.MaxMSP46";
+	
+	doInstallation;
 
-echo -ne "\nWould you like to install the externals and the help files in the standart places (C74:/externals/ and MaxMSP 4.5/max-help)? (Y/N) "
+	exit 0;
+}
 
-read Reponse
-if [[ $Reponse == "Y" || $Reponse == "y" ]] ; then
-	if [ -e "/Library/Application Support/Cycling '74/" ] ; then
-		echo -ne "installing:\n"
-		echo -ne "- objects (/Library/Application Support/Cycling '74/externals/ejies-obj)"
-		cp -R $DossierDeLInstalleur/ejies-obj externals/ && echo -ne "... done.\n"
+function doInstallation {
+	if [ -e "$C74Folder" ] ; then
+
+		if [[ maxObjectsToBeInstalled == 1 ]] ; then
+			echo -ne "- objects ($C74Folder/externals/ejies-obj)"
+			cp -R $DossierDeLInstalleur/ejies-obj "$C74Folder/externals/" && echo -ne "... done.\n"
+		fi
+
+		cd "$C74Folder";
+		pwd;
+		
+		echo -ne "- init files ($C74Folder/init/)"
+		cp -R $DossierDeLInstalleur/ejies-init/* "$C74Folder/init/" && echo -ne "... done.\n"
+		
+		echo -ne "- jsui files ($C74Folder/jsui-library/)"
+		cp -R $DossierDeLInstalleur/ejies-jsui/* "$C74Folder/jsui-library/" && echo -ne "... done.\n"
+		
+		echo -ne "- jsextensions file ($C74Folder/jsextensions/)"
+		cp -R $DossierDeLInstalleur/ejies-jsextensions/* "$C74Folder/jsextensions/" && echo -ne "... done.\n"
+	
+		echo -ne "- java externals file ($C74Folder/java/classes)"
+		cp -R $DossierDeLInstalleur/ejies-java/* "$C74Folder/java/classes/" && echo -ne "... done.\n"
+	else
+		echo -ne "Sorry, $C74Folder doen't exist. Init, jsui and jsextensions can't be installed.\n"
 	fi
 	
-	if [ -e "/Applications/MaxMSP 4.5/" ] ; then
-		echo -ne "- help files (/Applications/MaxMSP*/max-help/ejies-help)"
-		cp -R $DossierDeLInstalleur/ejies-help /Applications/MaxMSP*/max-help/ && echo -ne "... done.\n"
+	if [ -e "$maxAppFolder" ] ; then
+
+		if [[ maxObjectsToBeInstalled == 1 ]] ; then
+			echo -ne "- help files ($maxAppFolder/max-help/ejies-help)"
+			cp -R $DossierDeLInstalleur/ejies-help "$maxAppFolder/max-help/" && echo -ne "... done.\n"
+		fi
+
+		echo -ne "- extras file ($maxAppFolder/patches/extras/)"
+		cp $DossierDeLInstalleur/ejies-extras/* "$maxAppFolder/patches/extras/" && echo -ne "... done.\n"
+	
+		echo -ne "- prototypes ($maxAppFolder/patches/object-prototypes/)"
+		cp -R $DossierDeLInstalleur/ejies-prototypes/* "$maxAppFolder/patches/object-prototypes/" && echo -ne "... done.\n"
+	
+		echo -ne "- inspectors ($maxAppFolder/patches/inspectors)"
+		cp $DossierDeLInstalleur/ejies-insp/* "$maxAppFolder/patches/inspectors/" && echo -ne "... done.\n"
+		
+		echo -ne "- images (/Applications/MaxMSP*/patches/picts)"
+		cp $DossierDeLInstalleur/ejies-pict/* "$maxAppFolder/patches/picts/" && echo -ne "... done.\n"
+		
+	else
+		echo -ne "Sorry, $maxAppFolder/ doesn't exist. Extra, prototypes and inspectors can't be installed.\n"
 	fi
-else
-	echo -ne "I can understand that... but you'll have to install it yourself!\n"
-fi
 
+}
 
-echo -ne "\nWould you like to install the shortcuts? (Y/N) "
-
-read AutreReponse
-if [[ $AutreReponse == "Y" || $AutreReponse == "y" ]] ; then
+function installShortcuts {
 	# code from AddShortcuts2Max.command
 	echo -ne "installing the shortcuts now:\n"
 	echo "- Removing old shorcuts... (if needed)"
@@ -83,16 +87,113 @@ if [[ $AutreReponse == "Y" || $AutreReponse == "y" ]] ; then
 	
 	sleep 0.5 
 	echo -ne "- Adding new shorcuts"
-	(defaults write com.cycling74.Max NSUserKeyEquivalents -dict-add "Restore Origin" "@~R" "Set Origin" "@~S" "Open As Text…" "@~O" "Save As…" "@\$S" Clear "~X" "Paste Replace" "@~V" "Lock Background" "@~L" Redo "@~Z" "Text" "@~N" "New from Clipboard" "@\$N" "Encapsulate" "@\$E" "De-encapsulate" "@\$D") && echo -ne "... done.\n"
+	(defaults write $preferenceFile NSUserKeyEquivalents -dict-add "Restore Origin" "@~R" "Set Origin" "@~S" "Open As Text…" "@~O" "Save As…" "@\$S" Clear "~X" "Paste Replace" "@~V" "Lock Background" "@~L" Redo "@~Z" "Text" "@~N" "New from Clipboard" "@\$N" "Encapsulate" "@\$E" "De-encapsulate" "@\$D") && echo -ne "... done.\n"
 	
 	
 	echo -ne "To revert, remove the ~/Library/Preferences/com.cycling74.Max.plist file.\n"
 	
 	sleep 0.5
 	echo -e "The new shortcuts will be available the next time you start MaxMSP.\n\n"
+}
+################################
+
+
+
+
+
+################################
+# Installation process
+################################
+clear
+echo "------------------------"
+echo "-- ejies Installation --"
+echo "------------------------"
+echo ""
+echo ""
+
+
+################################
+# making PATH
+################################
+PathDeLInstalleur=$0
+DossierDeLInstalleur=$(dirname $PathDeLInstalleur)
+
+
+################################
+#  Version checking
+################################
+whichVersion=0;
+
+if [ -e "/Applications/MaxMSP 4.5" ]; then
+	whichVersion=1;
 fi
 
+if [ -e "/Applications/MaxMSP 4.6" ]; then
+	let "whichVersion = $whichVersion + 2";
+fi
+
+if [[ $whichVersion == 0 ]]; then
+	echo "MaxMSP is not installed in the /Applications folder. The ejies's automatic installation is not possible.";
+	exit 1;
+fi
+
+echo -ne "Checking version... ";
+if [[ $whichVersion == 1 ]]; then 
+	echo "MaxMSP 4.5 is installed.";
+elif [[ $whichVersion == 2 ]]; then 
+	echo "MaxMSP 4.6 is installed.";
+elif [[ $whichVersion == 3 ]]; then
+	echo "MaxMSP 4.5 and MaxMSP 4.6 are installed.";
+fi
+
+
+
+
+################################
+#  User interactions
+################################
+
+# choix des versions
+if [[ $whichVersion == 3 ]]; then
+	echo -ne "\nWould you like to install the ejies for both versions(MaxMSP 4.5 and MaxMSP 4.6)? (Y/N) ";
+	read isInstallBothVersion;
+fi
+
+# choix des objets/helps
+echo -ne "\nWould you like to install the externals and the help files in the standart places (C74:/externals/ and MaxMSP 4.5/max-help)? (Y/N) "
+
+read installMaxObjects;
+if [[ $installMaxObjects == "Y" || $installMaxObjects == "y" ]] ; then
+	maxObjectsToBeInstalled=1;
+else
+	maxObjectsToBeInstalled=0;
+	echo -ne "I can understand that... but you'll have to install it yourself!\n"
+fi
+
+# choix pour les shortcuts
+echo -ne "\nWould you like to install the shortcuts? (Y/N) "
+read shortcutsAnswer;
+
+
+# lance le processus d'installation
+if [[ $isInstallBothVersion == "Y" || $isInstallBothVersion == "y" ]] ; then
+		echo "il faut faire les installs deux fois";
+		do45Installation;
+		do46Installation;
+else
+		echo "The ejies will be installed for MaxMSP 4.6 only";
+		do46Installation;
+fi
+
+# installation des racourcis
+if [[ $shortcutsAnswer == "Y" || $shortcutsAnswer == "y" ]] ; then
+	installShortcuts;
+fi
+
+################################
+# Fin de l'installation
 echo -ne "\n\nend of the installation... enjoy!\n"
 echo -ne "(you can quit the Terminal now...)\n"
 
 exit 0
+
