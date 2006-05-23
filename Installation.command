@@ -169,13 +169,21 @@ read shortcutsAnswer;
 
 
 # lance le processus d'installation
-if [[ $isInstallBothVersion == "Y" || $isInstallBothVersion == "y" ]] ; then
-		echo -ne "\nThe ejies will be installed for MaxMSP 4.5 and 4.6.\n";
-		do45Installation;
-		do46Installation;
-else
-		echo -ne "\nThe ejies will be installed for MaxMSP 4.6 only.\n";
-		do46Installation;
+if [[ $whichVersion == 1 ]]; then 
+	do45Installation;
+	
+elif [[ $whichVersion == 2 ]]; then 
+	do46Installation;
+	
+elif [[ $whichVersion == 3 ]]; then
+	if [[ $isInstallBothVersion == "Y" || $isInstallBothVersion == "y" ]] ; then
+			echo -ne "\nThe ejies will be installed for MaxMSP 4.5 and 4.6.\n";
+			do45Installation;
+			do46Installation;
+	else
+			echo -ne "\nThe ejies will be installed for MaxMSP 4.6 only.\n";
+			do46Installation;
+	fi
 fi
 
 # installation des racourcis
