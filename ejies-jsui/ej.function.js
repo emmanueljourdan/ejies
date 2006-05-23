@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.72 $
-	$Date: 2006/05/22 17:33:09 $
+	$Revision: 1.73 $
+	$Date: 2006/05/23 18:13:32 $
 */
 
 // global code
@@ -839,21 +839,16 @@ function DeleteReadThings()
 function MyRemoveDuplicate(courbe)
 {
 	var i, flag;
-	var startat = 1;
 	var ReturnState = 0;
 	
-	do	{
-		flag = 0;
-		for (i = startat; i < (courbe.np - 1); i++) {
-			// suppression du point du milieu s'il est encadrŽ par 2 valeurs identiques
-			if ( courbe.pa[i-1].valy == courbe.pa[i].valy && courbe.pa[i+1].valy == courbe.pa[i-1].valy) {
-				DeletePoint(courbe, i);
-				flag = 1;
-				startat = Math.max(1, i - 1); // la prochaine fois qu'on rentre dans la boucle for a commencera ˆ partir de ce point
-				ReturnState++;
-			}
+	for (i = 1; i < (courbe.np - 1); i++) {
+		// suppression du point du milieu s'il est encadrŽ par 2 valeurs identiques
+		if ( courbe.pa[i-1].valy == courbe.pa[i].valy && courbe.pa[i+1].valy == courbe.pa[i-1].valy) {
+			DeletePoint(courbe, i);
+			i = Math.max(1, i - 2); // la prochaine fois qu'on rentre dans la boucle for a commencera ˆ partir de ce point
+			ReturnState = 1;
 		}
-	} while (flag)
+	}
 	
 	if ( ReturnState ) {
 		DoNotify();
