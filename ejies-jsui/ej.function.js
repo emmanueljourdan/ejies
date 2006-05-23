@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.74 $
-	$Date: 2006/05/23 18:27:08 $
+	$Revision: 1.75 $
+	$Date: 2006/05/23 19:36:14 $
 */
 
 // global code
@@ -1451,7 +1451,6 @@ function all()
 	var OldRedrawState = RedrawEnable;
 	NeedNotify = 0;
 	DisplayOneTime = 1;
-	
 	RedrawEnable = 0;
 	NotifyEnable = 0;
 	
@@ -2231,8 +2230,8 @@ function zoomout()
 	var OldRedrawState = RedrawEnable;
 	RedrawEnable = 0;
 	MyZoomOut(f[front]);
-	drawFunctions();				// on ne réaffiche donc qu'à la sortie, une seule fois.
 	RedrawEnable = OldRedrawState;	// restauration de l'état de la variable d'avant son entrée dans la fonction
+	drawFunctions();				// on ne réaffiche donc qu'à la sortie, une seule fois.
 }
 
 function MyZoomOut(courbe)
@@ -2532,15 +2531,15 @@ function getactive()
 function getzoom_x(courbe)
 {
 	var tmpF = frontOrArgument(courbe, arguments, 0);
-	outlet(DUMPOUT, tmpF.name, "zoom_x",	tmpF.ZoomX[0] / (tmpF.domain[1] - tmpF.domain[0]) - tmpF.domain[0],
-											tmpF.ZoomX[1] / (tmpF.domain[1] - tmpF.domain[0]) - tmpF.domain[0]);
+	outlet(DUMPOUT, tmpF.name, "zoom_x",	(tmpF.ZoomX[0] - tmpF.domain[0]) / (tmpF.domain[1] - tmpF.domain[0]),
+											(tmpF.ZoomX[1] - tmpF.domain[0]) / (tmpF.domain[1] - tmpF.domain[0]) );
 }
 
 function getzoom_y(courbe)
 {
 	var tmpF = frontOrArgument(courbe, arguments, 0);
-	outlet(DUMPOUT, tmpF.name, "zoom_y",	tmpF.ZoomY[0] / (tmpF.range[1] - tmpF.range[0]) - tmpF.range[0],
-											tmpF.ZoomY[1] / (tmpF.range[1] - tmpF.range[0]) - tmpF.range[0]);
+	outlet(DUMPOUT, tmpF.name, "zoom_y",	(tmpF.ZoomY[0] - tmpF.range[0]) / (tmpF.range[1] - tmpF.range[0]),
+											(tmpF.ZoomY[1] - tmpF.range[0]) / (tmpF.range[1] - tmpF.range[0]));
 }
 
 

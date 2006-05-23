@@ -16,6 +16,7 @@ Collection of aqua sliders with prototypes
 Improvements:
 Installation/Uninstallation: compatible with MaxMSP 4.6
 ej.function.js: display with a bad argument won't cause problem
+ej.function.js: removeduplicate is now more efficient
 ej.lop: new operators (atodb, dbtoa)
 ej.lop: val @ttribute accept now more than one value
 ej.lop: accepts argument(s): operator followed by value(s)
@@ -25,6 +26,7 @@ ej.lscale: help file math function corrected
 
 Bug correction:
 ej.function.js: dump/listdump with the send argument and a function containing spaces works now (Thanks Richard)
+ej.function.js: getzoom_x/getzoom_y now report correct values
 ej.lslide: slide_up/slide_down was not choose correctly (Thanks Elvio)
 ej.vdb~ and ej.vdb-sig~: windowing was wrong... and that's really bad... (Thanks José-Miguel)
 
