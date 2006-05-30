@@ -1,11 +1,12 @@
 ejies Ñ Version history
 
 *******************
-1.56b8: 17 May 2006
+1.56b9: XX June 2006
 This version requires MaxMSP 4.5.6 or higher.
 
 New Java Externals:
 ej.ftom: Frequency to MIDI (with tuning adjustment, works for lists)
+ej.fplay: equivalent of ej.function.js without the drawing features
 ej.ldrunk: more than a drunk for list
 ej.linterp: more than a list interpolator (up to 8 inputs)
 ej.mtof: MIDI to Frequency (with tuning adjustment, works for lists)
@@ -17,6 +18,8 @@ Improvements:
 Installation/Uninstallation: compatible with MaxMSP 4.6
 ej.function.js: display with a bad argument won't cause problem
 ej.function.js: removeduplicate is now more efficient
+ej.function.js: drawing is really more efficient (especially while sending a lot of points)
+ej.function.js: notify psto less often (using the same task technique as for drawing)
 ej.lop: new operators (atodb, dbtoa)
 ej.lop: val @ttribute accept now more than one value
 ej.lop: accepts argument(s): operator followed by value(s)

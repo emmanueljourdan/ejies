@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.75 $
-	$Date: 2006/05/23 19:36:14 $
+	$Revision: 1.76 $
+	$Date: 2006/05/30 18:18:49 $
 */
 
 // global code
@@ -73,6 +73,9 @@ var tmpRange, tmpDomain;	// utilisŽ dans Interp
 
 var SketchFunctions = new Sketch(BoxWidth, BoxHeight - LegendStateBordure);
 var SketchText = new Sketch(BoxWidth, LegendStateBordure);
+var slowDrawing = new Task(drawFunctions, this);	// pour empcher le rafraichissement trop rapide
+var slowNotify = new Task(notifyclients, this);		// pour empcher la mise ˆ jour pattr trop rapide
+
 SketchFunctions.fsaa = 1;
 SketchText.fsaa = 1;
 
@@ -153,6 +156,16 @@ function draw()
 	refresh();
 }
 
+function askForDrawFunctions()
+{	
+	if (slowDrawing.running)
+		slowDrawing.cancel();
+	
+/* 	post("running? " + drawingTask.running + "\n"); */
+	slowDrawing.schedule(100); // trigger the task one time
+}
+askForDrawFunctions.local = 1;
+
 function drawAll()
 {
 	if (RedrawEnable) {
@@ -189,11 +202,20 @@ function drawFunctions()
 }
 drawFunctions.local = 1;
 
+function askForNotify()
+{
+	if (slowNotify.running)
+		slowNotify.cancel();
+		
+	slowNotify.schedule(100);
+}
+askForNotify.local = 1;
+
 function DoNotify()
 {
 	if (NotifyEnable) {
 /* 		post("notifying\n"); */
-		notifyclients();
+		askForNotify();
 		DoNotify.done = 0;
 	} else
 		DoNotify.done = 1;
@@ -336,7 +358,6 @@ function list()
 {
 	ArgsParser(f[front], "list", arguments)
 	DoNotify();
-	drawFunctions();
 }
 
 function anything()
@@ -371,7 +392,7 @@ function anything()
 	else if (drawText.display)
 		drawText();
 	else if (drawFunctions.display)
-		drawFunctions();
+		askForDrawFunctions();
 }
 
 function onresize(w,h)
@@ -631,7 +652,7 @@ function MyAddPoints(courbe, liste)
 	
 	sortingPoints(courbe);
 	DoNotify();
-	drawFunctions();
+	askForDrawFunctions();
 }
 MyAddPoints.local = 1;
 
@@ -655,7 +676,7 @@ function MyDomain(start, stop, courbe)
 	}
 
 	DoNotify();
-	drawFunctions();
+	askForDrawFunctions();
 }
 MyDomain.local = 1;
 
@@ -703,7 +724,7 @@ function MySetDomain(start, stop, courbe)
 
 	// Si la grille est activŽe, changer le domain doit redessiner la grille
 	if (GridMode)
-		drawFunctions();
+		askForDrawFunctions();
 }
 MySetDomain.local = 1;
 
@@ -852,7 +873,7 @@ function MyRemoveDuplicate(courbe)
 	
 	if ( ReturnState ) {
 		DoNotify();
-		drawFunctions();
+		askForDrawFunctions();
 	}
 }
 MyRemoveDuplicate.local = 1;
@@ -867,7 +888,7 @@ function MySmooth(courbe)
 	}
 
 	DoNotify();
-	drawFunctions();
+	askForDrawFunctions();
 }
 MySmooth.local = 1;
 
@@ -1075,8 +1096,8 @@ function ArgsParser(courbe, msg, a)
 	// en fonction du nombre d'arguments 1 (interpolationX-Y) 2 (AddPoint) 3 (MovePoint)
 		switch (a.length) {
 			case 1: interp(courbe, a[0]); break;
-			case 2: AddOnePoint(courbe, val2x(courbe, a[0]), val2y(courbe, a[1])); drawFunctions(); break;
-			case 3: MovePoint(courbe, a[0], a[1], a[2]); drawFunctions(); break;
+			case 2: AddOnePoint(courbe, val2x(courbe, a[0]), val2y(courbe, a[1])); askForDrawFunctions(); break;
+			case 3: MovePoint(courbe, a[0], a[1], a[2]); askForDrawFunctions(); break;
 			default: perror("too many arguments for message", msg); break;
 		}
 		return 0;	// sort de la fonction
@@ -1125,11 +1146,11 @@ function ArgsParser(courbe, msg, a)
 		case "smooth":		MySmooth(courbe); break;
 		case "gridstep":	if (a.length == 2) { MyGridStep(courbe, a[1]); }; break;
 		case "brgb":		SetColor(courbe, "brgb", a[1], a[2], a[3]); drawAll(); break;
-		case "frgb":		SetColor(courbe, "frgb", a[1], a[2], a[3]); drawFunctions(); break;
-		case "rgb2":		SetColor(courbe, "rgb2", a[1], a[2], a[3]); drawFunctions(); break;
-		case "rgb3":		SetColor(courbe, "rgb3", a[1], a[2], a[3]); drawFunctions(); break;
+		case "frgb":		SetColor(courbe, "frgb", a[1], a[2], a[3]); askForDrawFunctions(); break;
+		case "rgb2":		SetColor(courbe, "rgb2", a[1], a[2], a[3]); askForDrawFunctions(); break;
+		case "rgb3":		SetColor(courbe, "rgb3", a[1], a[2], a[3]); askForDrawFunctions(); break;
 		case "rgb4":		SetColor(courbe, "rgb4", a[1], a[2], a[3]); drawText(); break;
-		case "rgb5":		SetColor(courbe, "rgb5", a[1], a[2], a[3]); drawFunctions(); break;
+		case "rgb5":		SetColor(courbe, "rgb5", a[1], a[2], a[3]); askForDrawFunctions(); break;
 
 
 		case "pastefunction":	MyPasteFunction(courbe); break;
@@ -1222,7 +1243,7 @@ function MySustain(point, state, courbe)
 		if (point >= 0 && point < courbe.np) {
 			courbe.pa[point].sustain = state;
 			DoNotify();
-			drawFunctions();
+			askForDrawFunctions();
 		} else
 			perror("no point", point, "(sustain operation aborted)" );
 	} else
@@ -1253,7 +1274,7 @@ function MyClear(courbe, v)
 		}
 	}
 	DoNotify();
-	drawFunctions();
+	askForDrawFunctions();
 }
 MyClear.local = 1;
 
@@ -1270,7 +1291,7 @@ function MyClearSustain(courbe)
 		courbe.pa[i].sustain = 0;
 	}
 	DoNotify();
-	drawFunctions();
+	askForDrawFunctions();
 }
 MyClearSustain.local = 1;
 
@@ -1301,7 +1322,7 @@ function MyGridStep(courbe, v)
 			courbe.GridStep = v;
 			DoNotify();
 			if (GridMode)
-				drawFunctions();
+				askForDrawFunctions();
 		}
 	} else
 		perror("bad argument for message gridstep");
@@ -1470,7 +1491,7 @@ function all()
 	else if (drawText.display)
 		drawText();
 	else if (drawFunctions.display)
-		drawFunctions();
+		askForDrawFunctions();
 }
 
 function addpoints()
@@ -1545,7 +1566,7 @@ function MyNormalizeX(courbe)
 	if (min != max) {
 		ApplyNormalizeX(courbe, min, max);
 		DoNotify();
-		drawFunctions();
+		askForDrawFunctions();
 	}
 }
 MyNormalizeX.local = 1;
@@ -1582,7 +1603,7 @@ function MyNormalizeY(courbe)
 	if (min != max) {
 		ApplyNormalizeY(courbe, min, max);	
 		DoNotify();
-		drawFunctions();
+		askForDrawFunctions();
 	}
 }
 MyNormalizeY.local = 1;
@@ -1645,7 +1666,7 @@ function MyNormalize(courbe)
 		}
 	}
 	DoNotify();
-	drawFunctions();
+	askForDrawFunctions();
 }
 MyNormalize.local = 1;
 
@@ -1722,7 +1743,7 @@ function deletefunction()
 
 	outlet(DUMPOUT, "display", front);
 	DoNotify();
-	drawFunctions();
+	askForDrawFunctions();
 }
 
 function bordersync(v)
@@ -1843,7 +1864,7 @@ function grid(v)
 {
 	if (v == 0 || v == 1) {
 		GridMode = v;
-		drawFunctions();
+		askForDrawFunctions();
 	} else
 		perror("gridmode doesn't understand", v);
 }
@@ -1913,7 +1934,7 @@ function hiddenpoint(v)
 {
 	if (v == 0 || v == 1) {
 		HiddenPointDisplay = v;
-		drawFunctions();
+		askForDrawFunctions();
 	} else
 		perror("hiddenpoint doesn't understand", v);
 }
@@ -1940,7 +1961,7 @@ function ghost(v)
 		perror("ghost percentage between 0 and 100 % expected", v);
 	else {
 		Ghostness = v * 0.01;
-		drawFunctions();
+		askForDrawFunctions();
 	}
 }
 
@@ -1984,11 +2005,11 @@ function sustain()
 }
 
 function brgb() { SetColor(f[front], "brgb", arguments); drawAll(); }
-function frgb() { SetColor(f[front], "frgb", arguments); drawFunctions(); }
-function rgb2() { SetColor(f[front], "rgb2", arguments); drawFunctions(); }
-function rgb3() { SetColor(f[front], "rgb3", arguments); drawFunctions(); }
+function frgb() { SetColor(f[front], "frgb", arguments); askForDrawFunctions(); }
+function rgb2() { SetColor(f[front], "rgb2", arguments); askForDrawFunctions(); }
+function rgb3() { SetColor(f[front], "rgb3", arguments); askForDrawFunctions(); }
 function rgb4() { SetColor(f[front], "rgb4", arguments); drawText(); }
-function rgb5() { SetColor(f[front], "rgb5", arguments); drawFunctions(); }
+function rgb5() { SetColor(f[front], "rgb5", arguments); askForDrawFunctions(); }
 
 function domain()
 {
@@ -2039,7 +2060,7 @@ function range(a, b, courbe)
 	}
 
 	DoNotify();
-	drawFunctions();
+	askForDrawFunctions();
 }
 
 function setrange(a, b, courbe)
@@ -2067,7 +2088,7 @@ function setrange(a, b, courbe)
 
 	// NeedDraw contient le rŽsultat de la nouvelle courbe (y a t'il un point avec y=0) OnePointAtZero c'est l'Žtat d'avant.
 	if (NeedDraw || tmpF.OnePointAtZero)
-		drawFunctions();
+		askForDrawFunctions();
 }
 
 function fswitch() { Switchfront(); }
