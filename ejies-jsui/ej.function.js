@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.76 $
-	$Date: 2006/05/30 18:18:49 $
+	$Revision: 1.77 $
+	$Date: 2006/05/31 14:22:45 $
 */
 
 // global code
@@ -919,7 +919,7 @@ function AddOnePoint(courbe, x, y)
 	}
 	else {
 		for (i = 0; i < courbe.np; i++) {
-			if (courbe.pa[i].x >= x) {
+			if (courbe.pa[i].x > x) {
 				tmp = i;
 				break;
 			}
@@ -1042,7 +1042,7 @@ function quickSort(courbe, g, d)
 		while(true) {
 			while ((++i <= d) && (courbe.pa[i].x < v)) { ; };
 			while ((--j >= g) && (courbe.pa[j].x > v)) { ; };
-			if (i >= j) break;
+			if (i > j) break;	// now it's stable
 			swapPoints(courbe, i, j);
 		}
 		swapPoints(courbe, i, d);
@@ -2936,7 +2936,7 @@ function read(filename)
 		AllowEdit = 0;
 
 		var tmpLine = LectureNextLigne(fichier);
-		if (tmpLine != "ej.function format") {
+		if (tmpLine.search("ej.function format") == -1) {
 			perror("can't read this file format");
 			
 			// suppression des objets opendialog...
