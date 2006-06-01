@@ -58,20 +58,21 @@ Other:
 
 MacOS X Installation:
 - Double click on Installation.command and follow the instructions...
-- You'll be asked for an automatic installation of the externals and the help files: you can disable the automatic installation by answering N (means no...) to the question.
+- You'll be asked for a couple of questions... please answer...
 - The Installation.command allows you to install also the shortcuts (same as AddShortcuts2Max.command)
 - At the end of the installation you can quit the Terminal application.
+- If the installation doesn't work... follow the windows installation procedure.
 
 Windows Installation:
-- put the CONTENTS of the ejies-extras folder in the ../MaxMSP 4.5/patches/extras folder
+- put the CONTENTS of the ejies-extras folder in the ../MaxMSP 4.*/patches/extras folder
 - put the CONTENTS of the ejies-init folder in the C74:/init folder
 - put the CONTENTS of the ejies-java folder in the C74:/java/classes folder
 - put the CONTENTS of the ejies-jsui folder in the C74:/jsui-library folder
 - put the CONTENTS of the ejies-jsextensions folder in the C74:/jsextensions folder
-- put the CONTENTS of the ejies-prototypes folder in the ./MaxMSP 4.5/patches/object-protypes/ folder
-- put the ejies-insp folder in the ../MaxMSP 4.5/patches/inspectors/ folder
+- put the CONTENTS of the ejies-prototypes folder in the ./MaxMSP 4.*/patches/object-protypes/ folder
+- put the ejies-insp folder in the ../MaxMSP 4.*/patches/inspectors/ folder
 - put the ejies-obj folder in the C74:/externals or whatever you want in the Max Search path
-- put the ejies-help folder in the ../MaxMSP 4.5/max-help or whatever you want in the Max Search path
+- put the ejies-help folder in the ../MaxMSP 4.*/max-help or whatever you want in the Max Search path
 
 Contact:
 manu(at)e--j.com

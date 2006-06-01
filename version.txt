@@ -18,8 +18,9 @@ Improvements:
 Installation/Uninstallation: compatible with MaxMSP 4.6
 ej.function.js: display with a bad argument won't cause problem
 ej.function.js: removeduplicate is now more efficient
-ej.function.js: drawing is really more efficient (especially while sending a lot of points)
-ej.function.js: notify psto less often (using the same task technique as for drawing)
+ej.function.js: drawing is really more efficient (~150 times faster when sending points coordinates with a dump)
+ej.function.js: notify psto less often (using the same Task technique as for drawing)
+ej.function.js: points with the same x position are now put in the "right" order (Thanks Henry)
 ej.lop: new operators (atodb, dbtoa)
 ej.lop: val @ttribute accept now more than one value
 ej.lop: accepts argument(s): operator followed by value(s)
