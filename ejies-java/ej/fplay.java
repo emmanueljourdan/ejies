@@ -2,8 +2,8 @@
  *	ej.fplay by Emmanuel Jourdan, Ircam Ñ 04 2006
  *	function player
  *
- *	$Revision: 1.1 $
- *	$Date: 2006/05/16 16:11:14 $
+ *	$Revision: 1.2 $
+ *	$Date: 2006/06/01 15:03:10 $
  */
 
 /**
@@ -239,12 +239,15 @@ public class fplay extends ej
 			// 2 nombres
 			if (isNumber(args[0]) && isNumber(args[1]))
 				((Courbe) Courbes.get(idx)).addOnePoint(args[0].toFloat(), args[1].toFloat()); // comme dans listOfNumbers
-			else if (args[0].isString() && (args[1].isInt() || args[1].isFloat())) {
+			else if (args[0].isString()) {
 				if (args[0].getString().equals("nth") && isNumber(args[1]))
 					myNth(idx, args[1].toInt());
-			} else if (args[0].isString() && args[0].getString().equals("clear")) {
-				// methode clear avec Atom[] sans le premier qui est une String "clear"
-				((Courbe) Courbes.get(args[1].toInt())).clearPoints(Atom.toInt(Atom.removeFirst(args)));
+				else if (args[0].getString().equals("domain") && isNumber(args[1]))
+					((Courbe) Courbes.get(idx)).domain(0, args[1].toDouble());
+				else if (args[0].getString().equals("clear")) {
+					// methode clear avec Atom[] sans le premier qui est une String "clear"
+					((Courbe) Courbes.get(args[1].toInt())).clearPoints(Atom.toInt(Atom.removeFirst(args)));
+				}
 			}
 		} else if (args.length == 3) {
 			// trois nombres
