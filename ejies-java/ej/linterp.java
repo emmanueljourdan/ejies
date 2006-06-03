@@ -3,8 +3,8 @@
  *	simple list interpolator
  *
  *
- *	$Revision: 1.10 $
- *	$Date: 2006/05/16 17:05:04 $
+ *	$Revision: 1.11 $
+ *	$Date: 2006/06/03 17:35:41 $
  */
 
 package ej;
@@ -268,19 +268,7 @@ public class linterp extends ej {
 			}
 		}
 		
-
-		switch (outputmode) {
-			case  0:
-				outlet(0, resultat);
-				break;
-			case  1:
-				writeToBuffer();
-				break;
-			case 2:
-				outlet(0, resultat);
-				writeToBuffer();
-				break;
-		}
+		doOutput();
 	}
 	
 	private boolean inputCheck(byte byteArg) {
@@ -313,8 +301,18 @@ public class linterp extends ej {
 		return min;
 	}
 	
+	private void doOutput() {
+		switch (outputmode) {
+			case  0:
+				outlet(0, resultat); break;
+			case  1:
+				writeToBuffer(); break;
+			case 2:
+				outlet(0, resultat); writeToBuffer(); break;
+		}
+	}
+	
 	private void writeToBuffer() {
-		// c'est pas trs compliquŽ...
 		if (buf_name != null && resultat.length > 0) {
 			MSPBuffer.poke(buf_name, resultat);
 		}

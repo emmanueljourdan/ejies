@@ -3,13 +3,15 @@
  *	scale for lists
  *
  *
- *	$Revision: 1.3 $
- *	$Date: 2006/04/10 13:22:57 $
+ *	$Revision: 1.4 $
+ *	$Date: 2006/06/03 17:35:41 $
  */
 
 package ej;
 
 import com.cycling74.max.*;
+import com.cycling74.msp.MSPBuffer;
+
 import java.lang.reflect.*;// this time I use reflection instead of interface :-)
 import java.util.Arrays;
 
@@ -28,6 +30,8 @@ public class lscale extends ej {
 	private float[] yClip = { yMin, yMax };
 	private float expValue = 1;
 	private String methodString = "calculeNormal";
+	private String buf_name = null;
+	private byte outputmode = 0;
 
 	private boolean clip = false;
 	
@@ -39,6 +43,9 @@ public class lscale extends ej {
 		createInfoOutlet(true);
 		
 		declareAttribute("clip", "getClip", "setClip");
+		declareAttribute("outputmode", null, "setMode");
+		declareAttribute("buf_name");
+
 		initClass();
 		newArgs(args);
 		calculeChoice();
@@ -99,7 +106,6 @@ public class lscale extends ej {
 	}
 
 	public void list(float[] args) {
-	
 		switch (getInlet()) {
 			case 0:                // première entrée... liste à scaler
 				a = args;
@@ -147,34 +153,30 @@ public class lscale extends ej {
 		try {
 			resultat = new float[a.length];
 			myMethod.invoke(this, null);
-			outlet(0, resultat);
+			doOutput();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
 	public void calculeNormal() {
-		for (int i = 0; i < resultat.length; i++) {
+		for (int i = 0; i < resultat.length; i++)
 			resultat[i] = ((a[i] - xMin) / xRange) * yRange + yMin;
-		}
 	}
 	
 	public void calculeExp() {
-		for (int i = 0; i < resultat.length; i++) {
+		for (int i = 0; i < resultat.length; i++)
 			resultat[i] = (float) Math.pow(((a[i] - xMin) / xRange), expValue) * yRange + yMin;
-		}
 	}
 	
 	public void calculeClip() {
-		for (int i = 0; i < resultat.length; i++) {
+		for (int i = 0; i < resultat.length; i++)
 			resultat[i] = (float) Math.max(yClip[0], Math.min(Math.pow(((a[i] - xMin) / xRange), expValue) * yRange + yMin, yClip[1]));
-		}
 	}
 	
 	public void calculeExpClip() {
-		for (int i = 0; i < resultat.length; i++) {
+		for (int i = 0; i < resultat.length; i++)
 			resultat[i] = (float) Math.max(yClip[0], Math.min(Math.pow(((a[i] - xMin) / xRange), expValue) * yRange + yMin, yClip[1]));
-		}
 	}
 		
 	private void newArgs(float[] args) {
@@ -186,5 +188,22 @@ public class lscale extends ej {
 		if (args.length > 5) error("ej.lscale: extra argument");
 		
 		refreshRange();
+	}
+	
+	private void doOutput() {
+		switch (outputmode) {
+			case  0:
+				doOutput(); break;
+			case  1:
+				writeToBuffer(); break;
+			case 2:
+				doOutput(); writeToBuffer(); break;
+		}
+	}
+	
+	private void writeToBuffer() {
+		if (buf_name != null && resultat.length > 0) {
+			MSPBuffer.poke(buf_name, resultat);
+		}
 	}
 }

@@ -2,25 +2,31 @@
  *	ej.lclip by Emmanuel Jourdan, Ircam Ñ 02 2005
  *	Constrains a list within a certain range
  *
- *	$Revision: 1.2 $
- *	$Date: 2006/04/10 13:22:57 $
+ *	$Revision: 1.3 $
+ *	$Date: 2006/06/03 17:35:41 $
  */
 
 package ej;
 import com.cycling74.max.*;
+import com.cycling74.msp.MSPBuffer;
 
 public class lclip extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "List to be constrained", "Minimum", "Maximum" };
 	private static final String[] OUTLET_ASSIST = new String[]{ "Constrained list output"};	
 
-	private float[] a ;
+	private float[] resultat;
 	private float clipMin = 0;
 	private float clipMax = 0;
+	private String buf_name = null;
+	private byte outputmode = 0;
 	
 	public lclip(float clipMin, float clipMax)	{
 		declareTypedIO("aff", "l");
 		createInfoOutlet(false);
 		
+		declareAttribute("outputmode", null, "setMode");
+		declareAttribute("buf_name");
+
 		this.clipMin = clipMin;
 		this.clipMax = clipMax;
 		
@@ -35,7 +41,7 @@ public class lclip extends ej {
 	public void inlet(float f) {
 		switch (getInlet()) {
 			case 0:
-				a = new float[] { f };
+				resultat = new float[] { f };
 				calcule();
 				break;
 			case 1:
@@ -48,10 +54,9 @@ public class lclip extends ej {
 	}
 
 	public void list(float[] args) {
-	
 		switch (getInlet()) {
 			case 0:
-				a = args;
+				resultat = args;
 				calcule();
 				break;
 			case 1:
@@ -68,9 +73,26 @@ public class lclip extends ej {
 	}
 	
 	private void calcule() {
-		for (int i = 0; i < a.length; i++)
-			a[i] = Math.min(Math.max(clipMin, a[i]), clipMax);
+		for (int i = 0; i < resultat.length; i++)
+			resultat[i] = Math.min(Math.max(clipMin, resultat[i]), clipMax);
 
-		outlet(0, a);
+		doOutput();
+	}
+	
+	private void doOutput() {
+		switch (outputmode) {
+			case  0:
+				outlet(0, resultat); break;
+			case  1:
+				writeToBuffer(); break;
+			case 2:
+				outlet(0, resultat); writeToBuffer(); break;
+		}
+	}
+	
+	private void writeToBuffer() {
+		if (buf_name != null && resultat.length > 0) {
+			MSPBuffer.poke(buf_name, resultat);
+		}
 	}
 }

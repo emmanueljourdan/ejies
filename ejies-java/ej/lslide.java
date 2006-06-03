@@ -3,13 +3,14 @@
  *	slide for lists
  *
  *
- *	$Revision: 1.6 $
- *	$Date: 2006/05/18 17:50:48 $
+ *	$Revision: 1.7 $
+ *	$Date: 2006/06/03 17:35:41 $
  */
 
 package ej;
 
 import com.cycling74.max.*;
+import com.cycling74.msp.MSPBuffer;
 
 public class lslide extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "List to be slided :-)", "Slide Up", "Slide Down" };
@@ -21,6 +22,8 @@ public class lslide extends ej {
 	private float slide_down = 1;
 	private float yN_1 = 0;
 	private boolean firstIsMade = false;
+	private String buf_name = null;
+	private byte outputmode = 0;
 	
 	public lslide(float slideUp, float slideDown)	{
 		declareTypedIO("aff", "l");
@@ -30,7 +33,9 @@ public class lslide extends ej {
 		setSlideDown(slideDown);
 		declareAttribute("slide_up", "getSlideUp", "setSlideUp");
 		declareAttribute("slide_down", "getSlideDown", "setSlideDown");
-		
+		declareAttribute("outputmode", null, "setMode");
+		declareAttribute("buf_name");
+
 		setInletAssist(INLET_ASSIST);
 		setOutletAssist(OUTLET_ASSIST);
 	}
@@ -73,7 +78,6 @@ public class lslide extends ej {
 	}
 
 	public void list(float[] args) {
-	
 		switch (getInlet()) {
 			case 0:
 				a = args;
@@ -114,7 +118,7 @@ public class lslide extends ej {
 				resultat[i] = yN_1 + ((a[i] - yN_1) / slide_down);
 		}
 		
-		outlet(0, resultat);
+		doOutput();
 	}
 	
 	private void calculeFirstTime() {
@@ -127,7 +131,24 @@ public class lslide extends ej {
 				resultat[i] = yN_1 + ((a[i] - yN_1) / slide_down);
 		}
 		
-		outlet(0, resultat);
+		doOutput();
 		firstIsMade = true;
+	}
+	
+	private void doOutput() {
+		switch (outputmode) {
+			case  0:
+				outlet(0, resultat); break;
+			case  1:
+				writeToBuffer(); break;
+			case 2:
+				outlet(0, resultat); writeToBuffer(); break;
+		}
+	}
+	
+	private void writeToBuffer() {
+		if (buf_name != null && resultat.length > 0) {
+			MSPBuffer.poke(buf_name, resultat);
+		}
 	}
 }

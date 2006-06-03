@@ -3,13 +3,14 @@
  *	drunk for list
  *
  *
- *	$Revision: 1.5 $
- *	$Date: 2006/04/19 15:37:25 $
+ *	$Revision: 1.6 $
+ *	$Date: 2006/06/03 17:35:41 $
  */
 
 package ej;
 
 import com.cycling74.max.*;
+import com.cycling74.msp.MSPBuffer;
 
 public class ldrunk extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "clean list", "Random range (float/list)", "random step (± step / 2)", "probability of random (%)" };
@@ -23,6 +24,8 @@ public class ldrunk extends ej {
 	private boolean autoreset = false;
 	private float[] resultat = new float[0];
 	private float[] inputList = new float[0];
+	private String buf_name = null;
+	private byte outputmode = 0;
 	
 	public ldrunk(float maxRange, float stepSize) {
 		this(0f, maxRange, stepSize, 100f);
@@ -45,7 +48,9 @@ public class ldrunk extends ej {
 		declareAttribute("proba", null, "setProba");
 		declareAttribute("ignore0");
 		declareAttribute("autoreset");
-		
+		declareAttribute("outputmode", null, "setMode");
+		declareAttribute("buf_name");
+
 		setInletAssist(INLET_ASSIST);
 		setOutletAssist(OUTLET_ASSIST);
 	}
@@ -77,7 +82,6 @@ public class ldrunk extends ej {
 		switch (getInlet()) {
 			case 0:
 				inputList = args;
-//				doRandom();
 				break;
 			case 1:
 				setRange(args);
@@ -122,7 +126,7 @@ public class ldrunk extends ej {
 				makeAlea(i);
 		}
 		
-		outlet(0, resultat);
+		doOutput();
 	}
 
 	private void makeAlea(int i) {
@@ -135,5 +139,22 @@ public class ldrunk extends ej {
 			else if (resultat[i] > range[1])
 				resultat[i] = Math.max((range[1] - resultat[i]) + range[1], range[0]);
 		}		
+	}
+
+	private void doOutput() {
+		switch (outputmode) {
+			case  0:
+				outlet(0, resultat); break;
+			case  1:
+				writeToBuffer(); break;
+			case 2:
+				outlet(0, resultat); writeToBuffer(); break;
+		}
+	}
+	
+	private void writeToBuffer() {
+		if (buf_name != null && resultat.length > 0) {
+			MSPBuffer.poke(buf_name, resultat);
+		}
 	}
 }
