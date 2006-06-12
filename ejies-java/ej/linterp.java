@@ -3,8 +3,8 @@
  *	simple list interpolator
  *
  *
- *	$Revision: 1.11 $
- *	$Date: 2006/06/03 17:35:41 $
+ *	$Revision: 1.12 $
+ *	$Date: 2006/06/12 10:00:36 $
  */
 
 package ej;
@@ -123,14 +123,6 @@ public class linterp extends ej {
 				return;// car c'est déclenché aussi à la fin de la méthode
 			default:
 				setInput(getInlet(), args);
-//			case 1: a = new float[]{ args }; break;
-//			case 2: b = new float[]{ args }; break;
-//			case 3: c = new float[]{ args }; break;
-//			case 4: d = new float[]{ args }; break;
-//			case 5: e = new float[]{ args }; break;
-//			case 6: f = new float[]{ args }; break;
-//			case 7: g = new float[]{ args }; break;
-//			case 8: h = new float[]{ args }; break;
 		}
 		
 		if (autotrigger) calcule();
@@ -150,14 +142,6 @@ public class linterp extends ej {
 				break;
 			default:
 				setInput(getInlet(), args);
-//			case 1: a = args; break;
-//			case 2: b = args; break;
-//			case 3: c = args; break;
-//			case 4: d = args; break;
-//			case 5: e = args; break;
-//			case 6: f = args; break;
-//			case 7: g = args; break;
-//			case 8: h = args; break;
 		}
 		
 //		listes = new float[][] { a, b, c, d, e, f, g, h };
