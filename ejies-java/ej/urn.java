@@ -2,13 +2,13 @@
  *	ej.urn by Emmanuel Jourdan, Ircam — 04 2005
  *	like the urn object but for larger range
  *
- *	$Revision: 1.2 $
- *	$Date: 2006/04/10 13:23:59 $
+ *	$Revision: 1.3 $
+ *	$Date: 2006/06/12 09:48:32 $
  */
 
 package ej;
 
-import com.cycling74.max.*;
+//import com.cycling74.max.*;
 import java.util.Random; 
 
 public class urn extends ej {
@@ -16,8 +16,6 @@ public class urn extends ej {
 	private static final String[] OUTLET_ASSIST = new String[]{ "Random Number Output", "bang if All Numbers in Range Chosen" };
 	private int urnSize = 0;
 	private int howManyLeft = 0;
-	private int tmpValue; // utilisé pour la permutation
-	private int rIdx;     // stockera l'index donné par Random
 	private Random myRandom = new Random();
 	private int[] urnValues; // tableau qui stocke les valeurs possibles
 	private boolean autoclear = false;
@@ -71,20 +69,23 @@ public class urn extends ej {
 		post("ej.urn: using " + urnSize * 4 + " bytes.");
 	}
 	
-	private void urner() {
+	private synchronized void urner() {
 		/*
 		 * Chaque fois qu'on demande une valeur aléatoire, la valeur est mise
 		 * à la fin du tableau (en fait à l'index de howManyLeft - 1)
 		 */
+		int rIdx;     // stockera l'index donné par Random
 		
 		rIdx = myRandom.nextInt(howManyLeft--); // ATTENTION: on décrémente après utiliser la valeur !!!
-		tmpValue = urnValues[rIdx]; // la permutation se prépare
-		
-		outlet(0, tmpValue);
+		outlet(0, urnValues[rIdx]);
 
-		// permutation avec la fin du tableau
-		urnValues[rIdx] = urnValues[howManyLeft];
-		urnValues[howManyLeft] = tmpValue;
+		// swap if needed...
+		// http://en.wikipedia.org/wiki/Xor_swap_algorithm
+		if (rIdx != howManyLeft) {
+			urnValues[rIdx] ^= (int) urnValues[howManyLeft];
+			urnValues[howManyLeft] ^= (int) urnValues[rIdx];
+			urnValues[rIdx] ^= (int) urnValues[howManyLeft];
+		}
 	}
 	
 	private void urnInit(int size) {
