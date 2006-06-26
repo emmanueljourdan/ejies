@@ -1,8 +1,8 @@
 /*
  *	ejies Java externals by Emmanuel Jourdan, Ircam Ñ 12 2005
  *
- *	$Revision: 1.5 $
- *	$Date: 2006/05/09 16:34:30 $
+ *	$Revision: 1.6 $
+ *	$Date: 2006/06/26 17:14:18 $
  */
 
 package ej;
@@ -23,19 +23,12 @@ public abstract class ej extends MaxObject
 		}
 	}
 	
-	public boolean isNumber(Atom a) {
-		if (a.isInt() || a.isFloat())
-			return true;
-		else
-			return false;
-	}
-	
 	public void dblclick() {
 		// c'est super amusant, on peut faire un double clic...
 		post(theMessage);
 		findVersion();
 	}
-	
+
 	private void findVersion() {
 		/*
 		 il faut chercher ceci :
@@ -46,8 +39,7 @@ public abstract class ej extends MaxObject
 		String theFile = MaxSystem.locateFile("ejies-jsextensions.js");
 		String versionNumber = null;
 		String versionDate = null;
-		
-		
+	
 		BufferedReader inputFile = null;
 		try {   
 			inputFile = new BufferedReader(new FileReader(theFile));
@@ -55,7 +47,7 @@ public abstract class ej extends MaxObject
 			Pattern pVers = Pattern.compile(".*VersNum = \\\"(.*)\\\".*");
 			Pattern pDate = Pattern.compile(".*VersDate = \\\"\\((\\d*/\\d*).*"); 
 			Matcher mVers, mDate;
-
+	
 			while((line = inputFile.readLine()) != null) {
 				mVers = pVers.matcher(line);
 				mDate = pDate.matcher(line);
@@ -75,8 +67,31 @@ public abstract class ej extends MaxObject
 			}
 			catch (IOException e) { /* pareil */ }
 		}
-
+	
 		if (versionNumber != null && versionDate != null)
 			post("    version " + versionNumber + "   ---   " + versionDate);
+	}
+
+	/*
+	 * Tools
+	 */
+	public boolean isNumber(Atom a) {
+		if (a.isInt() || a.isFloat())
+			return true;
+		else
+			return false;
+	}
+	
+	// faster to debug... accept anything
+	public void post(float f) {
+		super.post(f + "");
+	}
+	
+	public void post(Atom[] a) {
+		super.post(a.toString());
+	}
+	
+	public void post(float[] f) {
+		super.post(f.toString());
 	}
 }
