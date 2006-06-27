@@ -4,8 +4,8 @@
  *
  *  Many thanks to Ben Nevile for performances enhacement.
  *
- *	$Revision: 1.21 $
- *	$Date: 2006/05/17 17:41:14 $
+ *	$Revision: 1.22 $
+ *	$Date: 2006/06/27 18:14:21 $
  */
 
 package ej;
@@ -33,7 +33,7 @@ public class lop extends ej {
 	private boolean bSet = false;
 	private boolean isUnary = false;
 	private ListOperator myListOperator;
-	
+
 	public lop(Atom[] args)	{
 		declareTypedIO("al", "l");
 		createInfoOutlet(true);
