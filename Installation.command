@@ -29,20 +29,20 @@ function doInstallation {
 
 		if [[ $maxObjectsToBeInstalled == 1 ]] ; then
 			echo -ne "- objects ($C74Folder/externals/ejies-obj)"
-			cp -R $DossierDeLInstalleur/ejies-obj "$C74Folder/externals/" && echo -ne "... done.\n"
+			cp -R "$DossierDeLInstalleur"/ejies-obj "$C74Folder/externals/" && echo -ne "... done.\n"
 		fi
 		
 		echo -ne "- init files ($C74Folder/init/)"
-		cp -R $DossierDeLInstalleur/ejies-init/* "$C74Folder/init/" && echo -ne "... done.\n"
+		cp -R "$DossierDeLInstalleur"/ejies-init/* "$C74Folder/init/" && echo -ne "... done.\n"
 		
 		echo -ne "- jsui files ($C74Folder/jsui-library/)"
-		cp -R $DossierDeLInstalleur/ejies-jsui/* "$C74Folder/jsui-library/" && echo -ne "... done.\n"
+		cp -R "$DossierDeLInstalleur"/ejies-jsui/* "$C74Folder/jsui-library/" && echo -ne "... done.\n"
 		
 		echo -ne "- jsextensions file ($C74Folder/jsextensions/)"
-		cp -R $DossierDeLInstalleur/ejies-jsextensions/* "$C74Folder/jsextensions/" && echo -ne "... done.\n"
+		cp -R "$DossierDeLInstalleur"/ejies-jsextensions/* "$C74Folder/jsextensions/" && echo -ne "... done.\n"
 	
 		echo -ne "- java externals file ($C74Folder/java/classes)"
-		cp -R $DossierDeLInstalleur/ejies-java/* "$C74Folder/java/classes/" && echo -ne "... done.\n"
+		cp -R "$DossierDeLInstalleur"/ejies-java/* "$C74Folder/java/classes/" && echo -ne "... done.\n"
 	else
 		echo -ne "Sorry, $C74Folder doen't exist. Init, jsui and jsextensions can't be installed.\n"
 	fi
@@ -51,20 +51,20 @@ function doInstallation {
 
 		if [[ $maxObjectsToBeInstalled == 1 ]] ; then
 			echo -ne "- help files ($maxAppFolder/max-help/ejies-help)"
-			cp -R $DossierDeLInstalleur/ejies-help "$maxAppFolder/max-help/" && echo -ne "... done.\n"
+			cp -R "$DossierDeLInstalleur"/ejies-help "$maxAppFolder/max-help/" && echo -ne "... done.\n"
 		fi
 
 		echo -ne "- extras file ($maxAppFolder/patches/extras/)"
-		cp $DossierDeLInstalleur/ejies-extras/* "$maxAppFolder/patches/extras/" && echo -ne "... done.\n"
+		cp "$DossierDeLInstalleur"/ejies-extras/* "$maxAppFolder/patches/extras/" && echo -ne "... done.\n"
 	
 		echo -ne "- prototypes ($maxAppFolder/patches/object-prototypes/)"
-		cp -R $DossierDeLInstalleur/ejies-prototypes/* "$maxAppFolder/patches/object-prototypes/" && echo -ne "... done.\n"
+		cp -R "$DossierDeLInstalleur"/ejies-prototypes/* "$maxAppFolder/patches/object-prototypes/" && echo -ne "... done.\n"
 	
 		echo -ne "- inspectors ($maxAppFolder/patches/inspectors)"
-		cp $DossierDeLInstalleur/ejies-insp/* "$maxAppFolder/patches/inspectors/" && echo -ne "... done.\n"
+		cp "$DossierDeLInstalleur"/ejies-insp/* "$maxAppFolder/patches/inspectors/" && echo -ne "... done.\n"
 		
 		echo -ne "- images (/Applications/MaxMSP*/patches/picts)"
-		cp $DossierDeLInstalleur/ejies-pict/* "$maxAppFolder/patches/picts/" && echo -ne "... done.\n"
+		cp "$DossierDeLInstalleur"/ejies-pict/* "$maxAppFolder/patches/picts/" && echo -ne "... done.\n"
 		
 	else
 		echo -ne "Sorry, $maxAppFolder/ doesn't exist. Extra, prototypes and inspectors can't be installed.\n"
@@ -109,7 +109,7 @@ echo ""
 # making PATH
 ################################
 PathDeLInstalleur=$0
-DossierDeLInstalleur=$(dirname $PathDeLInstalleur)
+DossierDeLInstalleur=$(dirname "$PathDeLInstalleur")
 
 
 ################################
@@ -196,5 +196,5 @@ fi
 echo -ne "\nend of the installation... enjoy!\n"
 echo -ne "(you can quit the Terminal now...)\n"
 
-exit 0
+exit 0;
 
