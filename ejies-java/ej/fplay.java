@@ -2,18 +2,14 @@
  *	ej.fplay by Emmanuel Jourdan, Ircam Ñ 04 2006
  *	function player
  *
- *	$Revision: 1.3 $
- *	$Date: 2006/06/27 18:02:05 $
+ *	$Revision: 1.4 $
+ *	$Date: 2006/06/28 17:19:23 $
  */
 
 /**
- * TODO MEessages standards : fait jusqu'ˆ dump inclu
- * TODO getsustatin / sustain
- * TODO getfix / fix
- * 
- * TODO	lecture/sauvegarde en fichier texte
- * TODO	messages spŽciaux pour la communication avec ej.function.js
- * TODO domain/range/setdomain/setrange
+ *  TODO : others non standarts messages...
+ * TODO	 lecture/sauvegarde en fichier texte
+ * TODO	 messages spŽciaux pour la communication avec ej.function.js
  * 
  */
 
@@ -35,6 +31,7 @@ public class fplay extends ej
 	private static final int NBCOURBES = 1;
 	
 	private boolean isAll = false;
+	private boolean outputmode = false;
 	
 	private ArrayList Courbes = new ArrayList();
 	private int current = 0;
@@ -44,6 +41,8 @@ public class fplay extends ej
 		declareTypedIO("a", "aaa");
 		createInfoOutlet(true);
 
+		declareAttribute("outputmode");
+		
 		setInletAssist(INLET_ASSIST);
 		setOutletAssist(OUTLET_ASSIST);
 
@@ -81,6 +80,7 @@ public class fplay extends ej
 	
 	public void addfunction(String s) {
 		Courbes.add(new Courbe(s));
+		getname();
 	}
 
 	public void deletefunction(int i) {
@@ -98,15 +98,16 @@ public class fplay extends ej
 
 	
 	public void display(int idx) {
-		if (idx >= 0 && idx < Courbes.size()) {
+		if (idx >= 0 && idx < Courbes.size())
 			current = idx;
-		}
 	}
 
 	public void display(String s) {
 		for (int c = 0; c < Courbes.size(); c++) {
-			if ((((Courbe) Courbes.get(c)).getName()).equals(s))
+			if ((((Courbe) Courbes.get(c)).getName()).equals(s)) {
 				current = c;
+				break;
+			}
 		}
 	}
 
@@ -205,6 +206,10 @@ public class fplay extends ej
 		outlet(DUMPOUT_OUTLET, "current", ((Courbe) Courbes.get(current)).getName());
 	}
 
+	public void getdisplay() {
+		outlet(DUMPOUT_OUTLET, "display", current);
+	}
+	
 	public void getsustain() {
 		myGetSustain(current);
 	}
@@ -259,6 +264,8 @@ public class fplay extends ej
 				// args[0] is string
 				if (msgName.equals("bang"))
 					myBang(courbeIdx);
+				else if (msgName.equals("next"))
+					myNext(courbeIdx);
 				else if (msgName.equals("dump"))
 					((Courbe) Courbes.get(courbeIdx)).dump();
 				else if (msgName.equals("listdump"))
@@ -297,7 +304,6 @@ public class fplay extends ej
 					((Courbe) Courbes.get(courbeIdx)).setDomain(0, args[1].toDouble());
 				else if (msgName.equals("nth") && isNumber(args[1]))
 					myNth(courbeIdx, args[1].toInt());
-			
 			}
 		} else if (args.length == 3) {
 			// trois nombres
@@ -308,14 +314,14 @@ public class fplay extends ej
 					((Courbe) Courbes.get(courbeIdx)).domain(args[1].toDouble(), args[2].toDouble());
 				else if (msgName.equals("setdomain") && isNumber(args[1]) && isNumber(args[2]))
 					((Courbe) Courbes.get(courbeIdx)).setDomain(args[1].toDouble(), args[2].toDouble());
-				else if (msgName.equals("sustain") && isNumber(args[1]) && isNumber(args[2]))
-					mySustain(courbeIdx, args[1].toInt(), args[2].toInt());
-				else if (msgName.equals("fix") && isNumber(args[1]) && isNumber(args[2]))
-					myFix(courbeIdx, args[1].toInt(), args[2].toInt());
 				else if (msgName.equals("range") && isNumber(args[1]) && isNumber(args[2]))
 					((Courbe) Courbes.get(courbeIdx)).range(args[1].toDouble(), args[2].toDouble());
 				else if (msgName.equals("setrange") && isNumber(args[1]) && isNumber(args[2]))
 					((Courbe) Courbes.get(courbeIdx)).setRange(args[1].toDouble(), args[2].toDouble());
+				else if (msgName.equals("sustain") && isNumber(args[1]) && isNumber(args[2]))
+					mySustain(courbeIdx, args[1].toInt(), args[2].toInt());
+				else if (msgName.equals("fix") && isNumber(args[1]) && isNumber(args[2]))
+					myFix(courbeIdx, args[1].toInt(), args[2].toInt());
 			}
 
 		}
@@ -362,28 +368,28 @@ public class fplay extends ej
 	}
 	
 	private void mySustain(int courbeIdx, int idx, int state) {
-		if (idx >= 0 && idx < ((Courbe) Courbes.get(courbeIdx)).np() && (state == 0 || state == 1)) {
-			switch (state) {
-			case 1:
-				((Courbe) Courbes.get(courbeIdx)).setSustain(idx, true);
-				break;
+		switch (state) {
 			case 0:
 				((Courbe) Courbes.get(courbeIdx)).setSustain(idx, false);
 				break;
-			}
+			case 1:
+				((Courbe) Courbes.get(courbeIdx)).setSustain(idx, true);
+				break;
+			default:
+				error("bad argument for message sustain");
 		}
 	}
 
 	private void myFix(int courbeIdx, int idx, int state) {
-		if (idx >= 0 && idx < ((Courbe) Courbes.get(courbeIdx)).np() && (state == 0 || state == 1)) {
-			switch (state) {
-			case 1:
-				((Courbe) Courbes.get(courbeIdx)).setFix(idx, true);
-				break;
+		switch (state) {
 			case 0:
 				((Courbe) Courbes.get(courbeIdx)).setFix(idx, false);
 				break;
-			}
+			case 1:
+				((Courbe) Courbes.get(courbeIdx)).setFix(idx, true);
+				break;
+			default:
+				error("bad argument for message fix");
 		}
 	}
 
@@ -454,7 +460,12 @@ public class fplay extends ej
 			NextFrom = 0;
 
 			ArrayList tmpArray = new ArrayList();
-			
+
+			if (outputmode) {
+				tmpArray.add(Atom.newAtom(((Point) lPoints.get(0)).getY()));
+				tmpArray.add(Atom.newAtom(0.));
+			}
+				
 			for (int i = 1; i < np(); i++) {
 				tmpArray.add(Atom.newAtom(((Point) lPoints.get(i)).getY()));
 				tmpArray.add(Atom.newAtom(((Point) lPoints.get(i)).getX() - ((Point) lPoints.get(i - 1)).getX()));
@@ -465,7 +476,9 @@ public class fplay extends ej
 			}
 
 			Atom[] tmp = new Atom[tmpArray.size()];
-			outlet(LINE_OUTLET, getName(), ((Point) lPoints.get(0)).getY());
+			if (! outputmode)
+				outlet(LINE_OUTLET, getName(), ((Point) lPoints.get(0)).getY());
+			
 			outlet(LINE_OUTLET, getName(), (Atom[]) tmpArray.toArray(tmp));
 		}	
 
@@ -664,11 +677,13 @@ public class fplay extends ej
 		}
 		
 		public void setSustain(int idx, boolean state) {
-			((Point) lPoints.get(idx)).setSustain(state);
+			if (idx >= 0 && idx < np())
+				((Point) lPoints.get(idx)).setSustain(state);
 		}
 		
 		public void setFix(int idx, boolean state) {
-			((Point) lPoints.get(idx)).setFix(state);
+			if (idx >= 0 && idx < np())
+				((Point) lPoints.get(idx)).setFix(state);
 		}
 
 		public Atom[] getSustain() {
