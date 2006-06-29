@@ -2,8 +2,8 @@
  *	ej.fplay by Emmanuel Jourdan, Ircam Ñ 04 2006
  *	function player
  *
- *	$Revision: 1.4 $
- *	$Date: 2006/06/28 17:19:23 $
+ *	$Revision: 1.5 $
+ *	$Date: 2006/06/29 10:41:50 $
  */
 
 /**
@@ -479,7 +479,8 @@ public class fplay extends ej
 			if (! outputmode)
 				outlet(LINE_OUTLET, getName(), ((Point) lPoints.get(0)).getY());
 			
-			outlet(LINE_OUTLET, getName(), (Atom[]) tmpArray.toArray(tmp));
+			if (tmpArray.size() > 1)	// si on a qu'un point dans la courbe, il ne faut pas afficher la liste
+				outlet(LINE_OUTLET, getName(), (Atom[]) tmpArray.toArray(tmp));
 		}	
 
 		public void next() {
