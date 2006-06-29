@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.78 $
-	$Date: 2006/06/29 10:03:00 $
+	$Revision: 1.79 $
+	$Date: 2006/06/29 10:37:39 $
 */
 
 // global code
@@ -574,7 +574,9 @@ function line(courbe)
 	}
 	
 	outlet(LINE_OUTLET, courbe.name, courbe.pa[0].valy);
-	outlet(LINE_OUTLET, courbe.name, tmpArray);
+
+	if (tmpArray.length > 1)
+		outlet(LINE_OUTLET, courbe.name, tmpArray);
 }
 line.local = 1;
 
