@@ -2,8 +2,8 @@
  *	ej.fplay by Emmanuel Jourdan, Ircam Ñ 04 2006
  *	function player
  *
- *	$Revision: 1.7 $
- *	$Date: 2006/06/29 15:12:52 $
+ *	$Revision: 1.8 $
+ *	$Date: 2006/06/29 17:12:00 $
  */
 
 /**
@@ -28,19 +28,21 @@ public class fplay extends ej
 	private static final int LINE_OUTLET = 1;
 	private static final int DUMP_OUTLET = 2;
 	private static final int DUMPOUT_OUTLET = 3;
-	private static final int NBCOURBES = 1;
 	
 	private boolean isAll = false;
-	private boolean outputmode = false;
 	
+	private boolean outputmode = false;
 	private ArrayList Courbes = new ArrayList();
 	private int current = 0;
+	
+	private int nbfunctions = 1;
 	
 	public fplay(Atom[] args)
 	{
 		declareTypedIO("a", "aaa");
 		createInfoOutlet(true);
 
+		declareAttribute("nbfunctions", "getNbFunctions", "setNbFunctions");
 		declareAttribute("outputmode");
 		
 		setInletAssist(INLET_ASSIST);
@@ -49,6 +51,18 @@ public class fplay extends ej
 		init();
 	}
 
+	public void dblclick() {
+		post("ej.fplay");
+		post("\tnbfunctions: " + nbfunctions);
+
+		for (int i = 0; i < nbfunctions; i++) {
+			post("\tname: " + ((Courbe) Courbes.get(i)).getName());
+			post("\t\tnbpoints: " + ((Courbe) Courbes.get(i)).np());
+			post("\t\tdomain: " + ((Courbe) Courbes.get(i)).domain[0] + "\t\t" + ((Courbe) Courbes.get(i)).domain[1]);
+			post("\t\trange: " + ((Courbe) Courbes.get(i)).range[0] + "\t\t" + ((Courbe) Courbes.get(i)).range[1]);
+		}
+	}
+	
 	// standart messages
 	public void bang() {
 		myBang(current);
@@ -149,6 +163,11 @@ public class fplay extends ej
 		myName(current, args);
 	}
 
+	public void name(String[] names) {
+		for (int i = 0; i < Math.min(names.length, nbfunctions); i++)
+			myName(i, names[i]);
+	}
+	
 	public void domain(double max) {
 		((Courbe) Courbes.get(current)).domain(0, max);
 	}
@@ -226,9 +245,6 @@ public class fplay extends ej
 		((Courbe) Courbes.get(current)).unFix();
 	}
 	
-	public void getnbfunctions() {
-		outlet(DUMPOUT_OUTLET, "nbfunctions", Courbes.size());
-	}
 
 	/*
 	 * private methodes
@@ -327,8 +343,19 @@ public class fplay extends ej
 		}
 	}
 	
+	private void setNbFunctions(Atom[] a) {
+		if (a.length == 1 && isNumber(a[0]) && a[0].toInt() > 0) {
+			nbfunctions = a[0].toInt();
+			init();
+		}
+	}
+	
+	private int  getNbFunctions() {
+		return Courbes.size();
+	}
+
 	private void init() {
-		for (int i = 0; i < NBCOURBES; i++) {
+		for (int i = 0; i < nbfunctions; i++) {
 			Courbes.add(new Courbe("function" + i));
 		}
 	}
