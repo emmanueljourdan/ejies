@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.77 $
-	$Date: 2006/05/31 14:22:45 $
+	$Revision: 1.78 $
+	$Date: 2006/06/29 10:03:00 $
 */
 
 // global code
@@ -1689,7 +1689,7 @@ function addfunction()
 	
 	f[tmp] = new Courbe(arguments[0]);
 	NbCourbes++;
-	pixel2machin(f[front]);
+	pixel2machin(f[tmp]);
 	getname();		// mise ˆ jour du menu
 }
 
