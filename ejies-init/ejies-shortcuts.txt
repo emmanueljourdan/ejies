@@ -39,4 +39,5 @@ max shortcut ftom mxj ej.ftom;
 max shortcut urn mxj ej.urn;
 max shortcut linterp mxj ej.linterp;
 max shortcut ldrunk mxj ej.ldrunk;
-
+max shortcut fplay mxj ej.fplay;
+max shortcut l2buffer mxj ej.l2buffer;
