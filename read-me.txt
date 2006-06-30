@@ -3,6 +3,8 @@ by Emmanuel Jourdan, Ircam
 This version requires MaxMSP 4.5.6 or higher.
 
 Java externals:
+¥ ej.fplay: Non-graphical multi-breakpoint function editor 
+¥ ej.l2buffer: fill a buffer~ with a list 
 ¥ ej.ftom: Frequency to MIDI (with tuning adjustment, works for lists)
 ¥ ej.lchange: aware of list changes
 ¥ ej.lclip: constrains a list within a certain range

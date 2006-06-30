@@ -5,8 +5,9 @@ ejies Ñ Version history
 This version requires MaxMSP 4.5.6 or higher.
 
 New Java Externals:
-ej.ftom: Frequency to MIDI (with tuning adjustment, works for lists)
 ej.fplay: equivalent of ej.function.js without the drawing features
+ej.l2buffer: fill a buffer~ with a list
+ej.ftom: Frequency to MIDI (with tuning adjustment, works for lists)
 ej.ldrunk: more than a drunk for list
 ej.linterp: more than a list interpolator (up to 8 inputs)
 ej.mtof: MIDI to Frequency (with tuning adjustment, works for lists)
