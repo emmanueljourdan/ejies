@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.79 $
-	$Date: 2006/06/29 10:37:39 $
+	$Revision: 1.80 $
+	$Date: 2006/07/06 15:08:21 $
 */
 
 // global code
@@ -2945,6 +2945,7 @@ function read(filename)
 			if (OpendialogPrepend)
 					DeleteReadThings();
 
+			fichier.close();
 			return;
 		}
 				
