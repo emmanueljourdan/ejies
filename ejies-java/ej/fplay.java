@@ -2,8 +2,8 @@
  *	ej.fplay by Emmanuel Jourdan, Ircam Ñ 04 2006
  *	function player
  *
- *	$Revision: 1.8 $
- *	$Date: 2006/06/29 17:12:00 $
+ *	$Revision: 1.9 $
+ *	$Date: 2006/07/06 17:01:43 $
  */
 
 /**
@@ -16,19 +16,24 @@
 
  package ej;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.ListIterator;
+import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
+import java.util.regex.Pattern;
+
 import com.cycling74.max.*;
 
-public class fplay extends ej
-{
+public class fplay extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "quite anything..."};
 	private static final String[] OUTLET_ASSIST = new String[]{ "interpolated Y for input X", "points in line~ format", "dump message output"	};
 	private static final int INTERP_OUTLET = 0;
 	private static final int LINE_OUTLET = 1;
 	private static final int DUMP_OUTLET = 2;
 	private static final int DUMPOUT_OUTLET = 3;
-	
+	private static Pattern commentLine = Pattern.compile(".*\\/\\/.*");
+
 	private boolean isAll = false;
 	
 	private boolean outputmode = false;
@@ -37,8 +42,7 @@ public class fplay extends ej
 	
 	private int nbfunctions = 1;
 	
-	public fplay(Atom[] args)
-	{
+	public fplay(Atom[] args) {
 		declareTypedIO("a", "aaa");
 		createInfoOutlet(true);
 
@@ -110,6 +114,127 @@ public class fplay extends ej
 			error("function named " + s + " doesn't exist");
 	}
 
+	public void read() {
+		String s;
+		if ((s = MaxSystem.openDialog("choose a ej.function or ej.fplay file")) != null)
+			read(MaxSystem.maxPathToNativePath(s));
+	}
+	
+	
+	public void read(String s) {
+        String filePath = MaxSystem.locateFile(s);
+         if (filePath == null) {
+        	 error("can't locate that file");
+        	 return;
+         }
+			
+	    fileParsing(filePath);
+	}
+
+	public void write() {
+		String s;
+		if ((s = MaxSystem.saveAsDialog("choose a ej.function or ej.fplay file","myfunctions.txt")) != null)
+			write(MaxSystem.maxPathToNativePath(s));
+		
+	}
+	
+	public void write(String s) {
+
+	}
+	
+	private String lectureLigne(BufferedReader in) throws NullPointerException, IOException {
+		String str = null;
+		do {
+			str = in.readLine();
+		} while (str != null && (str.length() < 4 || Pattern.matches(".*\\/\\//*", str)));
+
+		return str;
+	}
+
+	private void fileParsing(String filePath) {
+		boolean isValidFileType = false;
+		String str;
+		boolean isEOFCorrect = false;
+		
+		try {
+	        BufferedReader in = new BufferedReader(new FileReader(filePath));
+	        
+	        try {
+	        	while ((str = lectureLigne(in)) != null) {
+	        		if (str.matches("(?i).*ej\\.function format.*")) {
+	        			isValidFileType = true;
+	        			break;
+	        		}
+	        	}
+
+	        	// if it contains ej.function format
+	        	if (isValidFileType) {
+	        		int idx;
+	        		StringTokenizer tok;
+		        	int versionNumber;
+		        	
+	        		try {
+		        		tok = new StringTokenizer(lectureLigne(in));
+		        		
+		        		versionNumber = Integer.parseInt(tok.nextToken());
+		        		if (versionNumber < 1 && versionNumber> 3) {
+		        			error("bad file version number");
+		        			in.close();
+		        			return;			// il faut sortir !
+		        		}
+		        		
+		        		setNbFunctions(Integer.parseInt(tok.nextToken()));	
+		        		int[] np = new int[getNbFunctions()]; 
+		        		    
+		        		if ( getNbFunctions() > tok.countTokens())
+		        			error("missing informations");
+		        		else {
+		        			for (idx = 0; idx < getNbFunctions(); idx++)
+		        				np[idx] = Integer.parseInt(tok.nextToken());
+		        		}
+		        		
+		        		// for each function
+		        		for (int c = 0; c < getNbFunctions(); c++) {
+		        			tok = new StringTokenizer(lectureLigne(in));
+		        			post("combien il en reste   " + tok.countTokens());
+			        		// name, domain min, domain max, range min, range max, gridstep, active
+			        		((Courbe) Courbes.get(c)).setName(tok.nextToken());
+			        		if (versionNumber == 1)
+			        			((Courbe) Courbes.get(c)).domain(0., Double.parseDouble(tok.nextToken()));
+			        		else
+			        			((Courbe) Courbes.get(c)).domain(Double.parseDouble(tok.nextToken()), Double.parseDouble(tok.nextToken()));
+			        		
+			        		((Courbe) Courbes.get(c)).range(Double.parseDouble(tok.nextToken()), Double.parseDouble(tok.nextToken()));
+			        		// ignoring the extra things (gridstep, active)
+			        		
+			        		if (versionNumber < 3) // saute la ligne contenant les couleurs
+			        			lectureLigne(in);
+			        		
+			        		// add points
+			        		for (int i = 0; i < np[c]; i++) {
+			        			tok = new StringTokenizer(lectureLigne(in));
+			        			((Courbe) Courbes.get(c)).addTypedPoint(tok.nextToken(), tok.nextToken(), tok.nextToken());
+			        		}
+		        		}
+		  
+		        			
+	        		} catch (NoSuchElementException e) {
+	        			error("missing information in the file, the object may be corrupted now...");
+	        			in.close();
+	        		}
+		        	
+		        		isEOFCorrect = true;
+	        	} else
+	        		error("bad file type");
+	        } catch (NullPointerException e) {
+	        	post("fin de ficher ? " + isEOFCorrect);
+	        }
+	        
+	        in.close();
+	    } catch (IOException e) {
+	    	error("can't open the file");
+	    }
+	}
 	
 	public void display(int idx) {
 		if (idx >= 0 && idx < Courbes.size())
@@ -192,8 +317,6 @@ public class fplay extends ej
 		((Courbe) Courbes.get(current)).setRange(min, max);
 	}
 	
-	
-
 	public void sustain(int idx, int state) {
 		mySustain(current, idx, state);
 	}
@@ -343,11 +466,14 @@ public class fplay extends ej
 		}
 	}
 	
+	private void setNbFunctions(int i) {
+		nbfunctions = i;
+		init();
+	}
+	
 	private void setNbFunctions(Atom[] a) {
-		if (a.length == 1 && isNumber(a[0]) && a[0].toInt() > 0) {
-			nbfunctions = a[0].toInt();
-			init();
-		}
+		if (a.length == 1 && isNumber(a[0]) && a[0].toInt() > 0)
+			setNbFunctions( a[0].toInt());
 	}
 	
 	private int  getNbFunctions() {
@@ -355,6 +481,7 @@ public class fplay extends ej
 	}
 
 	private void init() {
+		Courbes = new ArrayList();
 		for (int i = 0; i < nbfunctions; i++) {
 			Courbes.add(new Courbe("function" + i));
 		}
@@ -458,6 +585,7 @@ public class fplay extends ej
 	 */
 	class Courbe {
 		private String name = "function0";
+//		private int np = 0;										// used because of the reading
 		private double[] domain = {0., 1000.};			// domain de la courbe
 		private double[] range = {0., 1.};			// range de la courbe
 		private ArrayList lPoints = new ArrayList();	// PointsArray
@@ -637,9 +765,6 @@ public class fplay extends ej
 		}
 		
 		public void addOnePoint(double valx, double valy) {
-			/**
-			 * permet d'ajouter un point (il sera automatiquement insŽrer dans l'ordre croissant x)
-			 */
 			ListIterator listiter = lPoints.listIterator();
 
 			while (listiter.hasNext()) {
@@ -651,6 +776,11 @@ public class fplay extends ej
 			}
 			// on est ici car le point est le plus grand 
 			lPoints.add(new Point(valx, valy));
+		}
+		
+		public void addTypedPoint(String x, String y, String state) { 
+			int tmp = Integer.parseInt(state);
+			lPoints.add(new Point(Double.parseDouble(x), Double.parseDouble(y), (tmp & 2) == 2, (tmp & 1) == 1));
 		}
 
 		public void removeOnePoint(int idx) {
@@ -700,7 +830,7 @@ public class fplay extends ej
 		private void swapPoints(int num1, int num2) {
 			// Žchange des pointeurs
 			Point tmp = (Point) lPoints.get(num1);
-			lPoints.set(num2, (Point) lPoints.get(num2));
+			lPoints.set(num2, lPoints.get(num2));
 			lPoints.set(num1,  tmp);
 		}
 		
@@ -725,10 +855,10 @@ public class fplay extends ej
 			
 			if (tmpArray.size() == 1)
 				return null;
-			else {
-				Atom[] tmp = new Atom[tmpArray.size()];
-				return (Atom[]) tmpArray.toArray(tmp);
-			}
+
+			// else
+			Atom[] tmp = new Atom[tmpArray.size()];
+			return (Atom[]) tmpArray.toArray(tmp);
 		}
 
 		public Atom[] getFix() {
@@ -740,12 +870,12 @@ public class fplay extends ej
 					tmpArray.add(Atom.newAtom(i));
 			}
 			
-			if (tmpArray.size() == 1)
+			if (tmpArray.size() == 1) // == 1 means "fix" is only there
 				return null;
-			else {
-				Atom[] tmp = new Atom[tmpArray.size()];
-				return (Atom[]) tmpArray.toArray(tmp);
-			}
+			
+			// else
+			Atom[] tmp = new Atom[tmpArray.size()];
+			return (Atom[]) tmpArray.toArray(tmp);
 		}
 		
 		public void getDomain() {
@@ -785,7 +915,7 @@ public class fplay extends ej
 				double factor = (max - min) / (domain[1] - domain[0]);
 				
 				double tmp; // pour des raisons de lisibilitŽs
-				for (int i = 0; i < lPoints.size(); i++) {
+				for (int i = 0; i <  np(); i++) {
 					tmp = ((((Point) lPoints.get(i)).getX() - domain[0]) * factor) + min; 
 					((Point) lPoints.get(i)).setX(tmp);
 				}
@@ -830,8 +960,14 @@ public class fplay extends ej
 		}
 		
 		Point(double valx, double valy) {
+			this(valx, valy, false, false);
+		}
+		
+		Point(double valx, double valy, boolean sustain, boolean fix) {
 			this.valx = valx;
 			this.valy = valy;
+			this.sustain = sustain;
+			this.fix = fix;
 		}
 
 		void setX(double valx) {
