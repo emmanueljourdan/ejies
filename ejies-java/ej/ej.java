@@ -1,15 +1,15 @@
 /*
  *	ejies Java externals by Emmanuel Jourdan, Ircam Ñ 12 2005
  *
- *	$Revision: 1.6 $
- *	$Date: 2006/06/26 17:14:18 $
+ *	$Revision: 1.7 $
+ *	$Date: 2006/07/31 14:54:57 $
  */
 
 package ej;
+
 import com.cycling74.max.*;
 import java.util.regex.*;
 import java.io.*;
-// import java.util.*;
 
 public abstract class ej extends MaxObject
 {
@@ -83,6 +83,17 @@ public abstract class ej extends MaxObject
 	}
 	
 	// faster to debug... accept anything
+	public void post(boolean b) {
+		if (b)
+			super.post("true");
+		else
+			super.post("false");
+	}
+	
+	public void post(int i) {
+		super.post(i + "");
+	}
+	
 	public void post(float f) {
 		super.post(f + "");
 	}
