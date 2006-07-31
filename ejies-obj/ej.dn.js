@@ -2,13 +2,11 @@
 	ej.dn.js by Emmanuel Jourdan, Ircam Ñ 09 2004
 	display named objets (open the subpatcher)
 
-	$Revision: 1.3 $
-	$Date: 2005/09/26 15:15:57 $
+	$Revision: 1.4 $
+	$Date: 2006/07/31 09:22:25 $
  */
 
 // global code
-var ejies = EjiesUtils();	// lien vers ejies-extension.js
-
 inlets = 1;
 outlets = 0;
 setinletassist(0, "symbol: Name of the named object you want to find")
@@ -18,7 +16,7 @@ var str, re;
 var SearchState = 0;
 
 if (jsarguments.length > 1) SearchState = jsarguments[1];
-if (jsarguments.length > 2) perror("too many arguments...");
+if (jsarguments.length > 2) error(this, "too many arguments...");
 
 function searchmode(v)
 {
@@ -60,13 +58,6 @@ function testinput(re, str)
 		return 0 ;	// it does not contain;
 }
 testinput.local = 1;
-
-function perror()
-{
-	ejies.scriptname = "ej.dn.js";
-	ejies.perror(arguments);
-}
-perror.local = 1;
 
 // Pour la compilation automatique
 // autowatch = 1;

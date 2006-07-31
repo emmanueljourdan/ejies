@@ -2,14 +2,11 @@
 	ej.nthru.js by Emmanuel Jourdan, Ircam - 05 2004
 	Ce truc ne fait rien	 :-)
  
-	$Revision: 1.3 $
-	$Date: 2005/09/26 15:15:57 $
+	$Revision: 1.4 $
+	$Date: 2006/07/31 09:22:25 $
 */
 
 // global code
-
-var ejies = EjiesUtils();	// lien vers ejies-extension.js
-
 var NbInlets = 1;
 var NbOutlets = 1;
 const MAXINOUT = 64;
@@ -19,7 +16,7 @@ if (jsarguments.length>1 && typeof jsarguments[1] == "number")
 if (jsarguments.length>2 && typeof jsarguments[2] == "number")
 	NbOutlets = Math.min(jsarguments[2],MAXINOUT);	// outlet (minimum 1, max 64)
 if (jsarguments.length>3)
-	perror("extra arguments...");
+	error(this, "extra arguments...");
 
 inlets = NbInlets;
 outlets = NbOutlets;
@@ -90,13 +87,6 @@ function anything()
 	}
 }
 anything.immediate = 1;
-
-function perror()
-{
-	ejies.scriptname = "ej.nthru.js";
-	ejies.perror(arguments);
-}
-perror.local = 1;
 
 // Pour la compilation automatique
 // autowatch = 1;

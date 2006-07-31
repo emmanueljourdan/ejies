@@ -2,12 +2,11 @@
 	ej.lui.js by Emmanuel Jourdan, Ircam Ñ 09 2004
 	lui means Load jsUI...
 
-	$Revision: 1.6 $
-	$Date: 2005/09/26 15:15:57 $
+	$Revision: 1.7 $
+	$Date: 2006/07/31 09:22:25 $
  */
 
 // global code
-var ejies = new EjiesUtils();
 inlets = 1;
 outlets = 1;
 setinletassist(0, "Forget me please :-)");
@@ -18,10 +17,10 @@ if ( jsarguments[1] ) {
 	if (jsarguments[1] != "noUI")
 		wait_and_process();
 } else
-	perror("missing argument!");
+	error(this, "missing argument!");
 
 if (max.version < 455)
-	perror("MaxMSP 4.5.5 or higher is required.");
+	error(this, "MaxMSP 4.5.5 or higher is required.");
 
 function wait_and_process()
 {
@@ -64,13 +63,6 @@ function testinstallation()
 	post("¥ WARNING Ejies are not properly installed!\n");
 	post("Make sure the ejies-jsextensions.js is installed in the \"C74:/jsextensions\" folder!\n");
 }
-
-function perror()
-{
-	ejies.scriptname = "ej.lui.js";
-	ejies.perror(arguments);
-}
-perror.local = 1;
 
 // Pour la compilation automatique
 // autowatch = 1;

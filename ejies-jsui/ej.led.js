@@ -3,12 +3,11 @@
 	an alternative led...
 	since 1.54b3: mode button added
 	
-	$Revision: 1.6 $
-	$Date: 2005/10/05 16:53:19 $
+	$Revision: 1.7 $
+	$Date: 2006/07/31 09:23:12 $
 */
 
 // Global Code
-var ejies = EjiesUtils();	// lien vers ejies-extension.js
 inlets = 1;
 outlets = 2;
 setinletassist(0, "int/float, messages");
@@ -104,7 +103,7 @@ function anything()
 	if (LedMode)
 		bang();
 	else
-		perror("doesn't understand", messagename);
+		error(this, "doesn't understand", messagename);
 }
 
 function set(v)
@@ -127,7 +126,7 @@ function blinktime(v)
 	if (v > 0)
 		FlashTime = v;
 	else
-		perror("bad argument for message blinktime");
+		error(this, "bad argument for message blinktime");
 }
 
 function WaitAndStop()
@@ -163,7 +162,7 @@ function mode(v)
 		LastValue = 0;
 		ForceDisplay();
 	} else
-		perror("bad arguement for message mode");
+		error(this, "bad arguement for message mode");
 }
 
 function pict(v)
@@ -239,14 +238,6 @@ function forcesize(w,h)
 }
 forcesize.local = 1; //private
 
-
-function perror()
-{
-	ejies.scriptname = "ej.led.js";
-	ejies.perror(arguments);
-}
-perror.local = 1;
-
 function save()
 {
 /* 	save states */
@@ -268,7 +259,7 @@ function circlesize(v)
 		ForceDisplay();
 	}
 	else
-		perror("bad argument for message circlesize");
+		error(this, "bad argument for message circlesize");
 }
 
 function frgb(r,g,b)

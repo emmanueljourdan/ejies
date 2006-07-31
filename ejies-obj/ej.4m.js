@@ -2,13 +2,11 @@
 	ej.4m.js by Emmanuel Jourdan, Ircam — 06 2004
 	output the min, median, mean, maximum on a int/float stream
  
-	$Revision: 1.5 $
-	$Date: 2006/01/03 17:02:49 $
+	$Revision: 1.6 $
+	$Date: 2006/07/31 09:22:25 $
 */
 
 // global code
-var ejies = new EjiesUtils();				// lien vers ejies-extension.js
-
 inlets = 1;
 outlets = 5;
 setinletassist(0, "int/float");
@@ -35,7 +33,7 @@ if (jsarguments.length > 2) {
 		VerboseOrNot = 1;
 	}
 if (jsarguments.length > 3)
-	perror("extra arguments...");
+	error(this, "extra arguments...");
 
 function loadbang()
 {
@@ -59,7 +57,7 @@ function bang()
 		for (i = 0 ; i < (OldWindowSize - WindowReset) ; i++ ) {
 			a.shift();
 		}
-		perror("using temp window size of ", a.length, " items.");
+		error(this, "using temp window size of ", a.length, " items.");
 		sortie();
 		window(OldWindowSize);
 	} else if (WindowReset >= a.length) { // il y a suffisament d'élément.
@@ -69,7 +67,7 @@ function bang()
 
 function anything()
 {
-	perror("doesn't understand ", messagename);
+	error(this, "doesn't understand", messagename);
 }
 
 // change la taille de la fenêtre d'analyse
@@ -83,7 +81,7 @@ function reset()			// reset: vide le buffer
 {
 	window(a.length);
 	if (VerboseOrNot)
-		perror("buffer is now empty.");
+		error(this, "buffer is now empty.");
 }
 
 function clear() { reset() ;} // alias
@@ -132,13 +130,6 @@ function getverbose()
 {
 	outlet(4, "verbose", VerboseOrNot);
 }
-
-function perror()
-{
-	ejies.scriptname = "ej.4m.js";
-	ejies.perror(arguments);
-}
-perror.local = 1;
 
 // Pour la compilation automatique
 // autowatch = 1;

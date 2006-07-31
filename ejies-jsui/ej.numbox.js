@@ -2,13 +2,11 @@
 	ej.numbox.js by Emmanuel Jourdan, Ircam - 08 2004
 	an alternative number box.
 
-	$Revision: 1.12 $
-	$Date: 2005/12/10 17:20:32 $
+	$Revision: 1.13 $
+	$Date: 2006/07/31 09:23:12 $
 */
 
 // Global Code
-
-var ejies = EjiesUtils();	// lien vers ejies-extension.js
 inlets = 1;
 outlets = 3;
 setinletassist(0, "int/float, messages");
@@ -79,7 +77,7 @@ if (jsarguments.length>21)	MinMaxValues[1] = jsarguments[21];
 if (jsarguments.length>22)	DefaultValue = jsarguments[22];
 if (jsarguments.length>23)	change(jsarguments[23]);
 if (jsarguments.length>24)	mouseup(jsarguments[24]);
-if (jsarguments.length>25)	perror("extra arguments - check the inspector");
+if (jsarguments.length>25)	error(this, "extra arguments - check the inspector");
 
 MyVal = DefaultValue;
 
@@ -182,7 +180,7 @@ function leading0(v)
 			LeadingValue = v;
 			LeadingText = "";
 		} else
-			perror("leading0 ", v, "wrong argument");
+			error(this, "leading0 ", v, "wrong argument");
 	}
 	draw();
 	refresh();
@@ -228,7 +226,7 @@ function mouseup(v)
 	if (v == 1 || v == 0)
 		MouseUpState = v;
 	else
-		perror("mouseup ", v, "wrong argument");
+		error(this, "mouseup ", v, "wrong argument");
 }
 
 function getmouseup()
@@ -242,7 +240,7 @@ function roundmode(v)
 		RoundValue = v;
 		msg_float(MyVal);
 	} else
-		perror("roundmode ", v, "wrong argument (must be 0, 1 or 2)");
+		error(this, "roundmode ", v, "wrong argument (must be 0, 1 or 2)");
 }
 
 function getroundmode()
@@ -280,15 +278,8 @@ function change(v)
 	if (v == 1 || v == 0) {
 		ChangeState = v;
 	} else
-		perror("change ", v, "wrong argument");
+		error(this, "change ", v, "wrong argument");
 }
-
-function perror()
-{
-	ejies.scriptname = "ej.numbox.js";
-	ejies.perror(arguments);
-}
-perror.local = 1;
 
 function getchange()
 {
@@ -386,7 +377,7 @@ function getinitvalue()
 
 function args4insp()
 {
-	perror("since 1.52 the parameters are embed with the patcher. Use the inspector insteed.");
+	error(this, "since 1.52 the parameters are embed with the patcher. Use the inspector insteed.");
 	return;
 
 	var MsgArgs = new Array(25);
@@ -573,7 +564,7 @@ function KeyboardInput(v)
 				this.patcher.script("hide", TempName);	// hidden ne marche pas car c'est un subpatcher :-(
 				
 				if (keyboard.maxclass == "bogus") {
-					perror("check the installation: ej.numbox-keyboard.pat is missing in the ejies'help folder");
+					error(this, "check the installation: ej.numbox-keyboard.pat is missing in the ejies'help folder");
 					KeyboardError = 0;
 					return;
 				}
