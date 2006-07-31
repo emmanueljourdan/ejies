@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.80 $
-	$Date: 2006/07/06 15:08:21 $
+	$Revision: 1.81 $
+	$Date: 2006/07/31 13:36:41 $
 */
 
 // global code
@@ -83,7 +83,7 @@ RedrawEnable = 0;	// désactivation de l'affichage pendant l'initialisation
 NotifyEnable = 0;
 
 if (max.version < 455)
-	perror("MaxMSP 4.5.5 or higher is required. Please upgrade!");
+	ejies.error(this, "MaxMSP 4.5.5 or higher is required. Please upgrade!");
 
 if (box.rect[2] - box.rect[0] == 64 && box.rect[3] - box.rect[1] == 64) {
 	// numbox a été créée à partie de jsui : dimensions = 64*64
@@ -162,7 +162,7 @@ function askForDrawFunctions()
 		slowDrawing.cancel();
 	
 /* 	post("running? " + drawingTask.running + "\n"); */
-	slowDrawing.schedule(100); // trigger the task one time
+	slowDrawing.schedule(20); // trigger the task one time
 }
 askForDrawFunctions.local = 1;
 
@@ -214,7 +214,6 @@ askForNotify.local = 1;
 function DoNotify()
 {
 	if (NotifyEnable) {
-/* 		post("notifying\n"); */
 		askForNotify();
 		DoNotify.done = 0;
 	} else
@@ -378,7 +377,7 @@ function anything()
 	RedrawEnable = OldRedrawState;	// retour à l'état initial
 		
 	if (tmp == -1) {	// si -1 c'est que ça ne correspond pas à un nom de function ou de message
-		perror("doesn't understand", messagename, "(bad function name or message name)");
+		ejies.error(this, "doesn't understand", messagename, "(bad function name or message name)");
 		return;
 	}
 
@@ -427,7 +426,7 @@ function LectureInspector()
 		init();	// création des courbes
 
 		if (jsarguments.length != (10 + NbCourbes*18) ) {
-			perror("bad number of arguments in the inspector");
+			ejies.error(this, "bad number of arguments in the inspector");
 			return;
 		}
 		LegendState = jsarguments[idx++];
@@ -502,9 +501,9 @@ function PattrInterpError(v)
 		return;
 	
 	if (v == 0 )
-		perror("interpolation isn't possible (different number of function)");
+		ejies.error(this, "interpolation isn't possible (different number of function)");
 	else
-		perror("interpolation isn't possible (different number of points)");
+		ejies.error(this, "interpolation isn't possible (different number of points)");
 
 	PattrInterpError.flag = 1;
 }
@@ -514,7 +513,7 @@ function PattrTooMany(v)
 {
 	if (v >= 2048) {
 		if (PattrTooMany.flag) {
-			perror("too many functions/points... pattr won't work...");
+			ejies.error(this, "too many functions/points... pattr won't work...");
 			PattrTooMany.flag = 0;
 		}
 	} else
@@ -658,10 +657,101 @@ function MyAddPoints(courbe, liste)
 }
 MyAddPoints.local = 1;
 
+function syncfunctions()
+{
+	var courbe = f[arguments[0]];
+	
+	courbe.name = arguments[1];
+	courbe.domain[0] = arguments[2];
+	courbe.domain[1] = arguments[3];
+	courbe.range[0] = arguments[4];
+	courbe.range[1] = arguments[5];
+
+	MyThings2Zoom(courbe);
+	pixel2machin(courbe);
+	
+	DoNotify();
+	drawAll();
+}
+
+function syncpoints()
+{
+	var courbe = f[arguments[0]];
+	courbe.pa = new Array();	// clear every points
+	
+	for (var i = 0; i < ((arguments.length - 1) / 3); i++) {
+		courbe.pa[i] = new Point(	val2x(courbe, arguments[i*3+1]),
+									val2y(courbe, arguments[i*3+2]),
+									arguments[i*3+1],
+									arguments[i*3+2]
+								);
+		courbe.pa[i].fix = (arguments[i*3+3] & 1) == 1;
+		courbe.pa[i].sustain = (arguments[i*3+3] & 2) == 2;
+	}
+	courbe.np = courbe.pa.length;
+
+	DoNotify();
+	drawAll();
+}
+
+function sync()
+{
+	if (arguments.length == 0) {
+		outlet(DUMP_OUTLET, "nbfunctions", f.length);
+	
+		for (var c = 0; c < f.length; c++) {
+			outlet(DUMP_OUTLET, getSyncCourbe(c));
+	
+			if (f[c].np > 0)
+				outlet(DUMP_OUTLET, getSyncPoints(c));
+		}
+	} else
+		sync2send(arguments[0]);
+}
+
+function sync2send(sendName)
+{
+	messnamed(sendName, "nbfunctions", f.length);
+
+	for (var c = 0; c < f.length; c++) {
+		g.syncThings = getSyncCourbe(c);
+		g.sendnamed(sendName, "syncThings");
+
+		if (f[c].np > 0) {
+			g.syncThings = getSyncPoints(c);
+			g.sendnamed(sendName, "syncThings");
+		}
+	}
+}
+sync2send.local = 1;
+
+function getSyncCourbe(courbeIdx)
+{
+	return [ "syncfunctions", courbeIdx, f[courbeIdx].name, f[courbeIdx].domain[0], f[courbeIdx].domain[1], f[courbeIdx].range[0], f[courbeIdx].range[1] ];
+}
+getSyncCourbe.local = 0;
+
+function getSyncPoints(courbeIdx)
+{
+	var tmp = new Array((f[courbeIdx].np * 3) + 2);
+	var idx = 0;
+	tmp[idx++] = "syncpoints";
+	tmp[idx++] = courbeIdx; // the first thing is the ID of the function
+	
+	for (var i = 0; i < f[courbeIdx].np; i++) {
+		tmp[idx++] = f[courbeIdx].pa[i].valx;
+		tmp[idx++] = f[courbeIdx].pa[i].valy;
+		tmp[idx++] = f[courbeIdx].pa[i].sustain * 2 + f[courbeIdx].pa[i].fix;
+	}
+	
+	return tmp;
+}
+getSyncPoints.local = 0;
+
 function MyDomain(start, stop, courbe)
 {
 	if (start >= stop) {
-		perror("bad values for message domain: min must be lower than max");
+		ejies.error(this, "bad values for message domain: min must be lower than max");
 		return;
 	}
 	
@@ -706,7 +796,7 @@ MyThings2Zoom.local = 1;
 function MySetDomain(start, stop, courbe)
 {
 	if (start >= stop) {
-		perror("bad values for message domain: min must be lower than max");
+		ejies.error(this, "bad values for message domain: min must be lower than max");
 		return;
 	}
 
@@ -781,7 +871,7 @@ function MyPasteColors(courbe)
 	idx = 0;
 	
 	if (cp.length == 0) {
-		perror("before pasting colors, you have to copy something");
+		ejies.error(this, "before pasting colors, you have to copy something");
 		return;
 	}
 	
@@ -947,7 +1037,7 @@ DeletePoint.local = 1;
 function MovePoint(courbe, lequel, newx, newy)
 {
 	if (lequel >= courbe.np) {
-		perror("no point", lequel,"in function", courbe.name);
+		ejies.error(this, "no point", lequel,"in function", courbe.name);
 		return;
 	}
 	courbe.pa[lequel].valx = newx;
@@ -1100,7 +1190,7 @@ function ArgsParser(courbe, msg, a)
 			case 1: interp(courbe, a[0]); break;
 			case 2: AddOnePoint(courbe, val2x(courbe, a[0]), val2y(courbe, a[1])); askForDrawFunctions(); break;
 			case 3: MovePoint(courbe, a[0], a[1], a[2]); askForDrawFunctions(); break;
-			default: perror("too many arguments for message", msg); break;
+			default: ejies.error(this, "too many arguments for message", msg); break;
 		}
 		return 0;	// sort de la fonction
 	}
@@ -1124,7 +1214,7 @@ function ArgsParser(courbe, msg, a)
 							else if (a.length == 3)
 								MyDomain(a[1], a[2], courbe);
 							else
-								perror("bad argument(s) for message domain"); 
+								ejies.error(this, "bad argument(s) for message domain"); 
 							NeedNotify++; break;
 		case "setdomain":	
 							if (a.length == 2)
@@ -1132,7 +1222,7 @@ function ArgsParser(courbe, msg, a)
 							else if (a.length == 3)
 								MySetDomain(a[1], a[2], courbe);
 							else
-								perror("bad argument(s) for message setdomain");
+								ejies.error(this, "bad argument(s) for message setdomain");
 							NeedNotify++; break;
 		case "range":		if (a.length == 3) { range(a[1], a[2], courbe); } break;
 		case "setrange":	if (a.length == 3) { setrange(a[1], a[2], courbe); } break;
@@ -1177,11 +1267,11 @@ function ArgsParser(courbe, msg, a)
 		default: 			// message d'erreurs en fonction du type de message all ou pas
 							if (msg == "all") {
 								if (DisplayOneTime == 1) {
-									perror("bad arguments for message all");
+									ejies.error(this, "bad arguments for message all");
 									DisplayOneTime = 0;
 								}
 							} else {
-								perror("doesn't understand", a[0]);
+								ejies.error(this, "doesn't understand", a[0]);
 								return 0;
 							}
 							break;
@@ -1200,7 +1290,7 @@ function FixPoint(courbe, WhichPoint, state)
 		courbe.pa[WhichPoint].fix = state;
 		DoNotify();
 	} else
-		perror("bad argument for message fix");
+		ejies.error(this, "bad argument for message fix");
 }
 FixPoint.local = 1;
 
@@ -1247,9 +1337,9 @@ function MySustain(point, state, courbe)
 			DoNotify();
 			askForDrawFunctions();
 		} else
-			perror("no point", point, "(sustain operation aborted)" );
+			ejies.error(this, "no point", point, "(sustain operation aborted)" );
 	} else
-		perror("bad arguments for message sustain");
+		ejies.error(this, "bad arguments for message sustain");
 }
 MySustain.local = 1;
 
@@ -1327,7 +1417,7 @@ function MyGridStep(courbe, v)
 				askForDrawFunctions();
 		}
 	} else
-		perror("bad argument for message gridstep");
+		ejies.error(this, "bad argument for message gridstep");
 }
 MyGridStep.local = 1;
 
@@ -1366,8 +1456,6 @@ function MyDumpMatrix(courbe)
 		for (p = 0; p < courbe.np; p++) {
 			Matrix.setcell2d(0, p, courbe.pa[p].valx);
 			Matrix.setcell2d(1, p, courbe.pa[p].valy);
-/* 			Matrix.setcell2d(0, p, courbe.pa[p].x); */
-/* 			Matrix.setcell2d(1, p, courbe.pa[p].y); */
 		}
 		
 		outlet(DUMP_OUTLET, "jit_matrix", Matrix.name);
@@ -1391,7 +1479,7 @@ function MyListDump(courbe, sendname)
 	
 	// sortie limitée à 4095 éléments (4094 + nom de la fonction)
 	if (tmpArray.length > 4094) {
-		perror("listdump aborted: too many points... use dump instead for now.");
+		ejies.error(this, "listdump aborted: too many points... use dump instead for now.");
 		return;
 	}
 	
@@ -1412,7 +1500,7 @@ function MyName(courbe, name)
 	if (typeof(name) == "string")
 		courbe.name = name;
 	else {
-		perror("function name must be a symbol");
+		ejies.error(this, "function name must be a symbol");
 		return;
 	}
 	
@@ -1420,13 +1508,6 @@ function MyName(courbe, name)
 	drawText();
 }
 MyName.local = 1;
-
-function perror()
-{
-	ejies.scriptname = "ej.function.js";
-	ejies.perror(arguments);
-}
-perror.local = 1;
 
 function SetColor(intOrcourbe, which, a, b, c)
 {
@@ -1447,7 +1528,7 @@ function SetColor(intOrcourbe, which, a, b, c)
 	if (tmpA.length == 3 && (typeof(tmpA[0]) == "number") && (typeof(tmpA[1]) == "number") && (typeof(tmpA[2]) == "number") )
 		courbe[which] = MyColor2Float(tmpA[0], tmpA[1], tmpA[2]);
 	else
-		perror("bad arguments for message", which);
+		ejies.error(this, "bad arguments for message", which);
 }
 //SetColor.local = 1; // utilisée par embedmessage c'est pourquoi il ne faut pas qu'elle soit locale
 
@@ -1504,7 +1585,7 @@ function addpoints()
 function args4insp()
 {
 	//
-	perror("since 1.52 the parameters are embed with the patcher. Use the inspector insteed.");
+	ejies.error(this, "since 1.52 the parameters are embed with the patcher. Use the inspector insteed.");
 	return;
 	
 	var i, j;
@@ -1537,7 +1618,7 @@ function args4insp()
 function autosustain(v)
 {
 	if (v != 0 && v != 1) {
-		perror("autosustain doesn't understand", v);
+		ejies.error(this, "autosustain doesn't understand", v);
 		return;
 	}
 	AutoSustain = v;
@@ -1675,7 +1756,7 @@ MyNormalize.local = 1;
 function autocursor(v)
 {
 	if (v != 0 && v != 1)
-		perror("autocursor doesn't understand", v);
+		ejies.error(this, "autocursor doesn't understand", v);
 	else
 		CursorChange = v;
 }
@@ -1683,7 +1764,7 @@ function autocursor(v)
 function addfunction()
 {
 	if (arguments.length != 1) {
-		perror("missing argument (name) for message addfunction");
+		ejies.error(this, "missing argument (name) for message addfunction");
 		return;
 	}
 	
@@ -1698,7 +1779,7 @@ function addfunction()
 function insertfunction()
 {
 	if (arguments.length != 1) {
-		perror("missing argument (name) for message insertfunction");
+		ejies.error(this, "missing argument (name) for message insertfunction");
 		return;
 	}
 
@@ -1729,7 +1810,7 @@ function deletefunction()
 	}
 	
 	if (which == -1) {
-		perror(arguments[0], "bad function name (deletefunction aborted)");
+		ejies.error(this, arguments[0], "bad function name (deletefunction aborted)");
 		return;
 	}
 	
@@ -1753,7 +1834,7 @@ function bordersync(v)
 	if (v == 0 || v == 1)
 		BorderSyncState = v;
 	else
-		perror("bordersync doesn't understand", v);
+		ejies.error(this, "bordersync doesn't understand", v);
 }
 
 function clickadd(v)
@@ -1761,7 +1842,7 @@ function clickadd(v)
 	if (v == 0 || v == 1)
 		ClickAdd = v;
 	else
-		perror("clickadd doesn't understand", v);
+		ejies.error(this, "clickadd doesn't understand", v);
 }
 
 function clickmove(v)
@@ -1769,7 +1850,7 @@ function clickmove(v)
 	if (v == 0 || v == 1)
 		ClickMove = v;
 	else
-		perror("clickmove doesn't understand", v);
+		ejies.error(this, "clickmove doesn't understand", v);
 }
 
 function display()
@@ -1777,7 +1858,7 @@ function display()
 	var c, tmp;
 
 	if ( arguments.length != 1 ) {
-		perror("missing argument for message display");
+		ejies.error(this, "missing argument for message display");
 		return;
 	}
 	
@@ -1816,7 +1897,7 @@ function dumpmatrix()
 			}
 		}
 		// message d'erreur si le nom de la fonction n'est pas valide
-		perror(arguments[0], "is not a function, dumpmatrix aborted.");
+		ejies.error(this, arguments[0], "is not a function, dumpmatrix aborted.");
 	} else
 		MyDumpMatrix(f[front]);	// 
 }
@@ -1828,6 +1909,22 @@ function listdump()
 		MyListDump(f[front], arguments[0]);
 	else
 		MyListDump(f[front]);
+}
+
+function nbfunctions(v)
+{
+	// ajout des courbes, si nécessaire
+	if (v < NbCourbes) {
+		while (f.length > v)
+			f.splice(f.length - 1, 1);
+	} else if (v > NbCourbes) {
+		while (f.length < v)
+			f[f.length] = new Courbe("function" + (f.length - 1));
+	}
+	// si on a le même nombre de courbe, on ne fait rien
+	// ce qui permet de garder les couleurs par exemple.
+
+	NbCourbes = f.length;
 }
 
 function clear()
@@ -1843,7 +1940,7 @@ function clearsustain()
 	if (! arguments.length)
 		MyClearSustain(f[front]);
 	else
-		perror("extra arguments for message clearsustain");
+		ejies.error(this, "extra arguments for message clearsustain");
 }
 
 function fix()
@@ -1851,13 +1948,13 @@ function fix()
 	if (arguments.length == 2)
 		FixPoint(f[front], arguments[0], arguments[1]);
 	else
-		perror("bad arguments for message fix");
+		ejies.error(this, "bad arguments for message fix");
 }
 
 function unfix()
 {
 	if (arguments.length)
-		perror("extra arguments for message unfix");
+		ejies.error(this, "extra arguments for message unfix");
 	else
 		MyUnfix(f[front]);
 }
@@ -1868,7 +1965,7 @@ function grid(v)
 		GridMode = v;
 		askForDrawFunctions();
 	} else
-		perror("gridmode doesn't understand", v);
+		ejies.error(this, "gridmode doesn't understand", v);
 }
 
 function nth(v)
@@ -1876,7 +1973,7 @@ function nth(v)
 	if (typeof(v) == "number")
 		MyNth(f[front], v);
 	else
-		perror("bad argument for message nth");
+		ejies.error(this, "bad argument for message nth");
 }
 
 function notifyrecalled(v)
@@ -1884,7 +1981,7 @@ function notifyrecalled(v)
 	if (v == 0 || v == 1)
 		NotifyRecalledState = v;
 	else
-		perror("notifyrecalled doesn't understand", v);
+		ejies.error(this, "notifyrecalled doesn't understand", v);
 }
 
 function active()
@@ -1895,7 +1992,7 @@ function active()
 	var i;
 	
 	if (tmpArray.length > (NbCourbes + 1)) {
-		perror("too many arguments for message active");
+		ejies.error(this, "too many arguments for message active");
 		return;
 	}
 	
@@ -1905,14 +2002,14 @@ function active()
 			drawAll();
 			return;
 		} else
-			perror("bad argument for message active");
+			ejies.error(this, "bad argument for message active");
 	}
 
 	for (i = 1; i < tmpArray.length; i++) {
 		if (tmpArray[i] == 0 || tmpArray[i] == 1)
 			f[i-1].display = tmpArray[i];
 		else {
-			perror("bad argument for message active");
+			ejies.error(this, "bad argument for message active");
 			break;
 		}
 	}
@@ -1924,7 +2021,7 @@ function snap2grid(v)
 	if (v == 0 || v == 1)
 		Snap2GridState = v;
 	else
-		perror("snap2grid doesn't understand", v);
+		ejies.error(this, "snap2grid doesn't understand", v);
 }
 
 function gridstep(v)
@@ -1938,7 +2035,7 @@ function hiddenpoint(v)
 		HiddenPointDisplay = v;
 		askForDrawFunctions();
 	} else
-		perror("hiddenpoint doesn't understand", v);
+		ejies.error(this, "hiddenpoint doesn't understand", v);
 }
 
 function legend(v)
@@ -1960,7 +2057,7 @@ function legend(v)
 function ghost(v)
 {
 	if (v < 0 && v > 100)
-		perror("ghost percentage between 0 and 100 % expected", v);
+		ejies.error(this, "ghost percentage between 0 and 100 % expected", v);
 	else {
 		Ghostness = v * 0.01;
 		askForDrawFunctions();
@@ -1972,7 +2069,7 @@ function timedisplay(v)
 	if (v == 0 || v == 1)
 		TimeFlag = v;
 	else
-		perror("timedisplay doesn't understand", v);
+		ejies.error(this, "timedisplay doesn't understand", v);
 }
 
 function mousereport(v)
@@ -1980,12 +2077,17 @@ function mousereport(v)
 	if (v == 0 || v == 1)
 		MouseReportState = v;
 	else
-		perror("mousereport doesn't understand", v);
+		ejies.error(this, "mousereport doesn't understand", v);
 }
 
 function name(name)
 {
-	MyName(f[front], name);
+	if (arguments.length > 1) {
+		for (var i = 0; i < Math.min(arguments.length, f.length); i++)
+			MyName(f[i], arguments[i]);
+	} else
+		MyName(f[front], name);
+
 	getname();	// envoie la liste des fonctions
 }
 
@@ -1994,7 +2096,7 @@ function next()
 	if (! arguments.length)
 		MyNext(f[front]);
 	else
-		perror("extra arguments for message next");
+		ejies.error(this, "extra arguments for message next");
 }
 next.immediate = 1;
 
@@ -2003,7 +2105,7 @@ function sustain()
 	if (arguments.length == 2)
 		MySustain(arguments[0], arguments[1], f[front]);
 	else
-		perror("bad arguments for message sustain");
+		ejies.error(this, "bad arguments for message sustain");
 }
 
 function brgb() { SetColor(f[front], "brgb", arguments); drawAll(); }
@@ -2023,7 +2125,7 @@ function domain()
 				MyDomain(arguments[0], arguments[1], f[front]);
 				break;
 		default:
-				perror("bad argument(s) for message domain");
+				ejies.error(this, "bad argument(s) for message domain");
 				return;
 	}
 }
@@ -2038,7 +2140,7 @@ function setdomain()
 				MySetDomain(arguments[0], arguments[1], f[front]);
 				break;
 		default:
-				perror("bad argument(s) for message setdomain");
+				ejies.error(this, "bad argument(s) for message setdomain");
 				return;
 	}
 }
@@ -2046,7 +2148,7 @@ function setdomain()
 function range(a, b, courbe)
 {
 	if ( a >= b) {
-		perror("bad values for message range: min must be lower than max");
+		ejies.error(this, "bad values for message range: min must be lower than max");
 		return ;
 	}
 
@@ -2068,7 +2170,7 @@ function range(a, b, courbe)
 function setrange(a, b, courbe)
 {
 	if ( a >= b) {
-		perror("bad values for message setrange: min must be lower than max");
+		ejies.error(this, "bad values for message setrange: min must be lower than max");
 		return ;
 	}
 
@@ -2180,7 +2282,7 @@ function copycolors()
 	}
 	
 	if (c == -1) {
-		perror(arguments[0], "bad function name (copycolors aborted)");
+		ejies.error(this, arguments[0], "bad function name (copycolors aborted)");
 		return;
 	}
 
@@ -2197,7 +2299,7 @@ function pastecolors()
 	if (! arguments.length)
 		MyPasteColors(f[front]);
 	else
-		perror("extra arguments for message pastecolors");
+		ejies.error(this, "extra arguments for message pastecolors");
 }
 
 function zoom_x(start, stop, courbe)
@@ -2209,7 +2311,7 @@ function zoom_x(start, stop, courbe)
 		start = 0;
 		stop = 1;
 	} else if (arguments.length == 1) {
-		perror("missing argument for message zoom_x");
+		ejies.error(this, "missing argument for message zoom_x");
 		return;
 	}
 
@@ -2233,7 +2335,7 @@ function zoom_y(start, stop, courbe)
 		start = 0;
 		stop = 1;
 	} else if (arguments.length == 1) {
-		perror("missing argument for message zoom_y");
+		ejies.error(this, "missing argument for message zoom_y");
 		return;
 	}
 	
@@ -2670,7 +2772,7 @@ function setvalueof()
 		outlet(DUMPOUT, "recalled");
 
 	if ( FunctionVersionCheck < 1 && FunctionVersionCheck > 2 )
-		perror("bad version number - interpolation aborted");
+		ejies.error(this, "bad version number - interpolation aborted");
 }
 
 function getvalueof()
@@ -2796,7 +2898,7 @@ function copyfunction()
 	}
 	
 	if (c == -1) {
-		perror(arguments[0], "bad function name (copyfunction aborted)");
+		ejies.error(this, arguments[0], "bad function name (copyfunction aborted)");
 		return;
 	}
 
@@ -2827,7 +2929,7 @@ function pastefunction()
 	if (! arguments.length)
 		MyPasteFunction(f[front]);
 	else
-		perror("extra arguments for message pastefunction");
+		ejies.error(this, "extra arguments for message pastefunction");
 	
 	getname();			// il se peut que le nom soit changé
 	UpdateDisplay();
@@ -2842,7 +2944,7 @@ function MyPasteFunction(courbe)
 	var cp = g["copy"];	// c'est moins long
 	
 	if (cp.length == 0) {
-		perror("before pasting, you have to copy something");
+		ejies.error(this, "before pasting, you have to copy something");
 		return;
 	}
 		
@@ -2889,7 +2991,7 @@ function insertpaste()
 	p = idx = 0;
 	
 	if (cp.length == 0) {
-		perror("before inserting and pasting, you have to copy something");
+		ejies.error(this, "before inserting and pasting, you have to copy something");
 		return;
 	}
 		
@@ -2928,7 +3030,7 @@ function read(filename)
 	}
 
 	if (! arguments.length) {
-		perror("read filename is missing");
+		ejies.error(this, "read filename is missing");
 		return;
 	}
 
@@ -2939,7 +3041,7 @@ function read(filename)
 
 		var tmpLine = LectureNextLigne(fichier);
 		if (tmpLine.search("ej.function format") == -1) {
-			perror("can't read this file format");
+			ejies.error(this, "can't read this file format");
 			
 			// suppression des objets opendialog...
 			if (OpendialogPrepend)
@@ -3000,7 +3102,7 @@ function read(filename)
 				f[c].name += " " + tmpLine[idx++];
 			
 			// depuis la version 1.52 domaine contient deux limites.
-			if (FunctionVersionCheck == 1)
+			if (FunctionVersionCheck < 2)
 				f[c].domain[0] = 0;
 			else
 				f[c].domain[0] = parseFloat(tmpLine[idx++]);
@@ -3012,25 +3114,27 @@ function read(filename)
 
 			MyThings2Zoom(f[c]);
 			
-			f[c].GridStep = parseFloat(tmpLine[idx++]);
-			f[c].display = parseFloat(tmpLine[idx++]);
+			if (FunctionVersionCheck < 3) {
+				f[c].GridStep = parseFloat(tmpLine[idx++]);
+				f[c].display = parseFloat(tmpLine[idx++]);
 
-			idx = 0;
-			tmpLine = LectureNextLigne(fichier);
-			tmpLine = tmpLine.split(" ");
-			for (j=0; j < 3; j++) { f[c].brgb[j] = tmpLine[idx++] / 255; }
-			for (j=0; j < 3; j++) { f[c].frgb[j] = tmpLine[idx++] / 255; }
-			for (j=0; j < 3; j++) { f[c].rgb2[j] = tmpLine[idx++] / 255; }
-			for (j=0; j < 3; j++) { f[c].rgb3[j] = tmpLine[idx++] / 255; }
-			for (j=0; j < 3; j++) { f[c].rgb4[j] = tmpLine[idx++] / 255; }
-			for (j=0; j < 3; j++) { f[c].rgb5[j] = tmpLine[idx++] / 255; }
+				idx = 0;
+				tmpLine = LectureNextLigne(fichier);
+				tmpLine = tmpLine.split(" ");
+				for (j=0; j < 3; j++) { f[c].brgb[j] = tmpLine[idx++] / 255; }
+				for (j=0; j < 3; j++) { f[c].frgb[j] = tmpLine[idx++] / 255; }
+				for (j=0; j < 3; j++) { f[c].rgb2[j] = tmpLine[idx++] / 255; }
+				for (j=0; j < 3; j++) { f[c].rgb3[j] = tmpLine[idx++] / 255; }
+				for (j=0; j < 3; j++) { f[c].rgb4[j] = tmpLine[idx++] / 255; }
+				for (j=0; j < 3; j++) { f[c].rgb5[j] = tmpLine[idx++] / 255; }
+			}
 
 			for (p = 0; p < f[c].np; p++) {
 				idx = 0;
 				tmpLine = LectureNextLigne(fichier);
 				tmpLine = tmpLine.split(" ");
 				if (tmpLine.length != 3) {
-					perror("bad file contents");
+					ejies.error(this, "bad file contents");
 					break;
 				}
 				f[c]["pa"][p].valx = parseFloat(tmpLine[idx++]);
@@ -3051,7 +3155,7 @@ function read(filename)
 		outlet(DUMPOUT, "read", filename, 1);
 		fichier.close();
 	} else {
-		perror("could not read file: ", filename, "... don't ask why :-)\n");
+		ejies.error(this, "could not read file: ", filename, "... don't ask why :-)\n");
 		outlet(DUMPOUT, "read", filename, -1);
 	}
 	
@@ -3068,7 +3172,7 @@ function write(filename)
 	}
 	
 	if (arguments.length > 2) {
-		perror("too many arguments for message write");
+		ejies.error(this, "too many arguments for message write");
 		return;
 	}
 	
@@ -3082,7 +3186,7 @@ function write(filename)
 		if (arguments[1] == 1)
 			PrintComment = 1;
 		else
-			perror("bad arguments for message write");
+			ejies.error(this, "bad arguments for message write");
 	}
 		
 	var fichier = new File(filename,"write");
@@ -3135,7 +3239,7 @@ function write(filename)
 		fichier.close();
 		outlet(DUMPOUT, "write", filename, "1");
 	} else {
-		perror("could not write file: ", filename, "... don't ask why :-)\n");
+		ejies.error(this, "could not write file: ", filename, "... don't ask why :-)\n");
 		outlet(DUMPOUT, "write", filename, "-1");
 	}
 }
