@@ -3,8 +3,8 @@
 	an alternative led...
 	since 1.54b3: mode button added
 	
-	$Revision: 1.7 $
-	$Date: 2006/07/31 09:23:12 $
+	$Revision: 1.8 $
+	$Date: 2006/07/31 13:22:50 $
 */
 
 // Global Code
@@ -103,7 +103,7 @@ function anything()
 	if (LedMode)
 		bang();
 	else
-		error(this, "doesn't understand", messagename);
+		ejies.error(this, "doesn't understand", messagename);
 }
 
 function set(v)
@@ -126,7 +126,7 @@ function blinktime(v)
 	if (v > 0)
 		FlashTime = v;
 	else
-		error(this, "bad argument for message blinktime");
+		ejies.error(this, "bad argument for message blinktime");
 }
 
 function WaitAndStop()
@@ -162,7 +162,7 @@ function mode(v)
 		LastValue = 0;
 		ForceDisplay();
 	} else
-		error(this, "bad arguement for message mode");
+		ejies.error(this, "bad arguement for message mode");
 }
 
 function pict(v)
@@ -259,7 +259,7 @@ function circlesize(v)
 		ForceDisplay();
 	}
 	else
-		error(this, "bad argument for message circlesize");
+		ejies.error(this, "bad argument for message circlesize");
 }
 
 function frgb(r,g,b)

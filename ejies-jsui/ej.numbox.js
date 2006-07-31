@@ -2,8 +2,8 @@
 	ej.numbox.js by Emmanuel Jourdan, Ircam - 08 2004
 	an alternative number box.
 
-	$Revision: 1.13 $
-	$Date: 2006/07/31 09:23:12 $
+	$Revision: 1.14 $
+	$Date: 2006/07/31 13:22:50 $
 */
 
 // Global Code
@@ -77,7 +77,7 @@ if (jsarguments.length>21)	MinMaxValues[1] = jsarguments[21];
 if (jsarguments.length>22)	DefaultValue = jsarguments[22];
 if (jsarguments.length>23)	change(jsarguments[23]);
 if (jsarguments.length>24)	mouseup(jsarguments[24]);
-if (jsarguments.length>25)	error(this, "extra arguments - check the inspector");
+if (jsarguments.length>25)	ejies.error(this, "extra arguments - check the inspector");
 
 MyVal = DefaultValue;
 
@@ -180,7 +180,7 @@ function leading0(v)
 			LeadingValue = v;
 			LeadingText = "";
 		} else
-			error(this, "leading0 ", v, "wrong argument");
+			ejies.error(this, "leading0 ", v, "wrong argument");
 	}
 	draw();
 	refresh();
@@ -226,7 +226,7 @@ function mouseup(v)
 	if (v == 1 || v == 0)
 		MouseUpState = v;
 	else
-		error(this, "mouseup ", v, "wrong argument");
+		ejies.error(this, "mouseup ", v, "wrong argument");
 }
 
 function getmouseup()
@@ -240,7 +240,7 @@ function roundmode(v)
 		RoundValue = v;
 		msg_float(MyVal);
 	} else
-		error(this, "roundmode ", v, "wrong argument (must be 0, 1 or 2)");
+		ejies.error(this, "roundmode ", v, "wrong argument (must be 0, 1 or 2)");
 }
 
 function getroundmode()
@@ -278,7 +278,7 @@ function change(v)
 	if (v == 1 || v == 0) {
 		ChangeState = v;
 	} else
-		error(this, "change ", v, "wrong argument");
+		ejies.error(this, "change ", v, "wrong argument");
 }
 
 function getchange()
@@ -377,7 +377,7 @@ function getinitvalue()
 
 function args4insp()
 {
-	error(this, "since 1.52 the parameters are embed with the patcher. Use the inspector insteed.");
+	ejies.error(this, "since 1.52 the parameters are embed with the patcher. Use the inspector insteed.");
 	return;
 
 	var MsgArgs = new Array(25);
@@ -564,7 +564,7 @@ function KeyboardInput(v)
 				this.patcher.script("hide", TempName);	// hidden ne marche pas car c'est un subpatcher :-(
 				
 				if (keyboard.maxclass == "bogus") {
-					error(this, "check the installation: ej.numbox-keyboard.pat is missing in the ejies'help folder");
+					ejies.error(this, "check the installation: ej.numbox-keyboard.pat is missing in the ejies'help folder");
 					KeyboardError = 0;
 					return;
 				}
