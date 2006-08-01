@@ -1,6 +1,6 @@
 e j i e s (version 1.56)
 by Emmanuel Jourdan, Ircam
-This version requires MaxMSP 4.5.6 or higher.
+This version requires MaxMSP 4.5.6 or higher (compatible with MaxMSP 4.6 UB).
 
 Java externals:
 ¥ ej.fplay: Non-graphical multi-breakpoint function editor 

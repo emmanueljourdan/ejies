@@ -1,8 +1,8 @@
 ejies Ñ Version history
 
 *******************
-1.56b10: 27 June 2006
-This version requires MaxMSP 4.5.6 or higher.
+1.56b11: 1 August 2006
+This version requires MaxMSP 4.5.6 or higher (compatible with MaxMSP 4.6 UB).
 
 New Java Externals:
 ej.fplay: equivalent of ej.function.js without the drawing features
@@ -22,6 +22,8 @@ ej.function.js: removeduplicate is now more efficient
 ej.function.js: drawing is really more efficient (~150 times faster when sending points coordinates with a dump)
 ej.function.js: notify psto less often (using the same Task technique as for drawing)
 ej.function.js: points with the same x position are now put in the "right" order (Thanks Henry)
+ej.function.js: new nbfunctions/syncfunctions/syncpoints method for the synchronisation with ej.fplay
+ej.function.js: able to read the new ej.fplay file format
 ej.lop: new operators (atodb, dbtoa)
 ej.lop: val @ttribute accept now more than one value
 ej.lop: accepts argument(s): operator followed by value(s)
