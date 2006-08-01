@@ -2,8 +2,8 @@
  *	ej.fplay by Emmanuel Jourdan, Ircam Ñ 04 2006
  *	function player
  *
- *	$Revision
- *	$Date
+ *	$Revision: 1.11 $
+ *	$Date: 2006/08/01 16:51:18 $
  */
 
 /**
@@ -106,6 +106,12 @@ public class fplay extends ej {
 	
 	public void addfunction(String s) {
 		Courbes.add(new Courbe(s));
+		nbfunctions++;
+		getname();
+	}
+	
+	public void insertfunction(String s) {
+		Courbes.add(current, new Courbe(s));
 		nbfunctions++;
 		getname();
 	}
