@@ -2,8 +2,8 @@
  *	ej.fplay by Emmanuel Jourdan, Ircam Ñ 04 2006
  *	function player
  *
- *	$Revision: 1.11 $
- *	$Date: 2006/08/01 16:51:18 $
+ *	$Revision: 1.12 $
+ *	$Date: 2006/08/01 17:19:14 $
  */
 
 /**
