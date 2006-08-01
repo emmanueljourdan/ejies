@@ -2,8 +2,8 @@
 	ej.lui.js by Emmanuel Jourdan, Ircam Ñ 09 2004
 	lui means Load jsUI...
 
-	$Revision: 1.7 $
-	$Date: 2006/07/31 09:22:25 $
+	$Revision: 1.8 $
+	$Date: 2006/08/01 12:39:34 $
  */
 
 // global code
@@ -17,10 +17,10 @@ if ( jsarguments[1] ) {
 	if (jsarguments[1] != "noUI")
 		wait_and_process();
 } else
-	error(this, "missing argument!");
+	ejies.error(this, "missing argument!");
 
 if (max.version < 455)
-	error(this, "MaxMSP 4.5.5 or higher is required.");
+	ejies.error(this, "MaxMSP 4.5.5 or higher is required.");
 
 function wait_and_process()
 {

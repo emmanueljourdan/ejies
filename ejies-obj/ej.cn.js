@@ -2,8 +2,8 @@
 	ej.cn.js (change name) by Emmanuel Jourdan, Ircam - 12 2004
 	Allows you to rename any named object.
 
-	$Revision: 1.4 $
-	$Date: 2006/07/31 09:22:25 $
+	$Revision: 1.5 $
+	$Date: 2006/08/01 12:39:34 $
  */
 
 // global code
@@ -19,7 +19,7 @@ var NewNomObjet;
 if (jsarguments.length == 2)
 	OldNomObjet = jsarguments[1];
 if (jsarguments.length > 2)
-	error(this, "extra arguments...");
+	ejies.error(this, "extra arguments...");
 
 function anything()
 {

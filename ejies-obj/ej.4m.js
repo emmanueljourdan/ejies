@@ -2,8 +2,8 @@
 	ej.4m.js by Emmanuel Jourdan, Ircam — 06 2004
 	output the min, median, mean, maximum on a int/float stream
  
-	$Revision: 1.6 $
-	$Date: 2006/07/31 09:22:25 $
+	$Revision: 1.7 $
+	$Date: 2006/08/01 12:39:34 $
 */
 
 // global code
@@ -33,7 +33,7 @@ if (jsarguments.length > 2) {
 		VerboseOrNot = 1;
 	}
 if (jsarguments.length > 3)
-	error(this, "extra arguments...");
+	ejies.error(this, "extra arguments...");
 
 function loadbang()
 {
@@ -57,7 +57,7 @@ function bang()
 		for (i = 0 ; i < (OldWindowSize - WindowReset) ; i++ ) {
 			a.shift();
 		}
-		error(this, "using temp window size of ", a.length, " items.");
+		ejies.error(this, "using temp window size of ", a.length, " items.");
 		sortie();
 		window(OldWindowSize);
 	} else if (WindowReset >= a.length) { // il y a suffisament d'élément.
@@ -67,7 +67,7 @@ function bang()
 
 function anything()
 {
-	error(this, "doesn't understand", messagename);
+	ejies.error(this, "doesn't understand", messagename);
 }
 
 // change la taille de la fenêtre d'analyse
@@ -81,7 +81,7 @@ function reset()			// reset: vide le buffer
 {
 	window(a.length);
 	if (VerboseOrNot)
-		error(this, "buffer is now empty.");
+		ejies.error(this, "buffer is now empty.");
 }
 
 function clear() { reset() ;} // alias

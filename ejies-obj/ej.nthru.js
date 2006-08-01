@@ -2,8 +2,8 @@
 	ej.nthru.js by Emmanuel Jourdan, Ircam - 05 2004
 	Ce truc ne fait rien	 :-)
  
-	$Revision: 1.4 $
-	$Date: 2006/07/31 09:22:25 $
+	$Revision: 1.5 $
+	$Date: 2006/08/01 12:39:34 $
 */
 
 // global code
@@ -16,7 +16,7 @@ if (jsarguments.length>1 && typeof jsarguments[1] == "number")
 if (jsarguments.length>2 && typeof jsarguments[2] == "number")
 	NbOutlets = Math.min(jsarguments[2],MAXINOUT);	// outlet (minimum 1, max 64)
 if (jsarguments.length>3)
-	error(this, "extra arguments...");
+	ejies.error(this, "extra arguments...");
 
 inlets = NbInlets;
 outlets = NbOutlets;

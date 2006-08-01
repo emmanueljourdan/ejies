@@ -2,8 +2,8 @@
 	ej.cc.js (change color) by Emmanuel Jourdan, Ircam - 01 2005
 	Allows you to rename any named object.
  
-	$Revision: 1.5 $
-	$Date: 2006/07/31 09:22:25 $
+	$Revision: 1.6 $
+	$Date: 2006/08/01 12:39:34 $
 */
 
 // global code
@@ -23,10 +23,10 @@ if (jsarguments.length == 2) {
 	else if (jsarguments[1] == "ej")
 		defaults(); 						// mes paramtres
 	else
-		error(this, "wrong argument");
+		ejies.error(this, "wrong argument");
 }
 if (jsarguments.length > 2)
-	error(this, "extra arguments...");
+	ejies.error(this, "extra arguments...");
 
 function defaults()
 {
@@ -64,7 +64,7 @@ function anything()
 	if (typeof NomObjet == "string" && typeof Couleur == "number")
 		ExecuteOperation(ChangeColor);
 	else
-		error(this, "wrong argument, must be [symbol] [int]");
+		ejies.error(this, "wrong argument, must be [symbol] [int]");
 }
 
 function ExecuteOperation(toto)
@@ -101,7 +101,7 @@ function global(a)
 	if (a == 1 ||Êa == 0)
 		GlobalState = a;
 	else
-		error(this, "wrong argument for message global (1 or 0 expected)");
+		ejies.error(this, "wrong argument for message global (1 or 0 expected)");
 }
 
 function InternalExecuteOperation(a, b)

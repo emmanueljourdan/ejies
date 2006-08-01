@@ -2,8 +2,8 @@
 	ej.op.js by Emmanuel Jourdan, Ircam Ñ 09 2004
 	open patchers
 
-	$Revision: 1.4 $
-	$Date: 2006/07/31 09:22:25 $
+	$Revision: 1.5 $
+	$Date: 2006/08/01 12:39:34 $
  */
 
 // global code
@@ -20,7 +20,7 @@ var SearchState = 0;
 
 if (jsarguments.length > 1) SearchState = jsarguments[1];
 if (jsarguments.length > 2) CaseState = jsarguments[2];
-if (jsarguments.length > 3 ) error(this, "too many arguments...");
+if (jsarguments.length > 3 ) ejies.error(this, "too many arguments...");
 
 function anything()
 {
