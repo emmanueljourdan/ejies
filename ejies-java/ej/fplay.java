@@ -2,19 +2,16 @@
  *	ej.fplay by Emmanuel Jourdan, Ircam — 04 2006
  *	function player
  *
- *	$Revision: 1.9 $
- *	$Date: 2006/07/06 17:01:43 $
+ *	$Revision
+ *	$Date
  */
 
 /**
- *  TODO : others non standarts messages...
- * TODO	 lecture/sauvegarde en fichier texte
- * TODO	 messages spéciaux pour la communication avec ej.function.js
- * 
+ * TODO: copy paste entre ej.fplay ? à la funbuff
  */
 
 
- package ej;
+package ej;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -27,49 +24,58 @@ import com.cycling74.max.*;
 
 public class fplay extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "quite anything..."};
-	private static final String[] OUTLET_ASSIST = new String[]{ "interpolated Y for input X", "points in line~ format", "dump message output"	};
+	private static final String[] OUTLET_ASSIST = new String[]{ "interpolated Y for input X", "points in line~ format", "dump message output", "sync outlet"	};
 	private static final int INTERP_OUTLET = 0;
 	private static final int LINE_OUTLET = 1;
 	private static final int DUMP_OUTLET = 2;
 	private static final int DUMPOUT_OUTLET = 3;
-	private static Pattern commentLine = Pattern.compile(".*\\/\\/.*");
 
 	private boolean isAll = false;
-	
+	private boolean autosustain = false;
 	private boolean outputmode = false;
 	private ArrayList Courbes = new ArrayList();
 	private int current = 0;
+	private boolean isDblClickAllowed = false; // dblclick() seems to be triggered too often!
+	private int ligneNumber;
 	
 	private int nbfunctions = 1;
+
+	public static ArrayList clipboard = new ArrayList();
 	
 	public fplay(Atom[] args) {
 		declareTypedIO("a", "aaa");
 		createInfoOutlet(true);
 
 		declareAttribute("nbfunctions", "getNbFunctions", "setNbFunctions");
-		declareAttribute("outputmode");
-		
+		declareAttribute("autosustain");
+		declareAttribute("outputmode");	// pour sortie line~
+
 		setInletAssist(INLET_ASSIST);
 		setOutletAssist(OUTLET_ASSIST);
 
-		init();
+		init();	// création des courbes
+		isDblClickAllowed = true;
 	}
-
+	
 	public void dblclick() {
-		post("ej.fplay");
-		post("\tnbfunctions: " + nbfunctions);
-
-		for (int i = 0; i < nbfunctions; i++) {
-			post("\tname: " + ((Courbe) Courbes.get(i)).getName());
-			post("\t\tnbpoints: " + ((Courbe) Courbes.get(i)).np());
-			post("\t\tdomain: " + ((Courbe) Courbes.get(i)).domain[0] + "\t\t" + ((Courbe) Courbes.get(i)).domain[1]);
-			post("\t\trange: " + ((Courbe) Courbes.get(i)).range[0] + "\t\t" + ((Courbe) Courbes.get(i)).range[1]);
+		if (isDblClickAllowed) {
+			// surdéfinition de ej.dblclick()
+			post("ej.fplay infos:");
+			post("\tnbfunctions: " + getNbFunctions());
+	
+			for (int i = 0; i < getNbFunctions(); i++) {
+				post("\tname: " + ((Courbe) Courbes.get(i)).getName());
+				post("\t\t- nbpoints:\t\t\t" + ((Courbe) Courbes.get(i)).np());
+				post("\t\t- domain (x):\t" + ((Courbe) Courbes.get(i)).domain[0] + "\t\t" + ((Courbe) Courbes.get(i)).domain[1]);
+				post("\t\t- range (y):\t\t" + ((Courbe) Courbes.get(i)).range[0] + "\t\t" + ((Courbe) Courbes.get(i)).range[1]);
+			}
+			post("");
 		}
 	}
 	
 	// standart messages
 	public void bang() {
-		myBang(current);
+		((Courbe) Courbes.get(current)).line();
 	}
 
 	public void inlet(float f) {
@@ -94,150 +100,88 @@ public class fplay extends ej {
 	// add/remove functions 
 	public void addfunction() {
 		this.addfunction("function" + Courbes.size());
+		nbfunctions++;
+		getname();
 	}
 	
 	public void addfunction(String s) {
 		Courbes.add(new Courbe(s));
+		nbfunctions++;
 		getname();
 	}
 
 	public void deletefunction(int i) {
-		if (i >= 0 && i < Courbes.size())
+		if (i >= 0 && i < Courbes.size()) {
 			Courbes.remove(i);
+			nbfunctions--;
+		}
 	}
 	
 	public void deletefunction(String s) {
 		int tmp = name2idx(s);
-		if (tmp != -1)
+		if (tmp != -1) {
 			Courbes.remove(tmp);
-		else
+			nbfunctions--;
+		} else
 			error("function named " + s + " doesn't exist");
 	}
-
+	
+	public void addpoints(double[] val) {
+		((Courbe) Courbes.get(current)).addPoints(val);
+	}
+	
 	public void read() {
 		String s;
 		if ((s = MaxSystem.openDialog("choose a ej.function or ej.fplay file")) != null)
 			read(MaxSystem.maxPathToNativePath(s));
 	}
 	
-	
 	public void read(String s) {
         String filePath = MaxSystem.locateFile(s);
          if (filePath == null) {
         	 error("can't locate that file");
-        	 return;
-         }
-			
-	    fileParsing(filePath);
+        	 outlet(DUMPOUT_OUTLET, new Atom[] {
+        			 Atom.newAtom("read"),
+        			 Atom.newAtom(s),
+        			 Atom.newAtom(0)
+        			 });
+       } else {
+        	 outlet(DUMPOUT_OUTLET, new Atom[] {
+        			 Atom.newAtom("read"),
+        			 Atom.newAtom(MaxSystem.nameConform(filePath, MaxSystem.PATH_STYLE_SLASH, MaxSystem.PATH_TYPE_ABSOLUTE)),
+        			 Atom.newAtom(fileParsing(filePath)) /* here is the file parsing, the value returned indicate success or not */
+        	 });
+         }			
 	}
 
 	public void write() {
 		String s;
 		if ((s = MaxSystem.saveAsDialog("choose a ej.function or ej.fplay file","myfunctions.txt")) != null)
 			write(MaxSystem.maxPathToNativePath(s));
-		
 	}
 	
 	public void write(String s) {
-
-	}
-	
-	private String lectureLigne(BufferedReader in) throws NullPointerException, IOException {
-		String str = null;
-		do {
-			str = in.readLine();
-		} while (str != null && (str.length() < 4 || Pattern.matches(".*\\/\\//*", str)));
-
-		return str;
-	}
-
-	private void fileParsing(String filePath) {
-		boolean isValidFileType = false;
-		String str;
-		boolean isEOFCorrect = false;
+		String filePath = null;
+		if (s.indexOf("/") == -1)	// si il n'y a pas de slash, il 
+			filePath = MaxSystem.getDefaultPath() + s;
+		else
+			filePath = s;
 		
-		try {
-	        BufferedReader in = new BufferedReader(new FileReader(filePath));
-	        
-	        try {
-	        	while ((str = lectureLigne(in)) != null) {
-	        		if (str.matches("(?i).*ej\\.function format.*")) {
-	        			isValidFileType = true;
-	        			break;
-	        		}
-	        	}
+		filePath = MaxSystem.maxPathToNativePath(filePath);
+		
+		outlet(DUMPOUT_OUTLET, new Atom[] {
+				Atom.newAtom("write"),
+				Atom.newAtom(MaxSystem.nameConform(filePath, MaxSystem.PATH_STYLE_SLASH, MaxSystem.PATH_TYPE_ABSOLUTE)),
+				Atom.newAtom(writing(filePath)) });
+	}
 
-	        	// if it contains ej.function format
-	        	if (isValidFileType) {
-	        		int idx;
-	        		StringTokenizer tok;
-		        	int versionNumber;
-		        	
-	        		try {
-		        		tok = new StringTokenizer(lectureLigne(in));
-		        		
-		        		versionNumber = Integer.parseInt(tok.nextToken());
-		        		if (versionNumber < 1 && versionNumber> 3) {
-		        			error("bad file version number");
-		        			in.close();
-		        			return;			// il faut sortir !
-		        		}
-		        		
-		        		setNbFunctions(Integer.parseInt(tok.nextToken()));	
-		        		int[] np = new int[getNbFunctions()]; 
-		        		    
-		        		if ( getNbFunctions() > tok.countTokens())
-		        			error("missing informations");
-		        		else {
-		        			for (idx = 0; idx < getNbFunctions(); idx++)
-		        				np[idx] = Integer.parseInt(tok.nextToken());
-		        		}
-		        		
-		        		// for each function
-		        		for (int c = 0; c < getNbFunctions(); c++) {
-		        			tok = new StringTokenizer(lectureLigne(in));
-		        			post("combien il en reste   " + tok.countTokens());
-			        		// name, domain min, domain max, range min, range max, gridstep, active
-			        		((Courbe) Courbes.get(c)).setName(tok.nextToken());
-			        		if (versionNumber == 1)
-			        			((Courbe) Courbes.get(c)).domain(0., Double.parseDouble(tok.nextToken()));
-			        		else
-			        			((Courbe) Courbes.get(c)).domain(Double.parseDouble(tok.nextToken()), Double.parseDouble(tok.nextToken()));
-			        		
-			        		((Courbe) Courbes.get(c)).range(Double.parseDouble(tok.nextToken()), Double.parseDouble(tok.nextToken()));
-			        		// ignoring the extra things (gridstep, active)
-			        		
-			        		if (versionNumber < 3) // saute la ligne contenant les couleurs
-			        			lectureLigne(in);
-			        		
-			        		// add points
-			        		for (int i = 0; i < np[c]; i++) {
-			        			tok = new StringTokenizer(lectureLigne(in));
-			        			((Courbe) Courbes.get(c)).addTypedPoint(tok.nextToken(), tok.nextToken(), tok.nextToken());
-			        		}
-		        		}
-		  
-		        			
-	        		} catch (NoSuchElementException e) {
-	        			error("missing information in the file, the object may be corrupted now...");
-	        			in.close();
-	        		}
-		        	
-		        		isEOFCorrect = true;
-	        	} else
-	        		error("bad file type");
-	        } catch (NullPointerException e) {
-	        	post("fin de ficher ? " + isEOFCorrect);
-	        }
-	        
-	        in.close();
-	    } catch (IOException e) {
-	    	error("can't open the file");
-	    }
+	public void fswitch() {
+		current = ++current % getNbFunctions();
+		outlet(DUMPOUT_OUTLET, "display", current);
 	}
 	
 	public void display(int idx) {
-		if (idx >= 0 && idx < Courbes.size())
+		if (idx >= 0 && idx < getNbFunctions())
 			current = idx;
 	}
 
@@ -255,7 +199,7 @@ public class fplay extends ej {
 	}
 	
 	public void next() {
-		myNext(current);
+		((Courbe) Courbes.get(current)).next();
 	}
 
 	public void dump() {
@@ -263,7 +207,7 @@ public class fplay extends ej {
 	}
 	
 	public void listdump() {
-		((Courbe) Courbes.get(current)).listdump();
+		((Courbe) Courbes.get(current)).listDump();
 	}
 
 	public void dump(String s) {
@@ -273,7 +217,7 @@ public class fplay extends ej {
 	
 	public void listdump(String s) {
 		// methode listdump qui envoie vers un send
-		((Courbe) Courbes.get(current)).listdump(s);
+		((Courbe) Courbes.get(current)).listDump(s);
 	}
 	
 	public void clear() {
@@ -317,6 +261,34 @@ public class fplay extends ej {
 		((Courbe) Courbes.get(current)).setRange(min, max);
 	}
 	
+	public void autodomain() {
+		((Courbe) Courbes.get(current)).autoDomain();
+	}
+	
+	public void autorange() {
+		((Courbe) Courbes.get(current)).autoRange();
+	}
+	
+	public void normalize() {
+		((Courbe) Courbes.get(current)).normalize();
+	}
+	
+	public void normalize_x() {
+		((Courbe) Courbes.get(current)).normalizeX();
+	}
+
+	public void normalize_y() {
+		((Courbe) Courbes.get(current)).normalizeY();
+	}
+	
+	public void removeduplicate() {
+		((Courbe) Courbes.get(current)).removeDuplicate();
+	}
+	
+	public void smooth() {
+		((Courbe) Courbes.get(current)).smooth();
+	}
+	
 	public void sustain(int idx, int state) {
 		mySustain(current, idx, state);
 	}
@@ -352,6 +324,7 @@ public class fplay extends ej {
 		outlet(DUMPOUT_OUTLET, "display", current);
 	}
 	
+
 	public void getsustain() {
 		myGetSustain(current);
 	}
@@ -368,7 +341,78 @@ public class fplay extends ej {
 		((Courbe) Courbes.get(current)).unFix();
 	}
 	
+	public void getnbpoints() {
+		((Courbe) Courbes.get(current)).getNbPoints();
+	}
+	
+	public void sync() {
+		outlet(DUMP_OUTLET, "nbfunctions", getNbFunctions());
 
+		for (int c = 0; c < getNbFunctions(); c++) {
+			((Courbe) Courbes.get(c)).syncCourbe(c);
+			((Courbe) Courbes.get(c)).syncPoints(c);
+		}
+		outlet(DUMP_OUTLET, "redrawon");
+	}
+	
+	public void save() {
+		Atom[] names = new Atom[getNbFunctions()];
+		Atom[] domainAndRange = new Atom[getNbFunctions() *4];
+		
+		for (int c = 0; c < getNbFunctions(); c++) {
+			names[c] = Atom.newAtom((((Courbe) Courbes.get(c)).getName()));
+			domainAndRange[c*4] = Atom.newAtom(((Courbe) Courbes.get(c)).domain[0]);
+			domainAndRange[c*4+1] = Atom.newAtom(((Courbe) Courbes.get(c)).domain[1]);
+			domainAndRange[c*4+2] = Atom.newAtom(((Courbe) Courbes.get(c)).range[0]);
+			domainAndRange[c*4+3] = Atom.newAtom(((Courbe) Courbes.get(c)).range[1]);
+		}
+
+		// important informations to be embed in the patch
+		embedMessage("nbfunctions", new Atom[]{ Atom.newAtom(getNbFunctions()) });
+		embedMessage("name", names);
+		embedMessage("domainAndRange", domainAndRange);
+	}
+	
+	public void domainAndRange(Atom[] args) {
+		// called only from the save() method!
+		for (int c = 0; c < (args.length / 4); c++) {
+			((Courbe) Courbes.get(c)).domain(args[c*4].toDouble(), args[c*4+1].toDouble());
+			((Courbe) Courbes.get(c)).range(args[c*4+2].toDouble(), args[c*4+3].toDouble());
+		}
+	}
+	
+	public void sync(String sendName) {
+		if (MaxSystem.sendMessageToBoundObject(sendName, "nbfunctions", new Atom[] { Atom.newAtom(getNbFunctions()) }) == false) {
+			// on est ici seulement si le nom du receive n'est pas bon
+			error(sendName + " bad receive name");
+			return;	// sauve qui peut
+		}
+		
+		for (int c = 0; c < getNbFunctions(); c++) {
+			((Courbe) Courbes.get(c)).syncCourbe(c, sendName);
+			((Courbe) Courbes.get(c)).syncPoints(c, sendName);
+		}
+
+		MaxSystem.sendMessageToBoundObject(sendName, "redrawon", new Atom[] {});
+	}
+	
+	public void syncfunctions(Atom[] args) {
+		if (isNumber(args[0]))
+			((Courbe) Courbes.get(args[0].toInt())).setSyncFunctions(args);
+	}
+
+	public void syncpoints(double[] val) {
+		((Courbe) Courbes.get((int) val[0])).addTypedPoints(val);
+	}
+
+	/*
+	 * compatibility...
+	 */
+	public void redrawon() { ; }
+	
+	public void redrawoff() { ; }
+	
+	
 	/*
 	 * private methodes
 	 */
@@ -391,7 +435,7 @@ public class fplay extends ej {
 					((Courbe) Courbes.get(courbeIdx)).clearPoints(Atom.removeFirst(args)); // msg: functionName clear Atom[]
 				return;
 			} else if (msgName.equals("addpoints")) {
-				
+				((Courbe) Courbes.get(courbeIdx)).addPoints(Atom.toDouble(Atom.removeFirst(args)));
 				return;
 			}
 		}
@@ -402,14 +446,33 @@ public class fplay extends ej {
 			} else {
 				// args[0] is string
 				if (msgName.equals("bang"))
-					myBang(courbeIdx);
+					((Courbe) Courbes.get(courbeIdx)).line();
 				else if (msgName.equals("next"))
-					myNext(courbeIdx);
+					((Courbe) Courbes.get(courbeIdx)).next();
 				else if (msgName.equals("dump"))
 					((Courbe) Courbes.get(courbeIdx)).dump();
 				else if (msgName.equals("listdump"))
-					((Courbe) Courbes.get(courbeIdx)).listdump();
-				
+					((Courbe) Courbes.get(courbeIdx)).listDump();
+				else if (msgName.equals("autodomain"))
+					((Courbe) Courbes.get(courbeIdx)).autoDomain();
+				else if (msgName.equals("autorange"))
+					((Courbe) Courbes.get(courbeIdx)).autoRange();
+				else if (msgName.equals("normalize"))
+					((Courbe) Courbes.get(courbeIdx)).normalize();
+				else if (msgName.equals("normalize_x"))
+					((Courbe) Courbes.get(courbeIdx)).normalizeX();
+				else if (msgName.equals("normalize_y"))
+					((Courbe) Courbes.get(courbeIdx)).normalizeY();
+				else if (msgName.equals("removeduplicate"))
+					((Courbe) Courbes.get(courbeIdx)).removeDuplicate();
+				else if (msgName.equals("smooth"))
+					((Courbe) Courbes.get(courbeIdx)).smooth();
+				else if (msgName.equals("clearsustain"))
+					((Courbe) Courbes.get(courbeIdx)).clearSustain();
+				else if (msgName.equals("unfix"))
+					((Courbe) Courbes.get(courbeIdx)).unFix();
+
+				// les get(things) sont plus tard...
 				else if (msgName.equals("getdomain"))
 					((Courbe) Courbes.get(courbeIdx)).getDomain();
 				else if (msgName.equals("getrange"))
@@ -418,10 +481,8 @@ public class fplay extends ej {
 					myGetSustain(courbeIdx);
 				else if (msgName.equals("getfix"))
 					myGetFix(courbeIdx);
-				else if (msgName.equals("clearsustain"))
-					((Courbe) Courbes.get(courbeIdx)).clearSustain();
-				else if (msgName.equals("unfix"))
-					((Courbe) Courbes.get(courbeIdx)).unFix();
+				else if (msgName.equals("nbpoints"))
+					((Courbe) Courbes.get(courbeIdx)).getNbPoints();
 				else {
 					if (isAll)
 						error("bad argument for message all");
@@ -436,7 +497,7 @@ public class fplay extends ej {
 				if (msgName.equals("dump"))
 					((Courbe) Courbes.get(courbeIdx)).dump(args[1].toString());
 				else if (msgName.equals("listdump"))
-					((Courbe) Courbes.get(courbeIdx)).listdump(args[1].toString());
+					((Courbe) Courbes.get(courbeIdx)).listDump(args[1].toString());
 				else if (msgName.equals("domain") && isNumber(args[1]))
 					((Courbe) Courbes.get(courbeIdx)).domain(0, args[1].toDouble());
 				else if (msgName.equals("setdomain") && isNumber(args[1]))
@@ -447,7 +508,7 @@ public class fplay extends ej {
 		} else if (args.length == 3) {
 			// trois nombres
 			if (isNumber(args[0]) && isNumber(args[1]) && isNumber(args[2]))
-				((Courbe) Courbes.get(courbeIdx)).moveOnePoint((int) args[0].toInt(), args[1].toFloat(), args[2].toFloat());
+				((Courbe) Courbes.get(courbeIdx)).moveOnePoint(args[0].toInt(), args[1].toFloat(), args[2].toFloat());
 			else  {
 				if (msgName.equals("domain") && isNumber(args[1]) && isNumber(args[2]))
 					((Courbe) Courbes.get(courbeIdx)).domain(args[1].toDouble(), args[2].toDouble());
@@ -466,18 +527,205 @@ public class fplay extends ej {
 		}
 	}
 	
+	
+	private int fileParsing(String filePath) {
+		boolean isValidFileType = false;
+		String str;
+		boolean isEOFCorrect = false;
+		ligneNumber = 0;
+		
+		try {
+	        BufferedReader in = new BufferedReader(new FileReader(filePath));
+	        
+	        try {
+	        	while ((str = lectureLigne(in)) != null) {
+	        		if (str.matches("(?i).*ej\\.function format.*")) {
+	        			isValidFileType = true;
+	        			break;
+	        		}
+	        	}
+	
+	        	// if it contains ej.function format
+	        	if (isValidFileType) {
+	        		int idx;
+	        		StringTokenizer tok;
+		        	int versionNumber;
+		        	
+	        		try {
+		        		tok = new StringTokenizer(lectureLigne(in));
+		        		
+		        		versionNumber = Integer.parseInt(tok.nextToken());
+		        		if (versionNumber < 1 && versionNumber> 3) {
+		        			error("bad file version number (line: " + ligneNumber + ")");
+		        			in.close();
+		        			return -1;			// il faut sortir !
+		        		}
+		        		
+		        		setNbFunctions(Integer.parseInt(tok.nextToken()));	
+		        		int[] np = new int[getNbFunctions()]; 
+		        		    
+		        		if ( getNbFunctions() > tok.countTokens()) {
+		        			error("missing informations (line: " + ligneNumber + ")");
+		        			in.close();
+		        			return -1;			// il faut sortir !
+		        		}
+		        		
+		        		for (idx = 0; idx < getNbFunctions(); idx++)
+		        			np[idx] = Integer.parseInt(tok.nextToken());
+		        		
+		        		// for each function
+		        		for (int c = 0; c < getNbFunctions(); c++) {
+		        			String ligne = lectureLigne(in);
+
+		        			// name, domain min, domain max, range min, range max, gridstep, active
+			        		int tmpIdx = lectureFunctionName(c, ligne);
+			        		tok = new StringTokenizer(ligne);
+			        		for (int j = 0; j < tmpIdx; j++)
+			        			tok.nextToken();
+			        		
+			        		if (versionNumber == 1)
+			        			((Courbe) Courbes.get(c)).domain(0., Double.parseDouble(tok.nextToken()));
+			        		else
+			        			((Courbe) Courbes.get(c)).domain(Double.parseDouble(tok.nextToken()), Double.parseDouble(tok.nextToken()));
+			        		
+			        		((Courbe) Courbes.get(c)).range(Double.parseDouble(tok.nextToken()), Double.parseDouble(tok.nextToken()));
+			        		// ignoring the extra things (gridstep, active)
+			        		
+			        		if (versionNumber < 3) // saute la ligne contenant les couleurs
+			        			lectureLigne(in);
+			        		
+			        		// add points
+			        		for (int i = 0; i < np[c]; i++) {
+			        			tok = new StringTokenizer(lectureLigne(in));
+			        			((Courbe) Courbes.get(c)).addTypedPoint(tok.nextToken(), tok.nextToken(), tok.nextToken());
+			        		}
+		        		}
+	        		} catch (NoSuchElementException e) {
+	        			error("ej.fplay: missing information in the file, the object may be corrupted now... (line: " + ligneNumber + ")");
+	        			in.close();
+	        			return -1;
+	        		}
+	        		isEOFCorrect = true;
+	        	} else
+	        		error("ej.fplay: bad file type (line: " + ligneNumber+ ")");
+	        } catch (NullPointerException e) {
+		        in.close();
+	        	post("ej.fplay: end of file ? " + isEOFCorrect);
+	        }
+	        
+	        in.close();
+	    } catch (IOException e) {
+	    	error("ej.fplay: can't open the file");
+	    	return -1;
+	    } catch (Exception e) {
+	    	// everything else exception
+	    	error("ej.fplay: something wrong happen (line: " + ligneNumber + ")");
+	    	return -1;
+	    }
+	    
+	    return (isEOFCorrect ? 1: 0);
+	}
+	
+	private int lectureFunctionName(int c, String ligne) throws Exception {
+		// get the name of the function, make sure if there's space, that it will work.
+		// StreamTokenizer is used to know when the string contains numbers
+		// the return value, is the index of the next token (which should be a Double)
+		String tmp = "";
+		int offsetInLigne = 0;
+		
+		StreamTokenizer test = new StreamTokenizer(new StringBufferInputStream(ligne));
+		if (test.nextToken() == StreamTokenizer.TT_WORD) {
+			tmp = test.sval;
+			offsetInLigne++;
+		
+			while (test.nextToken() == StreamTokenizer.TT_WORD) {
+				tmp += " " + test.sval; 
+				offsetInLigne++;
+			}
+			((Courbe) Courbes.get(c)).setName(tmp);
+			return offsetInLigne;
+		}
+		
+		// else
+		error("ej.fplay: error in the function name (line: " + ligneNumber + ")");
+		return -1;
+	}
+	
+	private String lectureLigne(BufferedReader in) throws NullPointerException, IOException {
+		String str = null;
+		do {
+			str = in.readLine();
+			ligneNumber++;
+		} while (str != null && (str.length() < 4 || Pattern.matches(".*\\/\\//*", str)));
+	
+		return str;
+	}
+	
+
+
+	private int writing(String filePath) {
+		boolean isEOFCorrect = false;
+		
+		try {
+			BufferedWriter out = new BufferedWriter(new FileWriter(filePath));
+			StringBuffer sb = new StringBuffer();
+			int i, c; // not elegant, but less garbage collector
+			out.write("ej.function format");
+			out.newLine();
+	
+			sb.append("3 " + getNbFunctions()); // version, Nb functions
+			for (c = 0; c <  getNbFunctions(); c++)
+				sb.append(" " + ((Courbe) Courbes.get(c)).np());
+	
+			out.write(sb.toString());
+			out.newLine();
+			
+			for (c = 0; c < getNbFunctions(); c++) {
+				sb = new StringBuffer();
+				out.newLine();
+				sb.append(((Courbe) Courbes.get(c)).getName() + " ");
+				sb.append(((Courbe) Courbes.get(c)).domain[0] + " ");
+				sb.append(((Courbe) Courbes.get(c)).domain[1] + " ");
+				sb.append(((Courbe) Courbes.get(c)).range[0] + " ");
+				sb.append(((Courbe) Courbes.get(c)).range[1]);
+
+				out.write(sb.toString());
+				out.newLine();
+	
+				for (i = 0; i < ((Courbe) Courbes.get(c)).np(); i++ ) {
+					sb = new StringBuffer();
+					sb.append(((Courbe) Courbes.get(c)).getPoint(i).getX() + " ");
+					sb.append(((Courbe) Courbes.get(c)).getPoint(i).getY() + " ");
+					sb.append(((Courbe) Courbes.get(c)).getPoint(i).getSustainAndFix());
+
+					out.write(sb.toString());
+					out.newLine();
+				}
+			}
+			
+			isEOFCorrect = true;
+			out.close();
+		} catch  (IOException e) {
+			error("can't write the file");
+		}
+		
+		return (isEOFCorrect ? 1: 0);
+	}
+
+	
 	private void setNbFunctions(int i) {
 		nbfunctions = i;
 		init();
 	}
 	
+	// this one is called by the declareAttribute method
 	private void setNbFunctions(Atom[] a) {
 		if (a.length == 1 && isNumber(a[0]) && a[0].toInt() > 0)
 			setNbFunctions( a[0].toInt());
 	}
 	
 	private int  getNbFunctions() {
-		return Courbes.size();
+		return nbfunctions;
 	}
 
 	private void init() {
@@ -487,20 +735,14 @@ public class fplay extends ej {
 		}
 	}
 
-	private void myBang(int c) {
-		((Courbe) Courbes.get(c)).line();
-	}
-
-	private void myNext(int c) {
-		((Courbe) Courbes.get(c)).next();
-	}
-	
 	private void myInterp(int c, float f) {
 		if (((Courbe) Courbes.get(c)).np() > 1)
 			outlet(INTERP_OUTLET, ((Courbe) Courbes.get(c)).getName(), ((Courbe) Courbes.get(c)).interp(f));
 		// else on s'en fiche
 	}
 	
+	
+
 	private void listOfNumbers(int courbeIdx, float[] args) {
 		switch (args.length) {
 		case 2:
@@ -514,6 +756,7 @@ public class fplay extends ej {
 		}
 	}
 	
+	
 	private void myName(int c, String s) {
 		if (s != null) 
 			((Courbe) Courbes.get(c)).name = s;
@@ -521,6 +764,7 @@ public class fplay extends ej {
 			error("missing argument for message name");
 	}
 	
+
 	private void mySustain(int courbeIdx, int idx, int state) {
 		switch (state) {
 			case 0:
@@ -534,6 +778,8 @@ public class fplay extends ej {
 		}
 	}
 
+	
+	
 	private void myFix(int courbeIdx, int idx, int state) {
 		switch (state) {
 			case 0:
@@ -547,11 +793,12 @@ public class fplay extends ej {
 		}
 	}
 
+	
 	private void myNth(int courbeIdx, int i) {
 		if (i >= 0 && i < ((Courbe) Courbes.get(courbeIdx)).np())
 			outlet(INTERP_OUTLET, ((Courbe) Courbes.get(courbeIdx)).getPoint(i).getY());
 	}
-
+	
 	private int name2idx(String s) {
 		for (int c = 0; c < Courbes.size(); c++) {
 			if ((((Courbe) Courbes.get(c)).getName()).equals(s))
@@ -585,15 +832,16 @@ public class fplay extends ej {
 	 */
 	class Courbe {
 		private String name = "function0";
-//		private int np = 0;										// used because of the reading
 		private double[] domain = {0., 1000.};			// domain de la courbe
 		private double[] range = {0., 1.};			// range de la courbe
 		private ArrayList lPoints = new ArrayList();	// PointsArray
+		private int NextFrom = 0;						// utilisé pour le message next
+
+//		private int np = 0;										// used because of the reading
 //		private double[] ZoomX = {0., 1000.};			// domain de la courbe
 //		private double[] ZoomY = {0., 1.};			// range de la courbe
 //		private boolean display = true;				// display while inactive ?
 //		private double GridStep = 100;				// tout est dans lenom
-		private int NextFrom = 0;						// utilisé pour le message next
 		
 		Courbe(String name) {
 			this.name = name;
@@ -694,50 +942,280 @@ public class fplay extends ej {
 		}
 
 		public void dump() {
+			// implicitement, il ne se passe rien si il n'y a pas de points
 			for (int i = 0; i < np(); i++) {
 				outlet(DUMP_OUTLET, getName(), getPoint(i).getValues());
 			}
 		}
 
 		public void dump(String sendName) {
+			// implicitement, il ne se passe rien si il n'y a pas de points
 			for (int i = 0; i < np(); i++) {
-				if ( MaxSystem.sendMessageToBoundObject(sendName, getName(), Atom.newAtom(getPoint(i).getValues())) == false) {
+				// c'est très tordu : le test du if envoie les informations
+				if (MaxSystem.sendMessageToBoundObject(sendName, getName(), Atom.newAtom(getPoint(i).getValues())) == false) {
 					// on est ici seulement si le nom du receive n'est pas bon
 					error(sendName + " bad receive name");
-					return;	// s'il n'est pas bon une fois, il ne sera pas meilleur plus tard...
+					break;	// s'il n'est pas bon une fois, il ne sera pas meilleur plus tard...
 				}
 			}
 		}
 		
-		public void listdump() {
-			int i, idx;
-			double[] tmp = new double[np()*2];
-			
-			for (i = idx = 0; i < np(); i++) {
-				tmp[idx++] = getPoint(i).getX();
-				tmp[idx++] = getPoint(i).getY();
+		public void listDump() {
+			if (np() > 0) {
+				int i, idx;
+				double[] tmp = new double[np()*2];
+				
+				for (i = idx = 0; i < np(); i++) {
+					tmp[idx++] = getPoint(i).getX();
+					tmp[idx++] = getPoint(i).getY();
+				}
+				
+				outlet(DUMP_OUTLET, getName(), tmp);
 			}
-			
-			outlet(DUMP_OUTLET, getName(), tmp);
 		}
 		
-		public void listdump(String sendName) {
-			int i, idx;
-			Atom[] tmp = new Atom[np()*2];
-			
-			for (i = idx = 0; i < np(); i++) {
-				tmp[idx++] = Atom.newAtom(getPoint(i).getX());
-				tmp[idx++] = Atom.newAtom(getPoint(i).getY());
+		public void listDump(String sendName) {
+			if (np() > 0 ) {
+				int i, idx;
+				Atom[] tmp = new Atom[np()*2];
+				
+				for (i = idx = 0; i < np(); i++) {
+					tmp[idx++] = Atom.newAtom(getPoint(i).getX());
+					tmp[idx++] = Atom.newAtom(getPoint(i).getY());
+				}
+	
+				if (MaxSystem.sendMessageToBoundObject(sendName, getName(), tmp) == false)
+					error(sendName + " bad receive name");
 			}
-
-			if ( MaxSystem.sendMessageToBoundObject(sendName, getName(), tmp) == false)
-				error(sendName + " bad receive name");
 		}
+		
+		public void setSyncFunctions(Atom[] args) {
+			setName(args[1].toString());
+			domain[0] = args[2].toDouble();
+			domain[1] = args[3].toDouble();
+			range[0] = args[4].toDouble();
+			range[1] = args[5].toDouble();
+		}
+		
+		public void syncCourbe(int courbeIdx) {
+			outlet(DUMP_OUTLET, "syncfunctions", getCourbeParams(courbeIdx));
+		}
+
+		public void syncCourbe(int courbeIdx, String sendName) {
+			MaxSystem.sendMessageToBoundObject(sendName, "syncfunctions", getCourbeParams(courbeIdx));
+		}
+		
+		private Atom[] getCourbeParams(int courbeIdx) {
+			Atom[] tmp = new Atom[] {
+					Atom.newAtom(courbeIdx),
+					Atom.newAtom(getName()),
+					Atom.newAtom(domain[0]),
+					Atom.newAtom(domain[1]),
+					Atom.newAtom(range[0]),
+					Atom.newAtom(range[1])
+					};
+
+			return tmp;
+		}
+		
+		public void syncPoints(int courbeIdx) {
+			if (np() > 0) {
+				double[] tmp = new double[(np() * 3) + 1];
+				int idx = 0;
+				
+				tmp[idx++] = courbeIdx; // the first thing is the ID of the function
+				
+				for (int i = 0; i < np(); i++) {
+					tmp[idx++] = getPoint(i).getX();
+					tmp[idx++] = getPoint(i).getY();
+					tmp[idx++] = getPoint(i).getSustainAndFix();
+				}
+				
+				outlet(DUMP_OUTLET, "syncpoints",  tmp);
+			}
+		}
+		
+		public void syncPoints(int courbeIdx, String sendName) {
+			if (np() > 0) {
+				Atom[] tmp = new Atom[np() * 3 + 1];
+				int idx = 0;
+				
+				tmp[idx++] = Atom.newAtom(courbeIdx);
+				
+				for (int i = 0; i < np(); i++) {
+					tmp[idx++] = Atom.newAtom(getPoint(i).getX());
+					tmp[idx++] = Atom.newAtom(getPoint(i).getY());
+					tmp[idx++] = Atom.newAtom(getPoint(i).getSustainAndFix());
+				}
+				
+				MaxSystem.sendMessageToBoundObject(sendName, "syncpoints", tmp);
+			}
+		}
+		
 		
 		public int np() {
 			return lPoints.size();
 		}
 	
+		public void setRange(double min, double max) {
+			if (min < max) {
+				double factor = (max - min) / (range[1] - range[0]);
+				
+				double tmp; // pour des raisons de lisibilités
+				for (int i = 0; i < lPoints.size(); i++) {
+					tmp = ((((Point) lPoints.get(i)).getY() - range[0]) * factor) + min; 
+					((Point) lPoints.get(i)).setY(tmp);
+				}
+				
+				// je pourrais utiliser domain(min, max) mais il y a un test de plus,
+				// qui est déjà effectué au début de setDomain()
+				range[0] = min;
+				range[1] = max;
+			}
+		}
+
+		public void setDomain(double min, double max) {
+			if (min < max) {
+				double factor = (max - min) / (domain[1] - domain[0]);
+				
+				double tmp; // pour des raisons de lisibilités
+				for (int i = 0; i <  np(); i++) {
+					tmp = ((((Point) lPoints.get(i)).getX() - domain[0]) * factor) + min; 
+					((Point) lPoints.get(i)).setX(tmp);
+				}
+				
+				// je pourrais utiliser domain(min, max) mais il y a un test de plus,
+				// qui est déjà effectué au début de setDomain()
+				domain[0] = min;
+				domain[1] = max;
+			}
+		}
+
+		public void range(double min, double max) {
+			if (min < max) {
+				range[0] = min;
+				range[1] = max;
+			}
+		}
+
+		public void domain(double min, double max) {
+			if (min < max) {
+				domain[0] = min;
+				domain[1] = max;
+			}
+		}
+
+		public void autoDomain() {
+			if (np() > 1) {
+				double min = getPoint(0).getX();
+				double max = getPoint(0).getX();
+				for(int i = 1; i < np(); i++) {
+					if (getPoint(i).getX() > max)
+						max = getPoint(i).getX();
+					else if (getPoint(i).getX() < min)
+						min = getPoint(i).getX();
+				}
+				
+				if (min != max)
+					domain(min, max);			
+			}
+		}
+		
+		public void autoRange() {
+			if (np() > 1 ) {
+				double min = getPoint(0).getY();
+				double max = getPoint(0).getY();
+				for(int i = 1; i < np(); i++) {
+					if (getPoint(i).getY() > max)
+						max = getPoint(i).getY();
+					else if (getPoint(i).getY() < min)
+						min = getPoint(i).getY();
+				}
+				
+				if (min != max)
+					range(min, max);
+			}
+		}
+
+		public void normalize() {
+			// just a little bit more effficient, there's one loop less.
+			if (np() > 1) {
+				double minDomain = domain[1];
+				double maxDomain = domain[0];
+				double minRange = range[1];
+				double maxRange = range[0];
+				double tmp;
+				
+				for (int i = 0; i < np(); i++) {
+					if ((tmp = getPoint(i).getX()) < minDomain)
+						minDomain = tmp;
+					else if ((tmp = getPoint(i).getX()) > maxDomain)
+						maxDomain = tmp;
+					if ((tmp = getPoint(i).getY()) < minRange)
+						minRange = tmp;
+					else if ((tmp = getPoint(i).getY()) > maxRange)
+						maxRange = tmp;
+				}
+				
+				if (minDomain != maxDomain)
+					applyNormalizeX(minDomain, maxDomain);
+				if (minRange != maxRange)
+					applyNormalizeY(minRange, maxRange);
+			}
+		}
+
+		public void normalizeX() {
+			if (np() > 1) {
+				double minDomain = domain[1];
+				double maxDomain = domain[0];
+				double tmp;
+				
+				for (int i = 0 ; i < np(); i++) {
+					if ((tmp = getPoint(i).getX()) < minDomain)
+						minDomain = tmp;
+					else if ((tmp = getPoint(i).getX()) > maxDomain)
+						maxDomain = tmp;
+				}
+				
+				if (minDomain != maxDomain)
+					applyNormalizeX(minDomain, maxDomain);
+			}
+		}
+		
+		public void normalizeY() {
+			if (np() > 1) {
+				double minRange = range[1];
+				double maxRange = range[0];
+				double tmp;
+				
+				for (int i = 0 ; i < np(); i++) {
+					if ((tmp = getPoint(i).getY()) < minRange)
+						minRange = tmp;
+					else if ((tmp = getPoint(i).getY()) > maxRange)
+						maxRange = tmp;
+				}
+				
+				if (minRange != maxRange)
+					applyNormalizeY(minRange, maxRange);
+			}
+		}
+
+		private void applyNormalizeX(double min, double max) {
+			double plageDeValeurs = (domain[1] - domain[0]) / (max - min);
+			double offset = 0 - min;
+
+			for (int i = 0; i < np(); i++)
+				getPoint(i).setX((getPoint(i).getX() + offset) * plageDeValeurs - (0 - domain[0]));
+		}
+
+		private void applyNormalizeY(double min, double max) {
+			double plageDeValeurs = (range[1] - range[0]) / (max - min);
+			double offset = 0 - min;
+
+			for (int i = 0; i < np(); i++)
+				getPoint(i).setY((getPoint(i).getY() + offset) * plageDeValeurs - (0 - range[0]));
+		}
+		
 		public void clearAllPoints() {
 			lPoints.clear();
 		}
@@ -748,9 +1226,9 @@ public class fplay extends ej {
 		}
 		
 		public void clearPoints(int[] idx) {
-			for (int i = 0; i < idx.length; i++) {
+			// clear is reversed so the input index stay synchronized
+			for (int i = (idx.length - 1); i >= 0; i--)
 				clearPoints(idx[i]);
-			}
 		}
 		
 		public void clearPoints(Atom[] a) {
@@ -761,6 +1239,24 @@ public class fplay extends ej {
 					clearPoints(a[i].toInt());
 				else
 					error("bad argument for message clear");
+			}
+		}
+		
+		public void removeDuplicate() {
+			if (np() > 2) {
+				for (int i = 1; i < (np() - 1); i++) {
+					if (getPoint(i-1).getY() == getPoint(i).getY() && getPoint(i+1).getY() == getPoint(i-1).getY()) {
+						removeOnePoint(i);
+						i = Math.max(0, i - 2); // la prochaine fois qu'on rentre dans la boucle for ça commencera à partir de ce point
+					}
+				}
+			}
+		}
+		
+		public void smooth() {
+			if (np() > 2) {
+				for (int i = 1; i < (np() - 1); i++)
+					getPoint(i).setY(getPoint(i-1).getY()*0.15 + getPoint(i).getY()*0.7 + getPoint(i+1).getY()*0.15);
 			}
 		}
 		
@@ -776,11 +1272,30 @@ public class fplay extends ej {
 			}
 			// on est ici car le point est le plus grand 
 			lPoints.add(new Point(valx, valy));
+			applyAutoSustain();
+		}
+		
+		public void addPoints(double[] args) {
+			for (int i = 0; i < (args.length / 2); i += 2)
+				lPoints.add(new Point(args[i], args[i+1]));
+			
+			quickSort(0, np() - 1);
+			applyAutoSustain();
+		}
+		
+		public void addTypedPoints(double[] args) {
+			for (int i = 0; i < (args.length / 3); i++)
+				lPoints.add(new Point(args[i*3+1], args[i*3+2], (int) args[i*3+3]));
+			
+			applyAutoSustain();
+		}
+		
+		public void addTypedPoint(double valx, double valy, int state) {
+			lPoints.add(new Point(valx, valy, state));
 		}
 		
 		public void addTypedPoint(String x, String y, String state) { 
-			int tmp = Integer.parseInt(state);
-			lPoints.add(new Point(Double.parseDouble(x), Double.parseDouble(y), (tmp & 2) == 2, (tmp & 1) == 1));
+			lPoints.add(new Point(Double.parseDouble(x), Double.parseDouble(y), Integer.parseInt(state)));
 		}
 
 		public void removeOnePoint(int idx) {
@@ -789,6 +1304,7 @@ public class fplay extends ej {
 			 */
 			if (idx >= 0 && idx < np()) {
 				lPoints.remove(idx);
+				applyAutoSustain();
 			}
 		}
 
@@ -802,7 +1318,21 @@ public class fplay extends ej {
 				quickSort(0, np() - 1); // car on a peut-être trop déplacé le point
 			} else if (((Point) lPoints.get(idx)).getFix() == true)
 				post("le point est fixé, on ne peut donc pas le déplacer...");
-				
+
+			applyAutoSustain();
+		}
+		
+		private void applyAutoSustain() {
+			if (autosustain) {
+				if (np() > 3) {
+					for (int i = 0; i < np(); i++) {
+						if (i == (np() - 2))
+							getPoint(i).setSustain(true);
+						else
+							getPoint(i).setSustain(false);
+					}
+				}
+			}
 		}
 		
 		private void quickSort(int g, int d) {
@@ -886,6 +1416,10 @@ public class fplay extends ej {
 			outlet(DUMP_OUTLET, getName(), new Atom[] { Atom.newAtom("range"), Atom.newAtom(range[0]), Atom.newAtom(range[1]) } );
 		}
 		
+		public void getNbPoints() {
+			outlet(DUMP_OUTLET, getName(), new Atom[] { Atom.newAtom("nbpoints"), Atom.newAtom(np()) } );
+		}
+		
 		public void clearSustain() {
 			for (int i = 0; i < np(); i++)
 				((Point) lPoints.get(i)).setSustain(false);
@@ -894,54 +1428,6 @@ public class fplay extends ej {
 		public void unFix() {
 			for (int i = 0; i < np(); i++) 
 				((Point) lPoints.get(i)).setFix(false);
-		}
-		
-		public void domain(double min, double max) {
-			if (min < max) {
-				domain[0] = min;
-				domain[1] = max;
-			}
-		}
-
-		public void range(double min, double max) {
-			if (min < max) {
-				range[0] = min;
-				range[1] = max;
-			}
-		}
-				
-		public void setDomain(double min, double max) {
-			if (min < max) {
-				double factor = (max - min) / (domain[1] - domain[0]);
-				
-				double tmp; // pour des raisons de lisibilités
-				for (int i = 0; i <  np(); i++) {
-					tmp = ((((Point) lPoints.get(i)).getX() - domain[0]) * factor) + min; 
-					((Point) lPoints.get(i)).setX(tmp);
-				}
-				
-				// je pourrais utiliser domain(min, max) mais il y a un test de plus,
-				// qui est déjà effectué au début de setDomain()
-				domain[0] = min;
-				domain[1] = max;
-			}
-		}
-
-		public void setRange(double min, double max) {
-			if (min < max) {
-				double factor = (max - min) / (range[1] - range[0]);
-				
-				double tmp; // pour des raisons de lisibilités
-				for (int i = 0; i < lPoints.size(); i++) {
-					tmp = ((((Point) lPoints.get(i)).getY() - range[0]) * factor) + min; 
-					((Point) lPoints.get(i)).setY(tmp);
-				}
-				
-				// je pourrais utiliser domain(min, max) mais il y a un test de plus,
-				// qui est déjà effectué au début de setDomain()
-				range[0] = min;
-				range[1] = max;
-			}
 		}
 
 	}
@@ -961,6 +1447,11 @@ public class fplay extends ej {
 		
 		Point(double valx, double valy) {
 			this(valx, valy, false, false);
+		}
+		
+		Point(double valx, double valy, int state) {
+			// x, y, sustain et fix codé en binaire
+			this(valx, valy, (state & 2) == 2, (state & 1) == 1);
 		}
 		
 		Point(double valx, double valy, boolean sustain, boolean fix) {
@@ -1009,6 +1500,17 @@ public class fplay extends ej {
 		
 		public boolean getFix() {
 			return fix;
+		}
+		
+		public int getSustainAndFix() {
+			// return the value coded in binary
+			int tmp = 0;
+			if (sustain == true)
+				tmp += 2;
+			if (fix == true)
+				tmp += 1;
+			
+			return tmp;
 		}
 	}
 }
