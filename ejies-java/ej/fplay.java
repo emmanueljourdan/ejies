@@ -1,11 +1,9 @@
-insertfunction
-
 /*
  *	ej.fplay by Emmanuel Jourdan, Ircam Ñ 04 2006
  *	function player
  *
- *	$Revision: 1.17 $
- *	$Date: 2006/08/02 11:01:17 $
+ *	$Revision: 1.18 $
+ *	$Date: 2006/08/02 12:34:17 $
  */
 
 /**
