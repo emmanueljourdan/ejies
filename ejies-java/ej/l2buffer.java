@@ -1,8 +1,8 @@
 /*
  *	ej.l2buffer by Emmanuel Jourdan, Ircam Ñ 06 2005
  *
- *	$Revision: 1.1 $
- *	$Date: 2006/06/30 15:49:08 $
+ *	$Revision: 1.2 $
+ *	$Date: 2006/08/07 13:42:38 $
  */
 
 package ej;
@@ -15,6 +15,7 @@ public class l2buffer extends ej {
 
 	private String buf_name = null;
 	private int channel = 1;
+	private boolean isDblClickAllowed = false; // dblclick() seems to be triggered too often!
 	
 	public l2buffer(Atom[] args)	{
 		declareIO(2, 0);
@@ -32,22 +33,25 @@ public class l2buffer extends ej {
 			error("what can I do with all thoses arguments?");
 		}
 		
-		declareAttribute("buf_name", null, "set");
+		declareAttribute("buf_name", null, "setBufName");
 		declareAttribute("channel", null, "setChannel");
 		createInfoOutlet(false);
 		setInletAssist(INLET_ASSIST);
+		isDblClickAllowed = true;
 	}
 
 	public void dblclick() {
-		post("ej.l2buffer");
-
-		// if the number of channels is not greater than 0, the buffer doesn't exist.
-		if (MSPBuffer.getChannels(buf_name) > 0) {
-			post("\tbuffer name: " + buf_name);
-			post("\tchannels: " + MSPBuffer.getChannels(buf_name));
-			post("\twriting to channel: " + channel);
-		} else 
-			post("\t" + buf_name + " is not a valid buffer...");
+		if (isDblClickAllowed) {
+			post("ej.l2buffer");
+	
+			// if the number of channels is not greater than 0, the buffer doesn't exist.
+			if (MSPBuffer.getChannels(buf_name) > 0) {
+				post("\tbuffer name: " + buf_name);
+				post("\tchannels: " + MSPBuffer.getChannels(buf_name));
+				post("\twriting to channel: " + channel);
+			} else 
+				post("\t" + buf_name + " is not a valid buffer...");
+		}
 	}
 	
 	public void list(float[] args) {
@@ -60,9 +64,18 @@ public class l2buffer extends ej {
 	}
 	
 	public void set(String s) {
-			buf_name = s;
+		setBufName(s);
 	}
 	
+	public void set(String s, int i) {
+		setBufName(s);
+		setChannel(i);
+	}
+	
+	public void setBufName(String s) {
+		buf_name = s;
+	}
+
 	private void setChannel(int i) {
 		if (i >= 1 && i <= 4) {
 			channel = i;
