@@ -1,8 +1,8 @@
 /*
  *	ej.l2buffer by Emmanuel Jourdan, Ircam Ñ 06 2005
  *
- *	$Revision: 1.2 $
- *	$Date: 2006/08/07 13:42:38 $
+ *	$Revision: 1.3 $
+ *	$Date: 2006/08/07 14:05:02 $
  */
 
 package ej;
@@ -46,11 +46,11 @@ public class l2buffer extends ej {
 	
 			// if the number of channels is not greater than 0, the buffer doesn't exist.
 			if (MSPBuffer.getChannels(buf_name) > 0) {
-				post("\tbuffer name: " + buf_name);
-				post("\tchannels: " + MSPBuffer.getChannels(buf_name));
-				post("\twriting to channel: " + channel);
+				post("  buffer name: " + buf_name);
+				post("  channels: " + MSPBuffer.getChannels(buf_name));
+				post("  writing to channel: " + channel);
 			} else 
-				post("\t" + buf_name + " is not a valid buffer...");
+				post("  " + buf_name + " is not a valid buffer...");
 		}
 	}
 	

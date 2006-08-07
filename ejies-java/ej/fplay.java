@@ -2,8 +2,8 @@
  *	ej.fplay by Emmanuel Jourdan, Ircam Ñ 04 2006
  *	function player
  *
- *	$Revision: 1.21 $
- *	$Date: 2006/08/02 16:49:24 $
+ *	$Revision: 1.22 $
+ *	$Date: 2006/08/07 14:05:02 $
  */
 
 /**
@@ -40,7 +40,7 @@ public class fplay extends ej {
 	
 	private int nbfunctions = 1;
 
-	public static ArrayList clipboard = new ArrayList();
+//	public static ArrayList clipboard = new ArrayList();
 	
 	public fplay(Atom[] args) {
 		declareTypedIO("a", "aaa");
@@ -64,10 +64,10 @@ public class fplay extends ej {
 			post("\tnbfunctions: " + getNbFunctions());
 	
 			for (int i = 0; i < getNbFunctions(); i++) {
-				post("\tname: " + ((Courbe) Courbes.get(i)).getName());
-				post("\t\t- nbpoints:\t\t\t" + ((Courbe) Courbes.get(i)).np());
-				post("\t\t- domain (x):\t" + ((Courbe) Courbes.get(i)).domain[0] + "\t\t" + ((Courbe) Courbes.get(i)).domain[1]);
-				post("\t\t- range (y):\t\t" + ((Courbe) Courbes.get(i)).range[0] + "\t\t" + ((Courbe) Courbes.get(i)).range[1]);
+				post("  name: " + ((Courbe) Courbes.get(i)).getName());
+				post("    - nbpoints:     " + ((Courbe) Courbes.get(i)).np());
+				post("    - domain (x):  " + ((Courbe) Courbes.get(i)).domain[0] + "    " + ((Courbe) Courbes.get(i)).domain[1]);
+				post("    - range (y):    " + ((Courbe) Courbes.get(i)).range[0] + "    " + ((Courbe) Courbes.get(i)).range[1]);
 			}
 			post("");
 		}
