@@ -2,8 +2,8 @@
  *	ej.fplay by Emmanuel Jourdan, Ircam — 04 2006
  *	function player
  *
- *	$Revision: 1.22 $
- *	$Date: 2006/08/07 14:05:02 $
+ *	$Revision: 1.23 $
+ *	$Date: 2006/08/08 17:10:51 $
  */
 
 /**
@@ -61,7 +61,7 @@ public class fplay extends ej {
 		if (isDblClickAllowed) {
 			// surdéfinition de ej.dblclick()
 			post("ej.fplay infos:");
-			post("\tnbfunctions: " + getNbFunctions());
+			post("  nbfunctions: " + getNbFunctions());
 	
 			for (int i = 0; i < getNbFunctions(); i++) {
 				post("  name: " + ((Courbe) Courbes.get(i)).getName());
