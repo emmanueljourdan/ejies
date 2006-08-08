@@ -10,6 +10,7 @@ ej.l2buffer: fill a buffer~ with a list
 ej.ftom: Frequency to MIDI (with tuning adjustment, works for lists)
 ej.ldrunk: more than a drunk for list
 ej.linterp: more than a list interpolator (up to 8 inputs)
+ej.lquant: Quantize a stream of number or a list
 ej.mtof: MIDI to Frequency (with tuning adjustment, works for lists)
 ej.urn: like urn, for larger random range
 ej.jit.preview: (bpatcher) Patcher window for jitter (with slowing down)

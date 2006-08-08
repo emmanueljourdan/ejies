@@ -41,3 +41,5 @@ max shortcut linterp mxj ej.linterp;
 max shortcut ldrunk mxj ej.ldrunk;
 max shortcut fplay mxj ej.fplay;
 max shortcut l2buffer mxj ej.l2buffer;
+max shortcut lquant mxj ej.lquant;
+

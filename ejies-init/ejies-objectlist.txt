@@ -30,6 +30,7 @@ max oblist ejies "mxj ej.lclip";
 max oblist ejies "mxj ej.ldrunk";
 max oblist ejies "mxj ej.linterp";
 max oblist ejies "mxj ej.lop";
+max oblist ejies "mxj ej.lquant";
 max oblist ejies "mxj ej.lscale";
 max oblist ejies "mxj ej.lslide";
 max oblist ejies "mxj ej.mmmm";

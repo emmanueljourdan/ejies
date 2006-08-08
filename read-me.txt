@@ -11,6 +11,7 @@ Java externals:
 ¥ ej.ldrunk: drunk for list
 ¥ ej.linterp: more than a list interpolator 
 ¥ ej.lop: basic mathematic operations on (big) list
+¥ ej.lquant: Quantize a stream of number or a list (sort of multiple rounding process)
 ¥ ej.lscale: maps input range of lists to output range
 ¥ ej.lslide: smooth-out changes in list
 ¥ ej.mmmm: calculate minimum, mean, median and maximum
