@@ -1,8 +1,8 @@
 /*
  *	ejies Java externals by Emmanuel Jourdan, Ircam Ñ 12 2005
  *
- *	$Revision: 1.7 $
- *	$Date: 2006/07/31 14:54:57 $
+ *	$Revision: 1.8 $
+ *	$Date: 2006/08/08 14:46:10 $
  */
 
 package ej;
@@ -90,19 +90,26 @@ public abstract class ej extends MaxObject
 			super.post("false");
 	}
 	
-	public void post(int i) {
-		super.post(i + "");
+	public void post(long l) {
+		super.post(l + "");
 	}
 	
-	public void post(float f) {
-		super.post(f + "");
+	public void post(double d) {
+		super.post(d + "");
 	}
 	
 	public void post(Atom[] a) {
 		super.post(a.toString());
 	}
 	
-	public void post(float[] f) {
-		super.post(f.toString());
+	public void post(double[] d) {
+		String tmp;
+		if (d.length > 1) {
+			tmp = d[0] + "";
+			for (int i = 1; i < d.length; i++) {
+				tmp += " " + d[i];
+			}
+			post(tmp);
+		}
 	}
 }
