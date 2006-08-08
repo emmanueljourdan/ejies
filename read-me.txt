@@ -17,6 +17,8 @@ Java externals:
 ¥ ej.mmmm: calculate minimum, mean, median and maximum
 ¥ ej.mtof: MIDI to Frequency (with tuning adjustment, works for lists)
 ¥ ej.urn: like urn, for larger random range
+¥ ej.dx2x: create a list from intervals
+¥ ej.x2dx: get the interval between successive values of a list
 
 JS:
 ¥ ej.4m.js: (obsolet) calculate minimum, mean, median and maximum
