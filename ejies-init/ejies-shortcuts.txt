@@ -42,4 +42,9 @@ max shortcut ldrunk mxj ej.ldrunk;
 max shortcut fplay mxj ej.fplay;
 max shortcut l2buffer mxj ej.l2buffer;
 max shortcut lquant mxj ej.lquant;
-
+max shortcut xdx mxj ej.x2dx;
+max shortcut x->dx mxj ej.x2dx;
+max shortcut x2dx mxj ej.x2dx;
+max shortcut dxx mxj ej.dx2x;
+max shortcut dx->x mxj ej.dx2x;
+max shortcut dx2x mxj ej.dx2x;
