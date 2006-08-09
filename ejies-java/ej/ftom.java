@@ -2,8 +2,8 @@
  *	ej.ftom by Emmanuel Jourdan, Ircam Ñ 02 2005
  *	Frequency to MIDI (with tuning adjustment)
  *
- *	$Revision: 1.5 $
- *	$Date: 2006/05/09 17:42:55 $
+ *	$Revision: 1.6 $
+ *	$Date: 2006/08/09 14:37:14 $
  */
 
 package ej;
@@ -94,8 +94,8 @@ public class ftom extends ej {
 	private String getMode() {
 		if (whichMode < 3 || tonSubdivision == 2f)
 			return LIST_MODES[whichMode];
-		else
-			return new String((int) Math.floor(tonSubdivision * 2) + "");
+		// else
+		return new String((int) Math.floor(tonSubdivision * 2) + "");
 	}
 	
 	public void bang() {

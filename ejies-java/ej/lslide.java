@@ -3,8 +3,8 @@
  *	slide for lists
  *
  *
- *	$Revision: 1.7 $
- *	$Date: 2006/06/03 17:35:41 $
+ *	$Revision: 1.8 $
+ *	$Date: 2006/08/09 14:37:14 $
  */
 
 package ej;
@@ -23,7 +23,7 @@ public class lslide extends ej {
 	private float yN_1 = 0;
 	private boolean firstIsMade = false;
 	private String buf_name = null;
-	private byte outputmode = 0;
+	private int outputmode = 0;
 	
 	public lslide(float slideUp, float slideDown)	{
 		declareTypedIO("aff", "l");
@@ -39,7 +39,14 @@ public class lslide extends ej {
 		setInletAssist(INLET_ASSIST);
 		setOutletAssist(OUTLET_ASSIST);
 	}
-		
+	
+	private void setMode(int i) {
+		if (i >= 0 && i <= 2)
+			outputmode = i;
+		else
+			outputmode = 0;
+	}
+	
 	public void bang() {
 		calculeChoice();
 	}

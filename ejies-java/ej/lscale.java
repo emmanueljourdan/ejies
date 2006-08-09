@@ -3,8 +3,8 @@
  *	scale for lists
  *
  *
- *	$Revision: 1.4 $
- *	$Date: 2006/06/03 17:35:41 $
+ *	$Revision: 1.5 $
+ *	$Date: 2006/08/09 14:37:14 $
  */
 
 package ej;
@@ -31,7 +31,7 @@ public class lscale extends ej {
 	private float expValue = 1;
 	private String methodString = "calculeNormal";
 	private String buf_name = null;
-	private byte outputmode = 0;
+	private int outputmode = 0;
 
 	private boolean clip = false;
 	
@@ -53,7 +53,14 @@ public class lscale extends ej {
 		setInletAssist(INLET_ASSIST);
 		setOutletAssist(OUTLET_ASSIST);
 	}
-		
+	
+	private void setMode(int i) {
+		if (i >= 0 && i <= 2)
+			outputmode = i;
+		else
+			outputmode = 0;
+	}
+	
 	public void bang() {
 		calcule();
 	}

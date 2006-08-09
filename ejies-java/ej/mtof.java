@@ -2,8 +2,8 @@
  *	ej.mtof by Emmanuel Jourdan, Ircam Ñ 02 2005
  *	MIDI to Frequency (with tuning adjustment)
  *
- *	$Revision: 1.4 $
- *	$Date: 2006/04/10 13:23:28 $
+ *	$Revision: 1.5 $
+ *	$Date: 2006/08/09 14:37:14 $
  */
 
 package ej;
@@ -14,16 +14,22 @@ public class mtof extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "MIDI note number in (int/float/list)" };
 	private static final String[] OUTLET_ASSIST = new String[]{ "Frequency out"};
 
-	private float[] aList;
+//	private float[] aList;
 	
 	private float tuning = 440;
 	private int pitch_reference = 69;
 	
-	public mtof(float[] args) {
+	public mtof(float f) {
+		this(f, 69);
+	}
+	
+	public mtof(float tuning, float pitch_reference) {
 		declareTypedIO("a", "l");
 		createInfoOutlet(true);
 		
-		argsManager(args);
+		setTunnig(tuning);
+		setPitchReference(Math.round(pitch_reference));
+		
 		declareAttribute("tuning", "getTunnig", "setTunnig");
 		declareAttribute("pitch_reference", "getPitchReference", "setPitchReference");
 		
@@ -31,17 +37,6 @@ public class mtof extends ej {
 		setOutletAssist(OUTLET_ASSIST);
 	}
 	
-	private void argsManager(float[] args) {
-		switch (args.length) {
-			case 1:
-				setTunnig(args[0]);
-				break;
-			case  2:
-				setPitchReference((int) args[1]);
-				break;
-		}
-	}	
-
 	private void setTunnig(float f) {
 		if (f > 0 && f < 20000)
 			tuning = f;

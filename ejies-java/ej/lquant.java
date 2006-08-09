@@ -2,36 +2,50 @@
  *	ej.lquant by Emmanuel Jourdan, Ircam Ñ 08 2005
  *	Quantize a list
  *
- *	$Revision: 1.1 $
- *	$Date: 2006/08/08 14:54:28 $
+ *	$Revision: 1.2 $
+ *	$Date: 2006/08/09 14:37:14 $
  */
 
 package ej;
 import com.cycling74.max.*;
+import com.cycling74.msp.MSPBuffer;
 
 public class lquant extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "List to be quantized", "Quantzing list"};
 	private static final String[] OUTLET_ASSIST = new String[]{ "Quantized list"};	
 
-	private double[] resultat = new double[0];
-	private double[] quantFactors;
-	private double smallestInterval, smallestVal, interval, rounded;
+	private float[] resultat = new float[0];
+	private float[] quantFactors;
+	private double smallestInterval, rounded, interval;
+	private float smallestVal;
 	private boolean isErrorDisplayed = false;
+	private String buf_name = null;
+	private int outputmode = 0;
 	
 	public lquant() {
-		this(new double[] { 1. });
+		this(new float[] { 1f });
 	}
 	
-	public lquant(double[] args) {
+	public lquant(float[] args) {
 		declareTypedIO("al", "l");
 		createInfoOutlet(false);
 		
 		quantFactors = args;
+
+		declareAttribute("outputmode", null, "setMode");
+		declareAttribute("buf_name");
 		
 		setInletAssist(INLET_ASSIST);
 		setOutletAssist(OUTLET_ASSIST);
 	}
-		
+	
+	private void setMode(int i) {
+		if (i >= 0 && i <= 2)
+			outputmode = i;
+		else
+			outputmode = 0;
+	}
+	
 	public void bang() {
 		calcule();
 	}
@@ -39,16 +53,16 @@ public class lquant extends ej {
 	public void inlet(float f) {
 		switch (getInlet()) {
 			case 0:
-				resultat = new double[] { f };
+				resultat = new float[] { f };
 				calcule();
 				break;
 			case 1:
-				quantFactors = new double[] { f };
+				quantFactors = new float[] { f };
 				break;
 		}
 	}
 
-	public void list(double[] args) {
+	public void list(float[] args) {
 		switch (getInlet()) {
 			case 0:
 				resultat = args;
@@ -60,18 +74,13 @@ public class lquant extends ej {
 		}
 	}
 	
-	public void set(double[] args) {
+	public void set(float[] args) {
 		switch (getInlet()) {
 		case 0:
 			resultat = args; break;
 		case 1:
 			quantFactors = args; break;
 		}
-	}
-	
-	public void getquant() {
-		post("ici");
-		post(quantFactors);
 	}
 	
 	public void anything(String s, Atom[] args) {
@@ -83,10 +92,10 @@ public class lquant extends ej {
 			resultat[i] = calculNearest(resultat[i]);
 		}
 		
-		outlet(0, resultat);
+		doOutput();
 	}
 	
-	synchronized private double calculNearest(double val) {
+	synchronized private float calculNearest(float val) {
 		smallestInterval = Double.POSITIVE_INFINITY;
 		smallestVal = val;
 		
@@ -96,7 +105,7 @@ public class lquant extends ej {
 	
 				interval = Math.abs(val - rounded);
 				if (Math.abs(val - rounded) < smallestInterval) {
-					smallestVal = rounded;
+					smallestVal = (float) rounded;
 					smallestInterval = interval;
 				}
 			} else {
@@ -112,5 +121,22 @@ public class lquant extends ej {
 	
 	private double doRounding(double val, double roundingVal) {
 		return (Math.round(val*roundingVal) / roundingVal);
+	}
+	
+	private void doOutput() {
+		switch (outputmode) {
+			case  0:
+				outlet(0, resultat); break;
+			case  1:
+				writeToBuffer(); break;
+			case 2:
+				outlet(0, resultat); writeToBuffer(); break;
+		}
+	}
+	
+	private void writeToBuffer() {
+		if (buf_name != null && resultat.length > 0) {
+			MSPBuffer.poke(buf_name, resultat);
+		}
 	}
 }

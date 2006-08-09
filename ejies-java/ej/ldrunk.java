@@ -3,8 +3,8 @@
  *	drunk for list
  *
  *
- *	$Revision: 1.6 $
- *	$Date: 2006/06/03 17:35:41 $
+ *	$Revision: 1.7 $
+ *	$Date: 2006/08/09 14:37:14 $
  */
 
 package ej;
@@ -25,7 +25,7 @@ public class ldrunk extends ej {
 	private float[] resultat = new float[0];
 	private float[] inputList = new float[0];
 	private String buf_name = null;
-	private byte outputmode = 0;
+	private int outputmode = 0;
 	
 	public ldrunk(float maxRange, float stepSize) {
 		this(0f, maxRange, stepSize, 100f);
@@ -54,7 +54,14 @@ public class ldrunk extends ej {
 		setInletAssist(INLET_ASSIST);
 		setOutletAssist(OUTLET_ASSIST);
 	}
-		
+	
+	private void setMode(int i) {
+		if (i >= 0 && i <= 2)
+			outputmode = i;
+		else
+			outputmode = 0;
+	}
+	
 	public void bang() {
 		if (inputList.length > 0)
 			doRandom();

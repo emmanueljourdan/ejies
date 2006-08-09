@@ -3,8 +3,8 @@
  *	simple list interpolator
  *
  *
- *	$Revision: 1.12 $
- *	$Date: 2006/06/12 10:00:36 $
+ *	$Revision: 1.13 $
+ *	$Date: 2006/08/09 14:37:14 $
  */
 
 package ej;
@@ -24,7 +24,7 @@ public class linterp extends ej {
 	private String buf_name = null;
 	private byte combienInput;
 	
-	private byte outputmode = 0;
+	private int outputmode = 0;
 	private byte mode = 0;
 	private boolean autotrigger = false;
 	
@@ -68,7 +68,7 @@ public class linterp extends ej {
 	
 	private void setMode(int i) {
 		if (i >= 0 && i <= 2)
-			outputmode = (byte) i;
+			outputmode = i;
 		else
 			outputmode = 0;
 	}
@@ -135,10 +135,10 @@ public class linterp extends ej {
 					setInterpFactor(args);
 					calcule();
 					return;
-				} else {
-					error("no list expected here (in this mode)");
-					setInterpFactor(args);   // comme on est pas rancunier on va utiliser le premier argument
 				}
+				// else
+				error("no list expected here (in this mode)");
+				setInterpFactor(args);   // comme on est pas rancunier on va utiliser le premier argument
 				break;
 			default:
 				setInput(getInlet(), args);
@@ -269,8 +269,8 @@ public class linterp extends ej {
 
 		if (byteArg == flag)
 			return true;
-		else
-			return false;
+		// else
+		return false;
 	}
 	
 	private int findSmallestList() {

@@ -2,8 +2,8 @@
  *	ej.lclip by Emmanuel Jourdan, Ircam Ñ 02 2005
  *	Constrains a list within a certain range
  *
- *	$Revision: 1.3 $
- *	$Date: 2006/06/03 17:35:41 $
+ *	$Revision: 1.4 $
+ *	$Date: 2006/08/09 14:37:14 $
  */
 
 package ej;
@@ -18,7 +18,7 @@ public class lclip extends ej {
 	private float clipMin = 0;
 	private float clipMax = 0;
 	private String buf_name = null;
-	private byte outputmode = 0;
+	private int outputmode = 0;
 	
 	public lclip(float clipMin, float clipMax)	{
 		declareTypedIO("aff", "l");
@@ -33,7 +33,14 @@ public class lclip extends ej {
 		setInletAssist(INLET_ASSIST);
 		setOutletAssist(OUTLET_ASSIST);
 	}
-		
+	
+	private void setMode(int i) {
+		if (i >= 0 && i <= 2)
+			outputmode = i;
+		else
+			outputmode = 0;
+	}
+	
 	public void bang() {
 		calcule();
 	}
