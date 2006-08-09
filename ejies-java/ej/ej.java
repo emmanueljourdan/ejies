@@ -1,8 +1,8 @@
 /*
  *	ejies Java externals by Emmanuel Jourdan, Ircam Ñ 12 2005
  *
- *	$Revision: 1.8 $
- *	$Date: 2006/08/08 14:46:10 $
+ *	$Revision: 1.9 $
+ *	$Date: 2006/08/09 14:44:10 $
  */
 
 package ej;
@@ -78,8 +78,8 @@ public abstract class ej extends MaxObject
 	public boolean isNumber(Atom a) {
 		if (a.isInt() || a.isFloat())
 			return true;
-		else
-			return false;
+		// else
+		return false;
 	}
 	
 	// faster to debug... accept anything
