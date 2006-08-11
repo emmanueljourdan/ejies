@@ -2,11 +2,15 @@
  *	ej.lquant by Emmanuel Jourdan, Ircam Ñ 08 2005
  *	Quantize a list
  *
- *	$Revision: 1.2 $
- *	$Date: 2006/08/09 14:37:14 $
+ *	$Revision: 1.3 $
+ *	$Date: 2006/08/11 11:06:21 $
  */
 
 package ej;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+
 import com.cycling74.max.*;
 import com.cycling74.msp.MSPBuffer;
 
@@ -22,6 +26,7 @@ public class lquant extends ej {
 	private String buf_name = null;
 	private int outputmode = 0;
 	
+	
 	public lquant() {
 		this(new float[] { 1f });
 	}
@@ -30,7 +35,7 @@ public class lquant extends ej {
 		declareTypedIO("al", "l");
 		createInfoOutlet(false);
 		
-		quantFactors = args;
+		setQuantFactors(args);
 
 		declareAttribute("outputmode", null, "setMode");
 		declareAttribute("buf_name");
@@ -57,7 +62,7 @@ public class lquant extends ej {
 				calcule();
 				break;
 			case 1:
-				quantFactors = new float[] { f };
+				quantFactors = new float[] { Math.abs(f) };
 				break;
 		}
 	}
@@ -69,7 +74,7 @@ public class lquant extends ej {
 				calcule();
 				break;
 			case 1:
-				quantFactors = args;
+				setQuantFactors(args);
 				break;
 		}
 	}
@@ -79,7 +84,7 @@ public class lquant extends ej {
 		case 0:
 			resultat = args; break;
 		case 1:
-			quantFactors = args; break;
+			setQuantFactors(args); break;
 		}
 	}
 	
@@ -117,6 +122,30 @@ public class lquant extends ej {
 		}
 
 		return smallestVal;
+	}
+	
+
+	/**
+	 * Find the 
+	 * @param args <code>array</code> to be optimized
+	 */
+	private void setQuantFactors(float[] args) {
+		Arrays.sort(args);
+		Atom[] tmp = Atom.newAtom(args);
+		int i, j;
+
+		j = 0;
+		while( j < tmp.length) {
+			i = j + 1;
+			while(i < tmp.length) {
+				if (((tmp[i].toFloat() / tmp[j].toFloat()) % 1.) == 0.)
+					tmp = Atom.removeOne(tmp, i);
+				else
+					i++;
+			}
+			j++;
+		}
+		quantFactors = Atom.toFloat(tmp);
 	}
 	
 	private double doRounding(double val, double roundingVal) {
