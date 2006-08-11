@@ -1,10 +1,11 @@
 ejies Ñ Version history
 
 *******************
-1.56b13: 11 August 2006
+1.56rc1: 11 August 2006
 This version requires MaxMSP 4.5.6 or higher (compatible with MaxMSP 4.6 UB).
 
 New Java Externals:
+ej.dx2x: create a list from intervals
 ej.fplay: equivalent of ej.function.js without the drawing features
 ej.l2buffer: fill a buffer~ with a list
 ej.ftom: Frequency to MIDI (with tuning adjustment, works for lists)
@@ -14,9 +15,8 @@ ej.lquant: Quantize a stream of number or a list
 ej.mtof: MIDI to Frequency (with tuning adjustment, works for lists)
 ej.urn: like urn, for larger random range
 ej.jit.preview: (bpatcher) Patcher window for jitter (with slowing down)
-Collection of aqua sliders with prototypes
-ej.dx2x: create a list from intervals
 ej.x2dx: get the interval between successive values of a list
+Collection of aqua sliders with prototypes
 
 Improvements:
 Installation/Uninstallation: compatible with MaxMSP 4.5 and 4.6

@@ -10,7 +10,7 @@ post("\n     by Emmanuel Jourdan\, Ircam\n");
 
 function EjiesUtils()
 { 
-	this.VersNum = "1.56b13";		// Version Number
+	this.VersNum = "1.56rc1";		// Version Number
 	this.VersDate = "(08/2006)";	// Version release date
 
 	// clip method
