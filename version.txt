@@ -43,6 +43,7 @@ ej.function.js: addfunction problem fixed
 ej.function.js: line output works if there's only one point
 ej.lslide: slide_up/slide_down was not choose correctly (Thanks Elvio)
 ej.vdb~ and ej.vdb-sig~: windowing was wrong... and that's really bad... (Thanks José-Miguel)
+ej.lscale: was broken since 1.56b* (Thanks Antoine)
 
 
 
