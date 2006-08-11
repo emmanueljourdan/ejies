@@ -1,8 +1,8 @@
 /*
  *	ejies Java externals by Emmanuel Jourdan, Ircam Ñ 12 2005
  *
- *	$Revision: 1.9 $
- *	$Date: 2006/08/09 14:44:10 $
+ *	$Revision: 1.10 $
+ *	$Date: 2006/08/11 11:06:53 $
  */
 
 package ej;
@@ -11,11 +11,16 @@ import com.cycling74.max.*;
 import java.util.regex.*;
 import java.io.*;
 
+/**
+ * ej package
+ * @author jourdan
+ */
 public abstract class ej extends MaxObject
 {
 	private static boolean printedMessage;
 	private static String theMessage = "ejies Java externals by Emmanuel Jourdan, Ircam";
-	
+
+	/** print the ejies copyright message once */
 	public ej() {
 		if (printedMessage == false) {
 			dblclick();
@@ -23,6 +28,7 @@ public abstract class ej extends MaxObject
 		}
 	}
 	
+	/** display the copyright while you dblclick on a object from the ej package (with version number) */
 	public void dblclick() {
 		// c'est super amusant, on peut faire un double clic...
 		post(theMessage);
@@ -72,8 +78,10 @@ public abstract class ej extends MaxObject
 			post("    version " + versionNumber + "   ---   " + versionDate);
 	}
 
-	/*
-	 * Tools
+	/**
+	 * test if an Atom is a number
+	 * @param a
+	 * @return <code>true</code> if it's a number; <code>false</code> otherwise
 	 */
 	public boolean isNumber(Atom a) {
 		if (a.isInt() || a.isFloat())
@@ -104,7 +112,7 @@ public abstract class ej extends MaxObject
 	
 	public void post(double[] d) {
 		String tmp;
-		if (d.length > 1) {
+		if (d.length > 0) {
 			tmp = d[0] + "";
 			for (int i = 1; i < d.length; i++) {
 				tmp += " " + d[i];
