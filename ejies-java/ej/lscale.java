@@ -3,8 +3,8 @@
  *	scale for lists
  *
  *
- *	$Revision: 1.5 $
- *	$Date: 2006/08/09 14:37:14 $
+ *	$Revision: 1.6 $
+ *	$Date: 2006/08/11 15:10:49 $
  */
 
 package ej;
@@ -200,11 +200,11 @@ public class lscale extends ej {
 	private void doOutput() {
 		switch (outputmode) {
 			case  0:
-				doOutput(); break;
+				outlet(0, resultat); break;
 			case  1:
 				writeToBuffer(); break;
 			case 2:
-				doOutput(); writeToBuffer(); break;
+				outlet(0, resultat); writeToBuffer(); break;
 		}
 	}
 	
