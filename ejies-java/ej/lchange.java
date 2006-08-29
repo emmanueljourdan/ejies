@@ -2,8 +2,8 @@
  *	ej.lchange by Emmanuel Jourdan, Ircam Ñ 12 2005
  *	aware of list change
  *
- *	$Revision: 1.7 $
- *	$Date: 2006/05/15 10:21:23 $
+ *	$Revision: 1.8 $
+ *	$Date: 2006/08/29 15:46:17 $
  */
 
 package ej;
@@ -12,8 +12,12 @@ import com.cycling74.max.*;
 
 public class lchange extends ej
 {
-	private static final String[] INLET_ASSIST = new String[]{ "Repeted" };
-	private static final String[] OUTLET_ASSIST = new String[]{ "result if different from the last one"	};
+	private static final String[] INLET_ASSIST = new String[]{ "Anything to be tested" };
+	private static final String[][] OUTLET_ASSIST = new String[][] {
+						new String[] {"Result if different from the last one"},
+						new String[] {"bang when the list change"}, 
+						new String[] {"1 when the list change, 0 otherwise"}
+						};
 
 	private Atom[] lastThing = new Atom[0]; // c'est lˆ qu'on met la dernire chose
 	private int mode = 0;
@@ -27,7 +31,7 @@ public class lchange extends ej
 		declareAttribute("mode", null, "setMode");
 
 		setInletAssist(INLET_ASSIST);
-		setOutletAssist(OUTLET_ASSIST);
+		setOutletAssist(OUTLET_ASSIST[mode]);
 	}
 		
 	public void anything(String s, Atom[] args)
@@ -51,10 +55,12 @@ public class lchange extends ej
 				mode = 2;
 			else
 				error("bad argument for attribute mode");
-		} else if (a[0].isInt() && a[0].getInt() >= 0 && a[0].getInt() <= 2) {
-			mode = a[0].getInt();
+		} else if (a[0].toInt() >= 0 && a[0].toInt() <= 2) {
+			mode = a[0].toInt();
 		}
-		// On ignore le fait que c'est soit du float.
+
+		// change assistance string
+		setOutletAssist(OUTLET_ASSIST[mode]);
 	}
 	
 	private void isDifferent(String s, Atom[] args)
