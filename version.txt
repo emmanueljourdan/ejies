@@ -27,6 +27,7 @@ ej.function.js: notify psto less often (using the same Task technique as for dra
 ej.function.js: points with the same x position are now put in the "right" order (Thanks Henry)
 ej.function.js: new nbfunctions/syncfunctions/syncpoints method for the synchronisation with ej.fplay
 ej.function.js: able to read the new ej.fplay file format
+ej.lchange: dynamic assistance
 ej.lop: new operators (atodb, dbtoa)
 ej.lop: val @ttribute accept now more than one value
 ej.lop: accepts argument(s): operator followed by value(s)
