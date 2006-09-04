@@ -3,8 +3,8 @@
 	an alternative led...
 	since 1.54b3: mode button added
 	
-	$Revision: 1.8 $
-	$Date: 2006/07/31 13:22:50 $
+	$Revision: 1.9 $
+	$Date: 2006/09/04 13:35:25 $
 */
 
 // Global Code
@@ -24,7 +24,7 @@ var Flash = 0;
 var OldFlash;
 var FlashTime = 150;
 var LastValue = 0;
-var MyTask = new Task();
+var MyTask = new Task(PutItOff);
 var ColorList =[MyBrgb, MyBrgb2, MyFrgb, MyFrgb2];
 var RedrawEnable;
 var CircleRatio = 0.75;
@@ -81,6 +81,19 @@ function bang()
 		outlet(0, LastValue);
 }
 
+function bangOn()
+{
+	Flash = 1;
+	draw();
+	outlet(0, "bang");
+}
+
+function bangOff()
+{
+	Flash = 0;
+	draw();
+}
+
 function msg_float(v)
 {
 	if (LedMode)
@@ -131,19 +144,20 @@ function blinktime(v)
 
 function WaitAndStop()
 {
-	MyTask.cancel();		// arrête une autre task en cours
-	MyTask = new Task(PutItOff);
-	MyTask.interval = FlashTime;
-	MyTask.repeat(1);
+	MyTask.schedule(FlashTime);
+/* 	MyTask.cancel();		// arrête une autre task en cours */
+/* 	MyTask = new Task(PutItOff); */
+/* 	MyTask.interval = FlashTime; */
+/* 	MyTask.repeat(1); */
 }
 WaitAndStop.local = 1;
 
 function PutItOff()
 {
-	if ( ! arguments.callee.task.running) {
+/* 	if ( ! arguments.callee.task.running) { */
 		Flash = 0;
 		draw();
-	}
+/* 	} */
 }
 PutItOff.local = 1;
 
@@ -317,7 +331,7 @@ getcolor.local = 1;	// private
 function onclick()
 {
 	if (LedMode)
-		bang();
+		bangOn();
 	else {	
 		if (Flash == LastValue) {
 			Flash = 1 - Flash;
@@ -329,6 +343,12 @@ function onclick()
 		SendValue();
 		draw();
 	}
+}
+
+function ondrag(x,y,but)
+{
+	if (but == 0 && LedMode == 1)
+		bangOff();
 }
 
 redrawon();
