@@ -2,14 +2,20 @@
  *	ej.ftom by Emmanuel Jourdan, Ircam Ñ 02 2005
  *	Frequency to MIDI (with tuning adjustment)
  *
- *	$Revision: 1.6 $
- *	$Date: 2006/08/09 14:37:14 $
+ *	$Revision: 1.7 $
+ *	$Date: 2006/09/12 09:20:24 $
  */
 
 package ej;
 
 import com.cycling74.max.*;
 
+/**
+ * Convert frequency to midi. This works for list, and allows you to define tuning and pitch reference.   
+ * @author jourdan
+ * @see ej
+ * @version $Revision: 1.7 $
+ */
 public class ftom extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "MIDI note number in (int/float/list)" };
 	private static final String[] OUTLET_ASSIST = new String[]{ "Frequency out"};
@@ -22,11 +28,33 @@ public class ftom extends ej {
 	
 	private int[] listInt;
 	
-	public ftom(float[] args) {
+	/**
+	 * create a ftom object with default parameters (tuning 440 Hz, pitch reference 69)
+	 */
+	public ftom() {
+		this(440, 69);
+	}
+	
+	/**
+	 * create a ftom object with tuning specified as argument (pitch reference will be the default 69 value)
+	 * @param tuning tuning reference (Hz)
+	 */
+	public ftom(float tuning) {
+		this(tuning, 69);
+	}
+	
+	/**
+	 * create a ftom object with specified tuning and pitch reference.
+	 * @param tuning tuning reference (Hz)
+	 * @param pitch_reference pitche reference (MIDI note)
+	 */
+	public ftom(float tuning, int pitch_reference) {
 		declareTypedIO("a", "l");
 		createInfoOutlet(true);
 		
-		argsManager(args);
+		setTunnig(tuning);
+		setPitchReference(pitch_reference);
+		
 		declareAttribute("tuning", "getTunnig", "setTunnig");
 		declareAttribute("pitch_reference", "getPitchReference", "setPitchReference");
 		declareAttribute("mode", "getMode", "setMode");
@@ -35,17 +63,6 @@ public class ftom extends ej {
 		setOutletAssist(OUTLET_ASSIST);
 	}
 	
-	private void argsManager(float[] args) {
-		switch (args.length) {
-			case 1:
-				setTunnig(args[0]);
-				break;
-			case  2:
-				setPitchReference((int) args[1]);
-				break;
-		}
-	}
-
 	private void setTunnig(float f) {
 		if (f > 0 && f < 20000)
 			tuning = f;
@@ -98,14 +115,20 @@ public class ftom extends ej {
 		return new String((int) Math.floor(tonSubdivision * 2) + "");
 	}
 	
-	public void bang() {
-		error("ej.ftom: doesn't understand bang");
-	}
+//	public void bang() {
+//		error("ej.ftom: doesn't understand bang");
+//	}
 
+	/**
+	 * Calculate the result.
+	 */
 	public void inlet(float f) {
 		calculeFloat(f);
 	}
 	
+	/**
+	 * Calculate the result of the list.
+	 */
 	public void list(float[] list) {
 		switch (whichMode) {
 			case 0:
@@ -177,7 +200,7 @@ public class ftom extends ej {
 		outlet(0, list);
 	}
 	
-	public void anything(String s, Atom[] args) {
-		error("ej.ftom: doesn't understand " + s + " " + Atom.toOneString(args));
-	}
+//	public void anything(String s, Atom[] args) {
+//		error("ej.ftom: doesn't understand " + s + " " + Atom.toOneString(args));
+//	}
 }
