@@ -2,8 +2,8 @@
 	ej.op.js by Emmanuel Jourdan, Ircam Ñ 09 2004
 	open patchers
 
-	$Revision: 1.5 $
-	$Date: 2006/08/01 12:39:34 $
+	$Revision: 1.6 $
+	$Date: 2006/09/12 18:15:51 $
  */
 
 // global code
@@ -40,38 +40,84 @@ function searchmode(v)
 function openpatcher(v)
 {
 	re = v;
-	this.patcher.applydeep(iterons);
+	
+	if (CaseState && SearchState)
+		this.patcher.applydeep(iteronsCasePartial);
+	else if (CaseState && ! SearchState)
+		this.patcher.applydeep(iteronsCase);
+	else if (! CaseState && SearchState)
+		this.patcher.applydeep(iteronsPartial);
+	else
+		this.patcher.applydeep(iterons);
 }
+
+
+function iteronsCasePartial(MyObj)
+{
+	var p = MyObj.patcher;
+	if (MyObj.patcher.name != LastSubPatcher) {
+		if (p.name != "patcher") {
+			if (testinput(re.toLowerCase(), p.name.toLowerCase())) {
+				MyObj.patcher.front();
+				return false;
+			}
+		}	
+	}
+
+	LastSubPatcher = p.name;
+	return true;
+}
+iteronsCasePartial.local=1; // keep private
+
+function iteronsCase(MyObj)
+{
+	var p = MyObj.patcher;
+	if (MyObj.patcher.name != LastSubPatcher) {
+		if (p.name != "patcher") {
+			if (re.toLowerCase() == p.name.toLowerCase()) {
+				MyObj.patcher.front();
+				return false
+			}	
+		}	
+	}
+	LastSubPatcher = p.name;
+	return true;
+}
+iteronsCase.local=1; // keep private
+
+function iteronsPartial(MyObj)
+{
+	var p = MyObj.patcher;
+	if (MyObj.patcher.name != LastSubPatcher) {
+		if (p.name != "patcher") {
+			if (testinput(re, p.name)) {
+				MyObj.patcher.front();
+				return false;
+			}
+		}	
+	}
+	LastSubPatcher = p.name;
+	return true;
+
+}
+iteronsPartial.local = 1; // keep private
 
 function iterons(MyObj)
 {
 	var p = MyObj.patcher;
 	if (MyObj.patcher.name != LastSubPatcher) {
 		if (p.name != "patcher") {
-			var TempPatcherName = p.name;
-			if (CaseState) {
-				if (SearchState) {
-					if (testinput(re.toLowerCase(), TempPatcherName.toLowerCase()))
-						MyObj.patcher.front();
-				} else {
-					if (re.toLowerCase() == TempPatcherName.toLowerCase())
-						MyObj.patcher.front();
-				}	
-			} else {
-				if (SearchState) {
-					if (testinput(re, TempPatcherName))
-						MyObj.patcher.front();
-				} else {
-					if (re == TempPatcherName)
-						MyObj.patcher.front();
-				}	
-			}			
+			if (re == p.name) {
+				MyObj.patcher.front();
+				return false;
+			}
 		}	
 	}
 	LastSubPatcher = p.name;
 	return true;
+
 }
-iterons.local=1; // keep private
+iterons.local = 1; // keep private
 
 function testinput(re, str)
 {
