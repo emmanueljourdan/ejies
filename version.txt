@@ -38,6 +38,7 @@ ej.lscale: outputmode to send the resulting list to a buffer
 ej.clip: outputmode to send the resulting list to a buffer
 
 Bug correction:
+ej.ftom: fixed argument problem
 ej.function.js: dump/listdump with the send argument and a function containing spaces works now (Thanks Richard)
 ej.function.js: getzoom_x/getzoom_y now report correct values
 ej.function.js: addfunction problem fixed
