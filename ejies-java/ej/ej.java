@@ -1,8 +1,8 @@
 /*
  *	ejies Java externals by Emmanuel Jourdan, Ircam Ñ 12 2005
  *
- *	$Revision: 1.10 $
- *	$Date: 2006/08/11 11:06:53 $
+ *	$Revision: 1.11 $
+ *	$Date: 2006/09/20 16:40:54 $
  */
 
 package ej;
@@ -12,8 +12,10 @@ import java.util.regex.*;
 import java.io.*;
 
 /**
- * ej package
+
  * @author jourdan
+ * @see <a href="http://www.e--j.com">ejies</a>
+ * @version $Revision: 1.11 $
  */
 public abstract class ej extends MaxObject
 {
@@ -91,6 +93,10 @@ public abstract class ej extends MaxObject
 	}
 	
 	// faster to debug... accept anything
+	/**
+	 * redefinition to accept a boolean value as argument
+	 * @param b boolean value
+	 * */
 	public void post(boolean b) {
 		if (b)
 			super.post("true");
@@ -98,18 +104,42 @@ public abstract class ej extends MaxObject
 			super.post("false");
 	}
 	
+	/**
+	 * redefinition to accept a long as argument
+	 * @param l long value
+	 */
 	public void post(long l) {
 		super.post(l + "");
 	}
 	
+	/**
+	 * redifinition to accept a float/double value
+	 * @param d float/double value
+	 */
 	public void post(double d) {
 		super.post(d + "");
 	}
 	
+	/**
+	 * redefinition to accept an atom
+	 * @param a the atom
+	 */
+	public void post(Atom a) {
+		super.post(a.toString());
+	}
+	
+	/**
+	 * redefinition to accept an array of Atoms
+	 * @param a array of atoms
+	 */
 	public void post(Atom[] a) {
 		super.post(a.toString());
 	}
 	
+	/**
+	 * redefinition to accept an array of double
+	 * @param d array of double
+	 */
 	public void post(double[] d) {
 		String tmp;
 		if (d.length > 0) {

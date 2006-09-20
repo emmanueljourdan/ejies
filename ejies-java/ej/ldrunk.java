@@ -3,8 +3,8 @@
  *	drunk for list
  *
  *
- *	$Revision: 1.7 $
- *	$Date: 2006/08/09 14:37:14 $
+ *	$Revision: 1.8 $
+ *	$Date: 2006/09/20 16:40:54 $
  */
 
 package ej;
@@ -12,6 +12,12 @@ package ej;
 import com.cycling74.max.*;
 import com.cycling74.msp.MSPBuffer;
 
+/**
+ * give beers to a list...
+ * @author jourdan
+ * @see ej
+ * @version $Revision: 1.8 $
+ */
 public class ldrunk extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "clean list", "Random range (float/list)", "random step (± step / 2)", "probability of random (%)" };
 	private static final String[] OUTLET_ASSIST = new String[]{ "Drunked list"};	
@@ -27,14 +33,32 @@ public class ldrunk extends ej {
 	private String buf_name = null;
 	private int outputmode = 0;
 	
+	/**
+	 * Create a ldrunk object with specified maximum and step.
+	 * @param maxRange define the maximum of the range
+	 * @param stepSize define the step (randomness will be ± step/2) 
+	 */
 	public ldrunk(float maxRange, float stepSize) {
 		this(0f, maxRange, stepSize, 100f);
 	}
 
+	/**
+	 * Create a ldrunk object with specified minimum, maximum and step.
+	 * @param minRange define the minimum of the range
+	 * @param maxRange define the maximum of the range
+	 * @param stepSize define the step (randomness will be ± step/2) 
+	 */
 	public ldrunk(float minRange, float maxRange, float stepSize)	{
 		this(minRange, maxRange, stepSize, 100f);
 	}
 
+	/**
+	 * Create a ldrunk object with specified minimum, maximum, step and probapility.
+	 * @param minRange define the minimum of the range
+	 * @param maxRange define the maximum of the range
+	 * @param stepSize define the step (randomness will be ± step/2) 
+	 * @param proba probability of randomness (percentage)
+	 */
 	public ldrunk(float minRange, float maxRange, float stepSize, float proba)	{
 		declareTypedIO("alff", "l");
 		createInfoOutlet(true);
@@ -62,11 +86,21 @@ public class ldrunk extends ej {
 			outputmode = 0;
 	}
 	
+	/**
+	 * Trigger the randomisation.
+	 */
 	public void bang() {
 		if (inputList.length > 0)
 			doRandom();
 	}
 	
+	/**
+	 * If the floating point value arrives in the left inlet, try using drunk instead...
+	 * <p>If the floating point value arrives in the second inlet: set the minimum of the range 
+	 * <p>If the floating point value arrives in the third inlet: set the maximum of the range 
+	 * <p>If the floating point value arrives in the fourth inlet: set the step size
+	 * <p>If the floating point value arrives in the fifth inlet: set the probability
+	 */
 	public void inlet(float f) {
 		switch (getInlet()) {
 			case 0:
@@ -85,6 +119,9 @@ public class ldrunk extends ej {
 		}
 	}
 	
+	/**
+	 * List to be drunked.
+	 */
 	public void list(float[] args) {
 		switch (getInlet()) {
 			case 0:
@@ -93,7 +130,7 @@ public class ldrunk extends ej {
 			case 1:
 				setRange(args);
 				break;
-			default:
+			default: // meaning "other inputs"
 				error("ej.ldrunk: this inlet expects int/float");
 		}
 	}

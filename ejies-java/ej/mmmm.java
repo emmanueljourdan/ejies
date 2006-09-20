@@ -2,8 +2,8 @@
  *	ej.mmmm by Emmanuel Jourdan, Ircam — 12 2005
  *	output the min, median, mean, maximum on a int/float stream
  *
- *	$Revision: 1.5 $
- *	$Date: 2006/05/09 17:45:35 $
+ *	$Revision: 1.6 $
+ *	$Date: 2006/09/20 16:40:54 $
  */
 
 package ej;
@@ -11,6 +11,13 @@ package ej;
 import com.cycling74.max.*;
 import java.util.Arrays;
 
+/**
+ * min, median, mean and max on a stream of values. 
+ * @author jourdan
+ * @see "js ej.4m.js"
+ * @see ej
+ * @version $Revision: 1.6 $
+ */
 public class mmmm extends ej
 {
 	private static final String[] INLET_ASSIST = new String[]{ "int/float" };
@@ -27,16 +34,28 @@ public class mmmm extends ej
 	private boolean arrayFull = false;
 	
 	// si il n'y a pas d'arguments
+	/**
+	 * Create a mmmm with default window size (3).
+	 */
 	public mmmm() {
 		this(3, false);
 	}
 
 	// si il y a un argument
+	/**
+	 * Create a mmmm with specified window size.
+	 * @param ws window size
+	 */
 	public mmmm(int ws) {
 		this(ws, false);
 	}
 	
 	// il y a deux arguments
+	/**
+	 * Create a mmmm with specified window size and verbose mode
+	 * @param ws window size
+	 * @param verbeux verbose state (1 equals verbose, 0 silent).
+	 */
 	public mmmm(int ws, boolean verbeux) {
 		declareIO(1,4);
 		declareAttribute("window", null, "setWindow");
@@ -69,10 +88,17 @@ public class mmmm extends ej
 		}
 	}
 	
+	/**
+	 * Re-trigger.
+	 */
 	public void bang() {
 		sortie();
 	}
     
+	/**
+	 * Value to be analysed
+	 * @param f int/float
+	 */
 	public void inlet(float f) {
 		// reçoit les int et les float
 		addToList(f);
@@ -88,11 +114,18 @@ public class mmmm extends ej
 			a[idx++] = val;
 	}
 
+	/**
+	 * Reset the memory. <i>alias for reset().</i>
+	 */
 	public void clear() {
 		// clear is a synonym for reset();
 		reset();
 	}
 	
+	/**
+	 * Reset the memory.
+	 *
+	 */
 	public void reset() {
 		a = new float[window];
 		b = new float[window];

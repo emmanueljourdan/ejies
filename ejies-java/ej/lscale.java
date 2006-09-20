@@ -3,8 +3,8 @@
  *	scale for lists
  *
  *
- *	$Revision: 1.6 $
- *	$Date: 2006/08/11 15:10:49 $
+ *	$Revision: 1.7 $
+ *	$Date: 2006/09/20 16:40:54 $
  */
 
 package ej;
@@ -15,6 +15,12 @@ import com.cycling74.msp.MSPBuffer;
 import java.lang.reflect.*;// this time I use reflection instead of interface :-)
 import java.util.Arrays;
 
+/**
+ * Scale list.
+ * @author jourdan
+ * @see ej
+ * @version $Revision: 1.7 $
+ */
 public class lscale extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "List to be scaled", "Low input value", "High input value", "Low output value", "High output value", "Exponent" };
 	private static final String[] OUTLET_ASSIST = new String[]{ "Scaled list"};	
@@ -38,6 +44,10 @@ public class lscale extends ej {
 	private Class myClass;
 	private Method myMethod;
 	
+	/**
+	 * Create a lscale object.
+	 * @param args [xMin] [xMax] [yMin] [yMax] [exponantiel factor]
+	 */
 	public lscale(float[] args)	{
 		declareTypedIO("alffff", "l");
 		createInfoOutlet(true);
@@ -61,6 +71,9 @@ public class lscale extends ej {
 			outputmode = 0;
 	}
 	
+	/**
+	 * Re-Trigger the calculation.
+	 */
 	public void bang() {
 		calcule();
 	}
@@ -82,6 +95,15 @@ public class lscale extends ej {
 		return (clip ? 1: 0);
 	}
 
+	/**
+	 * Depending on the inlet number, a float value can do many things...
+	 * @param f if the value arrives in the leftmost inlet: set the value to be scaled, and trigger the calculation
+	 * @param f if the value arrives in the second inlet: set the xMin value
+	 * @param f if the value arrives in the third inlet: set the xMax value
+	 * @param f if the value arrives in the fourth inlet: set the yMin value
+	 * @param f if the value arrives in the fifth inlet: set the yMax value
+	 * @param f if the value arrives in the sixth inlet: set the exponential factor 
+	 */
 	public void inlet(float f) {
 		switch (getInlet()) {
 			case 0:
@@ -112,6 +134,12 @@ public class lscale extends ej {
 		}
 	}
 
+
+	/**
+	 * Define the list to be scaled.
+	 * @param args if the list arrives in the left inlet: set the list to be scaled and trigger the calculation
+	 * @param args if the list arrives in the second inlet: set the arguments for the scaling (xMin, xMax, yMin, yMax, Exponantial factor). 
+	 */
 	public void list(float[] args) {
 		switch (getInlet()) {
 			case 0:                // première entrée... liste à scaler
@@ -127,9 +155,9 @@ public class lscale extends ej {
 		}
 	}
 	
-	public void anything(String s, Atom[] args) {
-		error("ej.lscale: doesn't understand " + s + " " + Atom.toOneString(args));
-	}
+//	public void anything(String s, Atom[] args) {
+//		error("ej.lscale: doesn't understand " + s + " " + Atom.toOneString(args));
+//	}
 	
 	private void calculeChoice() {
 		// choix de la méthod pour le scaling
@@ -166,21 +194,25 @@ public class lscale extends ej {
 		}
 	}
 	
+	/** used internaly */
 	public void calculeNormal() {
 		for (int i = 0; i < resultat.length; i++)
 			resultat[i] = ((a[i] - xMin) / xRange) * yRange + yMin;
 	}
 	
+	/** used internaly */
 	public void calculeExp() {
 		for (int i = 0; i < resultat.length; i++)
 			resultat[i] = (float) Math.pow(((a[i] - xMin) / xRange), expValue) * yRange + yMin;
 	}
 	
+	/** used internaly */
 	public void calculeClip() {
 		for (int i = 0; i < resultat.length; i++)
 			resultat[i] = (float) Math.max(yClip[0], Math.min(Math.pow(((a[i] - xMin) / xRange), expValue) * yRange + yMin, yClip[1]));
 	}
 	
+	/** used internaly */
 	public void calculeExpClip() {
 		for (int i = 0; i < resultat.length; i++)
 			resultat[i] = (float) Math.max(yClip[0], Math.min(Math.pow(((a[i] - xMin) / xRange), expValue) * yRange + yMin, yClip[1]));

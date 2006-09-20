@@ -6,7 +6,20 @@
 
 package ej;
 
+
+/**
+ * ListDbtoa:
+ * interface used to perform ListDbtoa math operation
+ * @author jourdan
+ * @version $Revision: 1.2 $
+ * @see ej.lop
+ */
 public class ListDbtoa implements ListOperator {
+	/**
+	 * permform the ListDbtoa math operation 
+	 * @param a floating point value from the leftmost input
+	 * @param b list from the rightmost input
+	 */
 	public float[] operate(float a, float b[])
 	{
 		float[] resultat = new float[b.length];
@@ -17,6 +30,11 @@ public class ListDbtoa implements ListOperator {
 		return resultat;
 	}
 
+	/**
+	 * permform the ListDbtoa math operation 
+	 * @param a list from the leftmost input
+	 * @param b floating point value from the rightmost input
+	 */
 	public float[] operate(float a[], float b)
 	{
 		float[] resultat = new float[a.length];
@@ -27,6 +45,11 @@ public class ListDbtoa implements ListOperator {
 		return resultat;
 	}
 
+	/**
+	 * permform the ListDbtoa math operation 
+	 * @param a list from the leftmost input
+	 * @param b list from the rightmost input
+	 */
 	public float[] operate(float a[], float b[])
 	{
 		int listLength = Math.min(a.length, b.length);

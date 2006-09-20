@@ -2,8 +2,8 @@
  *	ej.urn by Emmanuel Jourdan, Ircam — 04 2005
  *	like the urn object but for larger range
  *
- *	$Revision: 1.3 $
- *	$Date: 2006/06/12 09:48:32 $
+ *	$Revision: 1.4 $
+ *	$Date: 2006/09/20 16:40:54 $
  */
 
 package ej;
@@ -11,6 +11,12 @@ package ej;
 //import com.cycling74.max.*;
 import java.util.Random; 
 
+/**
+ * random sequence generator (like the standart urn object)
+ * @author jourdan
+ * @see ej
+ * @version $Revision: 1.4 $
+ */
 public class urn extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "bang Generates Random Number", "Set Range of Random Number" };
 	private static final String[] OUTLET_ASSIST = new String[]{ "Random Number Output", "bang if All Numbers in Range Chosen" };
@@ -20,10 +26,19 @@ public class urn extends ej {
 	private int[] urnValues; // tableau qui stocke les valeurs possibles
 	private boolean autoclear = false;
 	
+	/**
+	 * Create a urn object with specified range
+	 * @param size range (output value will be from 0 to range-1)
+	 */
 	public urn(int size) {
 		this(size, 0);
 	}
 	
+	/**
+	 * Create a urn object with specified range and seed
+	 * @param size range (output value will be from 0 to range-1)
+	 * @param seed seed
+	 */
 	public urn(int size, int seed) {
 		declareTypedIO("bi", "ib");
 		createInfoOutlet(false);
@@ -36,6 +51,9 @@ public class urn extends ej {
 		setOutletAssist(OUTLET_ASSIST);
 	}
 	
+	/**
+	 * Generate the next random value.
+	 */
 	public void bang() {
 		if (howManyLeft != 0)
 			urner();
@@ -48,11 +66,18 @@ public class urn extends ej {
 		}
 	}
 	
+	/**
+	 * Define a new range.
+	 * @param i range (output value will be from 0 to range-1)
+	 */
 	public void inlet(int i) {
 		if (getInlet() == 1)
 			urnInit(i);
 	}
 	
+	/**
+	 * Reset the values (ready to start a new sequence)
+	 */
 	public void clear() {
 		/*
 		 * Il n'est pas nécessaire de réinitialiser le tableau,
@@ -60,11 +85,18 @@ public class urn extends ej {
 		 */
 		howManyLeft = urnSize;
 	}
-	
+
+	/**
+	 * Set the seed
+	 * @param seed integer value sets the seed.
+	 */
 	public void seed(int seed) {
 		setSeed(seed);
 	}
 	
+	/**
+	 * Display a message in the Max window of the memory utilisation.
+	 */
 	public void sizeInfo() {
 		post("ej.urn: using " + urnSize * 4 + " bytes.");
 	}
@@ -81,10 +113,11 @@ public class urn extends ej {
 
 		// swap if needed...
 		// http://en.wikipedia.org/wiki/Xor_swap_algorithm
+		// I must admit is really not clear :-)
 		if (rIdx != howManyLeft) {
-			urnValues[rIdx] ^= (int) urnValues[howManyLeft];
-			urnValues[howManyLeft] ^= (int) urnValues[rIdx];
-			urnValues[rIdx] ^= (int) urnValues[howManyLeft];
+			urnValues[rIdx] ^= urnValues[howManyLeft];
+			urnValues[howManyLeft] ^= urnValues[rIdx];
+			urnValues[rIdx] ^= urnValues[howManyLeft];
 		}
 	}
 	

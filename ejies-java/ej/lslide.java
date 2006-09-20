@@ -3,8 +3,8 @@
  *	slide for lists
  *
  *
- *	$Revision: 1.8 $
- *	$Date: 2006/08/09 14:37:14 $
+ *	$Revision: 1.9 $
+ *	$Date: 2006/09/20 16:40:54 $
  */
 
 package ej;
@@ -12,6 +12,13 @@ package ej;
 import com.cycling74.max.*;
 import com.cycling74.msp.MSPBuffer;
 
+/**
+ * smooth a list.
+ * @author jourdan
+ * @see ej
+ * @see standart <code>slide, slide~, jit.slide</code> objects
+ * @version $Revision: 1.9 $
+ */
 public class lslide extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "List to be slided :-)", "Slide Up", "Slide Down" };
 	private static final String[] OUTLET_ASSIST = new String[]{ "Slided list"};	
@@ -25,6 +32,11 @@ public class lslide extends ej {
 	private String buf_name = null;
 	private int outputmode = 0;
 	
+	/**
+	 * Create a lslide object with arguments.
+	 * @param slideUp slide up value
+	 * @param slideDown slide down value
+	 */
 	public lslide(float slideUp, float slideDown)	{
 		declareTypedIO("aff", "l");
 		createInfoOutlet(true);
@@ -47,6 +59,9 @@ public class lslide extends ej {
 			outputmode = 0;
 	}
 	
+	/**
+	 * Re-Trigger the smoothing.
+	 */
 	public void bang() {
 		calculeChoice();
 	}
@@ -69,6 +84,12 @@ public class lslide extends ej {
 		return slide_down;
 	}
 
+	/**
+	 * Change the slide up/down value
+	 * @param f if the value arrives in the left inlet: try using the <code>slide</code> object instead.
+	 * @param f if the value arrives in the second inlet: change the slide up value
+	 * @param f if the value arrives in the third inlet: change the slide down value
+	 */
 	public void inlet(float f) {
 		switch (getInlet()) {
 			case 0:
@@ -84,6 +105,11 @@ public class lslide extends ej {
 		}
 	}
 
+	/**
+	 * The list to be smoothed.
+	 * @param args if the list arrives in the left inlet: the list will be smoothed.
+	 * @param args if the list arrives in the second inlet: the first item of the list defines the slide up value, the second defines the slide down.
+	 */
 	public void list(float[] args) {
 		switch (getInlet()) {
 			case 0:
@@ -99,9 +125,10 @@ public class lslide extends ej {
 		}
 	}
 	
-	public void anything(String s, Atom[] args) {
-		error("ej.lslide: doesn't understand " + s + " " + Atom.toOneString(args));
-	}
+	
+//	public void anything(String s, Atom[] args) {
+//		error("ej.lslide: doesn't understand " + s + " " + Atom.toOneString(args));
+//	}
 	
 	private void calculeChoice() {
 		// redimensionne tout le monde

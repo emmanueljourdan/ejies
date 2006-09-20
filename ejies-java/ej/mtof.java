@@ -2,14 +2,20 @@
  *	ej.mtof by Emmanuel Jourdan, Ircam Ñ 02 2005
  *	MIDI to Frequency (with tuning adjustment)
  *
- *	$Revision: 1.5 $
- *	$Date: 2006/08/09 14:37:14 $
+ *	$Revision: 1.6 $
+ *	$Date: 2006/09/20 16:40:54 $
  */
 
 package ej;
 
 import com.cycling74.max.*;
 
+/**
+ * Convert MIDI to frequency. This works for list, and allows you to define tuning and pitch reference.   
+ * @author jourdan
+ * @see ej
+ * @version $Revision: 1.6 $
+ */
 public class mtof extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "MIDI note number in (int/float/list)" };
 	private static final String[] OUTLET_ASSIST = new String[]{ "Frequency out"};
@@ -19,10 +25,19 @@ public class mtof extends ej {
 	private float tuning = 440;
 	private int pitch_reference = 69;
 	
-	public mtof(float f) {
-		this(f, 69);
+	/**
+	 * Create a mtof object with specified tuning.
+	 * @param f tuning frequency.
+	 */
+	public mtof(float tuning) {
+		this(tuning, 69);
 	}
 	
+	/**
+	 * Create a mtof object with specified tuning and pitch reference.
+	 * @param tuning tuning frequency
+	 * @param pitch_reference MIDI pitch reference
+	 */
 	public mtof(float tuning, float pitch_reference) {
 		declareTypedIO("a", "l");
 		createInfoOutlet(true);
@@ -56,9 +71,9 @@ public class mtof extends ej {
 		return pitch_reference;
 	}
 	
-	public void bang() {
-		error("ej.mtof: doesn't understand bang");
-	}
+//	public void bang() {
+//		error("ej.mtof: doesn't understand bang");
+//	}
 	
 	public void inlet(float f) {
 		outlet(0, (float) (tuning * Math.pow(2,(f - pitch_reference)/12)) );
@@ -72,7 +87,7 @@ public class mtof extends ej {
 		outlet(0, list);
 	}
 	
-	public void anything(String s, Atom[] args) {
-		error("ej.mtof: doesn't understand " + s + " " + Atom.toOneString(args));
-	}	
+//	public void anything(String s, Atom[] args) {
+//		error("ej.mtof: doesn't understand " + s + " " + Atom.toOneString(args));
+//	}	
 }

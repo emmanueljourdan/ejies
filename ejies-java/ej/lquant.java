@@ -2,8 +2,8 @@
  *	ej.lquant by Emmanuel Jourdan, Ircam — 08 2005
  *	Quantize a list
  *
- *	$Revision: 1.3 $
- *	$Date: 2006/08/11 11:06:21 $
+ *	$Revision: 1.4 $
+ *	$Date: 2006/09/20 16:40:54 $
  */
 
 package ej;
@@ -14,6 +14,11 @@ import java.util.LinkedList;
 import com.cycling74.max.*;
 import com.cycling74.msp.MSPBuffer;
 
+/**
+ * Quantize a list (aka rounding to the nearest subdivision).
+ * @author jourdan
+ * @see ej
+ */
 public class lquant extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "List to be quantized", "Quantzing list"};
 	private static final String[] OUTLET_ASSIST = new String[]{ "Quantized list"};	
@@ -26,11 +31,17 @@ public class lquant extends ej {
 	private String buf_name = null;
 	private int outputmode = 0;
 	
-	
+	/**
+	 * Create a ej.lquant object with rounding default value (1.)
+	 */
 	public lquant() {
 		this(new float[] { 1f });
 	}
 	
+	/**
+	 * Create a lquant object with the defined value(s)
+	 * @param args set the quantification list
+	 */
 	public lquant(float[] args) {
 		declareTypedIO("al", "l");
 		createInfoOutlet(false);
@@ -51,10 +62,18 @@ public class lquant extends ej {
 			outputmode = 0;
 	}
 	
+	/**
+	 * Re-Trigger the calculation.
+	 */
 	public void bang() {
 		calcule();
 	}
 	
+	/**
+	 * Do something depending on the inlet number...
+	 * @param f if the value arrives in the left inlet: quantize that value
+	 * @param f if the falue arrives in the right inlet: set the new quantizing factors
+	 */
 	public void inlet(float f) {
 		switch (getInlet()) {
 			case 0:
@@ -67,6 +86,11 @@ public class lquant extends ej {
 		}
 	}
 
+	/**
+	 * Calculate or set the quantizing factors, depending on the inlet number
+	 * @param args if the list arrives in the left inlet: quantize that list
+	 * @param args if the list arrives in the right inlet: set the new quantizing factors
+	 */
 	public void list(float[] args) {
 		switch (getInlet()) {
 			case 0:
@@ -79,6 +103,11 @@ public class lquant extends ej {
 		}
 	}
 	
+	/**
+	 * Define the list to be quantized, without triggering the calculation.
+	 * @param args if the list arrives in the left inlet: store the list to be quantized
+	 * @param args if the list arrives in the right inlet: set the new quantizing factors
+	 */
 	public void set(float[] args) {
 		switch (getInlet()) {
 		case 0:
@@ -88,9 +117,9 @@ public class lquant extends ej {
 		}
 	}
 	
-	public void anything(String s, Atom[] args) {
-		error("ej.lquant: doesn't understand " + s + " " + Atom.toOneString(args));
-	}
+//	public void anything(String s, Atom[] args) {
+//		error("ej.lquant: doesn't understand " + s + " " + Atom.toOneString(args));
+//	}
 	
 	synchronized private void calcule() {
 		for (int i = 0; i < resultat.length; i++) {
@@ -124,11 +153,8 @@ public class lquant extends ej {
 		return smallestVal;
 	}
 	
-
-	/**
-	 * Find the 
-	 * @param args <code>array</code> to be optimized
-	 */
+	// Optimize the quantisation factors to reduce the number of calculation. I'm particulary proud of that part...
+	// cherche les plus grand communs dénominateurs
 	private void setQuantFactors(float[] args) {
 		Arrays.sort(args);
 		Atom[] tmp = Atom.newAtom(args);

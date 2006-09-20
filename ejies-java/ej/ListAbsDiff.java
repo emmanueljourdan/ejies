@@ -6,7 +6,20 @@
 
 package ej;
 
+
+/**
+ * ListAbsDiff:
+ * interface used to perform ListAbsDiff math operation
+ * @author jourdan
+ * @see ej.lop
+ * @version $Revision: 1.6 $
+ */
 public class ListAbsDiff implements ListOperator {
+	/**
+	 * permform the ListAbsDiff math operation 
+	 * @param a floating point value from the leftmost input
+	 * @param b list from the rightmost input
+	 */
 	public float[] operate(float a, float b[])
 	{
 		float[] resultat = new float[b.length];
@@ -17,6 +30,11 @@ public class ListAbsDiff implements ListOperator {
 		return resultat;
 	}
 
+	/**
+	 * permform the ListAbsDiff math operation 
+	 * @param a list from the leftmost input
+	 * @param b floating point value from the rightmost input
+	 */
 	public float[] operate(float a[], float b)
 	{
 		float[] resultat = new float[a.length];
@@ -27,6 +45,11 @@ public class ListAbsDiff implements ListOperator {
 		return resultat;
 	}
 
+	/**
+	 * permform the ListAbsDiff math operation 
+	 * @param a list from the leftmost input
+	 * @param b list from the rightmost input
+	 */
 	public float[] operate(float a[], float b[])
 	{
 		int listLength = Math.min(a.length, b.length);

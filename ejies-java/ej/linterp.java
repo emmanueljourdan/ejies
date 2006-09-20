@@ -3,8 +3,8 @@
  *	simple list interpolator
  *
  *
- *	$Revision: 1.13 $
- *	$Date: 2006/08/09 14:37:14 $
+ *	$Revision: 1.14 $
+ *	$Date: 2006/09/20 16:40:54 $
  */
 
 package ej;
@@ -12,6 +12,13 @@ package ej;
 import com.cycling74.max.*;
 import com.cycling74.msp.*;
 
+/**
+ * list interpolator
+ * @author jourdan
+ * @see ej
+ * @see ej.lop
+ * @version $Revision: 1.14 $
+ */
 public class linterp extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "interpolation factor (0. = A -> 1. = B)", "List A", "List B" };
 	private static final String[] INLET_ASSIST_QUAD = new String[]{ "interpolation factor (list)", "List A", "List B", "List C", "List D" };
@@ -28,6 +35,10 @@ public class linterp extends ej {
 	private byte mode = 0;
 	private boolean autotrigger = false;
 	
+	/**
+	 * Create a linterp object.
+	 * @param args none or "quad", "cube", "weight" specify linterp behavior
+	 */
 	public linterp(Atom[] args)	{
 		if (args.length > 0 && args[0].isString()) {
 			// premier argument est une chaine
@@ -99,6 +110,9 @@ public class linterp extends ej {
 		return theString;
 	}
 	
+	/**
+	 * Re-Trigger the calculation.
+	 */
 	public void bang() {
 		calcule();
 	}
@@ -115,6 +129,10 @@ public class linterp extends ej {
 		}
 	}
 	
+	/**
+	 * Define "where" we are in the interpolation (mode 1D only).
+	 * @param args
+	 */
 	public void inlet(float args) {
 		switch (getInlet()) {
 			case 0:
@@ -128,6 +146,11 @@ public class linterp extends ej {
 		if (autotrigger) calcule();
 	}
 	
+	/**
+	 * If the list arrives from the left most inlet: define "where" we are in the interpolation.
+	 * <p>else set the list to be interpolated.
+	 * @param list to be interpolated or list of "position"
+	 */
 	public void list(float[] args) {
 		switch (getInlet()) {
 			case 0:

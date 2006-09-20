@@ -1,8 +1,8 @@
 /*
  *	ej.l2buffer by Emmanuel Jourdan, Ircam Ñ 06 2005
  *
- *	$Revision: 1.3 $
- *	$Date: 2006/08/07 14:05:02 $
+ *	$Revision: 1.4 $
+ *	$Date: 2006/09/20 16:40:54 $
  */
 
 package ej;
@@ -10,6 +10,11 @@ package ej;
 import com.cycling74.max.*;
 import com.cycling74.msp.*;
 
+/**
+ * store a list into a buffer~
+ * @author jourdan
+ * @see ej
+ */
 public class l2buffer extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "Samples values to write", "Channel" };
 
@@ -17,6 +22,11 @@ public class l2buffer extends ej {
 	private int channel = 1;
 	private boolean isDblClickAllowed = false; // dblclick() seems to be triggered too often!
 	
+	/**
+	 * create a l2buffer object
+	 * @param args 1st argument is the name of the buffer~
+	 * @param args 2nd argument is the channel index (starting at 1)
+	 */
 	public l2buffer(Atom[] args)	{
 		declareIO(2, 0);
 		
@@ -40,6 +50,9 @@ public class l2buffer extends ej {
 		isDblClickAllowed = true;
 	}
 
+	/**
+	 * Post some information about the object to the Max window when you dble clik on the object.
+	 */
 	public void dblclick() {
 		if (isDblClickAllowed) {
 			post("ej.l2buffer");
@@ -54,25 +67,42 @@ public class l2buffer extends ej {
 		}
 	}
 	
+	/**
+	 * Store the list to the buffer.
+	 * @param args the list
+	 */
 	public void list(float[] args) {
 		writeToBuffer(args);
 	}
 
+	/**
+	 * When coming form the right inlet, set the channel index.
+	 * 	@param i channel index (starting at 1)
+	 */
 	public void inlet(int i) {
 		if (getInlet() == 1)
 			setChannel(i);
 	}
 	
+	/**
+	 * The message <i>set</i> followed by a symbol specify the name of the buffer~.
+	 * @param s name of the buffer~
+	 */
 	public void set(String s) {
 		setBufName(s);
 	}
 	
+	/**
+	 * Set the buffer~ and the channel at once.
+	 * @param s name of the buffer~
+	 * @param i channel index (starting at 1)
+	 */
 	public void set(String s, int i) {
 		setBufName(s);
 		setChannel(i);
 	}
 	
-	public void setBufName(String s) {
+	private void setBufName(String s) {
 		buf_name = s;
 	}
 
@@ -84,6 +114,8 @@ public class l2buffer extends ej {
 	}
 	
 	private void writeToBuffer(float[] args) {
-		MSPBuffer.poke(buf_name, channel, args);
+		if (buf_name != null && args.length > 0) {
+			MSPBuffer.poke(buf_name, channel, args);
+		}
 	}
 }

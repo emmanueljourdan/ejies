@@ -6,7 +6,20 @@
 
 package ej;
 
+
+/**
+ * ListLT:
+ * interface used to perform ListLT math operation
+ * @author jourdan
+ * @version $Revision: 1.6 $
+ * @see ej.lop
+ */
 public class ListLT implements ListOperator {
+	/**
+	 * permform the ListLT math operation 
+	 * @param a floating point value from the leftmost input
+	 * @param b list from the rightmost input
+	 */
 	public float[] operate(float a, float b[])
 	{
 		float[] resultat = new float[b.length];
@@ -17,6 +30,11 @@ public class ListLT implements ListOperator {
 		return resultat;
 	}
 
+	/**
+	 * permform the ListLT math operation 
+	 * @param a list from the leftmost input
+	 * @param b floating point value from the rightmost input
+	 */
 	public float[] operate(float a[], float b)
 	{
 		float[] resultat = new float[a.length];
@@ -27,6 +45,11 @@ public class ListLT implements ListOperator {
 		return resultat;
 	}
 
+	/**
+	 * permform the ListLT math operation 
+	 * @param a list from the leftmost input
+	 * @param b list from the rightmost input
+	 */
 	public float[] operate(float a[], float b[])
 	{
 		int listLength = Math.min(a.length, b.length);

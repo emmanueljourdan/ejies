@@ -2,14 +2,20 @@
  *	ej.lchange by Emmanuel Jourdan, Ircam — 12 2005
  *	aware of list change
  *
- *	$Revision: 1.8 $
- *	$Date: 2006/08/29 15:46:17 $
+ *	$Revision: 1.9 $
+ *	$Date: 2006/09/20 16:40:54 $
  */
 
 package ej;
 
 import com.cycling74.max.*;
 
+/**
+ * aware of list change
+ * @author jourdan
+ * @see ej
+ * @version $Revision: 1.9 $
+ */
 public class lchange extends ej
 {
 	private static final String[] INLET_ASSIST = new String[]{ "Anything to be tested" };
@@ -22,18 +28,28 @@ public class lchange extends ej
 	private Atom[] lastThing = new Atom[0]; // c'est là qu'on met la dernière chose
 	private int mode = 0;
 	
-	public lchange(Atom[] args)
+	/**
+	 * create a lchange object
+	 * @param mode attribute to set the lchange's behavior <i>(thru, int, bang)</i>
+	 */
+	public lchange(Atom[] mode)
 	{
 		declareInlets(new int[]{DataTypes.ALL});
 		declareOutlets(new int[]{DataTypes.ALL});
 		//		createInfoOutlet(false); // on en a besoin pour l'attribut
 
+		if (mode.length > 0)
+			setMode(mode);
+		
 		declareAttribute("mode", null, "setMode");
 
 		setInletAssist(INLET_ASSIST);
-		setOutletAssist(OUTLET_ASSIST[mode]);
+		setOutletAssist(OUTLET_ASSIST[this.mode]);
 	}
 		
+	/**
+	 * Anything to be test, can be symbol or list...
+	 */
 	public void anything(String s, Atom[] args)
 	{
 		// si la longueur est différente

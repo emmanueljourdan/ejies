@@ -2,13 +2,19 @@
  *	ej.x2dx by Emmanuel Jourdan, Ircam Ñ 08 2005
  *	the famous x->dx
  *
- *	$Revision: 1.1 $
- *	$Date: 2006/08/08 16:39:59 $
+ *	$Revision: 1.2 $
+ *	$Date: 2006/09/20 16:40:54 $
  */
 
 package ej;
 import com.cycling74.max.*;
 
+/**
+ * extract deltas from a list of values.
+ * @author jourdan
+ * @see ej
+ * @version $Revision: 1.2 $
+ */
 public class x2dx extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "List" };
 	private static final String[] OUTLET_ASSIST = new String[]{ "intervals"};	
@@ -16,6 +22,10 @@ public class x2dx extends ej {
 	private double[] input = new double[1];
 	private double[] resultat = new double[0];
 	
+	/**
+	 * Create x2dx object.
+	 * @param args
+	 */
 	public x2dx(Atom[] args) {
 		declareTypedIO("l", "l");
 		createInfoOutlet(false);
@@ -47,9 +57,9 @@ public class x2dx extends ej {
 		input = args;
 	}
 		
-	public void anything(String s, Atom[] args) {
-		error("ej.x2dx: doesn't understand " + s + " " + Atom.toOneString(args));
-	}
+//	public void anything(String s, Atom[] args) {
+//		error("ej.x2dx: doesn't understand " + s + " " + Atom.toOneString(args));
+//	}
 	
 	private void calcule() {
 		resultat = new double[input.length - 1];

@@ -4,13 +4,18 @@
  *
  *  Many thanks to Ben Nevile for performances enhacement.
  *
- *	$Revision: 1.22 $
- *	$Date: 2006/06/27 18:14:21 $
+ *	$Revision: 1.23 $
+ *	$Date: 2006/09/20 16:40:54 $
  */
 
 package ej;
 import com.cycling74.max.*;
 
+/**
+ * list operator: perform calculation on lists.
+ * @author jourdan
+ * @see ej
+ */
 public class lop extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "Left Operand", "Right Operand" };
 	private static final String[] INLET_ASSIST_UNARY = new String[]{ "List to be processed", "Nothing here, for this operator" };
@@ -34,6 +39,10 @@ public class lop extends ej {
 	private boolean isUnary = false;
 	private ListOperator myListOperator;
 
+	/**
+	 * Create a lop object. The optional arguments define the operand and the default values.
+	 * @param args operand, optionaly followed by the list of the default values (like the second inlet).
+	 */
 	public lop(Atom[] args)	{
 		declareTypedIO("al", "l");
 		createInfoOutlet(true);
@@ -216,12 +225,19 @@ public class lop extends ej {
 		// else : scalarmode est true mais l'une des deux listes n'est pas définie
 	}
 	
+	/**
+	 * Re-Trigger the calculation
+	 */
 	public void bang() {
 		if ( aSet == true || bSet == true) {
 				calcule();
 		}
 	}
 
+	/**
+	 * Apply the calculation on the floating point value, then trigger the calculation if the value arrive in the left inlet or if the <i>@autotrigger</i> mode is set to 1
+	 * @param f int or float value 
+	 */
 	public void inlet(float f) {
 		if (getInlet() == 1) {
 			bSet = true;
@@ -236,6 +252,9 @@ public class lop extends ej {
 		}
 	}
 	
+	/**
+	 * Set the value, and then trigger the calculation (if the value arrive in the left inlet, or if the <i>@autotrigger</i> mode is set to 1).
+	 */
 	public void list(float[] args) {
 		// beaucoup plus efficace que list(Atom[] args)
 		if (getInlet() == 1) {
@@ -251,11 +270,14 @@ public class lop extends ej {
 		}
 	}
 	
+	/**
+	 * Send the list of the availlable operators to the dumpout outlet.
+	 */
 	public void getops() {
 		outlet(1, "ops", Atom.newAtom(OPERATORS_LIST));
 	}
 
-	public void anything(String s, Atom[] args) {
-		error("ej.lop: doesn't understand " + s + " " + Atom.toOneString(args));
-	}
+//	public void anything(String s, Atom[] args) {
+//		error("ej.lop: doesn't understand " + s + " " + Atom.toOneString(args));
+//	}
 }
