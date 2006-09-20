@@ -1,4 +1,5 @@
 max shortcut function js ej.lui.js ej.function.js;
+max shortcut ej.function js ej.lui.js ej.function.js;
 max shortcut led js ej.lui.js ej.led.js;
 max shortcut numbox js ej.lui.js ej.numbox.js;
 max shortcut 4m mxj ej.mmmm;
