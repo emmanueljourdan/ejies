@@ -2,8 +2,8 @@
  *	ej.fplay by Emmanuel Jourdan, Ircam — 04 2006
  *	function player
  *
- *	$Revision: 1.23 $
- *	$Date: 2006/08/08 17:10:51 $
+ *	$Revision: 1.24 $
+ *	$Date: 2006/09/20 16:41:28 $
  */
 
 /**
@@ -22,6 +22,13 @@ import java.util.regex.Pattern;
 
 import com.cycling74.max.*;
 
+
+/**
+ * Multi function editor (like ej.function.js without the graphics)
+ * @version $Revision: 1.24 $
+ * @author jourdan
+ * @see "ej.function.js"
+ */
 public class fplay extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "quite anything..."};
 	private static final String[] OUTLET_ASSIST = new String[]{ "interpolated Y for input X", "points in line~ format", "dump message output", "sync outlet"	};
@@ -42,13 +49,24 @@ public class fplay extends ej {
 
 //	public static ArrayList clipboard = new ArrayList();
 	
+	/**
+	 * create a fplay object
+	 * @param args <i>optional</i> an int specify the number of functions
+	 */
 	public fplay(Atom[] args) {
 		declareTypedIO("a", "aaa");
 		createInfoOutlet(true);
-
+		
 		declareAttribute("nbfunctions", "getNbFunctions", "setNbFunctions");
 		declareAttribute("autosustain");
 		declareAttribute("outputmode");	// pour sortie line~
+
+		if (args.length >= 1) {
+			if (args[0].isInt())
+				nbfunctions = args[0].getInt();
+			else
+				bail("bad argument for ej.fplay: must be an int!");
+		}
 
 		setInletAssist(INLET_ASSIST);
 		setOutletAssist(OUTLET_ASSIST);
@@ -57,6 +75,9 @@ public class fplay extends ej {
 		isDblClickAllowed = true;
 	}
 	
+	/**
+	 * Display functions informations when you double click on the object
+	 */
 	public void dblclick() {
 		if (isDblClickAllowed) {
 			// surdéfinition de ej.dblclick()
@@ -74,23 +95,43 @@ public class fplay extends ej {
 	}
 	
 	// standart messages
+	/**
+	 * Output all breakpoints of the current function in line format (initial value followed by a list of deltatime-value pairs)
+	 */
 	public void bang() {
 		((Courbe) Courbes.get(current)).line();
 	}
 
+	/**
+	 * Send the interpolated y for this x for the current function at left outlet
+	 * @param f X value
+	 */
 	public void inlet(float f) {
 		myInterp(current, f);
 	}
 
+	/**
+	 * Add or move a point
+	 * @param args
+	 * <br>2 elements (x, y): add the new point at the location <i>x y</i>
+	 * <br>3 elements (idx, x, y): move the point <i>idx</i> to the location <i>x y</i>. idx starts at 0.
+	 */
 	public void list(float[] args) {
 		listOfNumbers(current, args);
 	}
 
+	/**
+	 * Look at any message to know if it's a name of a bpf, or a method's name of this ej.fplay object 
+	 */
 	public void anything(String s, Atom[] args) {
 		isAll = false;
 		parseArgs(name2idx(s), args);
 	}
 	
+	/**
+	 * Send a message to eveery bpf
+	 * @param args quite any message
+	 */
 	public void all(Atom[] args) {
 		isAll = true;	// used to make the differences with anything
 		for (int c = 0; c < Courbes.size(); c++)
@@ -98,50 +139,91 @@ public class fplay extends ej {
 	}
 
 	// add/remove functions 
+	/**
+	 * Method used to add a bpf to the object, then send the names of the bpf to the dumpout outlet in u(bu)menu format
+	 */
 	public void addfunction() {
 		this.addfunction("function" + Courbes.size());
 		nbfunctions++;
 		getname();
 	}
 	
+	/**
+	 * Method used to add a bpf to the object, then send the names of the bpf to the dumpout outlet in u(bu)menu format
+	 * @param s name of the bpf
+	 */
 	public void addfunction(String s) {
 		Courbes.add(new Courbe(s));
 		nbfunctions++;
 		getname();
 	}
+
+	/**
+	 * inert a bpf at the current location, then send the names of the bpf to the dumpout outlet in u(bu)menu format
+	 */
+	public void insertfunction() {
+		Courbes.add(current, new Courbe("function" + Courbes.size()));
+		nbfunctions++;
+		getname();
+	}
 	
+	/**
+	 * insert a bpf at the current location, then send the names of the bpf to the dumpout outlet in u(bu)menu format
+	 * @param s name of the bpf
+	 */
 	public void insertfunction(String s) {
 		Courbes.add(current, new Courbe(s));
 		nbfunctions++;
 		getname();
 	}
 
+	/**
+	 * Delete a bpf, then send the names of the bpf to the dumpout outlet in u(bu)menu format
+	 * @param i bpf index (start at 0)
+	 */
 	public void deletefunction(int i) {
 		if (i >= 0 && i < Courbes.size()) {
 			Courbes.remove(i);
 			nbfunctions--;
+			getname();
 		}
 	}
-	
+
+	/**
+	 * Delete a bpf, then send the names of the bpf to the dumpout outlet in u(bu)menu format
+	 * @param s bfp name
+	 */
 	public void deletefunction(String s) {
 		int tmp = name2idx(s);
 		if (tmp != -1) {
 			Courbes.remove(tmp);
 			nbfunctions--;
+			getname();
 		} else
 			error("function named " + s + " doesn't exist");
 	}
 	
+	/**
+	 * Fast method to add points
+	 * @param val list of pairs <i>x y</i>
+	 */
 	public void addpoints(double[] val) {
 		((Courbe) Courbes.get(current)).addPoints(val);
 	}
 	
+	/**
+	 * Display a dialog box to select the file to read.
+	 */
 	public void read() {
 		String s;
 		if ((s = MaxSystem.openDialog("choose a ej.function or ej.fplay file")) != null)
 			read(MaxSystem.maxPathToNativePath(s));
 	}
-	
+
+	/**
+	 * Attempt to read a text file
+	 * @param s file name (if in search path), or file path
+	 */
 	public void read(String s) {
         String filePath = MaxSystem.locateFile(s);
          if (filePath == null) {
@@ -160,12 +242,19 @@ public class fplay extends ej {
          }			
 	}
 
+	/**
+	 * Display a dialog box to write the contents of the object as a text file.
+	 */
 	public void write() {
 		String s;
 		if ((s = MaxSystem.saveAsDialog("choose a ej.function or ej.fplay file","myfunctions.txt")) != null)
 			write(MaxSystem.maxPathToNativePath(s));
 	}
 	
+	/**
+	 * Write the contents of the objects as a text file
+	 * @param s file name (if in the search path), file path
+	 */
 	public void write(String s) {
 		String filePath = null;
 		if (s.indexOf("/") == -1)	// si il n'y a pas de slash, il 
@@ -181,16 +270,27 @@ public class fplay extends ej {
 				Atom.newAtom(writing(filePath)) });
 	}
 
+	/**
+	 * Change the current function to the next one availlable, then send a message to the dumpout outlet.
+	 */
 	public void fswitch() {
 		current = ++current % getNbFunctions();
 		outlet(DUMPOUT_OUTLET, "display", current);
 	}
-	
+
+	/**
+	 * Change the current bpf to... 
+	 * @param idx index of the new current bpf
+	 */
 	public void display(int idx) {
 		if (idx >= 0 && idx < getNbFunctions())
 			current = idx;
 	}
 
+	/**
+	 * Change the current bpf to... 
+	 * @param s name of the new current bpf
+	 */
 	public void display(String s) {
 		for (int c = 0; c < Courbes.size(); c++) {
 			if ((((Courbe) Courbes.get(c)).getName()).equals(s)) {
@@ -200,105 +300,218 @@ public class fplay extends ej {
 		}
 	}
 
+	/**
+	 * Send the y value of the point (<i>index</i>) to the leftmost outlet.
+	 * @param i index of the point
+	 */
 	public void nth(int i) {
 		myNth(current, i);
 	}
 	
+	/**
+	 * The next message continues a list output from the sustain point where the output of the last bang or next message ended.
+	 */
 	public void next() {
 		((Courbe) Courbes.get(current)).next();
 	}
 
+	/**
+	 * send all points out dump outlet as pair of <i>w y </i>
+	 */
 	public void dump() {
 		((Courbe) Courbes.get(current)).dump();
 	}
 	
+	/**
+	 * Send all points to a receive object as an unique list of pairs of <i>w y </i>
+	 */
 	public void listdump() {
 		((Courbe) Courbes.get(current)).listDump();
 	}
 
+	/**
+	 * Send all points to a receive object as pair of <i>w y </i>
+	 * @param s name of the receive object you want to send it to.
+	 */
 	public void dump(String s) {
 		// methode dump qui envoie vers un send
 		((Courbe) Courbes.get(current)).dump(s);
 	}
 	
+	/**
+	 * Send all points to a receive object as an unique list of pairs of <i>w y </i>
+	 * @param s name of the receive object you want to send it to.
+	 */
 	public void listdump(String s) {
 		// methode listdump qui envoie vers un send
 		((Courbe) Courbes.get(current)).listDump(s);
 	}
 	
+	/**
+	 * Remove all the points of the current bpf
+	 */
 	public void clear() {
 		((Courbe) Courbes.get(current)).clearAllPoints();
 	}
 	
+	/**
+	 * Remove the specified points
+	 * @param idx index (starting at 0) of the points of the current bpf to be deleted
+	 */
 	public void clear(int[] idx) {
 		((Courbe) Courbes.get(current)).clearPoints(idx);
 	}
 
-	public void name(String args) {
-		myName(current, args);
+	/**
+	 * Change the name of the current bpf.
+	 * @param name new name for the function
+	 */
+	public void name(String name) {
+		myName(current, name);
 	}
 
+	/**
+	 * Change the names of the functions
+	 * @param names names of the functions
+	 */
 	public void name(String[] names) {
 		for (int i = 0; i < Math.min(names.length, nbfunctions); i++)
 			myName(i, names[i]);
 	}
 	
+	/**
+	 * Change the domain (x axis) dimensions
+	 * @param max maximum value (minimum will be 0)
+	 */
 	public void domain(double max) {
 		((Courbe) Courbes.get(current)).domain(0, max);
 	}
 	
+	/**
+	 * Change the domain (x axis) dimensions
+	 * @param min minimum value
+	 * @param max maximum value
+	 */
 	public void domain(double min, double max) {
 		((Courbe) Courbes.get(current)).domain(min, max);
 	}
 
+	/**
+	 * Change the range (y axis) dimensions
+	 * @param min minimum value
+	 * @param max maximum value
+	 */
 	public void range(double min, double max) {
 		((Courbe) Courbes.get(current)).range(min, max);
 	}
 	
+	/**
+	 * change the domain (change the point's values to fit the domain)
+	 * @param max domain maximum value (minimum will be 0)
+	 */
 	public void setdomain(double max) {
 		((Courbe) Courbes.get(current)).setDomain(0, max);
 	}
 	
+	/**
+	 * change the domain (change the point's values to fit the domain)
+	 * @param min domain minimum value
+	 * @param max domain maximum value
+	 */
 	public void setdomain(double min, double max) {
 		((Courbe) Courbes.get(current)).setDomain(min, max);
 	}
 
+	/**
+	 * change the range (change the point's values to fit the range)
+	 * @param min range minimum value
+	 * @param max range maximum value
+	 */
 	public void setrange(double min, double max) {
 		((Courbe) Courbes.get(current)).setRange(min, max);
 	}
 	
+	/**
+	 * Change the domain depending on the position of the first and last points (lowest and highest <i>x</i> value)
+	 */
 	public void autodomain() {
 		((Courbe) Courbes.get(current)).autoDomain();
 	}
 	
+	/**
+	 * Change the range depending on the position of the first and last points (lowest and highest <i>y</i> value)
+	 */
 	public void autorange() {
 		((Courbe) Courbes.get(current)).autoRange();
 	}
 	
+	/**
+	 * Normalize all the points of the current function.
+	 * This will strech the points to “fill" the domain and the range.
+	 */
 	public void normalize() {
 		((Courbe) Courbes.get(current)).normalize();
 	}
 	
+	/**
+	 * Normalize points of the current function depending on the domain.
+	 * This will strech the points to “fill" the domain.
+	 */
 	public void normalize_x() {
 		((Courbe) Courbes.get(current)).normalizeX();
 	}
 
+	/**
+	 * Normalize points of the current function depending on the range.
+ 	 * This will strech the points to “fill" the range.
+	 */
 	public void normalize_y() {
 		((Courbe) Courbes.get(current)).normalizeY();
 	}
 	
+	/** flip the function on both axis */
+	public void flip() {
+		((Courbe) Courbes.get(current)).flip();
+	}
+	
+	/** flip the function on the x axis */
+	public void flip_x() {
+		((Courbe) Courbes.get(current)).flipX();
+	}
+
+	/** flip the function on the y axis */
+	public void flip_y() {
+		((Courbe) Courbes.get(current)).flipY();
+	}
+
+	/**
+	 * Delete every contigus points with the same <i>y</i> value.
+	 */
 	public void removeduplicate() {
 		((Courbe) Courbes.get(current)).removeDuplicate();
 	}
 	
+	/**
+	 * Smooth the <i>y</i> values with the neighboors... 
+	 */
 	public void smooth() {
 		((Courbe) Courbes.get(current)).smooth();
 	}
 	
+	/**
+	 * Set the sustain state of the point <i>index</i>
+	 * @param idx number of the point (starting at 0)
+	 * @param state 1 if the point is sustained, 0 otherwise.
+	 */
 	public void sustain(int idx, int state) {
 		mySustain(current, idx, state);
 	}
 
+	/**
+	 * Prevents the user from moving a point. 
+	 * @param idx index of the point (starting at 0)
+	 * @param state <i>1</i> for fix, <i>0</i> for unfix
+	 */
 	public void fix(int idx, int state) {
 		myFix(current, idx, state);
 	}
@@ -307,6 +520,9 @@ public class fplay extends ej {
 	/*
 	 * get methods
 	 */
+	/**
+	 * Send the name of the functions to the dumpout outlet (in umenu format).
+	 */
 	public void getname() {
 		outlet(DUMPOUT_OUTLET, "name", "clear");
 		
@@ -314,43 +530,72 @@ public class fplay extends ej {
 			outlet(DUMPOUT_OUTLET, new String[] {  "name", "append", ((Courbe) Courbes.get(c)).getName() });
 	}
 
+	/**
+	 * Send the range limits of the current function to the dumpout outlet.
+	 */
 	public void getdomain() {
 		((Courbe) Courbes.get(current)).getDomain();
 	}
 	
+	/**
+	 * Send the domain limits of the current function to the dumpout outlet.
+	 */
 	public void getrange() {
 		((Courbe) Courbes.get(current)).getRange();
 	}
 	
+	/**
+	 * Send the current function name to the dumpout outlet.
+	 */
 	public void getcurrent() {
 		outlet(DUMPOUT_OUTLET, "current", ((Courbe) Courbes.get(current)).getName());
 	}
 
+	/**
+	 * Send the function index to the dumpout outlet.
+	 */
 	public void getdisplay() {
 		outlet(DUMPOUT_OUTLET, "display", current);
 	}
 	
-
+	/**
+	 * Get the list of the sustained points of the current function to the dumpout outlet.
+	 */
 	public void getsustain() {
 		myGetSustain(current);
 	}
 	
+	/**
+	 * Get the list of the fixed points of the current function to the dumpout outlet.
+	 */
 	public void getfix() {
 		myGetFix(current);
 	}
 
+	/**
+	 * Remove the sustain state of every point of the current bpf
+	 */
 	public void clearsustain() {
 		((Courbe) Courbes.get(current)).clearSustain();
 	}
 	
+	/**
+	 * Set the fix state of every points of the current function to false 
+	 */
 	public void unfix() {
 		((Courbe) Courbes.get(current)).unFix();
 	}
 	
+	/**
+	 * Send the number of point of the current function to the dumpout outlet.
+	 */
 	public void getnbpoints() {
 		((Courbe) Courbes.get(current)).getNbPoints();
 	}
 	
+	/**
+	 * Send to the dump outlet every information to synchronise the contents of this ej.fplay with another object like ej.fplay or ej.function.js</i>.
+	 */
 	public void sync() {
 		outlet(DUMP_OUTLET, "nbfunctions", getNbFunctions());
 
@@ -361,6 +606,9 @@ public class fplay extends ej {
 		outlet(DUMP_OUTLET, "redrawon");
 	}
 	
+	/**
+	 * used internaly... to store parameters in the patch.
+	 */
 	public void save() {
 		Atom[] names = new Atom[getNbFunctions()];
 		Atom[] domainAndRange = new Atom[getNbFunctions() *4];
@@ -379,6 +627,10 @@ public class fplay extends ej {
 		embedMessage("domainAndRange", domainAndRange);
 	}
 	
+	/**
+	 * used internally... don't use it!
+	 * @param args
+	 */
 	public void domainAndRange(Atom[] args) {
 		// called only from the save() method!
 		for (int c = 0; c < (args.length / 4); c++) {
@@ -387,6 +639,10 @@ public class fplay extends ej {
 		}
 	}
 	
+	/**
+ 	 * Send to a receive object every information to synchronise the contents of this ej.fplay with another object like ej.fplay or ej.function.js</i>.
+	 * @param sendName name of the receive object you'll send the values to
+	 */
 	public void sync(String sendName) {
 		if (MaxSystem.sendMessageToBoundObject(sendName, "nbfunctions", new Atom[] { Atom.newAtom(getNbFunctions()) }) == false) {
 			// on est ici seulement si le nom du receive n'est pas bon
@@ -402,20 +658,27 @@ public class fplay extends ej {
 		MaxSystem.sendMessageToBoundObject(sendName, "redrawon", new Atom[] {});
 	}
 	
+	/**
+	 * Message used for the synchronisation. 
+	 * @param args <i>[function index]</i> <i>[function name]</i> <i>domain and range</i> 
+	 */
 	public void syncfunctions(Atom[] args) {
 		if (isNumber(args[0]))
 			((Courbe) Courbes.get(args[0].toInt())).setSyncFunctions(args);
 	}
 
+	/**
+	 * Message used for the synchronisation. 
+	 * @param val <i>[function index]</i> <i>[val_x val_y state]*</i> 
+	 */
 	public void syncpoints(double[] val) {
 		((Courbe) Courbes.get((int) val[0])).addTypedPoints(val);
 	}
 
-	/*
-	 * compatibility...
-	 */
+	/** Does nothing, it's just here for compatibility reasons... */
 	public void redrawon() { ; }
 	
+	/** Does nothing, it's just here for compatibility reasons... */
 	public void redrawoff() { ; }
 	
 	
@@ -469,6 +732,12 @@ public class fplay extends ej {
 					((Courbe) Courbes.get(courbeIdx)).normalizeX();
 				else if (msgName.equals("normalize_y"))
 					((Courbe) Courbes.get(courbeIdx)).normalizeY();
+				else if (msgName.equals("flip"))
+					((Courbe) Courbes.get(courbeIdx)).flip();
+				else if (msgName.equals("flip_x"))
+					((Courbe) Courbes.get(courbeIdx)).flipX();
+				else if (msgName.equals("flip_y"))
+					((Courbe) Courbes.get(courbeIdx)).flipY();
 				else if (msgName.equals("removeduplicate"))
 					((Courbe) Courbes.get(courbeIdx)).removeDuplicate();
 				else if (msgName.equals("smooth"))
@@ -1143,6 +1412,38 @@ public class fplay extends ej {
 			}
 		}
 
+		
+		public void flip() {
+			double xAmount = domain[0] + domain[1];
+			double yAmount = range[0] + range[1];
+			
+			for (int i = 0; i < np(); i++) {
+				getPoint(i).setX(xAmount - getPoint(i).getX());
+				getPoint(i).setY(yAmount - getPoint(i).getY());
+			}
+			
+			quickSort(0, np() - 1);
+			applyAutoSustain();
+		}
+		
+		public void flipX() {
+			double xAmount = domain[0] + domain[1];
+			
+			for (int i = 0; i < np(); i++)
+				getPoint(i).setX(xAmount - getPoint(i).getX());
+			
+			quickSort(0, np() - 1);
+			applyAutoSustain();
+		}
+		
+		public void flipY() {
+			double yAmount = range[0] + range[1];
+			
+			for (int i = 0; i < np(); i++)
+				getPoint(i).setY(yAmount - getPoint(i).getY());
+
+		}
+		
 		public void normalize() {
 			// just a little bit more effficient, there's one loop less.
 			if (np() > 1) {
