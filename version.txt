@@ -1,7 +1,7 @@
 ejies Ñ Version history
 
 *******************
-1.56rc2: 13 September 2006
+1.56rc2: 20 September 2006
 This version requires MaxMSP 4.5.6 or higher (compatible with MaxMSP 4.6 UB).
 
 New Java Externals:
@@ -37,6 +37,8 @@ ej.lscale: help file math function corrected
 ej.lscale: outputmode to send the resulting list to a buffer
 ej.clip: outputmode to send the resulting list to a buffer
 ej.op.js: should be faster (
+ej.function.js: new flip, flip_x and flip_y message
+ej.fplay.js: new flip, flip_x and flip_y message
 
 Bug correction:
 ej.ftom: fixed argument problem

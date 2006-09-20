@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.81 $
-	$Date: 2006/07/31 13:36:41 $
+	$Revision: 1.82 $
+	$Date: 2006/09/20 16:08:04 $
 */
 
 // global code
@@ -1229,8 +1229,11 @@ function ArgsParser(courbe, msg, a)
 		case "zoom_x":		zoom_x(a[1], a[2], courbe); break;
 		case "zoom_y":		zoom_y(a[1], a[2], courbe); break;
 		case "normalize":	MyNormalize(courbe); break;
-		case "normalize_x":		MyNormalizeX(courbe); break;
-		case "normalize_y":		MyNormalizeY(courbe); break;
+		case "normalize_x":	MyNormalizeX(courbe); break;
+		case "normalize_y":	MyNormalizeY(courbe); break;
+		case "flip":		MyFlip(courbe); break;
+		case "flip_x":		MyFlipX(courbe); break;
+		case "flip_y":		MyFlipY(courbe); break;
 		case "zoomout":		MyZoomOut(courbe); break;
 		case "autodomain":	MyAutoDomain(courbe); break;
 		case "autorange":	MyAutoRange(courbe); break;
@@ -1629,6 +1632,55 @@ function autodomain()	{	MyAutoDomain(f[front]);	}
 function normalize()	{	MyNormalize(f[front]);	}
 function normalize_x()	{	MyNormalizeX(f[front]);	}
 function normalize_y()	{	MyNormalizeY(f[front]);	}
+function flip()			{	MyFlip(f[front]);		}
+function flip_x()		{	MyFlipX(f[front]);		}
+function flip_y()		{	MyFlipY(f[front]);		}
+
+
+function MyFlip(courbe)
+{
+	for (var i = 0; i < courbe.np; i++) {
+		courbe.pa[i].valx = (courbe.domain[0] + courbe.domain[1]) - courbe.pa[i].valx;
+		courbe.pa[i].valy = (courbe.range[0] + courbe.range[1]) - courbe.pa[i].valy;
+		courbe.pa[i].x = val2x(courbe, courbe.pa[i].valx);
+		courbe.pa[i].y = val2y(courbe, courbe.pa[i].valy);
+	}
+
+	sortingPoints(courbe);	// il faut maintenant remettre tous les points dans l'ordre
+	ApplyAutoSustain();
+
+	askForDrawFunctions();
+	askForNotify();
+}
+MyFlip.local = 1;
+
+
+function MyFlipX(courbe)
+{
+	for (var i = 0; i < courbe.np; i++) {
+		courbe.pa[i].valx = (courbe.domain[0] + courbe.domain[1]) - courbe.pa[i].valx;
+		courbe.pa[i].x = val2x(courbe, courbe.pa[i].valx);
+	}
+
+	sortingPoints(courbe);	// il faut maintenant remettre tous les points dans l'ordre
+	ApplyAutoSustain();
+
+	askForDrawFunctions();
+	askForNotify();
+}
+MyFlipX.local = 1;
+
+function MyFlipY(courbe)
+{
+	for (var i = 0; i < courbe.np; i++) {
+		courbe.pa[i].valy = (courbe.range[0] + courbe.range[1]) - courbe.pa[i].valy;
+		courbe.pa[i].y = val2y(courbe, courbe.pa[i].valy);
+	}
+
+	askForDrawFunctions();
+	askForNotify();
+}
+MyFlipY.local = 1;
 
 function MyNormalizeX(courbe)
 {
