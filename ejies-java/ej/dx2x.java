@@ -2,20 +2,19 @@
  *	ej.x2x by Emmanuel Jourdan, Ircam Ñ 08 2005
  *	the famous dx->x
  *
- *	$Revision: 1.2 $
- *	$Date: 2006/08/11 11:06:53 $
+ *	$Revision: 1.3 $
+ *	$Date: 2006/09/20 16:08:06 $
  */
 
 package ej;
 import com.cycling74.max.*;
 
 /**
- * dx2x:
  * take a list of intervals and generate a new list with a new origin
  * @author jourdan
- * @version $Revision: 1.2 $
  * @see ej.x2dx
  * @see ej
+ * @version $Revision: 1.3 $
  */
 public class dx2x extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "List of intervals", "origin" };
@@ -56,7 +55,7 @@ public class dx2x extends ej {
 	/**
 	 * specify the origin of the serie 
 	 * @param f if the value arrives in the rightmost inlet, it specify the origin. 
-	 * <i>if the value arrives in the leftmost inlet, it specify the first interval <b>(not the normal use)</b> </i>
+	 * <BR><i>if the value arrives in the leftmost inlet, it specify the first interval <b>(not the normal use)</b> </i>
 	 */
 	public void inlet(float f) {
 		switch(getInlet()) {
