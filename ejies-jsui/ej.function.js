@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.84 $
-	$Date: 2006/09/22 18:10:01 $
+	$Revision: 1.85 $
+	$Date: 2006/09/22 21:56:03 $
 */
 
 // global code
@@ -74,6 +74,7 @@ var tmpRange, tmpDomain;	// utilisé dans Interp
 var SketchFunctions = new Sketch(BoxWidth, BoxHeight - LegendStateBordure);
 var SketchText = new Sketch(BoxWidth, LegendStateBordure);
 var slowDrawing = new Task(drawFunctions, this);	// pour empêcher le rafraichissement trop rapide
+var slowDrawingAll = new Task(drawAll, this);	// pour empêcher le rafraichissement trop rapide
 var slowNotify = new Task(notifyclients, this);		// pour empêcher la mise à jour pattr trop rapide
 
 SketchFunctions.fsaa = 1;
@@ -158,13 +159,19 @@ function draw()
 
 function askForDrawFunctions()
 {	
-	if (slowDrawing.running)
-		slowDrawing.cancel();
+/* 	if (slowDrawing.running) */
+/* 		slowDrawing.cancel(); */
 	
 /* 	post("running? " + drawingTask.running + "\n"); */
 	slowDrawing.schedule(20); // trigger the task one time
 }
 askForDrawFunctions.local = 1;
+
+function askForDrawingAll()
+{
+	slowDrawingAll.schedule();
+}
+askForDrawingAll.local = 1;
 
 function drawAll()
 {
@@ -670,8 +677,8 @@ function syncfunctions()
 	MyThings2Zoom(courbe);
 	pixel2machin(courbe);
 	
-	DoNotify();
-	drawAll();
+	askForNotify();
+	askForDrawingAll();
 }
 
 function syncpoints()
@@ -690,8 +697,8 @@ function syncpoints()
 	}
 	courbe.np = courbe.pa.length;
 
-	DoNotify();
-	drawAll();
+	askForNotify();
+	askForDrawingAll();
 }
 
 function sync()
