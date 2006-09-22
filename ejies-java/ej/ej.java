@@ -1,8 +1,8 @@
 /*
  *	ejies Java externals by Emmanuel Jourdan, Ircam Ñ 12 2005
  *
- *	$Revision: 1.11 $
- *	$Date: 2006/09/20 16:40:54 $
+ *	$Revision: 1.12 $
+ *	$Date: 2006/09/22 13:46:51 $
  */
 
 package ej;
@@ -15,7 +15,7 @@ import java.io.*;
 
  * @author jourdan
  * @see <a href="http://www.e--j.com">ejies</a>
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 public abstract class ej extends MaxObject
 {
@@ -91,6 +91,32 @@ public abstract class ej extends MaxObject
 		// else
 		return false;
 	}
+
+	// redefine with a correct error message
+	protected void bang() {
+   		error(getClass().getName() +": doesn't understand bang");
+	}
+	
+	protected void inlet(int i) {
+   		error(getClass().getName() +": doesn't understand int");
+	}
+
+	protected void inlet(float f) {
+   		error(getClass().getName() +": doesn't understand float");
+	}
+	
+	protected void list(Atom[] a) {
+   		error(getClass().getName() +": doesn't understand list");
+	}
+	
+    protected void anything(String message, Atom args[]) {
+    	if (message.equals("list")) {
+    		list(args);
+    		return;
+    	}
+   		error(getClass().getName() +": doesn't understand \""+ message + "\"");
+   }
+	
 	
 	// faster to debug... accept anything
 	/**
