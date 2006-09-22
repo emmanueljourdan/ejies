@@ -36,7 +36,7 @@ jit.fullscreen: fix a problem when mirror is on and the resolution of both scree
 ej.lscale: help file math function corrected
 ej.lscale: outputmode to send the resulting list to a buffer
 ej.clip: outputmode to send the resulting list to a buffer
-ej.op.js: should be faster (
+ej.op.js: should be faster
 ej.function.js: new flip, flip_x and flip_y message
 ej.fplay.js: new flip, flip_x and flip_y message
 
