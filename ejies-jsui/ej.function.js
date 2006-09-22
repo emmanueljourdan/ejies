@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.83 $
-	$Date: 2006/09/22 13:36:22 $
+	$Revision: 1.84 $
+	$Date: 2006/09/22 18:10:01 $
 */
 
 // global code
@@ -724,6 +724,29 @@ function sync2send(sendName)
 	}
 }
 sync2send.local = 1;
+
+function synccurrent()
+{
+	if (arguments.length == 0) {
+		outlet(DUMP_OUTLET, getSyncCourbe(front));
+		
+		if (f[front].np > 0)
+			outlet(DUMP_OUTLET, getSyncPoints(front));
+	} else 
+		syncCurrent2Send(arguments[0]);
+}
+
+function syncCurrent2Send(sendName)
+{
+	g.syngThings = getSyncCourbe(front);
+	g.sendnamed(sendName, "syncThings");
+	
+	if (f[front].np > 0) {
+		g.syncThings = getSyncPoints(front);
+		g.sendnamed(sendName, "syncThings");
+	}
+}
+syncCurrent2Send.local = 1;
 
 function getSyncCourbe(courbeIdx)
 {
