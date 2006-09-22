@@ -2,8 +2,8 @@
  *	ej.fplay by Emmanuel Jourdan, Ircam Ñ 04 2006
  *	function player
  *
- *	$Revision: 1.25 $
- *	$Date: 2006/09/22 16:16:31 $
+ *	$Revision: 1.26 $
+ *	$Date: 2006/09/22 21:55:21 $
  */
 
 /**
@@ -25,7 +25,7 @@ import com.cycling74.max.*;
 
 /**
  * Multi function editor (like ej.function.js without the graphics)
- * @version $Revision: 1.25 $
+ * @version $Revision: 1.26 $
  * @author jourdan
  * @see "ej.function.js"
  */
@@ -594,7 +594,7 @@ public class fplay extends ej {
 	}
 	
 	/**
-	 * Send to the dump outlet every information to synchronise the contents of this ej.fplay with another object like ej.fplay or ej.function.js</i>.
+	 * Send to the dump outlet every informations to synchronize the contents of this ej.fplay with another object like ej.fplay or ej.function.js</i>.
 	 */
 	public void sync() {
 		outlet(DUMP_OUTLET, "nbfunctions", getNbFunctions());
@@ -603,7 +603,61 @@ public class fplay extends ej {
 			((Courbe) Courbes.get(c)).syncCourbe(c);
 			((Courbe) Courbes.get(c)).syncPoints(c);
 		}
-		outlet(DUMP_OUTLET, "redrawon");
+	}
+	
+	/**
+	 * Send to the dump outlet every informations to synchronize the current function.
+	 */
+	public void synccurrent() {
+		((Courbe) Courbes.get(current)).syncCourbe(current);
+		((Courbe) Courbes.get(current)).syncPoints(current);
+	}
+	
+	/**
+ 	 * Send to a receive object every information to synchronize the contents of this ej.fplay with another object like ej.fplay or ej.function.js</i>.
+	 * @param sendName name of the receive object you'll send the values to
+	 */
+	public void sync(String sendName) {
+		if (MaxSystem.sendMessageToBoundObject(sendName, "nbfunctions", new Atom[] { Atom.newAtom(getNbFunctions()) }) == false) {
+			// on est ici seulement si le nom du receive n'est pas bon
+			error(sendName + " bad receive name");
+			return;	// sauve qui peut
+		}
+		
+		for (int c = 0; c < getNbFunctions(); c++) {
+			((Courbe) Courbes.get(c)).syncCourbe(c, sendName);
+			((Courbe) Courbes.get(c)).syncPoints(c, sendName);
+		}
+
+		MaxSystem.sendMessageToBoundObject(sendName, "redrawon", new Atom[] {});
+	}
+	
+	/**
+	 * Send to a receive object every informations to synchronize the current function.
+	 * @param sendName name of the receive object you'll send the values to
+	 */
+    public void synccurrent(String sendName) {
+		((Courbe) Courbes.get(current)).syncCourbe(current, sendName);
+		((Courbe) Courbes.get(current)).syncPoints(current, sendName);
+
+		MaxSystem.sendMessageToBoundObject(sendName, "redrawon", new Atom[] {});
+    }
+
+	/**
+	 * Message used for the synchronisation. 
+	 * @param args <i>[function index]</i> <i>[function name]</i> <i>domain and range</i> 
+	 */
+	public void syncfunctions(Atom[] args) {
+		if (isNumber(args[0]))
+			((Courbe) Courbes.get(args[0].toInt())).setSyncFunctions(args);
+	}
+
+	/**
+	 * Message used for the synchronisation. 
+	 * @param val <i>[function index]</i> <i>[val_x val_y state]*</i> 
+	 */
+	public void syncpoints(double[] val) {
+		((Courbe) Courbes.get((int) val[0])).addTypedPoints(val);
 	}
 	
 	/**
@@ -639,42 +693,6 @@ public class fplay extends ej {
 		}
 	}
 	
-	/**
- 	 * Send to a receive object every information to synchronise the contents of this ej.fplay with another object like ej.fplay or ej.function.js</i>.
-	 * @param sendName name of the receive object you'll send the values to
-	 */
-	public void sync(String sendName) {
-		if (MaxSystem.sendMessageToBoundObject(sendName, "nbfunctions", new Atom[] { Atom.newAtom(getNbFunctions()) }) == false) {
-			// on est ici seulement si le nom du receive n'est pas bon
-			error(sendName + " bad receive name");
-			return;	// sauve qui peut
-		}
-		
-		for (int c = 0; c < getNbFunctions(); c++) {
-			((Courbe) Courbes.get(c)).syncCourbe(c, sendName);
-			((Courbe) Courbes.get(c)).syncPoints(c, sendName);
-		}
-
-		MaxSystem.sendMessageToBoundObject(sendName, "redrawon", new Atom[] {});
-	}
-	
-	/**
-	 * Message used for the synchronisation. 
-	 * @param args <i>[function index]</i> <i>[function name]</i> <i>domain and range</i> 
-	 */
-	public void syncfunctions(Atom[] args) {
-		if (isNumber(args[0]))
-			((Courbe) Courbes.get(args[0].toInt())).setSyncFunctions(args);
-	}
-
-	/**
-	 * Message used for the synchronisation. 
-	 * @param val <i>[function index]</i> <i>[val_x val_y state]*</i> 
-	 */
-	public void syncpoints(double[] val) {
-		((Courbe) Courbes.get((int) val[0])).addTypedPoints(val);
-	}
-
 	/** Does nothing, it's just here for compatibility reasons... */
 	public void redrawon() { ; }
 	
