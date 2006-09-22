@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.82 $
-	$Date: 2006/09/20 16:08:04 $
+	$Revision: 1.83 $
+	$Date: 2006/09/22 13:36:22 $
 */
 
 // global code
@@ -1639,14 +1639,37 @@ function flip_y()		{	MyFlipY(f[front]);		}
 
 function MyFlip(courbe)
 {
-	for (var i = 0; i < courbe.np; i++) {
-		courbe.pa[i].valx = (courbe.domain[0] + courbe.domain[1]) - courbe.pa[i].valx;
-		courbe.pa[i].valy = (courbe.range[0] + courbe.range[1]) - courbe.pa[i].valy;
-		courbe.pa[i].x = val2x(courbe, courbe.pa[i].valx);
-		courbe.pa[i].y = val2y(courbe, courbe.pa[i].valy);
+	var tmpX, tmpY, tmpSustain, tmpFix;
+	
+	// swap points so there's no need to reorder after (avoid the "same x value" problem for the ordering)
+	for (var i = 0; i < Math.round(courbe.np / 2); i++) {
+		if (i == courbe.np - i - 1) { // odd number of points (the middle stay at the middle position)
+			courbe.pa[i].valx = (courbe.domain[0] + courbe.domain[1]) - courbe.pa[i].valx;
+			courbe.pa[i].x = val2x(courbe, courbe.pa[i].valx);
+			courbe.pa[i].valy = (courbe.range[0] + courbe.range[1]) - courbe.pa[i].valy;
+			courbe.pa[i].y = val2y(courbe, courbe.pa[i].valy);
+		} else {
+			tmpX = courbe.pa[i].valx;
+			tmpY = courbe.pa[i].valy;
+			tmpSustain = courbe.pa[i].sustain;
+			tmpFix = courbe.pa[i].fix;
+			
+			courbe.pa[i].valx = (courbe.domain[0] + courbe.domain[1]) - courbe.pa[courbe.np - i - 1].valx;
+			courbe.pa[i].x = val2x(courbe, courbe.pa[i].valx);
+			courbe.pa[i].valy = (courbe.range[0] + courbe.range[1]) - courbe.pa[courbe.np - i - 1].valy;
+			courbe.pa[i].y = val2y(courbe, courbe.pa[i].valy);
+			courbe.pa[i].sustain = courbe.pa[courbe.np - i - 1].sustain;
+			courbe.pa[i].fix = courbe.pa[courbe.np - i - 1].fix;
+	
+			courbe.pa[courbe.np - i - 1].valx = (courbe.domain[0] + courbe.domain[1]) - tmpX;
+			courbe.pa[courbe.np - i - 1].x = val2x(courbe, courbe.pa[courbe.np - i - 1].valx);
+			courbe.pa[courbe.np - i - 1].valy = (courbe.range[0] + courbe.range[1]) - tmpY;
+			courbe.pa[courbe.np - i - 1].y = val2y(courbe, tmpY);
+			courbe.pa[courbe.np - i - 1].sustain = tmpSustain;
+			courbe.pa[courbe.np - i - 1].fix = tmpFix;
+		}		
 	}
 
-	sortingPoints(courbe);	// il faut maintenant remettre tous les points dans l'ordre
 	ApplyAutoSustain();
 
 	askForDrawFunctions();
@@ -1657,12 +1680,35 @@ MyFlip.local = 1;
 
 function MyFlipX(courbe)
 {
-	for (var i = 0; i < courbe.np; i++) {
-		courbe.pa[i].valx = (courbe.domain[0] + courbe.domain[1]) - courbe.pa[i].valx;
-		courbe.pa[i].x = val2x(courbe, courbe.pa[i].valx);
+	var tmpX, tmpY, tmpSustain, tmpFix;
+	
+	// swap points so there's no need to reorder after (avoid the "same x value" problem for the ordering)
+	for (var i = 0; i < Math.round(courbe.np / 2); i++) {
+		if (i == courbe.np - i - 1) { // odd number of points (the middle stay at the middle position)
+			courbe.pa[i].valx = (courbe.domain[0] + courbe.domain[1]) - courbe.pa[i].valx;
+			courbe.pa[i].x = val2x(courbe, courbe.pa[i].valx);
+		} else {
+			tmpX = courbe.pa[i].valx;
+			tmpY = courbe.pa[i].valy;
+			tmpSustain = courbe.pa[i].sustain;
+			tmpFix = courbe.pa[i].fix;
+			
+			courbe.pa[i].valx = (courbe.domain[0] + courbe.domain[1]) - courbe.pa[courbe.np - i - 1].valx;
+			courbe.pa[i].x = val2x(courbe, courbe.pa[i].valx);
+			courbe.pa[i].valy = courbe.pa[courbe.np - i - 1].valy;
+			courbe.pa[i].y = val2y(courbe, courbe.pa[i].valy);
+			courbe.pa[i].sustain = courbe.pa[courbe.np - i - 1].sustain;
+			courbe.pa[i].fix = courbe.pa[courbe.np - i - 1].fix;
+	
+			courbe.pa[courbe.np - i - 1].valx = (courbe.domain[0] + courbe.domain[1]) - tmpX;
+			courbe.pa[courbe.np - i - 1].x = val2x(courbe, courbe.pa[courbe.np - i - 1].valx);
+			courbe.pa[courbe.np - i - 1].valy = tmpY;
+			courbe.pa[courbe.np - i - 1].y = val2y(courbe, tmpY);
+			courbe.pa[courbe.np - i - 1].sustain = tmpSustain;
+			courbe.pa[courbe.np - i - 1].fix = tmpFix;
+		}		
 	}
 
-	sortingPoints(courbe);	// il faut maintenant remettre tous les points dans l'ordre
 	ApplyAutoSustain();
 
 	askForDrawFunctions();
