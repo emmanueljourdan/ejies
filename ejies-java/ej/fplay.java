@@ -2,8 +2,8 @@
  *	ej.fplay by Emmanuel Jourdan, Ircam Ñ 04 2006
  *	function player
  *
- *	$Revision: 1.24 $
- *	$Date: 2006/09/20 16:41:28 $
+ *	$Revision: 1.25 $
+ *	$Date: 2006/09/22 16:16:31 $
  */
 
 /**
@@ -25,7 +25,7 @@ import com.cycling74.max.*;
 
 /**
  * Multi function editor (like ej.function.js without the graphics)
- * @version $Revision: 1.24 $
+ * @version $Revision: 1.25 $
  * @author jourdan
  * @see "ej.function.js"
  */
@@ -1416,23 +1416,69 @@ public class fplay extends ej {
 		public void flip() {
 			double xAmount = domain[0] + domain[1];
 			double yAmount = range[0] + range[1];
+			double tmpX, tmpY;
+			boolean tmpSustain, tmpFix;
+			int oppositePoint;
 			
-			for (int i = 0; i < np(); i++) {
-				getPoint(i).setX(xAmount - getPoint(i).getX());
-				getPoint(i).setY(yAmount - getPoint(i).getY());
+			// swap points so there's no need to reorder after (avoid the "same x value" problem for the ordering)
+			// this method seems ugly... it's but, it avoids the reordering
+			for (int i = 0; i < Math.round(np() / 2); i++) {
+				if (i == np() - i - 1) { // odd number of points (the middle stay at the middle position)
+					getPoint(i).setX(xAmount - getPoint(i).getX());
+					getPoint(i).setY(yAmount - getPoint(i).getY());
+				} else {
+					tmpX = getPoint(i).getX();
+					tmpY = getPoint(i).getY();
+					tmpSustain = getPoint(i).getSustain();
+					tmpFix = getPoint(i).getFix();
+
+					oppositePoint = np() -i - 1;
+					
+					getPoint(i).setX(xAmount - getPoint(oppositePoint).getX());
+					getPoint(i).setY(yAmount - getPoint(oppositePoint).getY());
+					getPoint(i).setSustain(getPoint(oppositePoint).getSustain());
+					getPoint(i).setFix(getPoint(oppositePoint).getFix());
+
+					getPoint(oppositePoint).setX(xAmount - tmpX);
+					getPoint(oppositePoint).setY(yAmount - tmpY);
+					getPoint(oppositePoint).setSustain(tmpSustain);
+					getPoint(oppositePoint).setFix(tmpFix);
+				}
 			}
 			
-			quickSort(0, np() - 1);
 			applyAutoSustain();
 		}
 		
 		public void flipX() {
 			double xAmount = domain[0] + domain[1];
+			double tmpX, tmpY;
+			boolean tmpSustain, tmpFix;
+			int oppositePoint;
+
+			// swap points so there's no need to reorder after (avoid the "same x value" problem for the ordering)
+			for (int i = 0; i < Math.round(np() / 2); i++) {
+				if (i == np() - i - 1) { // odd number of points (the middle stay at the middle position)
+					getPoint(i).setX(xAmount - getPoint(i).getX());
+				} else {
+					tmpX = getPoint(i).getX();
+					tmpY = getPoint(i).getY();
+					tmpSustain = getPoint(i).getSustain();
+					tmpFix = getPoint(i).getFix();
+
+					oppositePoint = np() -i - 1;
+					
+					getPoint(i).setX(xAmount - getPoint(oppositePoint).getX());
+					getPoint(i).setY(getPoint(oppositePoint).getY());
+					getPoint(i).setSustain(getPoint(oppositePoint).getSustain());
+					getPoint(i).setFix(getPoint(oppositePoint).getFix());
+
+					getPoint(oppositePoint).setX(xAmount - tmpX);
+					getPoint(oppositePoint).setY(tmpY);
+					getPoint(oppositePoint).setSustain(tmpSustain);
+					getPoint(oppositePoint).setFix(tmpFix);
+				}
+			}
 			
-			for (int i = 0; i < np(); i++)
-				getPoint(i).setX(xAmount - getPoint(i).getX());
-			
-			quickSort(0, np() - 1);
 			applyAutoSustain();
 		}
 		
