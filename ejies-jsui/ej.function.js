@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.85 $
-	$Date: 2006/09/22 21:56:03 $
+	$Revision: 1.86 $
+	$Date: 2006/10/05 18:07:05 $
 */
 
 // global code
@@ -61,6 +61,7 @@ var BorderSyncState;
 var CursorChange;
 var NotifyRecalledState;	// utilise pour l'envoi d'un message lors du rappel pattr
 var MouseReportState;
+var fsaaValue = 1;
 swapPoints.tmp = new Point();
 drawText.display = 0;
 drawFunctions.display = 0;
@@ -77,8 +78,8 @@ var slowDrawing = new Task(drawFunctions, this);	// pour empêcher le rafraichiss
 var slowDrawingAll = new Task(drawAll, this);	// pour empêcher le rafraichissement trop rapide
 var slowNotify = new Task(notifyclients, this);		// pour empêcher la mise à jour pattr trop rapide
 
-SketchFunctions.fsaa = 1;
-SketchText.fsaa = 1;
+SketchFunctions.fsaa = fsaaValue;
+SketchText.fsaa = fsaaValue;
 
 RedrawEnable = 0;	// désactivation de l'affichage pendant l'initialisation
 NotifyEnable = 0;
@@ -338,6 +339,15 @@ function SpriteFunctions()
 	}
 }
 SpriteFunctions.local = 1;
+
+function fsaa(v)
+{
+	fsaaValue = v;
+	SketchFunctions.fsaa = v;
+	SketchText.fsaa = v;
+	askForDrawingAll();
+}
+
 
 
 //////////////// Fonctions magiques ///////////////
@@ -2330,7 +2340,7 @@ function redrawoff() { RedrawEnable = 0; }
 function redrawon()
 {
 	RedrawEnable = 1;
-	drawAll();
+	askForDrawingAll();
 }
 
 function resetall()
@@ -2340,6 +2350,7 @@ function resetall()
 	defaults();					// Applique les couleurs et paramètres pas défaut
 	AllPixel2Machin();			// calcule le rapport pixel/temps/range
 	sketch.default2d();
+	fsaa(fsaaValue);
 	// initialisation de propriétés de variables
 	EditedWithMouse.state = 0;	// flag initialisation
 	PattrInterpError.flag = 0;
@@ -2982,6 +2993,7 @@ function save()
 		embedmessage("SetColor", i, "rgb5", Math.round(f[i].rgb5[0] * 255), Math.round(f[i].rgb5[1] * 255), Math.round(f[i].rgb5[2] * 255) );
 	}
 	
+	embedmessage("fsaa", fsaaValue);
 	embedmessage("redrawon");	// refresh de l'affichage après la lecture des arguments
 }
 
