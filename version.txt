@@ -20,6 +20,7 @@ Collection of aqua sliders with prototypes
 
 Improvements:
 Installation/Uninstallation: compatible with MaxMSP 4.5 and 4.6
+ej.function.js: fsaa can be enable/disable again
 ej.function.js: display with a bad argument won't cause problem
 ej.function.js: removeduplicate is now more efficient
 ej.function.js: drawing is really more efficient (~150 times faster when sending points coordinates with a dump)
@@ -27,6 +28,7 @@ ej.function.js: notify psto less often (using the same Task technique as for dra
 ej.function.js: points with the same x position are now put in the "right" order (Thanks Henry)
 ej.function.js: new nbfunctions/syncfunctions/syncpoints method for the synchronisation with ej.fplay
 ej.function.js: able to read the new ej.fplay file format
+ej.function-insp: choice between domain/range and setdomain/setrange
 ej.lchange: dynamic assistance
 ej.lop: new operators (atodb, dbtoa)
 ej.lop: val @ttribute accept now more than one value
@@ -47,7 +49,7 @@ ej.function.js: getzoom_x/getzoom_y now report correct values
 ej.function.js: addfunction problem fixed
 ej.function.js: line output works if there's only one point
 ej.lslide: slide_up/slide_down was not choose correctly (Thanks Elvio)
-ej.vdb~ and ej.vdb-sig~: windowing was wrong... and that's really bad... (Thanks JosŽ-Miguel)
+ej.vdb~ and ej.vdb-sig~: windowing was wrong... and that's really bad... (Thanks JosÂŽ-Miguel)
 ej.lscale: was broken since 1.56b* (Thanks Antoine)
 
 
@@ -60,7 +62,7 @@ New Java Externals:
 ej.lchange: get the informationn of list change (works with big list, greater than 256 items)
 ej.lclip: constrains a list within a certain range
 ej.lop: list operators, works with big lists, greater than 256 items (Many thanks to Ben Nevile)
-ej.lscale: maps input range of lists to output range
+ainej.lscale: maps input range of lists to output range
 ej.lslide: smooth-out changes in list
 ej.mmmm: faster replacement of ej.4m.js (especially using @mode list)
 
