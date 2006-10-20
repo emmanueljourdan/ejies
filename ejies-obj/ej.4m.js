@@ -2,8 +2,8 @@
 	ej.4m.js by Emmanuel Jourdan, Ircam — 06 2004
 	output the min, median, mean, maximum on a int/float stream
  
-	$Revision: 1.7 $
-	$Date: 2006/08/01 12:39:34 $
+	$Revision: 1.8 $
+	$Date: 2006/10/20 10:37:37 $
 */
 
 // global code
@@ -80,8 +80,6 @@ function window(l)
 function reset()			// reset: vide le buffer
 {
 	window(a.length);
-	if (VerboseOrNot)
-		ejies.error(this, "buffer is now empty.");
 }
 
 function clear() { reset() ;} // alias
@@ -104,10 +102,8 @@ function verbose(a)
 function sortie(v)
 {
 	// copie de a dans b
-	b = new Array(a.length);
-	for (i=0 ; i < b.length ; i++) {
-		b[i] = a[i];
-	}
+	b = a.slice(0);
+
 	// la sortie ne fonctionne que quand le buffer a été rempli
 	if (++WindowReset >= b.length) {
 		// ordre décroissant des outlets pour permettre la sortie de gauche à droite
