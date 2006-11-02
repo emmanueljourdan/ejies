@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.86 $
-	$Date: 2006/10/05 18:07:05 $
+	$Revision: 1.87 $
+	$Date: 2006/11/02 13:41:21 $
 */
 
 // global code
@@ -423,6 +423,8 @@ function onresize(w,h)
 	BoxHeight = box.rect[3] - box.rect[1];
 	SketchFunctions = new Sketch(BoxWidth, BoxHeight - (LegendState ? LegendStateBordure : 0) );
 	SketchText = new Sketch(BoxWidth, LegendStateBordure);
+	SketchFunctions.fsaa = fsaaValue;
+	SketchText.fsaa = fsaaValue;
 	AllPixel2Machin();
 	ValRecalculate();
 	drawAll();
