@@ -2,8 +2,8 @@
  *	ej.urn by Emmanuel Jourdan, Ircam Ñ 04 2005
  *	like the urn object but for larger range
  *
- *	$Revision: 1.4 $
- *	$Date: 2006/09/20 16:40:54 $
+ *	$Revision: 1.5 $
+ *	$Date: 2006/11/02 17:28:37 $
  */
 
 package ej;
@@ -15,7 +15,7 @@ import java.util.Random;
  * random sequence generator (like the standart urn object)
  * @author jourdan
  * @see ej
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class urn extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "bang Generates Random Number", "Set Range of Random Number" };
@@ -73,6 +73,8 @@ public class urn extends ej {
 	public void inlet(int i) {
 		if (getInlet() == 1)
 			urnInit(i);
+		else
+			error("no int expected here!");
 	}
 	
 	/**

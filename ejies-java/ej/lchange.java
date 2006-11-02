@@ -2,8 +2,8 @@
  *	ej.lchange by Emmanuel Jourdan, Ircam Ñ 12 2005
  *	aware of list change
  *
- *	$Revision: 1.9 $
- *	$Date: 2006/09/20 16:40:54 $
+ *	$Revision: 1.10 $
+ *	$Date: 2006/11/02 17:28:37 $
  */
 
 package ej;
@@ -14,7 +14,7 @@ import com.cycling74.max.*;
  * aware of list change
  * @author jourdan
  * @see ej
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public class lchange extends ej
 {
@@ -46,9 +46,27 @@ public class lchange extends ej
 		setInletAssist(INLET_ASSIST);
 		setOutletAssist(OUTLET_ASSIST[this.mode]);
 	}
+
+	/**
+	 * Int to be tested
+	 * @param i
+	 */
+	public void inlet(int i) {
+		anything("int", new Atom[] { Atom.newAtom(i) });
+	}
+	
+	/**
+	 * Float to be tested
+	 * @parm f
+	 */
+	public void inlet(float f) {
+		anything("float", new Atom[] { Atom.newAtom(f) });
+	}
 		
 	/**
 	 * Anything to be test, can be symbol or list...
+	 * @param s messagename 
+	 * @param args arguments <i>(optional)</i>
 	 */
 	public void anything(String s, Atom[] args)
 	{

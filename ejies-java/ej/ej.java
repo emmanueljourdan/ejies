@@ -1,8 +1,8 @@
 /*
  *	ejies Java externals by Emmanuel Jourdan, Ircam Ñ 12 2005
  *
- *	$Revision: 1.12 $
- *	$Date: 2006/09/22 13:46:51 $
+ *	$Revision: 1.13 $
+ *	$Date: 2006/11/02 17:28:37 $
  */
 
 package ej;
@@ -15,7 +15,7 @@ import java.io.*;
 
  * @author jourdan
  * @see <a href="http://www.e--j.com">ejies</a>
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 public abstract class ej extends MaxObject
 {
@@ -98,7 +98,7 @@ public abstract class ej extends MaxObject
 	}
 	
 	protected void inlet(int i) {
-   		error(getClass().getName() +": doesn't understand int");
+  		error(getClass().getName() +": doesn't understand int");
 	}
 
 	protected void inlet(float f) {
