@@ -62,6 +62,10 @@ function doRemove {
 	
 		echo -ne "- help files ($maxAppFolder/max-help/ejies-help)"
 		rm -Rf "$maxAppFolder/max-help/"ejies-help && echo -ne "... done.\n"
+		
+		echo -ne "- ejies-javadoc ($maxAppFolder/java-doc/"
+		rm -Rf "$maxAppFolder/java-doc/"ejies-javadoc && echo -ne "... done.\n"
+		
 	else
 		echo -ne "Sorry, $maxAppFolder doesn't exist. Extra, prototypes and inspectors can't be uninstalled.\n"
 	fi

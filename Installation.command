@@ -66,6 +66,8 @@ function doInstallation {
 		echo -ne "- images (/Applications/MaxMSP*/patches/picts)"
 		cp "$DossierDeLInstalleur"/ejies-pict/* "$maxAppFolder/patches/picts/" && echo -ne "... done.\n"
 		
+		echo -ne "- ejies-javadoc (/Applications/MaxMSP*/java-doc/)"
+		cp -R "$DossierDeLInstalleur"/ejies-javadoc/* "$maxAppFolder/java-doc/" && echo -ne "... done.\n"		
 	else
 		echo -ne "Sorry, $maxAppFolder/ doesn't exist. Extra, prototypes and inspectors can't be installed.\n"
 	fi

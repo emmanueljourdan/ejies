@@ -78,6 +78,7 @@ Windows Installation:
 - put the ejies-insp folder in the ../MaxMSP 4.*/patches/inspectors/ folder
 - put the ejies-obj folder in the C74:/externals or whatever you want in the Max Search path
 - put the ejies-help folder in the ../MaxMSP 4.*/max-help or whatever you want in the Max Search path
+- put the ejies-javadoc folder in the ../MaxMSP 4.*/java-doc/ or whatever you want (in the Max Search path or not...)
 
 Contact:
 manu(at)e--j.com
