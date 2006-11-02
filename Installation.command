@@ -63,11 +63,11 @@ function doInstallation {
 		echo -ne "- inspectors ($maxAppFolder/patches/inspectors)"
 		cp "$DossierDeLInstalleur"/ejies-insp/* "$maxAppFolder/patches/inspectors/" && echo -ne "... done.\n"
 		
-		echo -ne "- images (/Applications/MaxMSP*/patches/picts)"
+		echo -ne "- images ($maxAppFolder/patches/picts)"
 		cp "$DossierDeLInstalleur"/ejies-pict/* "$maxAppFolder/patches/picts/" && echo -ne "... done.\n"
 		
-		echo -ne "- ejies-javadoc (/Applications/MaxMSP*/java-doc/)"
-		cp -R "$DossierDeLInstalleur"/ejies-javadoc/* "$maxAppFolder/java-doc/" && echo -ne "... done.\n"		
+		echo -ne "- ejies-javadoc ($maxAppFolder/java-doc/)"
+		cp -R "$DossierDeLInstalleur"/ejies-javadoc "$maxAppFolder/java-doc/" && echo -ne "... done.\n"		
 	else
 		echo -ne "Sorry, $maxAppFolder/ doesn't exist. Extra, prototypes and inspectors can't be installed.\n"
 	fi
