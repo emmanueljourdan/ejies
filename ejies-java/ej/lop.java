@@ -4,8 +4,8 @@
  *
  *  Many thanks to Ben Nevile for performances enhacement.
  *
- *	$Revision: 1.23 $
- *	$Date: 2006/09/20 16:40:54 $
+ *	$Revision: 1.24 $
+ *	$Date: 2006/11/03 11:14:38 $
  */
 
 package ej;
@@ -235,8 +235,16 @@ public class lop extends ej {
 	}
 
 	/**
+	 * Apply the calculation on the integer value, then trigger the calculation if the value arrive in the left inlet or if the <i>@autotrigger</i> mode is set to 1
+	 * @param f int value 
+	 */
+	public void inlet(int i) {
+		inlet((float) i);
+	}
+	
+	/**
 	 * Apply the calculation on the floating point value, then trigger the calculation if the value arrive in the left inlet or if the <i>@autotrigger</i> mode is set to 1
-	 * @param f int or float value 
+	 * @param f float value 
 	 */
 	public void inlet(float f) {
 		if (getInlet() == 1) {

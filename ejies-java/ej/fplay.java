@@ -2,8 +2,8 @@
  *	ej.fplay by Emmanuel Jourdan, Ircam Ñ 04 2006
  *	function player
  *
- *	$Revision: 1.26 $
- *	$Date: 2006/09/22 21:55:21 $
+ *	$Revision: 1.27 $
+ *	$Date: 2006/11/03 11:14:38 $
  */
 
 /**
@@ -25,7 +25,7 @@ import com.cycling74.max.*;
 
 /**
  * Multi function editor (like ej.function.js without the graphics)
- * @version $Revision: 1.26 $
+ * @version $Revision: 1.27 $
  * @author jourdan
  * @see "ej.function.js"
  */
@@ -100,6 +100,14 @@ public class fplay extends ej {
 	 */
 	public void bang() {
 		((Courbe) Courbes.get(current)).line();
+	}
+
+	/**
+	 * Send the interpolated y for this x for the current function at left outlet
+	 * @param i X value
+	 */
+	public void inlet(int i) {
+		myInterp(current, i);
 	}
 
 	/**

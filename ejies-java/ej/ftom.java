@@ -2,8 +2,8 @@
  *	ej.ftom by Emmanuel Jourdan, Ircam Ñ 02 2005
  *	Frequency to MIDI (with tuning adjustment)
  *
- *	$Revision: 1.7 $
- *	$Date: 2006/09/12 09:20:24 $
+ *	$Revision: 1.8 $
+ *	$Date: 2006/11/03 11:14:38 $
  */
 
 package ej;
@@ -14,7 +14,7 @@ import com.cycling74.max.*;
  * Convert frequency to midi. This works for list, and allows you to define tuning and pitch reference.   
  * @author jourdan
  * @see ej
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class ftom extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "MIDI note number in (int/float/list)" };
@@ -115,10 +115,13 @@ public class ftom extends ej {
 		return new String((int) Math.floor(tonSubdivision * 2) + "");
 	}
 	
-//	public void bang() {
-//		error("ej.ftom: doesn't understand bang");
-//	}
-
+	/**
+	 * Calculate the result.
+	 */
+	public void inlet(int i) {
+		calculeFloat(i);
+	}
+	
 	/**
 	 * Calculate the result.
 	 */

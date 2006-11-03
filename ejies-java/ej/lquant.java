@@ -2,8 +2,8 @@
  *	ej.lquant by Emmanuel Jourdan, Ircam Ñ 08 2005
  *	Quantize a list
  *
- *	$Revision: 1.4 $
- *	$Date: 2006/09/20 16:40:54 $
+ *	$Revision: 1.5 $
+ *	$Date: 2006/11/03 11:14:38 $
  */
 
 package ej;
@@ -67,6 +67,15 @@ public class lquant extends ej {
 	 */
 	public void bang() {
 		calcule();
+	}
+	
+	/**
+	 * Do something depending on the inlet number...
+	 * @param i if the value arrives in the left inlet: quantize that value
+	 * @param i if the falue arrives in the right inlet: set the new quantizing factors
+	 */
+	public void inlet(int i) {
+		inlet((float) i);
 	}
 	
 	/**

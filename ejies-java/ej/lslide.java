@@ -3,8 +3,8 @@
  *	slide for lists
  *
  *
- *	$Revision: 1.9 $
- *	$Date: 2006/09/20 16:40:54 $
+ *	$Revision: 1.10 $
+ *	$Date: 2006/11/03 11:14:38 $
  */
 
 package ej;
@@ -17,7 +17,7 @@ import com.cycling74.msp.MSPBuffer;
  * @author jourdan
  * @see ej
  * @see standart <code>slide, slide~, jit.slide</code> objects
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public class lslide extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "List to be slided :-)", "Slide Up", "Slide Down" };
@@ -85,7 +85,17 @@ public class lslide extends ej {
 	}
 
 	/**
-	 * Change the slide up/down value
+	 * Do something depending on the inlet...
+	 * @param f if the value arrives in the left inlet: try using the <code>slide</code> object instead.
+	 * @param f if the value arrives in the second inlet: change the slide up value
+	 * @param f if the value arrives in the third inlet: change the slide down value
+	 */
+	public void inlet(int i) {
+		inlet((float) i);
+	}
+
+	/**
+	 * Do something depending on the inlet...
 	 * @param f if the value arrives in the left inlet: try using the <code>slide</code> object instead.
 	 * @param f if the value arrives in the second inlet: change the slide up value
 	 * @param f if the value arrives in the third inlet: change the slide down value

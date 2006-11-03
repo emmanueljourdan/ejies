@@ -2,8 +2,8 @@
  *	ej.x2dx by Emmanuel Jourdan, Ircam Ñ 08 2005
  *	the famous x->dx
  *
- *	$Revision: 1.2 $
- *	$Date: 2006/09/20 16:40:54 $
+ *	$Revision: 1.3 $
+ *	$Date: 2006/11/03 11:14:38 $
  */
 
 package ej;
@@ -13,7 +13,7 @@ import com.cycling74.max.*;
  * extract deltas from a list of values.
  * @author jourdan
  * @see ej
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class x2dx extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "List" };
@@ -41,10 +41,6 @@ public class x2dx extends ej {
 		calcule();
 	}
 	
-	public void inlet(float f) {
-		error("ej.x2dx: needs at least a list of 2 values!");
-	}
-
 	public void list(double[] args) {
 		input = args;
 		calcule();
@@ -57,10 +53,6 @@ public class x2dx extends ej {
 		input = args;
 	}
 		
-//	public void anything(String s, Atom[] args) {
-//		error("ej.x2dx: doesn't understand " + s + " " + Atom.toOneString(args));
-//	}
-	
 	private void calcule() {
 		resultat = new double[input.length - 1];
 		

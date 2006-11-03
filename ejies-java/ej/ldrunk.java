@@ -3,8 +3,8 @@
  *	drunk for list
  *
  *
- *	$Revision: 1.8 $
- *	$Date: 2006/09/20 16:40:54 $
+ *	$Revision: 1.9 $
+ *	$Date: 2006/11/03 11:14:38 $
  */
 
 package ej;
@@ -16,7 +16,7 @@ import com.cycling74.msp.MSPBuffer;
  * give beers to a list...
  * @author jourdan
  * @see ej
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public class ldrunk extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "clean list", "Random range (float/list)", "random step (± step / 2)", "probability of random (%)" };
@@ -92,6 +92,17 @@ public class ldrunk extends ej {
 	public void bang() {
 		if (inputList.length > 0)
 			doRandom();
+	}
+	
+	/**
+	 * If the integer point value arrives in the left inlet, try using drunk instead...
+	 * <p>If the integer point value arrives in the second inlet: set the minimum of the range 
+	 * <p>If the integer point value arrives in the third inlet: set the maximum of the range 
+	 * <p>If the integer point value arrives in the fourth inlet: set the step size
+	 * <p>If the integer point value arrives in the fifth inlet: set the probability
+	 */
+	public void inlet(int i) {
+		inlet((float) i);
 	}
 	
 	/**

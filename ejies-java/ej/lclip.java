@@ -2,8 +2,8 @@
  *	ej.lclip by Emmanuel Jourdan, Ircam Ñ 02 2005
  *	Constrains a list within a certain range
  *
- *	$Revision: 1.5 $
- *	$Date: 2006/09/20 16:40:54 $
+ *	$Revision: 1.6 $
+ *	$Date: 2006/11/03 11:14:38 $
  */
 
 package ej;
@@ -14,7 +14,7 @@ import com.cycling74.msp.MSPBuffer;
  * clip the values of a list
  * @author jourdan
  * @see ej
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class lclip extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "List to be constrained", "Minimum", "Maximum" };
@@ -64,6 +64,18 @@ public class lclip extends ej {
 	 * <i>for that matter you may have to try the standart <code>change</code> object, which works quite well in fact :-)</i>)
 	 * <p> If the value arrives in the middle inlet : set the lowest value
 	 * <p> If the value arrives in the rightmost inlet : set the highest value
+	 * @parm i the value
+	 */
+	public void inlet(int i) {
+		inlet((float) i);
+	}
+	
+	/**
+	 * If the value arrives in the leftmost inlet : clip the int/float value (
+	 * <i>for that matter you may have to try the standart <code>change</code> object, which works quite well in fact :-)</i>)
+	 * <p> If the value arrives in the middle inlet : set the lowest value
+	 * <p> If the value arrives in the rightmost inlet : set the highest value
+	 * @param f the value
 	 */
 	public void inlet(float f) {
 		switch (getInlet()) {

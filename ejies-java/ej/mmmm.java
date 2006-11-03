@@ -2,8 +2,8 @@
  *	ej.mmmm by Emmanuel Jourdan, Ircam — 12 2005
  *	output the min, median, mean, maximum on a int/float stream
  *
- *	$Revision: 1.6 $
- *	$Date: 2006/09/20 16:40:54 $
+ *	$Revision: 1.7 $
+ *	$Date: 2006/11/03 11:14:38 $
  */
 
 package ej;
@@ -16,7 +16,7 @@ import java.util.Arrays;
  * @author jourdan
  * @see "js ej.4m.js"
  * @see ej
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class mmmm extends ej
 {
@@ -97,7 +97,15 @@ public class mmmm extends ej
     
 	/**
 	 * Value to be analysed
-	 * @param f int/float
+	 * @param f int
+	 */
+	public void inlet(int i) {
+		inlet((float) i);
+	}
+	
+	/**
+	 * Value to be analysed
+	 * @param f float
 	 */
 	public void inlet(float f) {
 		// reçoit les int et les float

@@ -1,8 +1,8 @@
 /*
  *	ej.l2buffer by Emmanuel Jourdan, Ircam Ñ 06 2005
  *
- *	$Revision: 1.4 $
- *	$Date: 2006/09/20 16:40:54 $
+ *	$Revision: 1.5 $
+ *	$Date: 2006/11/03 11:14:38 $
  */
 
 package ej;
@@ -82,6 +82,8 @@ public class l2buffer extends ej {
 	public void inlet(int i) {
 		if (getInlet() == 1)
 			setChannel(i);
+		else
+			error("no int expected here!");
 	}
 	
 	/**

@@ -2,8 +2,8 @@
  *	ej.mtof by Emmanuel Jourdan, Ircam Ñ 02 2005
  *	MIDI to Frequency (with tuning adjustment)
  *
- *	$Revision: 1.6 $
- *	$Date: 2006/09/20 16:40:54 $
+ *	$Revision: 1.7 $
+ *	$Date: 2006/11/03 11:14:38 $
  */
 
 package ej;
@@ -14,7 +14,7 @@ import com.cycling74.max.*;
  * Convert MIDI to frequency. This works for list, and allows you to define tuning and pitch reference.   
  * @author jourdan
  * @see ej
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class mtof extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "MIDI note number in (int/float/list)" };
@@ -71,10 +71,17 @@ public class mtof extends ej {
 		return pitch_reference;
 	}
 	
-//	public void bang() {
-//		error("ej.mtof: doesn't understand bang");
-//	}
-	
+	/**
+	 * Calculate the frequency corresponding to the MIDI note number you send
+	 * @param i MIDI note number
+	 */
+	public void inlet(int i) {
+		inlet((float) i);
+	}
+	/**
+	 * Calculate the frequency corresponding to the MIDI note number you send
+	 * @param f MIDI note number
+	 */
 	public void inlet(float f) {
 		outlet(0, (float) (tuning * Math.pow(2,(f - pitch_reference)/12)) );
 	}

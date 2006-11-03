@@ -3,8 +3,8 @@
  *	scale for lists
  *
  *
- *	$Revision: 1.7 $
- *	$Date: 2006/09/20 16:40:54 $
+ *	$Revision: 1.8 $
+ *	$Date: 2006/11/03 11:14:38 $
  */
 
 package ej;
@@ -19,7 +19,7 @@ import java.util.Arrays;
  * Scale list.
  * @author jourdan
  * @see ej
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class lscale extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "List to be scaled", "Low input value", "High input value", "Low output value", "High output value", "Exponent" };
@@ -95,6 +95,19 @@ public class lscale extends ej {
 		return (clip ? 1: 0);
 	}
 
+	/**
+	 * Depending on the inlet number, a int value can do many things...
+	 * @param i if the value arrives in the leftmost inlet: set the value to be scaled, and trigger the calculation
+	 * @param i if the value arrives in the second inlet: set the xMin value
+	 * @param i if the value arrives in the third inlet: set the xMax value
+	 * @param i if the value arrives in the fourth inlet: set the yMin value
+	 * @param i if the value arrives in the fifth inlet: set the yMax value
+	 * @param i if the value arrives in the sixth inlet: set the exponential factor 
+	 */
+	public void inlet(int i) {
+		inlet((float) i);
+	}
+	
 	/**
 	 * Depending on the inlet number, a float value can do many things...
 	 * @param f if the value arrives in the leftmost inlet: set the value to be scaled, and trigger the calculation
