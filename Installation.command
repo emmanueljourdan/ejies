@@ -1,6 +1,15 @@
 #!/bin/bash
 # This file must be saved in UTF-8 (because of the sortcuts)
 
+isQuietMode=0;
+
+if [[ "$*" == "-q" ]] ; then 
+	isQuietMode=1;
+elif [[ "$*" == "-h" ]] ; then
+	echo -ne "Usage:\nno args, or -q to make a non interactive installation\n\n"
+	exit
+fi
+
 ################################
 # Installations Methodes
 ################################
@@ -77,8 +86,7 @@ function doInstallation {
 
 function installShortcuts {
 	# code from AddShortcuts2Max.command
-	defaults delete com.cycling74.Max NSUserKeyEquivalents 2> /dev/null
-	defaults delete com.cycling74.MaxMSP4.6 NSUserKeyEquivalents 2> /dev/null
+	defaults delete $preferenceFile NSUserKeyEquivalents 2> /dev/null
 	
 	sleep 0.5 
 	echo -ne "Adding application shorcuts"
@@ -148,27 +156,32 @@ fi
 #  User interactions
 ################################
 
-# choix des versions
-if [[ $whichVersion == 3 ]]; then
-	echo -ne "\nWould you like to install the ejies for both versions(MaxMSP 4.5 and MaxMSP 4.6)? (Y/N) ";
-	read isInstallBothVersion;
-fi
-
-# choix des objets/helps
-echo -ne "Would you like to install the externals and the help files in the standart places (C74:/externals/ and MaxMSP 4.*/max-help)? (Y/N) "
-
-read installMaxObjects;
-if [[ $installMaxObjects == "Y" || $installMaxObjects == "y" ]] ; then
-	maxObjectsToBeInstalled=1;
+if [[ isQuietMode == 0 ]] ; then
+	# choix des versions
+	if [[ $whichVersion == 3 ]]; then
+		echo -ne "\nWould you like to install the ejies for both versions(MaxMSP 4.5 and MaxMSP 4.6)? (Y/N) ";
+		read isInstallBothVersion;
+	fi
+	
+	# choix des objets/helps
+	echo -ne "Would you like to install the externals and the help files in the standart places (C74:/externals/ and MaxMSP 4.*/max-help)? (Y/N) "
+	
+	read installMaxObjects;
+	if [[ $installMaxObjects == "Y" || $installMaxObjects == "y" ]] ; then
+		maxObjectsToBeInstalled=1;
+	else
+		maxObjectsToBeInstalled=0;
+		echo -ne "I can understand that... but you'll have to install it yourself!\n"
+	fi
+	
+	# choix pour les shortcuts
+	echo -ne "Would you like to install the shortcuts? (Y/N) "
+	read shortcutsAnswer;
 else
-	maxObjectsToBeInstalled=0;
-	echo -ne "I can understand that... but you'll have to install it yourself!\n"
+	whichVersion=2; # démarre l'installation pour 4.6 uniqument quand on est pas dans le mode interactif
+	shortcutsAnswer="Y";
+	maxObjectsToBeInstalled=1;
 fi
-
-# choix pour les shortcuts
-echo -ne "Would you like to install the shortcuts? (Y/N) "
-read shortcutsAnswer;
-
 
 # lance le processus d'installation
 if [[ $whichVersion == 1 ]]; then 
@@ -199,4 +212,3 @@ echo -ne "\nend of the installation... enjoy!\n"
 echo -ne "(you can quit the Terminal now...)\n"
 
 exit 0;
-
