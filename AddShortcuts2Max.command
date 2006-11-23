@@ -1,6 +1,26 @@
 #!/bin/bash
 # This file must be saved in UTF-8
 
+
+################################
+# Installations Methodes
+################################
+function installShortcuts {
+	echo "- Removing old shorcuts... (if needed)"
+	defaults delete $preferenceFile NSUserKeyEquivalents 2> /dev/null
+	
+	sleep 0.5 
+	echo "- Adding new shorcuts..."
+	defaults write $preferenceFile NSUserKeyEquivalents -dict-add "Restore Origin" "@~R" "Set Origin" "@~S" "Open As Text…" "@~O" "Save As…" "@\$S" Clear "~X" "Paste Replace" "@~V" "Lock Background" "@~L" Redo "@~Z" "Text" "@~N" "New from Clipboard" "@\$N" "Encapsulate" "@\$E" "De-encapsulate" "@\$D"
+	
+	echo "- Shortcuts added."
+}
+
+
+
+################################
+# Installation process
+################################
 clear
 
 echo "----------------------"
@@ -11,14 +31,16 @@ echo ""
 
 sleep 1 # c'est plus long mais �a fait joli
 
-echo "- Removing old shorcuts... (if needed)"
-defaults delete com.cycling74.Max NSUserKeyEquivalents 2> /dev/null
 
-sleep 0.5 
-echo "- Adding new shorcuts..."
-defaults write com.cycling74.Max NSUserKeyEquivalents -dict-add "Restore Origin" "@~R" "Set Origin" "@~S" "Open As Text…" "@~O" "Save As…" "@\$S" Clear "~X" "Paste Replace" "@~V" "Lock Background" "@~L" Redo "@~Z" "Text" "@~N" "New from Clipboard" "@\$N" "Encapsulate" "@\$E" "De-encapsulate" "@\$D"
+if [ -e "/Applications/MaxMSP 4.5" ] ; then
+	preferenceFile="com.cycling74.Max"
+	installShortcuts()
+fi
 
-echo "- Shortcuts added."
+if [ -e "/Applications/MaxMSP 4.6" ] ; then
+	preferenceFile="com.cycling74.MaxMSP46"
+	installShortcuts()
+fi
 
 echo "" # saut de ligne
 echo "To revert, remove the ~/Library/Preferences/com.cycling74.Max.plist file."
