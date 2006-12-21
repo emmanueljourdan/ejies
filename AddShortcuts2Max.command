@@ -1,7 +1,6 @@
 #!/bin/bash
 # This file must be saved in UTF-8
 
-
 ################################
 # Installations Methodes
 ################################
@@ -11,7 +10,7 @@ function installShortcuts {
 	
 	sleep 0.5 
 	echo "- Adding new shorcuts..."
-	defaults write $preferenceFile NSUserKeyEquivalents -dict-add "Restore Origin" "@~R" "Set Origin" "@~S" "Open As Text…" "@~O" "Save As…" "@\$S" Clear "~X" "Paste Replace" "@~V" "Lock Background" "@~L" Redo "@~Z" "Text" "@~N" "New from Clipboard" "@\$N" "Encapsulate" "@\$E" "De-encapsulate" "@\$D"
+	defaults write $preferenceFile NSUserKeyEquivalents -dict-add "Restore Origin" "@~R" "Set Origin" "@~S" "Open As Text…" "@~O" "Save As…" "@\$S" Clear "~X" "Paste Replace" "@~V" "Lock Background" "@~L" Redo "@~Z" "Text" "@~N" "New from Clipboard" "@\$N" "Encapsulate" "@\$E" "De-encapsulate" "@\$D" "Hide Object Palette" "~P" "File Preferences…" "@,"
 	
 	echo "- Shortcuts added."
 }
@@ -29,21 +28,20 @@ echo "----------------------"
 echo ""
 echo ""
 
-sleep 1 # c'est plus long mais �a fait joli
+sleep 1 # c'est plus long mais a fait joli
 
-
-if [ -e "/Applications/MaxMSP 4.5" ] ; then
+if [ -e "/Applications/MaxMSP 4.5" ]; then
 	preferenceFile="com.cycling74.Max"
-	installShortcuts()
+	installShortcuts
 fi
 
-if [ -e "/Applications/MaxMSP 4.6" ] ; then
+if [ -e "/Applications/MaxMSP 4.6" ]; then
 	preferenceFile="com.cycling74.MaxMSP46"
-	installShortcuts()
+	installShortcuts
 fi
 
 echo "" # saut de ligne
-echo "To revert, remove the ~/Library/Preferences/com.cycling74.Max.plist file."
+echo "To revert, remove the ~/Library/Preferences/$preferenceFile.plist file."
 
 sleep 0.5
 echo -e "The new shortcuts will be available the next time you start MaxMSP.\n\n"

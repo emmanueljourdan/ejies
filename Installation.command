@@ -90,7 +90,7 @@ function installShortcuts {
 	
 	sleep 0.5 
 	echo -ne "Adding application shorcuts"
-	(defaults write $preferenceFile NSUserKeyEquivalents -dict-add "Restore Origin" "@~R" "Set Origin" "@~S" "Open As Text…" "@~O" "Save As…" "@\$S" Clear "~X" "Paste Replace" "@~V" "Lock Background" "@~L" Redo "@~Z" "Text" "@~N" "New from Clipboard" "@\$N" "Encapsulate" "@\$E" "De-encapsulate" "@\$D") && echo -ne "... done.\n"
+	(defaults write $preferenceFile NSUserKeyEquivalents -dict-add "Restore Origin" "@~R" "Set Origin" "@~S" "Open As Text…" "@~O" "Save As…" "@\$S" Clear "~X" "Paste Replace" "@~V" "Lock Background" "@~L" Redo "@~Z" "Text" "@~N" "New from Clipboard" "@\$N" "Encapsulate" "@\$E" "De-encapsulate" "@\$D" "Hide Object Palette" "~P" "File Preferences…" "@,") && echo -ne "... done.\n"
 	
 	
 	echo -ne "To revert, remove the ~/Library/Preferences/$preferenceFile.plist file.\n"
@@ -178,7 +178,7 @@ if [[ isQuietMode == 0 ]] ; then
 	echo -ne "Would you like to install the shortcuts? (Y/N) "
 	read shortcutsAnswer;
 else
-	whichVersion=2; # d�marre l'installation pour 4.6 uniqument quand on est pas dans le mode interactif
+	whichVersion=2; # d�marre l'installation pour 4.6 uniqument quand on est pas dans le mode interactif
 	shortcutsAnswer="Y";
 	maxObjectsToBeInstalled=1;
 fi
