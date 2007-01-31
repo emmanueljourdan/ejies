@@ -2,8 +2,8 @@
 	ej.cc.js (change color) by Emmanuel Jourdan, Ircam - 01 2005
 	Allows you to rename any named object.
  
-	$Revision: 1.6 $
-	$Date: 2006/08/01 12:39:34 $
+	$Revision: 1.7 $
+	$Date: 2007/01/31 11:19:02 $
 */
 
 // global code
@@ -65,6 +65,12 @@ function anything()
 		ExecuteOperation(ChangeColor);
 	else
 		ejies.error(this, "wrong argument, must be [symbol] [int]");
+}
+
+function msg_int(i)
+{
+	// special case for the "int" object
+	InternalExecuteOperation("int", i);
 }
 
 function ExecuteOperation(toto)
