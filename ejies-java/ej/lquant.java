@@ -2,8 +2,8 @@
  *	ej.lquant by Emmanuel Jourdan, Ircam Ñ 08 2005
  *	Quantize a list
  *
- *	$Revision: 1.5 $
- *	$Date: 2006/11/03 11:14:38 $
+ *	$Revision: 1.6 $
+ *	$Date: 2007/02/05 17:47:39 $
  */
 
 package ej;
@@ -35,18 +35,18 @@ public class lquant extends ej {
 	 * Create a ej.lquant object with rounding default value (1.)
 	 */
 	public lquant() {
-		this(new float[] { 1f });
+		this(new Atom[] { Atom.newAtom(1) } );
 	}
 	
 	/**
 	 * Create a lquant object with the defined value(s)
 	 * @param args set the quantification list
 	 */
-	public lquant(float[] args) {
+	public lquant(Atom[] args) {
 		declareTypedIO("al", "l");
 		createInfoOutlet(false);
 		
-		setQuantFactors(args);
+		setQuantFactors(Atom.toFloat(args));
 
 		declareAttribute("outputmode", null, "setMode");
 		declareAttribute("buf_name");
@@ -144,7 +144,7 @@ public class lquant extends ej {
 		
 		for (int i = 0; i < quantFactors.length; i++) {
 			if (quantFactors[i] != 0) {
-				rounded = quantFactors[i] == 1 ? val : doRounding(val, 1 / quantFactors[i]);
+				rounded = doRounding(val, 1 / quantFactors[i]);
 	
 				interval = Math.abs(val - rounded);
 				if (Math.abs(val - rounded) < smallestInterval) {
