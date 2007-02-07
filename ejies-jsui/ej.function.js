@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.88 $
-	$Date: 2007/02/07 17:34:44 $
+	$Revision: 1.89 $
+	$Date: 2007/02/07 17:41:22 $
 */
 
 // global code
@@ -157,13 +157,13 @@ function draw()
 
 function askForDrawFunctions()
 {	
-	slowDrawing.schedule(200); // trigger the task one time
+	slowDrawing.schedule(20); // trigger the task one time
 }
 askForDrawFunctions.local = 1;
 
 function askForDrawingAll()
 {
-	slowDrawingAll.schedule(200);
+	slowDrawingAll.schedule(20);
 }
 askForDrawingAll.local = 1;
 
