@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.87 $
-	$Date: 2006/11/02 13:41:21 $
+	$Revision: 1.88 $
+	$Date: 2007/02/07 17:34:44 $
 */
 
 // global code
@@ -72,14 +72,12 @@ var tskDel = new Task();
 var tmpString = new String();
 var tmpRange, tmpDomain;	// utilisé dans Interp
 
-var SketchFunctions = new Sketch(BoxWidth, BoxHeight - LegendStateBordure);
-var SketchText = new Sketch(BoxWidth, LegendStateBordure);
+var SketchFunctions = new Sketch(BoxWidth, BoxHeight);
 var slowDrawing = new Task(drawFunctions, this);	// pour empêcher le rafraichissement trop rapide
-var slowDrawingAll = new Task(drawAll, this);	// pour empêcher le rafraichissement trop rapide
+var slowDrawingAll = new Task(draw, this);	// pour empêcher le rafraichissement trop rapide
 var slowNotify = new Task(notifyclients, this);		// pour empêcher la mise à jour pattr trop rapide
 
 SketchFunctions.fsaa = fsaaValue;
-SketchText.fsaa = fsaaValue;
 
 RedrawEnable = 0;	// désactivation de l'affichage pendant l'initialisation
 NotifyEnable = 0;
@@ -90,7 +88,6 @@ if (max.version < 455)
 if (box.rect[2] - box.rect[0] == 64 && box.rect[3] - box.rect[1] == 64) {
 	// numbox a été créée à partie de jsui : dimensions = 64*64
 	init();
-//	post(front, "\n");
 	onresize(200,100);
 }
 
@@ -148,11 +145,11 @@ init.local = 1;
 //////////////// Fonctions Affichage ///////////////
 function draw()
 {
+	sketch.copypixels(SketchFunctions, 0, 0);
+
 	if ( LegendState ) {
-		sketch.copypixels(SketchFunctions, 0, LegendStateBordure);
-		sketch.copypixels(SketchText);
-	} else
-		sketch.copypixels(SketchFunctions, 0, 0);
+		SpriteText();
+	}
 
 /* 	post("draw operation completed\n"); */
 	refresh();
@@ -160,24 +157,19 @@ function draw()
 
 function askForDrawFunctions()
 {	
-/* 	if (slowDrawing.running) */
-/* 		slowDrawing.cancel(); */
-	
-/* 	post("running? " + drawingTask.running + "\n"); */
-	slowDrawing.schedule(20); // trigger the task one time
+	slowDrawing.schedule(200); // trigger the task one time
 }
 askForDrawFunctions.local = 1;
 
 function askForDrawingAll()
 {
-	slowDrawingAll.schedule();
+	slowDrawingAll.schedule(200);
 }
 askForDrawingAll.local = 1;
 
 function drawAll()
 {
 	if (RedrawEnable) {
-		SpriteText();
 		SpriteFunctions();
 		draw();
 		drawText.display = 0;
@@ -191,7 +183,6 @@ function drawAll()
 function drawText()
 {
 	if (RedrawEnable) {
-		SpriteText();
 		draw();
 		drawText.display = 0;
 	} else
@@ -231,46 +222,38 @@ DoNotify.local = 1;
 
 function SpriteText()
 {
-	if ( ! LegendState )
-		return;		// si la légende n'est pas présente, on ne fait rien
+	with ( sketch ) {
+		// Nom de la Courbe
+		moveto((BoxWidth - Bordure)/BoxHeight,(BoxHeight - LegendStateBordure - Bordure)/BoxHeight);
 
-/* 	post("SpriteText\n"); */	
-	with ( SketchText ) {
-		glclearcolor(f[front].brgb);
-		glclear();
+		font("Arial");
+		fontsize(11);
+		textalign("right","center");
+		glcolor(f[front].rgb4);
+		
+		if ( BoxWidth < 130 && (SelectedPoint >= 0  || IdlePoint >= 0) ) { ;} //
+		else {
+			if (f[front].display)
+				text(f[front].name);
+			 else
+				text("("+f[front].name+")");
+		}
 
-		if ( LegendState ) {
-			// Nom de la Courbe
-			moveto((SketchText.size[0] - Bordure)/SketchText.size[1], - Bordure/SketchText.size[1]);
-			font("Arial");
-			fontsize(11);
-			textalign("right","center");
-			glcolor(f[front].rgb4);
-			
-			if ( BoxWidth < 130 && (SelectedPoint >= 0  || IdlePoint >= 0) ) { ;} //
-			else {
-				if (f[front].display)
-					text(f[front].name);
+		if (f[front].np > 0 && (SelectedPoint >= 0  || IdlePoint >= 0)) {
+			var WhichPoint = (SelectedPoint >=0 ) ? SelectedPoint : IdlePoint ;
+
+			if ( WhichPoint < f[front].np) {
+				var sep = " ";
+				if (f[front].pa[WhichPoint].fix)
+					sep = "=";
+
+				fontsize(10);
+				textalign("left","center");
+				moveto(-(BoxWidth - Bordure)/BoxHeight,(BoxHeight - LegendStateBordure - Bordure)/BoxHeight);
+				if (TimeFlag)
+					text("X" + sep + MyDomain2String(f[front]["pa"][WhichPoint].valx) + " Y" + sep + f[front]["pa"][WhichPoint].valy.toFixed(2));
 				else
-					text("("+f[front].name+")");
-			}
-	
-			if (f[front].np > 0 && (SelectedPoint >= 0  || IdlePoint >= 0)) {
-				var WhichPoint = (SelectedPoint >=0 ) ? SelectedPoint : IdlePoint ;
-	
-				if ( WhichPoint < f[front].np) {
-					var sep = " ";
-					if (f[front].pa[WhichPoint].fix)
-						sep = "=";
-	
-					fontsize(10);
-					textalign("left","center");
-					moveto(-(SketchText.size[0] - Bordure)/SketchText.size[1],(SketchText.size[1] - LegendStateBordure - Bordure)/SketchText.size[1]);
-					if (TimeFlag)
-						text("X" + sep + MyDomain2String(f[front]["pa"][WhichPoint].valx) + " Y" + sep + f[front]["pa"][WhichPoint].valy.toFixed(2));
-					else
-						text("X" + sep + f[front]["pa"][WhichPoint].valx.toFixed(2) + " Y" + sep + f[front]["pa"][WhichPoint].valy.toFixed(2));
-				}
+					text("X" + sep + f[front]["pa"][WhichPoint].valx.toFixed(2) + " Y" + sep + f[front]["pa"][WhichPoint].valy.toFixed(2));
 			}
 		}
 	}
@@ -328,9 +311,9 @@ function SpriteFunctions()
 						else {
 							if (f[c]["pa"][i].valy == 0) {
 								f[c].OnePointAtZero = 1;
-								framecircle(5 / SketchFunctions.size[1]); // 5 pixels le point...
+								framecircle(5 / BoxHeight); // 5 pixels le point...
 							} else
-								circle(5 / SketchFunctions.size[1]); // 5 pixels le point...
+								circle(5 / BoxHeight); // 5 pixels le point...
 						}
 					}
 				}
@@ -344,7 +327,6 @@ function fsaa(v)
 {
 	fsaaValue = v;
 	SketchFunctions.fsaa = v;
-	SketchText.fsaa = v;
 	askForDrawingAll();
 }
 
@@ -352,9 +334,9 @@ function fsaa(v)
 
 //////////////// Fonctions magiques ///////////////
 function x2val(courbe, x) { return ((( x - Bordure)) * courbe.PixelDomain + courbe.ZoomX[0]); }
-function y2val(courbe, y) {	return (courbe.ZoomY[1] - ((y  - Bordure) * courbe.PixelRange)); }
+function y2val(courbe, y) {	return (courbe.ZoomY[1] - ((y  - Bordure - LegendStateBordure) * courbe.PixelRange)); }
 function val2x(courbe, valx) {	return (( (valx - courbe.ZoomX[0]) / courbe.PixelDomain) + Bordure); }
-function val2y(courbe, valy) {	return ( ((courbe.ZoomY[1] - valy) / courbe.PixelRange) + Bordure); }
+function val2y(courbe, valy) {	return ( ((courbe.ZoomY[1] - valy) / courbe.PixelRange) + Bordure + LegendStateBordure); }
 
 
 //////////////// Fonctions standart ///////////////
@@ -421,10 +403,8 @@ function onresize(w,h)
 	
 	BoxWidth = box.rect[2] - box.rect[0];
 	BoxHeight = box.rect[3] - box.rect[1];
-	SketchFunctions = new Sketch(BoxWidth, BoxHeight - (LegendState ? LegendStateBordure : 0) );
-	SketchText = new Sketch(BoxWidth, LegendStateBordure);
+	SketchFunctions = new Sketch(BoxWidth, BoxHeight);
 	SketchFunctions.fsaa = fsaaValue;
-	SketchText.fsaa = fsaaValue;
 	AllPixel2Machin();
 	ValRecalculate();
 	drawAll();
@@ -1028,8 +1008,8 @@ MySmooth.local = 1;
 
 function pixel2machin(courbe)
 {
-	courbe.PixelDomain = (courbe.ZoomX[1] - courbe.ZoomX[0]) / (SketchFunctions.size[0]-(Bordure*2));
-	courbe.PixelRange = (courbe.ZoomY[1] - courbe.ZoomY[0]) / (SketchFunctions.size[1]-((Bordure*2)));
+	courbe.PixelDomain = (courbe.ZoomX[1] - courbe.ZoomX[0]) / (BoxWidth-(Bordure*2));
+	courbe.PixelRange = (courbe.ZoomY[1] - courbe.ZoomY[0]) / (BoxHeight-LegendStateBordure-((Bordure*2)));
 }
 pixel2machin.local = 1.;
 
@@ -1615,7 +1595,7 @@ function all()
 		
 	// affichage
 	if ( (drawFunctions.display + drawText.display) == 2)
-		drawAll();
+		askForDrawingAll();
 	else if (drawText.display)
 		drawText();
 	else if (drawFunctions.display)
@@ -1927,7 +1907,7 @@ function insertfunction()
 	NbCourbes++;
 	pixel2machin(f[front]);
 	getname();		// mise à jour du menu
-	drawAll();		// mise à jour de l'affichage, car c'est la courbe courrante
+	askForDrawingAll();		// mise à jour de l'affichage, car c'est la courbe courrante
 }
 
 function deletefunction()
@@ -2188,10 +2168,10 @@ function legend(v)
 	LegendState = v;
 	LegendStateBordure = 12 * v;		// 12 pixels la légende...
 	// redimensionnement du Sketch principal
-	SketchFunctions = new Sketch(BoxWidth, BoxHeight - (LegendState ? LegendStateBordure : 0) );
+	SketchFunctions = new Sketch(BoxWidth, BoxHeight);
 	AllPixel2Machin();
 	ValRecalculate();
-	drawAll();
+	askForDrawingAll();
 }
 
 function ghost(v)
@@ -2248,11 +2228,11 @@ function sustain()
 		ejies.error(this, "bad arguments for message sustain");
 }
 
-function brgb() { SetColor(f[front], "brgb", arguments); drawAll(); }
+function brgb() { SetColor(f[front], "brgb", arguments); askForDrawFunctions(); }
 function frgb() { SetColor(f[front], "frgb", arguments); askForDrawFunctions(); }
 function rgb2() { SetColor(f[front], "rgb2", arguments); askForDrawFunctions(); }
 function rgb3() { SetColor(f[front], "rgb3", arguments); askForDrawFunctions(); }
-function rgb4() { SetColor(f[front], "rgb4", arguments); drawText(); }
+function rgb4() { SetColor(f[front], "rgb4", arguments); askForDrawingAll(); }
 function rgb5() { SetColor(f[front], "rgb5", arguments); askForDrawFunctions(); }
 
 function domain()
@@ -2390,7 +2370,7 @@ function defaults()
 		f[c].rgb5 =[0.5,0.5,0.5];
 	}
 	
-	drawAll();	// si c'est utilisé dans la fonction save(), draw est désactivé automatiquement (RedrawEnable = 0);
+	askForDrawingAll();	// si c'est utilisé dans la fonction save(), draw est désactivé automatiquement (RedrawEnable = 0);
 }
 
 function removeduplicate()
@@ -2518,7 +2498,7 @@ function onidle(x,y,but,cmd,shift,capslock,option,ctrl)
 	if (AllowEdit == 0 || f[front].display == 0)
 		return;
 
-	y = yOffset(y);
+/* 	y = yOffset(y); */
 
 	for(i=0; i< f[front].np; i++) {
 
@@ -2556,16 +2536,13 @@ function onidleout()
 
 function yOffset(y)
 {
-	if ( LegendState )
-		return (y - LegendStateBordure);
-	else
-		return y;
+	return y ;
 }
 
 
 function onclick(x,y,but,cmd,shift,capslock,option,ctrl)
 {
-	y = yOffset(y);
+/* 	y = yOffset(y); */
 	
 	if (AllowEdit == 0 || f[front].display == 0) {
 		onidle(x, y);
@@ -2573,8 +2550,8 @@ function onclick(x,y,but,cmd,shift,capslock,option,ctrl)
 	}
 	
 	SelectedPoint = -2;
-	x = ejies.clip(x - 2, Bordure, SketchFunctions.size[0] - Bordure);
-	y = ejies.clip(y - 2, Bordure + LegendStateBordure, SketchFunctions.size[1] - Bordure);
+	x = ejies.clip(x - 2, Bordure, BoxWidth - Bordure);
+	y = ejies.clip(y - 2, Bordure + LegendStateBordure, BoxHeight - Bordure);
 
 	if (IdlePoint != -1) {
 		SelectedPoint = IdlePoint;
@@ -2633,7 +2610,7 @@ function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 		return;
 	}
 	
-	y = yOffset(y); // ne pas le mettre avant sinon onidle ne reçoit pas les bons coordonnées y
+/* 	y = yOffset(y); // ne pas le mettre avant sinon onidle ne reçoit pas les bons coordonnées y */
 
 	if (MouseReportState)
 		outlet(DUMPOUT, "mouse", 	ejies.clip(x2val(f[front], x), f[front].domain[0], f[front].domain[1]),
@@ -2647,8 +2624,8 @@ function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 		if ( Snap2GridState )
 			x = val2x(f[front], Math.round((x2val(f[front], x) - f[front].domain[0]) / f[front].GridStep) * f[front].GridStep + f[front].domain[0]);
 		
-		x = ejies.clip(x, Bordure, SketchFunctions.size[0] - Bordure);
-		y = ejies.clip(y, Bordure, SketchFunctions.size[1] - Bordure);
+		x = ejies.clip(x, Bordure, BoxWidth - Bordure);
+		y = ejies.clip(y, Bordure + LegendStateBordure, BoxHeight - Bordure);
 	
 		if ( BorderSyncState == 1 && f[front].np > 2 && ( SelectedPoint == 0 || SelectedPoint == (f[front].np - 1 ) )) {
 			SelectedPoint == 0 ? borderthing = (f[front].np - 1) : borderthing = 0;
@@ -2661,7 +2638,7 @@ function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 			} else if (SelectedPoint > 0 && SelectedPoint < (f[front]["np"] - 1)) {
 				x = ejies.clip(x, f[front]["pa"][SelectedPoint-1].x, f[front]["pa"][SelectedPoint+1].x);
 			} else if (SelectedPoint == (f[front]["np"] - 1) ) {
-				x = ejies.clip(x, f[front]["pa"][SelectedPoint-1].x, SketchFunctions.size[0]);
+				x = ejies.clip(x, f[front]["pa"][SelectedPoint-1].x, BoxWidth);
 			}
 		}
 
