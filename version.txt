@@ -10,12 +10,15 @@ ej.lquant: fixed integers arguments problem
 ej.lquant: fixed quantization with 1 (equals to rounding…)
 ej.numbox-keyboard.pat: now located in the ejies-obj folder, so it's found...
 
+
 Improvements:
 Installation.command: quiet mode (-q as argument), to it can be installed in non interactive mode (useful for network installation)
 AddShortcuts2Max.command: New shortcuts added: Show/Hide Object Palette (for Philippe), File Preferences
 AddShortcuts2Max.command: works with 4.6 too...
 ej.cc.help: now show how it works...
 ej.function.js: drawing methods updated (doesn't use 2 sketches anymore)
+ej.lchange: set message added for Roland...
+
 
 
 

@@ -2,8 +2,8 @@
  *	ej.lchange by Emmanuel Jourdan, Ircam Ñ 12 2005
  *	aware of list change
  *
- *	$Revision: 1.10 $
- *	$Date: 2006/11/02 17:28:37 $
+ *	$Revision: 1.11 $
+ *	$Date: 2007/02/15 11:00:04 $
  */
 
 package ej;
@@ -14,7 +14,7 @@ import com.cycling74.max.*;
  * aware of list change
  * @author jourdan
  * @see ej
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 public class lchange extends ej
 {
@@ -75,6 +75,26 @@ public class lchange extends ej
 			isDifferent(s, args);
 		} else {
 			compareItems(s, args);
+		}
+	}
+	
+	/**
+	 * Replace the stored "anything" without triggering the output.
+	 * @param a
+	 */
+	public void set(Atom[] a) {
+		if (a.length == 1) {
+			if (a[0].isInt())
+				updateLastThing("int", a);
+			else if (a[0].isFloat())
+				updateLastThing("float", a);
+			else
+				updateLastThing(a[0].getString(), new Atom[] { } );
+		} else if (a.length > 1) {
+				if (isNumber(a[0]))
+					updateLastThing("list", a);
+				else
+					updateLastThing(a[0].toString(), Atom.removeFirst(a));
 		}
 	}
 	
