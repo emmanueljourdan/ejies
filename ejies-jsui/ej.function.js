@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.89 $
-	$Date: 2007/02/07 17:41:22 $
+	$Revision: 1.90 $
+	$Date: 2007/02/20 16:16:37 $
 */
 
 // global code
@@ -74,7 +74,7 @@ var tmpRange, tmpDomain;	// utilisé dans Interp
 
 var SketchFunctions = new Sketch(BoxWidth, BoxHeight);
 var slowDrawing = new Task(drawFunctions, this);	// pour empêcher le rafraichissement trop rapide
-var slowDrawingAll = new Task(draw, this);	// pour empêcher le rafraichissement trop rapide
+var slowDrawingAll = new Task(drawAll, this);	// pour empêcher le rafraichissement trop rapide
 var slowNotify = new Task(notifyclients, this);		// pour empêcher la mise à jour pattr trop rapide
 
 SketchFunctions.fsaa = fsaaValue;
