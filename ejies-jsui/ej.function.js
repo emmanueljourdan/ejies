@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.90 $
-	$Date: 2007/02/20 16:16:37 $
+	$Revision: 1.91 $
+	$Date: 2007/04/03 16:40:23 $
 */
 
 // global code
@@ -1223,6 +1223,8 @@ function ArgsParser(courbe, msg, a)
 		case "clearsustain":	MyClearSustain(courbe); break;
 		case "dump":		a.length == 2 ? MyDump(courbe, a[1]) : MyDump(courbe); break;
 		case "listdump":	a.length == 2 ? MyListDump(courbe, a[1]) : MyListDump(courbe); break;
+		case "dumpmatrix": 	a.length == 2 ? MyDumpMatrix(courbe, a[1]) : MyDumpMatrix(courbe); break;
+		case "jit_matrix":	setPointsFromMatrix(courbe, a[0]); break;
 		case "addpoints":	MyAddPoints(courbe, a); break;
 		case "fix":			if (a.length == 3) { FixPoint(courbe, a[1], a[2]); } ; break;
 		case "unfix":		MyUnfix(courbe); break;
@@ -1469,22 +1471,57 @@ function MyDump(courbe, sendname)
 }
 MyDump.local = 1;
 
-function MyDumpMatrix(courbe)
+function checkInputMatrix(input)
+{
+	var isOk = true;
+
+	if (input.dim.length != 2) {
+		ejies.error(this, "support only 2 dim matrix");
+		isOk = false;
+	} 
+	if (input.planecount.length > 1){
+		ejies.error(this, "support only 1 plane matrix");
+		isOk = false;
+	}
+	return isOk;
+}
+checkInputMatrix.local = 1;
+
+function setPointsFromMatrix(courbe, matrixName)
+{
+	var myMatrix = new JitterMatrix(matrixName);
+
+	if (checkInputMatrix(myMatrix)) {
+		courbe.np = 0;
+	
+		for (var i = 0; i < myMatrix.dim[1]; i++)
+			courbe.pa[courbe.np++] = new Point(val2x(courbe, myMatrix.getcell(0, i)), val2y(courbe, myMatrix.getcell(1, i)));
+
+		sortingPoints(courbe);
+		DoNotify();
+		askForDrawFunctions();
+	}
+}
+setPointsFromMatrix.local = 1;
+
+function MyDumpMatrix(courbe, sendname)
 {
 	var p;
 
+	if (! courbe.np)
+		return;
 
-	// il faut au moins un point pour sortir
-	if (courbe.np) {
-		var Matrix = new JitterMatrix(1, "float32", 2, courbe.np);
-		
-		for (p = 0; p < courbe.np; p++) {
-			Matrix.setcell2d(0, p, courbe.pa[p].valx);
-			Matrix.setcell2d(1, p, courbe.pa[p].valy);
-		}
-		
-		outlet(DUMP_OUTLET, "jit_matrix", Matrix.name);
+	var myMatrix = new JitterMatrix(1, "float32", 2, courbe.np);
+
+	for (p = 0; p < courbe.np; p++) {
+		myMatrix.setcell2d(0, p, courbe.pa[p].valx);
+		myMatrix.setcell2d(1, p, courbe.pa[p].valy);
 	}
+
+	if (arguments.length  == 1)
+		outlet(DUMP_OUTLET, courbe.name, "jit_matrix", myMatrix.name);
+	else
+		messnamed(sendname, courbe.name, "jit_matrix", myMatrix.name);
 }
 MyDumpMatrix.local = 1;
 
@@ -1571,94 +1608,6 @@ function MyUnfix(courbe)
 }
 MyUnfix.local = 1;
 
-
-
-//////////////// Fonctions "ExtŽrieures" ///////////////
-function all()
-{
-	var i;
-	var OldRedrawState = RedrawEnable;
-	NeedNotify = 0;
-	DisplayOneTime = 1;
-	RedrawEnable = 0;
-	NotifyEnable = 0;
-	
-	for (i = 0, tmp = 0; i < NbCourbes; i++) {
-		ArgsParser(f[i], "all" , arguments, "\n");
-	}
-
-	RedrawEnable = OldRedrawState;
-	NotifyEnable = 1;
-
-	// pattr notification
-	DoNotify();
-		
-	// affichage
-	if ( (drawFunctions.display + drawText.display) == 2)
-		askForDrawingAll();
-	else if (drawText.display)
-		drawText();
-	else if (drawFunctions.display)
-		askForDrawFunctions();
-}
-
-function addpoints()
-{
-	MyAddPoints(f[front], arrayfromargs(messagename, arguments));
-}
-
-function args4insp()
-{
-	//
-	ejies.error(this, "since 1.52 the parameters are embed with the patcher. Use the inspector insteed.");
-	return;
-	
-	var i, j;
-	var idx = 0;
-	var tmpArray = new Array();
-	tmpArray[idx++] = "args4insp";
-	
-	tmpArray[idx++] = NbCourbes;
-	tmpArray[idx++] = LegendState;
-	tmpArray[idx++] = GridMode;
-	tmpArray[idx++] = Snap2GridState;
-	tmpArray[idx++] = HiddenPointDisplay;
-	tmpArray[idx++] = ClickAdd;
-	tmpArray[idx++] = ClickMove;
-	tmpArray[idx++] = AutoSustain;
-	tmpArray[idx++] = TimeFlag;
-
-	for (i = 0; i < NbCourbes; i++) {
-		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(f[i].brgb[j] * 255); }
-		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(f[i].frgb[j] * 255); }
-		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(f[i].rgb2[j] * 255); }
-		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(f[i].rgb3[j] * 255); }
-		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(f[i].rgb4[j] * 255); }
-		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(f[i].rgb5[j] * 255); }
-	}
-
-	outlet(DUMPOUT, tmpArray);
-}
-
-function autosustain(v)
-{
-	if (v != 0 && v != 1) {
-		ejies.error(this, "autosustain doesn't understand", v);
-		return;
-	}
-	AutoSustain = v;
-}
-
-function autorange()	{	MyAutoRange(f[front]);	}
-function autodomain()	{	MyAutoDomain(f[front]);	}
-function normalize()	{	MyNormalize(f[front]);	}
-function normalize_x()	{	MyNormalizeX(f[front]);	}
-function normalize_y()	{	MyNormalizeY(f[front]);	}
-function flip()			{	MyFlip(f[front]);		}
-function flip_x()		{	MyFlipX(f[front]);		}
-function flip_y()		{	MyFlipY(f[front]);		}
-
-
 function MyFlip(courbe)
 {
 	var tmpX, tmpY, tmpSustain, tmpFix;
@@ -1698,7 +1647,6 @@ function MyFlip(courbe)
 	askForNotify();
 }
 MyFlip.local = 1;
-
 
 function MyFlipX(courbe)
 {
@@ -1873,6 +1821,92 @@ function MyNormalize(courbe)
 }
 MyNormalize.local = 1;
 
+
+//////////////// Fonctions "ExtŽrieures" ///////////////
+function all()
+{
+	var i;
+	var OldRedrawState = RedrawEnable;
+	NeedNotify = 0;
+	DisplayOneTime = 1;
+	RedrawEnable = 0;
+	NotifyEnable = 0;
+	
+	for (i = 0, tmp = 0; i < NbCourbes; i++) {
+		ArgsParser(f[i], "all" , arguments, "\n");
+	}
+
+	RedrawEnable = OldRedrawState;
+	NotifyEnable = 1;
+
+	// pattr notification
+	DoNotify();
+		
+	// affichage
+	if ( (drawFunctions.display + drawText.display) == 2)
+		askForDrawingAll();
+	else if (drawText.display)
+		drawText();
+	else if (drawFunctions.display)
+		askForDrawFunctions();
+}
+
+function addpoints()
+{
+	MyAddPoints(f[front], arrayfromargs(messagename, arguments));
+}
+
+function args4insp()
+{
+	//
+	ejies.error(this, "since 1.52 the parameters are embed with the patcher. Use the inspector insteed.");
+	return;
+	
+	var i, j;
+	var idx = 0;
+	var tmpArray = new Array();
+	tmpArray[idx++] = "args4insp";
+	
+	tmpArray[idx++] = NbCourbes;
+	tmpArray[idx++] = LegendState;
+	tmpArray[idx++] = GridMode;
+	tmpArray[idx++] = Snap2GridState;
+	tmpArray[idx++] = HiddenPointDisplay;
+	tmpArray[idx++] = ClickAdd;
+	tmpArray[idx++] = ClickMove;
+	tmpArray[idx++] = AutoSustain;
+	tmpArray[idx++] = TimeFlag;
+
+	for (i = 0; i < NbCourbes; i++) {
+		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(f[i].brgb[j] * 255); }
+		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(f[i].frgb[j] * 255); }
+		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(f[i].rgb2[j] * 255); }
+		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(f[i].rgb3[j] * 255); }
+		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(f[i].rgb4[j] * 255); }
+		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(f[i].rgb5[j] * 255); }
+	}
+
+	outlet(DUMPOUT, tmpArray);
+}
+
+function autosustain(v)
+{
+	if (v != 0 && v != 1) {
+		ejies.error(this, "autosustain doesn't understand", v);
+		return;
+	}
+	AutoSustain = v;
+}
+
+function autorange()	{	MyAutoRange(f[front]);	}
+function autodomain()	{	MyAutoDomain(f[front]);	}
+function normalize()	{	MyNormalize(f[front]);	}
+function normalize_x()	{	MyNormalizeX(f[front]);	}
+function normalize_y()	{	MyNormalizeY(f[front]);	}
+function flip()			{	MyFlip(f[front]);		}
+function flip_x()		{	MyFlipX(f[front]);		}
+function flip_y()		{	MyFlipY(f[front]);		}
+
 function autocursor(v)
 {
 	if (v != 0 && v != 1)
@@ -2009,17 +2043,9 @@ function dump()
 function dumpmatrix()
 {
 	if (arguments.length) {
-		var c;
-		for (c = 0; c < NbCourbes; c++) {
-			if (arguments[0] == f[c].name) {
-				MyDumpMatrix(f[c]);
-				return;
-			}
-		}
-		// message d'erreur si le nom de la fonction n'est pas valide
-		ejies.error(this, arguments[0], "is not a function, dumpmatrix aborted.");
+		MyDumpMatrix(f[front], arguments[0]);
 	} else
-		MyDumpMatrix(f[front]);	// 
+		MyDumpMatrix(f[front]);
 }
 
 function listdump()
@@ -2029,6 +2055,16 @@ function listdump()
 		MyListDump(f[front], arguments[0]);
 	else
 		MyListDump(f[front]);
+}
+
+function jit_matrix(matrixName)
+{
+	if (arguments.length == 0)
+		ejies.error(this, "missing arguments for messagae jit_matrix")
+	else if (arguments.length == 1)
+		setPointsFromMatrix(f[front], matrixName);
+	else
+		ejies.error(this,"extra arguments for messagae jit_matrix")
 }
 
 function nbfunctions(v)
