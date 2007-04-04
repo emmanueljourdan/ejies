@@ -2,20 +2,31 @@
 	ej.lock.js by Emmanuel Jourdan, Ircam Ñ 07 2004
 	lock/unlock the actual patcher
 
-	$Revision: 1.5 $
-	$Date: 2006/08/01 12:39:34 $
+	$Revision: 1.6 $
+	$Date: 2007/04/04 11:22:06 $
  */
 
 // global code
 inlets = 1;
 outlets = 1;
-setinletassist(0, "0=lock, 1=unlock, ...");
+setinletassist(0, "0=lock, 1=unlock, poll/nopoll");
 setoutletassist(0, "dumpout");
 
 var IsRuntime;
+var lastLockState;
+var pollTsk = new Task(checkLocked, this);
 
 if (max.version < 455)
 	ejies.error(this, "MaxMSP 4.5.5 or higher is required.");
+
+function quiteLoadbang()
+{
+	if (jsarguments.length > 1) {
+		if (typeof(jsarguments[1]) == "number")
+			poll(jsarguments[1]);
+	}
+}
+quiteLoadbang.local = 1;
 
 function runtime_test()
 {
@@ -43,7 +54,35 @@ function getlock()
 	outlet(0, "lock",this.patcher.locked);
 }
 
+function poll()
+{
+	lastLockState = -1;
+	
+	// the optional argument defines the polling interval
+	if (arguments.length != 0 && typeof(arguments[0]) == "number")
+		pollTsk.interval = arguments[0] > 50 ? arguments[0] : 50;
+	else
+		pollTsk.interval = 100;
+	
+	pollTsk.repeat();
+}
+
+function nopoll()
+{
+	pollTsk.cancel();
+}
+
+function checkLocked()
+{
+	if (this.patcher.locked != lastLockState) {
+		lastLockState = this.patcher.locked;
+		getlock();
+	}
+}
+checkLocked.local = 1;
+
 runtime_test();
+quiteLoadbang();
 
 // Pour la compilation automatique
 // autowatch = 1;
