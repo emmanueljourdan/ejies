@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.91 $
-	$Date: 2007/04/03 16:40:23 $
+	$Revision: 1.92 $
+	$Date: 2007/04/04 10:14:28 $
 */
 
 // global code
@@ -1224,7 +1224,7 @@ function ArgsParser(courbe, msg, a)
 		case "dump":		a.length == 2 ? MyDump(courbe, a[1]) : MyDump(courbe); break;
 		case "listdump":	a.length == 2 ? MyListDump(courbe, a[1]) : MyListDump(courbe); break;
 		case "dumpmatrix": 	a.length == 2 ? MyDumpMatrix(courbe, a[1]) : MyDumpMatrix(courbe); break;
-		case "jit_matrix":	setPointsFromMatrix(courbe, a[0]); break;
+		case "jit_matrix":	setPointsFromMatrix(courbe, a[1]); break;
 		case "addpoints":	MyAddPoints(courbe, a); break;
 		case "fix":			if (a.length == 3) { FixPoint(courbe, a[1], a[2]); } ; break;
 		case "unfix":		MyUnfix(courbe); break;
@@ -1495,7 +1495,7 @@ function setPointsFromMatrix(courbe, matrixName)
 		courbe.np = 0;
 	
 		for (var i = 0; i < myMatrix.dim[1]; i++)
-			courbe.pa[courbe.np++] = new Point(val2x(courbe, myMatrix.getcell(0, i)), val2y(courbe, myMatrix.getcell(1, i)));
+			courbe.pa[courbe.np++] = new Point(val2x(courbe, myMatrix.getcell(0, i)[0]), val2y(courbe, myMatrix.getcell(1, i)[0]), myMatrix.getcell(0, i)[0], myMatrix.getcell(1, i)[0]);
 
 		sortingPoints(courbe);
 		DoNotify();
