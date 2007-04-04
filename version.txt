@@ -2,7 +2,7 @@ ejies — Version history
 
 
 *******************
-1.57b4: 14 March 2007
+1.57b5: 4 April 2007
 This version requires MaxMSP 4.5.6 or higher (compatible with MaxMSP 4.6 UB).
 
 Bug correction:
@@ -10,6 +10,9 @@ ej.lquant: fixed integers arguments problem
 ej.lquant: fixed quantization with 1 (equals to rounding…)
 ej.numbox-keyboard.pat: now located in the ejies-obj folder, so it's found...
 ej.function.js: fixed redrawing bug introduced in 1.57b2
+ej.function.js: fixed dumpmatrix inconsistency
+ej.function.js: dumpmatrix argument is the name of a receive object
+ej.function.js: accept 2 dim matrix as input (jit_matrix message)
 
 Improvements:
 Installation.command: quiet mode (-q as argument), to it can be installed in non interactive mode (useful for network installation)
