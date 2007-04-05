@@ -2,8 +2,8 @@
  *	ej.fplay by Emmanuel Jourdan, Ircam Ñ 04 2006
  *	function player
  *
- *	$Revision: 1.27 $
- *	$Date: 2006/11/03 11:14:38 $
+ *	$Revision: 1.28 $
+ *	$Date: 2007/04/05 11:15:37 $
  */
 
 /**
@@ -20,12 +20,13 @@ import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
+import com.cycling74.jitter.JitterMatrix;
 import com.cycling74.max.*;
 
 
 /**
  * Multi function editor (like ej.function.js without the graphics)
- * @version $Revision: 1.27 $
+ * @version $Revision: 1.28 $
  * @author jourdan
  * @see "ej.function.js"
  */
@@ -220,6 +221,14 @@ public class fplay extends ej {
 	}
 	
 	/**
+	 * Set points from a Jitter matrix.
+	 * @param s matrix name (~ address)
+	 */
+	public void jit_matrix(String s) {
+		((Courbe) Courbes.get(current)).jitMatrix(s);
+	}
+	
+	/**
 	 * Display a dialog box to select the file to read.
 	 */
 	public void read() {
@@ -324,21 +333,28 @@ public class fplay extends ej {
 	}
 
 	/**
-	 * send all points out dump outlet as pair of <i>w y </i>
+	 * send all points to the dump outlet as pair of <i>x y</i>
 	 */
 	public void dump() {
 		((Courbe) Courbes.get(current)).dump();
 	}
 	
 	/**
-	 * Send all points to a receive object as an unique list of pairs of <i>w y </i>
+	 * Send all points to the dump outlet as an unique list which contains pairs of <i>x y</i>
 	 */
 	public void listdump() {
 		((Courbe) Courbes.get(current)).listDump();
 	}
+	
+	/**
+	 * Send all points to the dump outlet as a Jitter Matrix (1 plane, 2 dim, type float32)
+	 */
+	public void dumpmatrix() {
+		((Courbe) Courbes.get(current)).dumpMatrix();
+	}
 
 	/**
-	 * Send all points to a receive object as pair of <i>w y </i>
+	 * Send all points to a receive object as pair of <i>x y</i>
 	 * @param s name of the receive object you want to send it to.
 	 */
 	public void dump(String s) {
@@ -347,14 +363,22 @@ public class fplay extends ej {
 	}
 	
 	/**
-	 * Send all points to a receive object as an unique list of pairs of <i>w y </i>
+	 * Send all points to a receive object as an unique list which contains paris of <i>x y</i>
 	 * @param s name of the receive object you want to send it to.
 	 */
 	public void listdump(String s) {
 		// methode listdump qui envoie vers un send
 		((Courbe) Courbes.get(current)).listDump(s);
 	}
-	
+
+	/**
+	 * Send all points to a receive object as a Jitter Matrix (1 plane, 2 dim, type float32)
+	 * @param s name of the receive object you want to send it to.
+	 */
+	public void dumpmatrix(String s) {
+		((Courbe) Courbes.get(current)).dumpMatrix(s);
+	}
+
 	/**
 	 * Remove all the points of the current bpf
 	 */
@@ -748,6 +772,8 @@ public class fplay extends ej {
 					((Courbe) Courbes.get(courbeIdx)).dump();
 				else if (msgName.equals("listdump"))
 					((Courbe) Courbes.get(courbeIdx)).listDump();
+				else if (msgName.equals("dumpmatrix"))
+					((Courbe) Courbes.get(courbeIdx)).dumpMatrix();
 				else if (msgName.equals("autodomain"))
 					((Courbe) Courbes.get(courbeIdx)).autoDomain();
 				else if (msgName.equals("autorange"))
@@ -795,14 +821,18 @@ public class fplay extends ej {
 			if (isNumber(args[0]) && isNumber(args[1]))
 				((Courbe) Courbes.get(courbeIdx)).addOnePoint(args[0].toFloat(), args[1].toFloat()); // comme dans listOfNumbers
 			else {
-				if (msgName.equals("dump"))
+				if (msgName.equals("dump") && args[1].isString())
 					((Courbe) Courbes.get(courbeIdx)).dump(args[1].toString());
-				else if (msgName.equals("listdump"))
+				else if (msgName.equals("listdump") && args[1].isString())
 					((Courbe) Courbes.get(courbeIdx)).listDump(args[1].toString());
+				else if (msgName.equals("dumpmatrix") && args[1].isString())
+					((Courbe) Courbes.get(courbeIdx)).dumpMatrix(args[1].toString());
 				else if (msgName.equals("domain") && isNumber(args[1]))
 					((Courbe) Courbes.get(courbeIdx)).domain(0, args[1].toDouble());
 				else if (msgName.equals("setdomain") && isNumber(args[1]))
 					((Courbe) Courbes.get(courbeIdx)).setDomain(0, args[1].toDouble());
+				else if (msgName.equals("jit_matrix") && args[1].isString())
+					((Courbe) Courbes.get(courbeIdx)).jitMatrix(args[1].getString());
 				else if (msgName.equals("nth") && isNumber(args[1]))
 					myNth(courbeIdx, args[1].toInt());
 			}
@@ -1288,6 +1318,58 @@ public class fplay extends ej {
 				if (MaxSystem.sendMessageToBoundObject(sendName, getName(), tmp) == false)
 					error(sendName + " bad receive name");
 			}
+		}
+		
+		public void dumpMatrix() {
+			JitterMatrix myMatrix = new JitterMatrix(1, "float32", 2, np());
+			Atom[] tmp = new Atom[3];
+			tmp[0] = Atom.newAtom(getName());
+			tmp[1] = Atom.newAtom("jit_matrix");
+			tmp[2] = Atom.newAtom(myMatrix.getName());
+			
+			for (int i = 0; i < np(); i++) {
+				myMatrix.setcell2d(0, i, new float[]{(float) getPoint(i).getX()});
+				myMatrix.setcell2d(1, i, new float[]{(float) getPoint(i).getY()});
+			}
+			
+			outlet(DUMP_OUTLET, tmp);
+		}
+		
+		public void dumpMatrix(String sendName) {
+			JitterMatrix myMatrix = new JitterMatrix(1, "float32", 2, np());
+			Atom[] tmp = new Atom[2];
+			tmp[0] = Atom.newAtom("jit_matrix");
+			tmp[1] = Atom.newAtom(myMatrix.getName());
+			
+			for (int i = 0; i < np(); i++) {
+				myMatrix.setcell2d(0, i, new float[]{(float) getPoint(i).getX()});
+				myMatrix.setcell2d(1, i, new float[]{(float) getPoint(i).getY()});
+			}
+
+			if (MaxSystem.sendMessageToBoundObject(sendName, getName(), tmp) == false)
+				error(sendName + " bad recevie name");
+		}
+		
+		public void jitMatrix(String inName) {
+			int[] dim;
+			JitterMatrix myMatrix = new JitterMatrix(inName);
+			
+			dim = myMatrix.getDim();
+			if (dim.length != 2) {
+				error("support only 2 dim matrix");
+				return;
+			}
+			if (myMatrix.getPlanecount() != 1) {
+				error("support only 1 plane matrix");
+				return;
+			}
+			
+			lPoints.clear();
+			for (int i = 0; i < dim[1]; i++)
+				lPoints.add(new Point(myMatrix.getcell2dDouble(0, i)[0], myMatrix.getcell2dDouble(1, i)[0]));
+			
+			quickSort(0, np() - 1);
+			applyAutoSustain();
 		}
 		
 		public void setSyncFunctions(Atom[] args) {
