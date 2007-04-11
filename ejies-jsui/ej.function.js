@@ -2,14 +2,22 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.92 $
-	$Date: 2007/04/04 10:14:28 $
+	$Revision: 1.93 $
+	$Date: 2007/04/11 13:05:04 $
 */
 
 // global code
 var ejies = new EjiesUtils(); // lien vers ejiesUtils.js
 
-const FUNCTIONVERSION = 2; // Depuis ejies version 1.52 le numéro de version est 2 (à cause du domain qui a 2 bornes).
+
+/*
+	Version 1: domain n'a qu'une borne 
+	Version 2: depuis 1.52 domain avec 2 bornes
+	Version 3: ej.fplay compatible
+	Version 4: grille sur 2 axes
+*/
+const FUNCTIONVERSION = 4;
+
 inlets = 1;
 outlets = 5;
 const INTERP_OUTLET = 0;
@@ -119,7 +127,9 @@ function Courbe(name)
 	this.rgb4 =[0.2,0.2,0.2];	// couleur texte
 	this.rgb5 =[0.5,0.5,0.5];	// Couleur grille
 	this.display = 1;			// display while inactive ?
-	this.GridStep = 100;		// tout est dans lenom
+	this.grid_x = 100;			// grille X
+	this.grid_y = 0.1;			// grille Y
+	
 	this.PixelDomain;			// ...
 	this.PixelRange;			// ...
 	this.NextFrom = 0;			// utilisé pour le message next
@@ -269,13 +279,22 @@ function SpriteFunctions()
 		glclearcolor(f[front].brgb);
 		glclear();
 		
-		// dessine la grille
-		if ( GridMode ) {
+		// dessine la grille X
+		if ( GridMode  & 1) {
 			glcolor(f[front]["rgb5"], Ghostness);
 			
-			for (i = 0; i < (((f[front].domain[1] - f[front].domain[0]) / f[front].GridStep)+1); i++) {
-			linesegment( screentoworld(val2x(f[front], i*f[front].GridStep + f[front].domain[0]), val2y(f[front], f[front].range[0]) ),
-				screentoworld( val2x(f[front], i*f[front].GridStep + f[front].domain[0]), val2y(f[front], f[front].range[1]) ) );
+			for (i = 0; i < (((f[front].domain[1] - f[front].domain[0]) / f[front].grid_x)+1); i++) {
+			linesegment( screentoworld(val2x(f[front], i*f[front].grid_x + f[front].domain[0]), val2y(f[front], f[front].range[0]) ),
+				screentoworld( val2x(f[front], i*f[front].grid_x + f[front].domain[0]), val2y(f[front], f[front].range[1]) ) );
+			}
+		}
+		// dessine le grille Y
+		if (GridMode & 2) {
+			glcolor(f[front]["rgb5"], Ghostness);
+			
+			for (i = 0; i < (((f[front].range[1] - f[front].range[0]) / f[front].grid_y)+1); i++) {
+				linesegment(screentoworld(val2x(f[front], f[front].domain[0]), val2y(f[front], i*f[front].grid_y + f[front].range[0])),
+				screentoworld(val2x(f[front], f[front].domain[1]), val2y(f[front], i *f[front].grid_y + f[front].range[0])));
 			}
 		}
 	
@@ -1263,7 +1282,9 @@ function ArgsParser(courbe, msg, a)
 		case "autorange":	MyAutoRange(courbe); break;
 		case "removeduplicate": 	MyRemoveDuplicate(courbe); break;
 		case "smooth":		MySmooth(courbe); break;
-		case "gridstep":	if (a.length == 2) { MyGridStep(courbe, a[1]); }; break;
+		case "gridstep":	if (a.length == 2) { MyGridStep_x(courbe, a[1]); }; break;
+		case "gridstep_x":	if (a.length == 2) { MyGridStep_x(courbe, a[1]); }; break;
+		case "gridstep_y":	if (a.length == 2) { MyGridStep_y(courbe, a[1]); }; break;
 		case "brgb":		SetColor(courbe, "brgb", a[1], a[2], a[3]); drawAll(); break;
 		case "frgb":		SetColor(courbe, "frgb", a[1], a[2], a[3]); askForDrawFunctions(); break;
 		case "rgb2":		SetColor(courbe, "rgb2", a[1], a[2], a[3]); askForDrawFunctions(); break;
@@ -1281,6 +1302,8 @@ function ArgsParser(courbe, msg, a)
 		case "getfix":		getfix(courbe); break;
 		case "getsustain":	getsustain(courbe); break;
 		case "getgridstep":	getgridstep(courbe); break;
+		case "getgridstep_x":	getgridstep_x(courbe); break;
+		case "getgridstep_y":	getgridstep_y(courbe); break;
 		case "getbrgb":		GetColor(courbe, "brgb"); break;
 		case "getfrgb":		GetColor(courbe, "frgb"); break;
 		case "getrgb2":		GetColor(courbe, "rgb2"); break;
@@ -1434,11 +1457,11 @@ function MyFloat2Color(qui)
 }
 MyFloat2Color.local = 1;
 
-function MyGridStep(courbe, v)
+function MyGridStep_x(courbe, v)
 {
 	if (typeof(v) == "number" && v > 0) {
-		if ( ((courbe.ZoomX[1] - courbe.ZoomX[0]) / v) < (BoxWidth-(Bordure*2) / 4) ) {
-			courbe.GridStep = v;
+		if (((courbe.ZoomX[1] - courbe.ZoomX[0]) / v) < (BoxWidth-(Bordure*2) / 4) ) { /* très arbitraire tout ça */
+			courbe.grid_x = v;
 			DoNotify();
 			if (GridMode)
 				askForDrawFunctions();
@@ -1446,8 +1469,21 @@ function MyGridStep(courbe, v)
 	} else
 		ejies.error(this, "bad argument for message gridstep");
 }
-MyGridStep.local = 1;
+MyGridStep_x.local = 1;
 
+function MyGridStep_y(courbe, v)
+{
+	if (typeof(v) == "number" && v > 0) {
+		if (((courbe.ZoomY[1] - courbe.ZoomY[0]) / v) < BoxHeight / 4) { /* très arbitraire tout ça */
+			courbe.grid_y = v;
+			DoNotify();
+			if (GridMode)
+				askForDrawFunctions();
+		}
+	} else
+		ejies.error(this, "bad argument for message gridstep_y");
+}
+MyGridStep_y.local = 1;
 
 function MyDump(courbe, sendname)
 {
@@ -2117,7 +2153,7 @@ function unfix()
 
 function grid(v)
 {
-	if (v == 0 || v == 1) {
+	if (v >= 0 && v <= 3) {
 		GridMode = v;
 		askForDrawFunctions();
 	} else
@@ -2174,7 +2210,7 @@ function active()
 
 function snap2grid(v)
 {
-	if (v == 0 || v == 1)
+	if (v >= 0 && v <= 3)
 		Snap2GridState = v;
 	else
 		ejies.error(this, "snap2grid doesn't understand", v);
@@ -2182,7 +2218,17 @@ function snap2grid(v)
 
 function gridstep(v)
 {
-	MyGridStep(f[front], v);
+	MyGridStep_x(f[front], v);
+}
+
+function gridstep_x(v)
+{
+	MyGridStep_x(f[front], v);
+}
+
+function gridstep_y(v)
+{
+	MyGridStep_y(f[front], v);
 }
 
 function hiddenpoint(v)
@@ -2616,8 +2662,10 @@ function onclick(x,y,but,cmd,shift,capslock,option,ctrl)
 
 	// ajout d'un point
 	if (cmd == 0 && shift == 0 && SelectedPoint == -2 && ClickAdd == 1) {
-		if ( Snap2GridState )
-			x = val2x(f[front], Math.round((x2val(f[front], x) - f[front].domain[0]) / f[front].GridStep) * f[front].GridStep + f[front].domain[0]);
+		if (Snap2GridState & 1)
+			x = val2x(f[front], Math.round((x2val(f[front], x) - f[front].domain[0]) / f[front].grid_x) * f[front].grid_x + f[front].domain[0]);
+		if (Snap2GridState & 2)
+			y = val2y(f[front], Math.round((y2val(f[front], y) - f[front].range[0]) / f[front].grid_y) * f[front].grid_y + f[front].range[0]);
 		SelectedPoint = AddOnePoint(f[front], x, y);
 		ApplyAutoSustain();
 		EditedWithMouse.state++;
@@ -2625,6 +2673,7 @@ function onclick(x,y,but,cmd,shift,capslock,option,ctrl)
 		drawAll();
 		onidle(x,y);
 	}
+
 	if (MouseReportState)
 		outlet(DUMPOUT, "mouse",	ejies.clip(x2val(f[front], x), f[front].domain[0], f[front].domain[1]),
 									ejies.clip(y2val(f[front], y), f[front].range[0], f[front].range[1]),
@@ -2657,8 +2706,10 @@ function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 		if (f[front]["pa"][SelectedPoint].fix)
 			return;
 			
-		if ( Snap2GridState )
-			x = val2x(f[front], Math.round((x2val(f[front], x) - f[front].domain[0]) / f[front].GridStep) * f[front].GridStep + f[front].domain[0]);
+		if (Snap2GridState & 1)
+			x = val2x(f[front], Math.round((x2val(f[front], x) - f[front].domain[0]) / f[front].grid_x) * f[front].grid_x + f[front].domain[0]);
+		if (Snap2GridState & 2)
+			y = val2y(f[front], Math.round((y2val(f[front], y) - f[front].range[0]) / f[front].grid_y) * f[front].grid_y + f[front].range[0]);
 		
 		x = ejies.clip(x, Bordure, BoxWidth - Bordure);
 		y = ejies.clip(y, Bordure + LegendStateBordure, BoxHeight - Bordure);
@@ -2752,7 +2803,19 @@ function getsustain(courbe)
 function getgridstep(courbe)
 {
 	var tmpF = frontOrArgument(courbe, arguments, 0);
-	outlet(DUMPOUT, tmpF.name, "gridstep", tmpF.GridStep);
+	outlet(DUMPOUT, tmpF.name, "gridstep", tmpF.grid_x); /* not really consistent it's just for compatibility reason */
+}	
+
+function getgridstep_x(courbe)
+{
+	var tmpF = frontOrArgument(courbe, arguments, 0);
+	outlet(DUMPOUT, tmpF.name, "gridstep_x", tmpF.grid_x);
+}
+
+function getgridstep_y(courbe)
+{
+	var tmpF = frontOrArgument(courbe, arguments, 0);
+	outlet(DUMPOUT, tmpF.name, "gridstep_y", tmpF.grid_y);
 }
 
 function getbrgb() { GetColor(f[front], "brgb"); }
@@ -2864,7 +2927,7 @@ function setvalueof()
 			return;
 		}
 	}
-
+ 
 	AllowEdit = 0;
 	
 	BeginCurve = new Array();
@@ -2892,8 +2955,10 @@ function setvalueof()
 
 		MyThings2Zoom(f[i]);
 		
-		f[i].GridStep = arguments[idx++];
-		
+		f[i].grid_x = arguments[idx++];
+		if (FunctionVersionCheck == 4) /* pas de grille en y */
+			f[i].grid_y = arguments[idx++];
+			
 		OldNp = f[i].np;
 		f[i].np = (arguments[i+2]);
 
@@ -2925,7 +2990,7 @@ function setvalueof()
 	if (NotifyRecalledState)
 		outlet(DUMPOUT, "recalled");
 
-	if ( FunctionVersionCheck < 1 && FunctionVersionCheck > 2 )
+	if ( FunctionVersionCheck < 1 && FunctionVersionCheck > 4 )
 		ejies.error(this, "bad version number - interpolation aborted");
 }
 
@@ -2949,7 +3014,8 @@ function getvalueof()
 		tmpData[idx++] = f[i].domain[1];
 		tmpData[idx++] = f[i].range[0];
 		tmpData[idx++] = f[i].range[1];
-		tmpData[idx++] = f[i].GridStep;
+		tmpData[idx++] = f[i].grid_x;
+		tmpData[idx++] = f[i].grid_y;
 
 		for (p = 0; p < f[i].np; p++) {
 			// on stocke un minimum de chose pour pouvoir mettre plus de points
@@ -3066,7 +3132,8 @@ function copyfunction()
 	cp[idx++] = f[c].domain[1];
 	cp[idx++] = f[c].range[0];
 	cp[idx++] = f[c].range[1];
-	cp[idx++] = f[c].GridStep;
+	cp[idx++] = f[c].grid_x;
+	cp[idx++] = f[x].grid_y;
 	cp[idx++] = f[c].display;
 
 	for (p = 0; p < f[c].np; p++) {
@@ -3121,7 +3188,8 @@ function MyPasteFunction(courbe)
 	courbe.domain[1] = cp[idx++];
 	courbe.range[0] = cp[idx++];
 	courbe.range[1] = cp[idx++];
-	courbe.GridStep = cp[idx++];
+	courbe.grid_x = cp[idx++];
+	courbe.grix_y = cp[idx++];
 	courbe.display = cp[idx++];
 	
 	for (p = 0; p < courbe.np; p++) {
@@ -3160,7 +3228,8 @@ function insertpaste()
 	f[front].domain[1] = cp[idx++];
 	f[front].range[0] = cp[idx++];
 	f[front].range[1] = cp[idx++];	
-	f[front].GridStep = cp[idx++];
+	f[front].grid_x = cp[idx++];
+	f[front].grid_y = cp[idx++];
 	f[front].display = cp[idx++];
 	
 	for (p = 0; p < f[front].np; p++) {
@@ -3269,8 +3338,11 @@ function read(filename)
 
 			MyThings2Zoom(f[c]);
 			
-			if (FunctionVersionCheck < 3) {
-				f[c].GridStep = parseFloat(tmpLine[idx++]);
+			if (FunctionVersionCheck != 3) {
+				f[c].grid_x = parseFloat(tmpLine[idx++]);
+				if (FunctionVersionCheck == 4)
+					f[c].grid_y = parseFloat(tmpLine[idx++]);
+					
 				f[c].display = parseFloat(tmpLine[idx++]);
 
 				idx = 0;
@@ -3368,7 +3440,8 @@ function write(filename)
 			tmpStr += f[i].domain[1] + sep;
 			tmpStr += f[i].range[0] + sep;
 			tmpStr += f[i].range[1] + sep;
-			tmpStr += f[i].GridStep + sep;
+			tmpStr += f[i].grid_x + sep;
+			tmpStr += f[i].grid_y + sep;
 			tmpStr += f[i].display;
 			fichier.writeline(tmpStr);		
 
