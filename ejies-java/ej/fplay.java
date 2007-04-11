@@ -2,8 +2,8 @@
  *	ej.fplay by Emmanuel Jourdan, Ircam Ñ 04 2006
  *	function player
  *
- *	$Revision: 1.28 $
- *	$Date: 2007/04/05 11:15:37 $
+ *	$Revision: 1.29 $
+ *	$Date: 2007/04/11 13:51:17 $
  */
 
 /**
@@ -26,7 +26,7 @@ import com.cycling74.max.*;
 
 /**
  * Multi function editor (like ej.function.js without the graphics)
- * @version $Revision: 1.28 $
+ * @version $Revision: 1.29 $
  * @author jourdan
  * @see "ej.function.js"
  */
@@ -37,7 +37,8 @@ public class fplay extends ej {
 	private static final int LINE_OUTLET = 1;
 	private static final int DUMP_OUTLET = 2;
 	private static final int DUMPOUT_OUTLET = 3;
-
+	private static final int FPLAY_VERSION_NUMBER = 3;
+	
 	private boolean isAll = false;
 	private boolean autosustain = false;
 	private boolean outputmode = false;
@@ -886,7 +887,7 @@ public class fplay extends ej {
 		        		tok = new StringTokenizer(lectureLigne(in));
 		        		
 		        		versionNumber = Integer.parseInt(tok.nextToken());
-		        		if (versionNumber < 1 && versionNumber> 3) {
+		        		if (versionNumber < 1 && versionNumber > 4) {
 		        			error("bad file version number (line: " + ligneNumber + ")");
 		        			in.close();
 		        			return -1;			// il faut sortir !
@@ -920,9 +921,9 @@ public class fplay extends ej {
 			        			((Courbe) Courbes.get(c)).domain(Double.parseDouble(tok.nextToken()), Double.parseDouble(tok.nextToken()));
 			        		
 			        		((Courbe) Courbes.get(c)).range(Double.parseDouble(tok.nextToken()), Double.parseDouble(tok.nextToken()));
-			        		// ignoring the extra things (gridstep, active)
+			        		// ignoring the extra things (gridstep_x, gridstep_y, active)
 			        		
-			        		if (versionNumber < 3) // saute la ligne contenant les couleurs
+			        		if (versionNumber != 3) // saute la ligne contenant les couleurs
 			        			lectureLigne(in);
 			        		
 			        		// add points
@@ -1004,7 +1005,7 @@ public class fplay extends ej {
 			out.write("ej.function format");
 			out.newLine();
 	
-			sb.append("3 " + getNbFunctions()); // version, Nb functions
+			sb.append(FPLAY_VERSION_NUMBER + " " + getNbFunctions()); // version, Nb functions
 			for (c = 0; c <  getNbFunctions(); c++)
 				sb.append(" " + ((Courbe) Courbes.get(c)).np());
 	
