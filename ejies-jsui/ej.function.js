@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.93 $
-	$Date: 2007/04/11 13:05:04 $
+	$Revision: 1.94 $
+	$Date: 2007/04/11 13:51:50 $
 */
 
 // global code
@@ -3269,7 +3269,7 @@ function read(filename)
 			
 			// suppression des objets opendialog...
 			if (OpendialogPrepend)
-					DeleteReadThings();
+				DeleteReadThings();
 
 			fichier.close();
 			return;
@@ -3340,7 +3340,7 @@ function read(filename)
 			
 			if (FunctionVersionCheck != 3) {
 				f[c].grid_x = parseFloat(tmpLine[idx++]);
-				if (FunctionVersionCheck == 4)
+				if (FunctionVersionCheck == 4) /* in format 4, there's a horizontal grid */
 					f[c].grid_y = parseFloat(tmpLine[idx++]);
 					
 				f[c].display = parseFloat(tmpLine[idx++]);
