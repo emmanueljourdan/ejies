@@ -2,7 +2,7 @@ ejies Ñ Version history
 
 
 *******************
-1.57b5: 4 April 2007
+1.57b6: 11 April 2007
 This version requires MaxMSP 4.5.6 or higher (compatible with MaxMSP 4.6 UB).
 
 Bug correction:
@@ -20,6 +20,12 @@ ej.cc.help: now show how it works...
 ej.function.js: drawing methods updated (doesn't use 2 sketches anymore)
 ej.function.js: dumpmatrix argument is the name of a receive object
 ej.function.js: accept 2 dim matrix as input (jit_matrix message)
+ej.function.js: horizontal grid (grid message, gridstep_x/gridstep_y)
+ej.function.js: new file format to support horizontal grid
+ej.function-inps: grid and snap2grid have a umenu
+ej.fplay: accept 2 dim matrix as input (jit_matrix message)
+ej.fplay: dumpmatrix as in ej.function.js
+ej.fplay: new file format to support horizontal grid
 ej.lchange: set message added for Roland...
 ej.lock.js: polling method to report lock change
 kd&u: default modifiers key is now 0 or 128 on windows
