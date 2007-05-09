@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.94 $
-	$Date: 2007/04/11 13:51:50 $
+	$Revision: 1.95 $
+	$Date: 2007/05/09 14:55:43 $
 */
 
 // global code
@@ -15,8 +15,9 @@ var ejies = new EjiesUtils(); // lien vers ejiesUtils.js
 	Version 2: depuis 1.52 domain avec 2 bornes
 	Version 3: ej.fplay compatible
 	Version 4: grille sur 2 axes
+	Version 5: couleur pour line
 */
-const FUNCTIONVERSION = 4;
+const FUNCTIONVERSION = 5;
 
 inlets = 1;
 outlets = 5;
@@ -79,6 +80,7 @@ var tskDraw = new Task();
 var tskDel = new Task();
 var tmpString = new String();
 var tmpRange, tmpDomain;	// utilisŽ dans Interp
+var LineValue = -1;
 
 var SketchFunctions = new Sketch(BoxWidth, BoxHeight);
 var slowDrawing = new Task(drawFunctions, this);	// pour empcher le rafraichissement trop rapide
@@ -126,6 +128,7 @@ function Courbe(name)
 	this.rgb3 =[1,0.,0.];		// Couleur sustain
 	this.rgb4 =[0.2,0.2,0.2];	// couleur texte
 	this.rgb5 =[0.5,0.5,0.5];	// Couleur grille
+	this.rgb6 =[0.42,0.42,0.42];// Couleur de line
 	this.display = 1;			// display while inactive ?
 	this.grid_x = 100;			// grille X
 	this.grid_y = 0.1;			// grille Y
@@ -157,9 +160,11 @@ function draw()
 {
 	sketch.copypixels(SketchFunctions, 0, 0);
 
-	if ( LegendState ) {
+	if ( LegendState )
 		SpriteText();
-	}
+
+	if (LineValue >= f[front].domain[0])
+		SpriteLine();
 
 /* 	post("draw operation completed\n"); */
 	refresh();
@@ -270,6 +275,16 @@ function SpriteText()
 }
 SpriteText.local = 1;
 
+function SpriteLine()
+{
+	with ( sketch ) {
+		glcolor(f[front].rgb6);
+		linesegment(	screentoworld(val2x(f[front], LineValue), BoxHeight),
+						screentoworld(val2x(f[front], LineValue), val2y(f[front], f[front].range[1])));
+	}
+}
+SpriteLine.local = 1;
+
 function SpriteFunctions()
 {
 /* 	post("SpriteFunctions\n"); */
@@ -361,7 +376,7 @@ function val2y(courbe, valy) {	return ( ((courbe.ZoomY[1] - valy) / courbe.Pixel
 //////////////// Fonctions standart ///////////////
 function bang()
 {
-	line(f[front]);
+	doLineOutput(f[front]);
 }
 bang.immediate = 1;
 
@@ -410,6 +425,12 @@ function anything()
 		drawText();
 	else if (drawFunctions.display)
 		askForDrawFunctions();
+}
+
+function line(v)
+{
+	LineValue = v;
+	draw();
 }
 
 function onresize(w,h)
@@ -571,7 +592,7 @@ function MyDomain2String(v)
 }
 MyDomain2String.local = 1;
 
-function line(courbe)
+function doLineOutput(courbe)
 {
 	var tmpArray = new Array();
 	var i, idx;
@@ -595,7 +616,7 @@ function line(courbe)
 	if (tmpArray.length > 1)
 		outlet(LINE_OUTLET, courbe.name, tmpArray);
 }
-line.local = 1;
+doLineOutput.local = 1;
 
 function interp(courbe, v)
 {
@@ -1237,7 +1258,7 @@ function ArgsParser(courbe, msg, a)
 	}
 
 	switch (a[0]) {
-		case "bang":		line(courbe); break;
+		case "bang":		doLineOutput(courbe); break;
 		case "clear":		a.length == 1 ? MyClear(courbe) : MyClear(courbe, a); break;
 		case "clearsustain":	MyClearSustain(courbe); break;
 		case "dump":		a.length == 2 ? MyDump(courbe, a[1]) : MyDump(courbe); break;
@@ -1352,7 +1373,7 @@ function MyNext(courbe)
 	var OldNextFrom = courbe.NextFrom;
 	
 	if (courbe.NextFrom == 0) {
-		line(courbe);
+		doLineOutput(courbe);
 		return;
 	}
 	
@@ -2316,6 +2337,7 @@ function rgb2() { SetColor(f[front], "rgb2", arguments); askForDrawFunctions(); 
 function rgb3() { SetColor(f[front], "rgb3", arguments); askForDrawFunctions(); }
 function rgb4() { SetColor(f[front], "rgb4", arguments); askForDrawingAll(); }
 function rgb5() { SetColor(f[front], "rgb5", arguments); askForDrawFunctions(); }
+function rgb6() { SetColor(f[front], "rgb6", arguments); askForDrawingAll(); }
 
 function domain()
 {
@@ -2956,7 +2978,7 @@ function setvalueof()
 		MyThings2Zoom(f[i]);
 		
 		f[i].grid_x = arguments[idx++];
-		if (FunctionVersionCheck == 4) /* pas de grille en y */
+		if (FunctionVersionCheck >= 4) /* pas de grille en y */
 			f[i].grid_y = arguments[idx++];
 			
 		OldNp = f[i].np;
@@ -2990,7 +3012,7 @@ function setvalueof()
 	if (NotifyRecalledState)
 		outlet(DUMPOUT, "recalled");
 
-	if ( FunctionVersionCheck < 1 && FunctionVersionCheck > 4 )
+	if ( FunctionVersionCheck < 1 && FunctionVersionCheck > 5 )
 		ejies.error(this, "bad version number - interpolation aborted");
 }
 
@@ -3072,6 +3094,7 @@ function save()
 		embedmessage("SetColor", i, "rgb3", Math.round(f[i].rgb3[0] * 255), Math.round(f[i].rgb3[1] * 255), Math.round(f[i].rgb3[2] * 255) );
 		embedmessage("SetColor", i, "rgb4", Math.round(f[i].rgb4[0] * 255), Math.round(f[i].rgb4[1] * 255), Math.round(f[i].rgb4[2] * 255) );
 		embedmessage("SetColor", i, "rgb5", Math.round(f[i].rgb5[0] * 255), Math.round(f[i].rgb5[1] * 255), Math.round(f[i].rgb5[2] * 255) );
+		embedmessage("SetColor", i, "rgb6", Math.round(f[i].rgb6[0] * 255), Math.round(f[i].rgb6[1] * 255), Math.round(f[i].rgb6[2] * 255) );
 	}
 	
 	embedmessage("fsaa", fsaaValue);
@@ -3326,7 +3349,7 @@ function read(filename)
 				f[c].name += " " + tmpLine[idx++];
 			
 			// depuis la version 1.52 domaine contient deux limites.
-			if (FunctionVersionCheck < 2)
+			if (FunctionVersionCheck == 1)
 				f[c].domain[0] = 0;
 			else
 				f[c].domain[0] = parseFloat(tmpLine[idx++]);
@@ -3340,7 +3363,7 @@ function read(filename)
 			
 			if (FunctionVersionCheck != 3) {
 				f[c].grid_x = parseFloat(tmpLine[idx++]);
-				if (FunctionVersionCheck == 4) /* in format 4, there's a horizontal grid */
+				if (FunctionVersionCheck >= 4) /* in format 4 and higher, there's a horizontal grid */
 					f[c].grid_y = parseFloat(tmpLine[idx++]);
 					
 				f[c].display = parseFloat(tmpLine[idx++]);
@@ -3354,6 +3377,7 @@ function read(filename)
 				for (j=0; j < 3; j++) { f[c].rgb3[j] = tmpLine[idx++] / 255; }
 				for (j=0; j < 3; j++) { f[c].rgb4[j] = tmpLine[idx++] / 255; }
 				for (j=0; j < 3; j++) { f[c].rgb5[j] = tmpLine[idx++] / 255; }
+				for (j=0; j < 3; j++) { f[c].rgb6[j] = tmpLine[idx++] / 255; }
 			}
 
 			for (p = 0; p < f[c].np; p++) {
@@ -3452,6 +3476,7 @@ function write(filename)
 			for (j=0; j < 3; j++) { tmpStr += Math.round(f[i].rgb3[j] * 255) + sep; }
 			for (j=0; j < 3; j++) { tmpStr += Math.round(f[i].rgb4[j] * 255) + sep; }
 			for (j=0; j < 3; j++) { tmpStr += Math.round(f[i].rgb5[j] * 255) + sep; }
+			for (j=0; j < 3; j++) { tmpStr += Math.round(f[i].rgb6[j] * 255) + sep; }
 			fichier.writeline(tmpStr);
 
 			for (p = 0; p < f[i].np; p++) {
