@@ -2,8 +2,8 @@
  *	ej.fplay by Emmanuel Jourdan, Ircam Ñ 04 2006
  *	function player
  *
- *	$Revision: 1.29 $
- *	$Date: 2007/04/11 13:51:17 $
+ *	$Revision: 1.30 $
+ *	$Date: 2007/05/09 15:55:29 $
  */
 
 /**
@@ -26,7 +26,7 @@ import com.cycling74.max.*;
 
 /**
  * Multi function editor (like ej.function.js without the graphics)
- * @version $Revision: 1.29 $
+ * @version $Revision: 1.30 $
  * @author jourdan
  * @see "ej.function.js"
  */
@@ -887,7 +887,7 @@ public class fplay extends ej {
 		        		tok = new StringTokenizer(lectureLigne(in));
 		        		
 		        		versionNumber = Integer.parseInt(tok.nextToken());
-		        		if (versionNumber < 1 && versionNumber > 4) {
+		        		if (versionNumber < 1 && versionNumber > 5) {
 		        			error("bad file version number (line: " + ligneNumber + ")");
 		        			in.close();
 		        			return -1;			// il faut sortir !
