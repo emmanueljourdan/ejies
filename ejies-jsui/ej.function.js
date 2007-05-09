@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.95 $
-	$Date: 2007/05/09 14:55:43 $
+	$Revision: 1.96 $
+	$Date: 2007/05/09 15:43:45 $
 */
 
 // global code
@@ -280,7 +280,7 @@ function SpriteLine()
 	with ( sketch ) {
 		glcolor(f[front].rgb6);
 		linesegment(	screentoworld(val2x(f[front], LineValue), BoxHeight),
-						screentoworld(val2x(f[front], LineValue), val2y(f[front], f[front].range[1])));
+						screentoworld(val2x(f[front], LineValue), 0));
 	}
 }
 SpriteLine.local = 1;
