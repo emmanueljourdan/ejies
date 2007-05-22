@@ -1,8 +1,8 @@
 /*
  *	ejies Java externals by Emmanuel Jourdan, Ircam — 12 2005
  *
- *	$Revision: 1.13 $
- *	$Date: 2006/11/02 17:28:37 $
+ *	$Revision: 1.14 $
+ *	$Date: 2007/05/22 17:33:28 $
  */
 
 package ej;
@@ -15,7 +15,7 @@ import java.io.*;
 
  * @author jourdan
  * @see <a href="http://www.e--j.com">ejies</a>
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 public abstract class ej extends MaxObject
 {
@@ -34,10 +34,14 @@ public abstract class ej extends MaxObject
 	public void dblclick() {
 		// c'est super amusant, on peut faire un double clic...
 		post(theMessage);
-		findVersion();
+		String[] tmp = findVersion();
+		
+		if (tmp[0] != null && tmp[1] != null)
+			post("    version " + tmp[0] + "   ---   " + tmp[1]);
+
 	}
 
-	private void findVersion() {
+	protected String[] findVersion() {
 		/*
 		 il faut chercher ceci :
 		 VersNum = "1.56b3"; 
@@ -45,8 +49,7 @@ public abstract class ej extends MaxObject
 		 */
 		
 		String theFile = MaxSystem.locateFile("ejies-jsextensions.js");
-		String versionNumber = null;
-		String versionDate = null;
+		String[] versions = new String[2];
 	
 		BufferedReader inputFile = null;
 		try {   
@@ -61,9 +64,9 @@ public abstract class ej extends MaxObject
 				mDate = pDate.matcher(line);
 				
 				if (mVers.matches()) {
-					versionNumber = mVers.replaceAll("$1");
+					versions[0] = mVers.replaceAll("$1");
 				} else if (mDate.matches()) {
-					versionDate = mDate.replaceAll("$1");
+					versions[1] = mDate.replaceAll("$1");
 					break;    // normalement la date est après le numbéro de version
 				}
 			}
@@ -75,9 +78,7 @@ public abstract class ej extends MaxObject
 			}
 			catch (IOException e) { /* pareil */ }
 		}
-	
-		if (versionNumber != null && versionDate != null)
-			post("    version " + versionNumber + "   ---   " + versionDate);
+		return versions;
 	}
 
 	/**
