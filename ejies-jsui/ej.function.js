@@ -2,8 +2,8 @@
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 
-	$Revision: 1.96 $
-	$Date: 2007/05/09 15:43:45 $
+	$Revision: 1.97 $
+	$Date: 2007/05/22 16:00:49 $
 */
 
 // global code
@@ -3156,7 +3156,7 @@ function copyfunction()
 	cp[idx++] = f[c].range[0];
 	cp[idx++] = f[c].range[1];
 	cp[idx++] = f[c].grid_x;
-	cp[idx++] = f[x].grid_y;
+	cp[idx++] = f[c].grid_y;
 	cp[idx++] = f[c].display;
 
 	for (p = 0; p < f[c].np; p++) {
@@ -3212,7 +3212,7 @@ function MyPasteFunction(courbe)
 	courbe.range[0] = cp[idx++];
 	courbe.range[1] = cp[idx++];
 	courbe.grid_x = cp[idx++];
-	courbe.grix_y = cp[idx++];
+	courbe.grid_y = cp[idx++];
 	courbe.display = cp[idx++];
 	
 	for (p = 0; p < courbe.np; p++) {

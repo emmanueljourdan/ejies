@@ -2,7 +2,7 @@ ejies Ñ Version history
 
 
 *******************
-1.57b7: 9 Mai 2007
+1.57b8: 22 Mai 2007
 This version requires MaxMSP 4.5.6 or higher (compatible with MaxMSP 4.6 UB).
 
 Bug correction:
@@ -24,6 +24,7 @@ ej.function.js: horizontal grid (grid message, gridstep_x/gridstep_y)
 ej.function.js: new file format to support horizontal grid
 ej.function-insp: grid and snap2grid have a umenu
 ej.function.js: progress bar (line message)
+ej.function.js: copyfunction works again (bug introduced in 1.57b5)
 ej.fplay: accept 2 dim matrix as input (jit_matrix message)
 ej.fplay: dumpmatrix as in ej.function.js
 ej.fplay: new file format to support horizontal grid
