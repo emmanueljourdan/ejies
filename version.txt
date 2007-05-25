@@ -7,7 +7,7 @@ This version requires MaxMSP 4.5.6 or higher (compatible with MaxMSP 4.6 UB).
 
 Bug correction:
 ej.lquant: fixed integers arguments problem
-ej.lquant: fixed quantization with 1 (equals to rounding…)
+ej.lquant: fixed quantization with 1 (equals to rounding...)
 ej.numbox-keyboard.pat: now located in the ejies-obj folder, so it's found...
 ej.function.js: fixed redrawing bug introduced in 1.57b2
 ej.function.js: fixed dumpmatrix inconsistency
@@ -32,6 +32,7 @@ ej.lchange: set message added for Roland...
 ej.lock.js: polling method to report lock change
 kd&u: default modifiers key is now 0 or 128 on windows
 ejies-overview: does not require Jitter to get the version number over network (use a java class now)
+stout~: finally the 0 dB is at 0 dB, not -0.6dB...
 
 
 
