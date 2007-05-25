@@ -1,8 +1,8 @@
 /*
  *	ej.getejiesversion by Emmanuel Jourdan, Ircam Ñ 05 2007
  *
- *	$Revision: 1.1 $
- *	$Date: 2007/05/22 17:33:28 $
+ *	$Revision: 1.2 $
+ *	$Date: 2007/05/25 16:38:47 $
  */
 
 package ej;
@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import com.cycling74.max.*;
 
 /**
  * Returns the current installed version and the current available version (Internet connection).
@@ -38,16 +39,22 @@ public class getejiesversion extends ej {
 	 * returns installed version number and current available version
 	 */
 	public void bang()  {
-      	try {
-      		String tmp;
-      		URL url = new URL("http://www.e--j.com/ejies/current.txt");
-      		BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
-      		if ((tmp = br.readLine()) != null)
-    			outlet(1, tmp);
-		} catch (MalformedURLException e) {
-		} catch (IOException e) {
-		}
-
-		outlet(0, findVersion()[0]); // current installed version (defined in ej.class)
+		MaxSystem.deferLow(new Executable(){
+			public void execute() {
+		      	try {
+		      		String tmp;
+		      		URL url = new URL("http://www.e--j.com/ejies/current.txt");
+		      		BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
+		      		if ((tmp = br.readLine()) != null)
+		    			outlet(1, tmp);
+				} catch (MalformedURLException e) {
+				} catch (IOException e) {
+					post("¥ warning: Unable to get the version number from ej's website. Check your internet connection.");
+					outlet(1, "need internet");
+				}
+		
+				outlet(0, findVersion()[0]); // current installed version (defined in ej.class)
+			}
+		});
     }
 }
