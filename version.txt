@@ -31,6 +31,7 @@ ej.fplay: new file format to support horizontal grid
 ej.lchange: set message added for Roland...
 ej.lock.js: polling method to report lock change
 kd&u: default modifiers key is now 0 or 128 on windows
+ejies-overview: does not require Jitter to get the version number over network (use a java class now)
 
 
 
