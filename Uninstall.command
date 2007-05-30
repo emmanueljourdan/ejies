@@ -39,6 +39,9 @@ function doRemove {
 	
 		echo -ne "- java externals ($C74Folder/java/classes/ej)"
 		rm -Rf "$C74Folder/java/classes/"ej && echo -ne "... done.\n"
+
+		echo -ne "- java lib ($C74Folder/java/lib/ej.jar)"
+		rm -f "$C74Folder/java/lib/ej.jar" && echo -ne "... done.\n"
 	
 	else
 		echo -ne "Sorry, $C74Folder doen't exist. Init, jsui and jsextensions can't be uninstalled.\n"

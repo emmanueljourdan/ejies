@@ -33,7 +33,7 @@ ej.lock.js: polling method to report lock change
 kd&u: default modifiers key is now 0 or 128 on windows
 ejies-overview: does not require Jitter to get the version number over network (use a java class now)
 stout~: finally the 0 dB is at 0 dB, not -0.6dB...
-
+java classes: now included as one jar files which contains classes and sources
 
 
 *******************
