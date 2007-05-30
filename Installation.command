@@ -50,7 +50,8 @@ function doInstallation {
 		echo -ne "- jsextensions file ($C74Folder/jsextensions/)"
 		cp -R "$DossierDeLInstalleur"/ejies-jsextensions/* "$C74Folder/jsextensions/" && echo -ne "... done.\n"
 	
-		echo -ne "- java externals file ($C74Folder/java/classes)"
+		echo -ne "- java lib ($C74Folder/java/classes)"
+		rm -Rf "$C74Folder/java/classes/ej"
 		cp "$DossierDeLInstalleur"/ejies-java/ej.jar "$C74Folder/java/lib/" && echo -ne "... done.\n"
 	else
 		echo -ne "Sorry, $C74Folder doen't exist. Init, jsui and jsextensions can't be installed.\n"
