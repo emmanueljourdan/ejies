@@ -71,7 +71,7 @@ MacOS X Installation:
 Windows Installation:
 - put the CONTENTS of the ejies-extras folder in the ../MaxMSP 4.*/patches/extras folder
 - put the CONTENTS of the ejies-init folder in the C74:/init folder
-- put the CONTENTS of the ejies-java folder in the C74:/java/classes folder
+- put the CONTENTS (ej.jar) of the ejies-java folder in the C74:/java/lib folder
 - put the CONTENTS of the ejies-jsui folder in the C74:/jsui-library folder
 - put the CONTENTS of the ejies-jsextensions folder in the C74:/jsextensions folder
 - put the CONTENTS of the ejies-prototypes folder in the ./MaxMSP 4.*/patches/object-protypes/ folder
