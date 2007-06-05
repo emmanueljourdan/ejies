@@ -150,14 +150,11 @@ elif [[ $whichVersion == 3 ]]; then
 	echo "MaxMSP 4.5 and MaxMSP 4.6 are installed.";
 fi
 
-
-
-
 ################################
 #  User interactions
 ################################
 
-if [[ isQuietMode == 0 ]] ; then
+if [[ $isQuietMode == 0 ]] ; then
 	# choix des versions
 	if [[ $whichVersion == 3 ]]; then
 		echo -ne "\nWould you like to install the ejies for both versions(MaxMSP 4.5 and MaxMSP 4.6)? (Y/N) ";
