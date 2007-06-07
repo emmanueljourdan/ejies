@@ -3,8 +3,8 @@
  *	slide for lists
  *
  *
- *	$Revision: 1.10 $
- *	$Date: 2006/11/03 11:14:38 $
+ *	$Revision: 1.11 $
+ *	$Date: 2007/06/07 16:06:20 $
  */
 
 package ej;
@@ -17,10 +17,10 @@ import com.cycling74.msp.MSPBuffer;
  * @author jourdan
  * @see ej
  * @see standart <code>slide, slide~, jit.slide</code> objects
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 public class lslide extends ej {
-	private static final String[] INLET_ASSIST = new String[]{ "List to be slided :-)", "Slide Up", "Slide Down" };
+	private static final String[] INLET_ASSIST = new String[]{ "List to be smoothed", "Slide Up", "Slide Down" };
 	private static final String[] OUTLET_ASSIST = new String[]{ "Slided list"};	
 
 	private float[] a = new float[0];
@@ -31,6 +31,9 @@ public class lslide extends ej {
 	private boolean firstIsMade = false;
 	private String buf_name = null;
 	private int outputmode = 0;
+	private MaxClock cl = new MaxClock(this, "exec");
+	private boolean isClockRunning = false;
+	private int interval = 0;
 	
 	/**
 	 * Create a lslide object with arguments.
@@ -47,11 +50,47 @@ public class lslide extends ej {
 		declareAttribute("slide_down", "getSlideDown", "setSlideDown");
 		declareAttribute("outputmode", null, "setMode");
 		declareAttribute("buf_name");
-
+		declareAttribute("interval", null, "setInterval");
+		
 		setInletAssist(INLET_ASSIST);
 		setOutletAssist(OUTLET_ASSIST);
 	}
+
+	/**
+	 * used internal to free the clock.
+	 */
+	public void notifyDeleted() {
+		cl.release();
+	}
 	
+	private void setInterval(int i) {
+		if (i > 0) {
+			cl.delay(0); // start the clock now
+			interval = i; // sets the attribute value
+			isClockRunning = true;
+		} else {
+			cl.unset(); // do not call release...
+			interval = 0;
+			isClockRunning = false;
+		}
+	}
+	
+	private void doIt() {
+		if (! isClockRunning) { // if it's not running
+			if (interval <= 0)
+				calculeChoice(); // if attribute is not set, calculate normally
+			else
+				setInterval(interval); // start the clock
+		}
+		// if it's running there's nothing to do. It'll be done on next tick.
+	}
+
+	private void exec() {
+		calculeChoice();
+		if (interval > 0)
+			cl.delay(interval);
+	}
+
 	private void setMode(int i) {
 		if (i >= 0 && i <= 2)
 			outputmode = i;
@@ -63,7 +102,7 @@ public class lslide extends ej {
 	 * Re-Trigger the smoothing.
 	 */
 	public void bang() {
-		calculeChoice();
+		doIt();
 	}
 	
 	private void setSlideUp(float f) {
@@ -104,7 +143,7 @@ public class lslide extends ej {
 		switch (getInlet()) {
 			case 0:
 				a = new float[] { f };
-				calculeChoice();
+				doIt();
 				break;
 			case 1:
 				setSlideUp(f);
@@ -124,7 +163,7 @@ public class lslide extends ej {
 		switch (getInlet()) {
 			case 0:
 				a = args;
-				calculeChoice();
+				doIt();
 				break;
 			case 1:
 				setSlideUp(args[0]);
@@ -134,11 +173,6 @@ public class lslide extends ej {
 				error("ej.lslide: slide down inlet expects float");
 		}
 	}
-	
-	
-//	public void anything(String s, Atom[] args) {
-//		error("ej.lslide: doesn't understand " + s + " " + Atom.toOneString(args));
-//	}
 	
 	private void calculeChoice() {
 		// redimensionne tout le monde
