@@ -1,6 +1,6 @@
 e j i e s (version 1.57)
 by Emmanuel Jourdan, Ircam
-This version requires MaxMSP 4.5.6 or higher (compatible with MaxMSP 4.6 UB).
+This version requires MaxMSP 4.5.6 or higher (MaxMSP 4.6.3 is highly recommended).
 
 Java externals:
 ¥ ej.dx2x: create a list from intervals
@@ -61,14 +61,14 @@ Other:
 ¥ AddShortcuts2Max.command: Bash script (MacOS X only) which add some shortcuts to MaxMSP.
 ¥ Installation.command: Bash script (MacOS X only) which allows you to install the ejies.
 
-MacOS X Installation:
+Automatic installation for MacOS X:
 - Double click on Installation.command and follow the instructions...
 - You'll be asked for a couple of questions... please answer...
 - The Installation.command allows you to install also the shortcuts (same as AddShortcuts2Max.command)
 - At the end of the installation you can quit the Terminal application.
 - If the installation doesn't work... follow the windows installation procedure.
 
-Windows Installation:
+Manual installation (MacOS or Windows):
 - put the CONTENTS of the ejies-extras folder in the ../MaxMSP 4.*/patches/extras folder
 - put the CONTENTS of the ejies-init folder in the C74:/init folder
 - put the CONTENTS (ej.jar) of the ejies-java folder in the C74:/java/lib folder
