@@ -1,5 +1,11 @@
 ejies Ñ Version history
 
+*******************
+1.58: X June 2007
+
+Bug correction:
+ej.dialog: pressing escape key close the dialog and notify the second outlet
+
 
 *******************
 1.57: 7 June 2007
