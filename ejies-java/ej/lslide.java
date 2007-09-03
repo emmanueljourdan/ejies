@@ -3,8 +3,8 @@
  *	slide for lists
  *
  *
- *	$Revision: 1.11 $
- *	$Date: 2007/06/07 16:06:20 $
+ *	$Revision: 1.12 $
+ *	$Date: 2007/09/03 11:27:44 $
  */
 
 package ej;
@@ -17,7 +17,7 @@ import com.cycling74.msp.MSPBuffer;
  * @author jourdan
  * @see ej
  * @see standart <code>slide, slide~, jit.slide</code> objects
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 public class lslide extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "List to be smoothed", "Slide Up", "Slide Down" };
@@ -108,11 +108,15 @@ public class lslide extends ej {
 	private void setSlideUp(float f) {
 		if (f >= 1) 
 			slide_up = f;
+		else
+			slide_up = 1;
 	}
 	
 	private void setSlideDown(float f) {
 		if (f >= 1)
 			slide_down = f;
+		else
+			slide_down = 1;
 	}
 	
 	private float getSlideUp() {
@@ -174,6 +178,18 @@ public class lslide extends ej {
 		}
 	}
 	
+	/**
+	 * Set the list to be smoothed (so you can interpolate from that)
+	 * @param args the list
+	 */
+	 public void set(float[] args) {
+	 	if (getInlet() == 0) {
+	 		a = args;
+	 		resultat = args;
+	 		firstIsMade = true;
+	 	}
+	 }
+	
 	private void calculeChoice() {
 		// redimensionne tout le monde
 		if (resultat.length != a.length) {
@@ -230,3 +246,4 @@ public class lslide extends ej {
 		}
 	}
 }
+
