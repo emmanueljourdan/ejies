@@ -1,8 +1,8 @@
 /*
  *	ej.l2buffer by Emmanuel Jourdan, Ircam Ñ 06 2005
  *
- *	$Revision: 1.5 $
- *	$Date: 2006/11/03 11:14:38 $
+ *	$Revision: 1.6 $
+ *	$Date: 2007/09/06 15:47:59 $
  */
 
 package ej;
@@ -32,7 +32,7 @@ public class l2buffer extends ej {
 		
 		switch (args.length) {
 		case 0:
-			post("don't forget the argument..."); break;
+			post("¥ warning: ej.l2buffer: don't forget the argument..."); break;
 		case 1:
 			set(args[0].toString()); break;
 		case 2:
