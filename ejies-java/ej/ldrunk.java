@@ -3,8 +3,8 @@
  *	drunk for list
  *
  *
- *	$Revision: 1.9 $
- *	$Date: 2006/11/03 11:14:38 $
+ *	$Revision: 1.10 $
+ *	$Date: 2007/09/26 11:25:29 $
  */
 
 package ej;
@@ -16,7 +16,7 @@ import com.cycling74.msp.MSPBuffer;
  * give beers to a list...
  * @author jourdan
  * @see ej
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public class ldrunk extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "clean list", "Random range (float/list)", "random step (± step / 2)", "probability of random (%)" };
@@ -32,6 +32,10 @@ public class ldrunk extends ej {
 	private float[] inputList = new float[0];
 	private String buf_name = null;
 	private int outputmode = 0;
+	private MaxClock cl = new MaxClock(this, "exec");
+	private boolean isClockRunning = false;
+	private int interval = 0;
+
 	
 	/**
 	 * Create a ldrunk object with specified maximum and step.
@@ -74,11 +78,31 @@ public class ldrunk extends ej {
 		declareAttribute("autoreset");
 		declareAttribute("outputmode", null, "setMode");
 		declareAttribute("buf_name");
+		declareAttribute("interval", null, "setInterval");
 
 		setInletAssist(INLET_ASSIST);
 		setOutletAssist(OUTLET_ASSIST);
 	}
 	
+	/**
+	 * used internal to free the clock.
+	 */
+	public void notifyDeleted() {
+		cl.release();
+	}
+	
+	private void setInterval(int i) {
+		if (i > 0) {
+			cl.delay(0); // start the clock now
+			interval = i; // sets the attribute value
+			isClockRunning = true;
+		} else {
+			cl.unset(); // do not call release...
+			interval = 0;
+			isClockRunning = false;
+		}
+	}
+
 	private void setMode(int i) {
 		if (i >= 0 && i <= 2)
 			outputmode = i;
@@ -86,12 +110,28 @@ public class ldrunk extends ej {
 			outputmode = 0;
 	}
 	
+	private void doIt() {
+		if (! isClockRunning) { // if it's not running
+			if (interval <= 0)
+				doRandom(); // if attribute is not set, calculate normally
+			else
+				setInterval(interval); // start the clock
+		}
+		// if it's running there's nothing to do. It'll be done on next tick.
+	}
+
+	private void exec() {
+		doRandom();
+		if (interval > 0)
+			cl.delay(interval);
+	}
+	
 	/**
 	 * Trigger the randomisation.
 	 */
 	public void bang() {
 		if (inputList.length > 0)
-			doRandom();
+			doIt();
 	}
 	
 	/**
@@ -116,7 +156,7 @@ public class ldrunk extends ej {
 		switch (getInlet()) {
 			case 0:
 				inputList = new float[]{ f };
-				doRandom();
+				doIt();
 				break;
 			case 1:
 				setRange(new float[]{ 0 , Math.abs(f) });

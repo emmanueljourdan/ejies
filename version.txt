@@ -6,6 +6,11 @@ ejies Ñ Version history
 Bug correction:
 ej.dialog: pressing escape key close the dialog and notify the second outlet
 
+Improvements:
+ej.ldrunk: interval attribute which outputs continuously (kinda integrated metro)
+ej.lslide: set message, slide_up slide_down minimum properly set to 1
+
+
 
 *******************
 1.57: 7 June 2007
