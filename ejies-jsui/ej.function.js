@@ -1,9 +1,14 @@
 /* 
 	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
+	
+	curve additions from Martin Robinson
+	
+	also based on parts of "cyclone" (pd) for the curve~ algorithm
+	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.97 $
-	$Date: 2007/05/22 16:00:49 $
+	$Revision: 1.98 $
+	$Date: 2007/10/05 16:11:58 $
 */
 
 // global code
@@ -16,8 +21,9 @@ var ejies = new EjiesUtils(); // lien vers ejiesUtils.js
 	Version 3: ej.fplay compatible
 	Version 4: grille sur 2 axes
 	Version 5: couleur pour line
+	Version 6: curve integration
 */
-const FUNCTIONVERSION = 5;
+const FUNCTIONVERSION = 6;
 
 inlets = 1;
 outlets = 5;
@@ -39,6 +45,7 @@ g["copy"] = new Array();			// Utilisé pour le copier-coller
 g["copycolors"] = new Array();		// Utilisé pour le copier-coller des couleurs
 var NbCourbes = 1;
 var f = new Array();
+var isCurveMode = 0;
 var Tolerance = 4;
 var Bordure = 4;
 var LegendStateBordure = 12;
@@ -82,6 +89,34 @@ var tmpString = new String();
 var tmpRange, tmpDomain;	// utilisé dans Interp
 var LineValue = -1;
 
+var numCurvePoints = 12; //MR - curve vars
+var CLCCURVE_C1 = 1e-20;
+var CLCCURVE_C2 = 1.2;
+var CLCCURVE_C3 = 0.41;
+var CLCCURVE_C4 = 0.91;
+var DEFAULT_CURVE = 0.; // for tesing set this to 0. when finished
+var CURVE_MIN = -0.995;
+var CURVE_MAX = 0.995;
+var MAX_CURVE_NP = 43; // max points for curve~
+var LimitNP = 1; // clip num points MAX_CURVE_NP
+var SelectedCurve = -1;
+var prevy = 0;
+var MoveMode = 0;
+
+var numCurvePoints = 12; //MR - curve vars
+var CLCCURVE_C1 = 1e-20;
+var CLCCURVE_C2 = 1.2;
+var CLCCURVE_C3 = 0.41;
+var CLCCURVE_C4 = 0.91;
+var DEFAULT_CURVE = 0.; // for tesing set this to 0. when finished
+var CURVE_MIN = -0.995;
+var CURVE_MAX = 0.995;
+var MAX_CURVE_NP = 43; // max points for curve~
+var LimitNP = 1; // clip num points MAX_CURVE_NP
+var SelectedCurve = -1;
+var prevy = 0;
+var MoveMode = 0;
+
 var SketchFunctions = new Sketch(BoxWidth, BoxHeight);
 var slowDrawing = new Task(drawFunctions, this);	// pour empêcher le rafraichissement trop rapide
 var slowDrawingAll = new Task(drawAll, this);	// pour empêcher le rafraichissement trop rapide
@@ -102,16 +137,108 @@ if (box.rect[2] - box.rect[0] == 64 && box.rect[3] - box.rect[1] == 64) {
 }
 
 //////////////// Objets ///////////////
-function Point(x, y, valx, valy)
+function Point(x, y, valx, valy, curve)
 {
-	this.x = x;
-	this.y = y;
-	this.valx = valx;
+	this.x = x;				// what's the difference between x and valx? etc MR
+	this.y = y;				// i think x and y are screen positions; and
+	this.valx = valx;		// valx/y are the values
 	this.valy = valy;
 	this.sustain = 0;
 	this.fix = 0;
+	this.curve = curve;		// curve, 0 = linear, -1 <= curve <= 1 curve, reserve out of bounds for other uses
+	this.cseg = 0;					// a CurveSeg generated when the points are changed? and/or sorted?
+									// curve points in x/y (rather than valx/valy)
+									// first point (0?) has no curve, others will need to be 
+									// new Array(numCurvePoints)
+									// ok for output to line but interpolating output 
+									// will need thought
 }
 Point.local = 1;
+
+function CurveCoeffs(nhops, crv)
+{
+	this.bbp = 0.;
+	this.mmp = 0.;
+	
+	if (nhops > 0)
+    {
+		var hh, ff, eff, gh;
+		if (crv < 0.)
+		{
+		    if (crv < -1.)
+			crv = -1.;
+		    hh = Math.pow(((CLCCURVE_C1 - crv) * CLCCURVE_C2), CLCCURVE_C3) * CLCCURVE_C4;
+		    ff = hh / (1. - hh);
+		    eff = Math.exp(ff) - 1.;
+		    gh = (Math.exp(ff * .5) - 1.) / eff;
+		    this.bbp = gh * (gh / (1. - (gh + gh)));
+		    this.mmp = 1. / (((Math.exp(ff * (1. / nhops)) - 1.) / (eff * this.bbp)) + 1.);
+		    this.bbp += 1.;
+		}
+		else
+		{
+		    if (crv > 1.)
+			crv = 1.;
+		    hh = Math.pow(((crv + CLCCURVE_C1) * CLCCURVE_C2), CLCCURVE_C3) * CLCCURVE_C4;
+		    ff = hh / (1. - hh);
+		    eff = Math.exp(ff) - 1.;
+		    gh = (Math.exp(ff * .5) - 1.) / eff;
+		    this.bbp = gh * (gh / (1. - (gh + gh)));
+		    this.mmp = ((Math.exp(ff * (1. / nhops)) - 1.) / (eff * this.bbp)) + 1.;
+		}
+    }
+    else if (crv < 0.) {
+		this.bbp = 2.;
+		this.mmp = 1.;
+	}
+    else
+		this.bbp = this.mmp = 1.;
+}
+CurveCoeffs.local = 1;
+
+//new CurveSeg(prev.valy, curr.valy, prev.valx, curr.valx, curr.curve, numCurvePoints);
+function CurveSeg(y0, y1, x0, x1, curve, nhops)
+{
+	var hopsize, dy, vv, cx;
+	
+	this.y0 = y0;
+	this.y1 = y1;
+	this.x0 = x0;
+	this.x1 = x1;
+	this.delta = x1-x0;
+	this.nhops = nhops;
+	
+	// clip to ±0.995 due to curve~ bug
+	
+	if(curve < CURVE_MIN) 
+		this.curve = CURVE_MIN;
+	else if(curve > CURVE_MAX)
+		this.curve = CURVE_MAX;
+	else
+		this.curve = curve;
+	
+	this.coeffs = new CurveCoeffs(nhops, curve);
+	this.cpa = new Array(nhops); // x/y pairs in val format so that zooming/rescaling won't need a recalc
+	
+	if(this.curve < 0.)
+		dy = this.y0 - this.y1;
+	else
+		dy = this.y1 - this.y0;
+				
+	cx = this.x0;
+	hopsize = this.delta / this.nhops;
+	vv = this.coeffs.bbp;
+				
+	for(j = 0; j < this.nhops; j++) {
+		var cy = (vv - this.coeffs.bbp) * dy + this.y0;
+						
+		vv *= this.coeffs.mmp;		
+		this.cpa[j] = [cx, cy];
+					
+		cx += hopsize;
+	}	
+}
+CurveSeg.local = 1;
 
 function Courbe(name)
 {
@@ -139,6 +266,163 @@ function Courbe(name)
 	this.OnePointAtZero = 0;	// 1 si un des points de la courbe à 0 pour valeur y
 }
 Courbe.local = 1;
+
+function calcCurves()
+{
+	for (c = 0; c < NbCourbes; c++) {
+		calcFunctionCurves(f[c]);
+	}
+	
+}
+calcCurves.local = 1;
+
+function calcFunctionCurves(courbe)
+{
+	if(courbe.np > 1) {
+		courbe.pa[0].cseg = 0;
+		
+		for(i = 1; i < courbe.np; i++) { // 1st point doesn't have a curve				
+			calcOneCurve(courbe, i-1, i);
+		}
+	}	
+}
+calcFunctionCurves.local = 1;
+
+function calcOneCurve(courbe, p0, p1)
+{	
+	var prev, curr;
+	
+	if(p0 < 0) return;
+	if(p1 < 1) return;
+	if(p0 > (courbe.np-2)) return;
+	if(p1 > (courbe.np-1)) return;
+	
+	prev = courbe.pa[p0];
+	curr = courbe.pa[p1];
+	
+	if(Math.abs(curr.curve) >= 0.001) 
+		curr.cseg = new CurveSeg(prev.valy, curr.valy, prev.valx, curr.valx, curr.curve, numCurvePoints);	
+				
+}
+calcOneCurve.local = 1;
+
+function calcNCurves(courbe, p0, pn)
+{
+	for(i = p0; i < pn; i++) {
+		calcOneCurve(courbe, i, i+1);
+	}
+}
+calcNCurves.local = 1;
+
+
+function offsetOneCurve(courbe, p0, p1, dx)
+{
+	var prev, curr;
+	
+	if(p0 < 0) return;
+	if(p1 < 1) return;
+	if(p0 > (courbe.np-2)) return;
+	if(p1 > (courbe.np-1)) return;
+	
+	prev = courbe.pa[p0];
+	curr = courbe.pa[p1];
+	
+	if(curr.cseg == 0 || Math.abs(curr.curve) >= 0.001) {
+		curr.cseg = new CurveSeg(prev.valy, curr.valy, prev.valx, curr.valx, curr.curve, numCurvePoints);	
+	}
+	else
+	{
+		for(i = 0; i < curr.cseg.nhops; i++) {
+			var tmpy = curr.cseg.cpa[i][1];
+			
+			curr.cseg.cpa[i] = [ curr.cseg.cpa[i][0]+dx, curr.cseg.cpa[i][1] ];
+		}
+	}
+}
+offsetOneCurve.local = 1;
+
+function offsetNCurves(courbe, p0, pn, dx)
+{
+	for(i = p0; i < pn; i++) {
+		//post("offset curve: "+i+"\n");
+		offsetOneCurve(courbe, i, i+1, dx);
+	}
+}
+offsetNCurves.local = 1;
+
+// added MR
+function allcurves(crv)
+{
+	if(f[front].np > 1) {
+		for(i = 1; i < f[front].np; i++) {
+			f[front]["pa"][i].curve = crv;
+		}
+	}
+	
+	calcCurves();
+	
+	DoNotify();
+	drawFunctions();
+}
+
+// added MR - should be attribute?
+function numcurvepoints(num)
+{
+	if(num > 1) {
+		numCurvePoints = num;
+		
+		calcCurves();
+	
+		DoNotify();
+		drawFunctions();
+	}
+}
+
+function limitnumpoints(flag)
+{
+	var redraw = 0;
+	
+	if(flag == 0) 
+		LimitNP = 0;
+	else {
+		LimitNP = 1;
+		
+		for (c = 0; c < NbCourbes; c++) {
+			var ndel = f[c].np - MAX_CURVE_NP;
+			if(ndel > 0) {
+				while(ndel-- > 0) {
+					DeletePoint(f[c], 1);
+				}
+				redraw = 1;
+			}
+		}
+		
+		if(redraw) {
+			DoNotify();
+			askForDrawFunctions();
+		}
+	}
+	
+}
+
+// added point moving modes
+function movemode(mode)
+{
+	if(mode < 0) mode = 0;
+	if(mode > 6) mode = 6;
+	
+	MoveMode = mode;
+	
+	/*
+		0 - "normal" function mode
+		1 - "clip" - stop points moving before previous and after next points, clipping their movement
+		2 - "shift" - prevent movement to before the previous point and move all subsequent points on by an equal amount
+		3 - "shift-clip" - as 2 above but when the last point reaches the end of the domain movement is prevented
+		4 - "shift-extend" - points may exceed the maximum domain
+		5 - "shift-zoom" - points may exceed the maximum domain and if so we zoom out
+		6 - "auto-zoom" - points may exceed the maximum domain always normalize the x axis
+	*/
+}
 
 function init()
 {
@@ -254,21 +538,43 @@ function SpriteText()
 				text("("+f[front].name+")");
 		}
 
-		if (f[front].np > 0 && (SelectedPoint >= 0  || IdlePoint >= 0)) {
-			var WhichPoint = (SelectedPoint >=0 ) ? SelectedPoint : IdlePoint ;
-
-			if ( WhichPoint < f[front].np) {
-				var sep = " ";
-				if (f[front].pa[WhichPoint].fix)
-					sep = "=";
-
-				fontsize(10);
-				textalign("left","center");
-				moveto(-(BoxWidth - Bordure)/BoxHeight,(BoxHeight - LegendStateBordure - Bordure)/BoxHeight);
-				if (TimeFlag)
-					text("X" + sep + MyDomain2String(f[front]["pa"][WhichPoint].valx) + " Y" + sep + f[front]["pa"][WhichPoint].valy.toFixed(2));
-				else
-					text("X" + sep + f[front]["pa"][WhichPoint].valx.toFixed(2) + " Y" + sep + f[front]["pa"][WhichPoint].valy.toFixed(2));
+		if (isCurveMode) {
+					if (f[front].np > 0 && (SelectedPoint >= 0  || IdlePoint >= 0) || SelectedCurve > 0) {
+				var WhichPoint = SelectedCurve > 0 ? (SelectedCurve) : ((SelectedPoint >=0 ) ? SelectedPoint : IdlePoint);
+	
+				if ( WhichPoint < f[front].np) {
+					var sep = " ";
+					if (f[front].pa[WhichPoint].fix)
+						sep = "=";
+	
+					fontsize(10);
+					textalign("left","center");
+					moveto(-(BoxWidth - Bordure)/BoxHeight,(BoxHeight - LegendStateBordure - Bordure)/BoxHeight);
+					if (TimeFlag)
+						text("X" + sep + MyDomain2String(f[front]["pa"][WhichPoint].valx) + " Y" + sep + f[front]["pa"][WhichPoint].valy.toFixed(2) + 
+							" c" + sep + f[front]["pa"][WhichPoint].curve.toFixed(3));
+					else
+						text("X" + sep + f[front]["pa"][WhichPoint].valx.toFixed(2) + " Y" + sep + f[front]["pa"][WhichPoint].valy.toFixed(2) + 
+							" c" + sep + f[front]["pa"][WhichPoint].curve.toFixed(3));
+				}
+			}
+		} else {
+			if (f[front].np > 0 && (SelectedPoint >= 0  || IdlePoint >= 0)) {
+				var WhichPoint = (SelectedPoint >=0 ) ? SelectedPoint : IdlePoint ;
+	
+				if ( WhichPoint < f[front].np) {
+					var sep = " ";
+					if (f[front].pa[WhichPoint].fix)
+						sep = "=";
+	
+					fontsize(10);
+					textalign("left","center");
+					moveto(-(BoxWidth - Bordure)/BoxHeight,(BoxHeight - LegendStateBordure - Bordure)/BoxHeight);
+					if (TimeFlag)
+						text("X" + sep + MyDomain2String(f[front]["pa"][WhichPoint].valx) + " Y" + sep + f[front]["pa"][WhichPoint].valy.toFixed(2));
+					else
+						text("X" + sep + f[front]["pa"][WhichPoint].valx.toFixed(2) + " Y" + sep + f[front]["pa"][WhichPoint].valy.toFixed(2));
+				}
 			}
 		}
 	}
@@ -322,8 +628,27 @@ function SpriteFunctions()
 							
 					moveto(screentoworld(f[c]["pa"][0].x,f[c]["pa"][0].y ));
 					
-					for (i = 0; i < (f[c].np - 1); i++) {
-						lineto(screentoworld(f[c]["pa"][i+1].x,f[c]["pa"][i+1].y ));
+					if (isCurveMode) {
+						for (i = 0; i < (f[c].np - 1); i++) {e
+							lineto(screentoworld(f[c]["pa"][i+1].x,f[c]["pa"][i+1].y ));
+						}
+					} else {
+						for (i = 0; i < (f[c].np - 1); i++) {
+							var thePoint = f[c]["pa"][i+1];
+							
+							if(Math.abs(thePoint.curve) >= 0.001) {
+								var cseg 	= thePoint.cseg;
+								var cpa 	= cseg.cpa; 
+								
+								for(j = 0; j < cpa.length; j++) {
+									var cx = val2x(f[c], cpa[j][0]);
+									var cy = val2y(f[c], cpa[j][1]);
+									
+									lineto(screentoworld(cx, cy));
+								}
+							}	
+							lineto(screentoworld(thePoint.x, thePoint.y));		
+						}
 					}
 				}
 				
@@ -605,6 +930,7 @@ function doLineOutput(courbe)
 	for (i = 1, idx = 0; i < courbe.np; i++) {
 		tmpArray[idx++] = courbe.pa[i].valy;
 		tmpArray[idx++] = courbe.pa[i].valx - courbe.pa[i-1].valx;
+		if (isCurveMode)	tmpArray[idx++] = courbe.pa[i].curve;
 		if (courbe.pa[i].sustain) {
 			courbe.NextFrom = i;
 			break;
@@ -644,7 +970,39 @@ function interp(courbe, v)
 	tmpRange = courbe.pa[a+1].valy - courbe.pa[a].valy;
 	tmpDomain = courbe.pa[a+1].valx - courbe.pa[a].valx;
 	
-	outlet(INTERP_OUTLET, courbe.name, ((v - courbe.pa[a].valx) / tmpDomain) * tmpRange + courbe.pa[a].valy);
+	if (isCurveMode) { 
+		if(Math.abs(courbe.pa[a+1].curve) < 0.001) { // almost linear
+			outlet(INTERP_OUTLET, courbe.name, ((v - courbe.pa[a].valx) / tmpDomain) * tmpRange + courbe.pa[a].valy);
+		} else {	
+			// curves
+			var hp; //h(p) = (((p + 1e-20) * 1.2) ** .41) * .91.
+			var fp; //f(p) = h(p) / (1 - h(p))
+			var gp; //g(x, p) = (exp(f(p) * x) - 1) / (exp(f(p)) - 1)
+			var gx;
+			var curve = courbe.pa[a+1].curve;
+			
+			if(curve < 0.) {
+				gx = (courbe.pa[a+1].valx - v) / tmpDomain;
+				
+				hp = Math.pow((1e-20 - curve) * 1.2, 0.41) * 0.91;
+				fp = hp / (1. - hp);
+				gp = (Math.exp(fp * gx) - 1.) / (Math.exp(fp) - 1.);
+				
+				outlet(INTERP_OUTLET, courbe.name, courbe.pa[a+1].valy - gp * tmpRange);
+	
+			} else {
+				gx = (v - courbe.pa[a].valx) / tmpDomain;
+				
+				hp = Math.pow((curve + 1e-20) * 1.2, 0.41) * 0.91;
+				fp = hp / (1. - hp);
+				gp = (Math.exp(fp * gx) - 1.) / (Math.exp(fp) - 1.);
+				
+				outlet(INTERP_OUTLET, courbe.name, gp * tmpRange + courbe.pa[a].valy);
+			}
+		}
+	} else {
+		outlet(INTERP_OUTLET, courbe.name, ((v - courbe.pa[a].valx) / tmpDomain) * tmpRange + courbe.pa[a].valy);
+	}
 }
 interp.local = 1;
 
@@ -686,11 +1044,22 @@ function MyAddPoints(courbe, liste)
 	var i;
 	// ça commence à 1 car le premier élément est addfunctions
 	// Nombre d'élément réel dans la liste / 2 pour vérifier qu'il y a bien un nombre pair
-	for (i = 1; i < (Math.floor((liste.length - 1) / 2) * 2); i += 2) {
-		courbe.pa[courbe.np++] = new Point( val2x(courbe, liste[i]), val2y(courbe, liste[i+1]), liste[i], liste[i+1]);
+
+	if (isCurveMode) {
+		for (i = 1; i < (Math.floor((liste.length - 1) / 3) * 3); i += 3) {
+			if(LimitNP && courbe.np < MAX_CURVE_NP) {
+				courbe.pa[courbe.np++] = new Point( val2x(courbe, liste[i]), val2y(courbe, liste[i+1]), liste[i], liste[i+1], liste[i+2]); // added curve MR
+			}
+		}
+	} else {
+		for (i = 1; i < (Math.floor((liste.length - 1) / 2) * 2); i += 2) {
+			courbe.pa[courbe.np++] = new Point( val2x(courbe, liste[i]), val2y(courbe, liste[i+1]), liste[i], liste[i+1]);
+		}
 	}
 	
 	sortingPoints(courbe);
+	// TODO: do we need that?
+	if (isCurveMode)	calcFunctionCurves(courbe); 			// added MR
 	DoNotify();
 	askForDrawFunctions();
 }
@@ -718,17 +1087,32 @@ function syncpoints()
 	var courbe = f[arguments[0]];
 	courbe.pa = new Array();	// clear every points
 	
-	for (var i = 0; i < ((arguments.length - 1) / 3); i++) {
-		courbe.pa[i] = new Point(	val2x(courbe, arguments[i*3+1]),
-									val2y(courbe, arguments[i*3+2]),
-									arguments[i*3+1],
-									arguments[i*3+2]
-								);
-		courbe.pa[i].fix = (arguments[i*3+3] & 1) == 1;
-		courbe.pa[i].sustain = (arguments[i*3+3] & 2) == 2;
+	if (isCurvePoint) {
+		for (var i = 0; i < ((arguments.length - 1) / 4); i++) {
+			courbe.pa[i] = new Point(	val2x(courbe, arguments[i*4+1]),
+										val2y(courbe, arguments[i*4+2]),
+										arguments[i*4+1],
+										arguments[i*4+2],
+										arguments[i*4+3] // added MR
+									);
+			courbe.pa[i].fix = (arguments[i*4+4] & 1) == 1;
+			courbe.pa[i].sustain = (arguments[i*4+4] & 2) == 2;
+		}
+	} else {
+		for (var i = 0; i < ((arguments.length - 1) / 3); i++) {
+			courbe.pa[i] = new Point(	val2x(courbe, arguments[i*3+1]),
+										val2y(courbe, arguments[i*3+2]),
+										arguments[i*3+1],
+										arguments[i*3+2]
+									);
+			courbe.pa[i].fix = (arguments[i*3+3] & 1) == 1;
+			courbe.pa[i].sustain = (arguments[i*3+3] & 2) == 2;
+		}
 	}
 	courbe.np = courbe.pa.length;
 
+	// TODO: do we need that?
+	if (isCurveMode)	calcFunctionCurves(courbe); 			// added MR
 	askForNotify();
 	askForDrawingAll();
 }
@@ -795,7 +1179,7 @@ getSyncCourbe.local = 0;
 
 function getSyncPoints(courbeIdx)
 {
-	var tmp = new Array((f[courbeIdx].np * 3) + 2);
+	var tmp = new Array((f[courbeIdx].np * (isCurveMode ? 4 : 3)) + 2);
 	var idx = 0;
 	tmp[idx++] = "syncpoints";
 	tmp[idx++] = courbeIdx; // the first thing is the ID of the function
@@ -803,6 +1187,7 @@ function getSyncPoints(courbeIdx)
 	for (var i = 0; i < f[courbeIdx].np; i++) {
 		tmp[idx++] = f[courbeIdx].pa[i].valx;
 		tmp[idx++] = f[courbeIdx].pa[i].valy;
+		if (isCurveMode)	tmp[idx++] = f[courbeIdx].pa[i].curve; // added MR
 		tmp[idx++] = f[courbeIdx].pa[i].sustain * 2 + f[courbeIdx].pa[i].fix;
 	}
 	
@@ -874,6 +1259,8 @@ function MySetDomain(start, stop, courbe)
 		courbe.pa[i].valx = x2val(courbe, courbe.pa[i].x);
 	}
 
+	//TODO: do we need that?
+	if (isCurveMode) 	calcFunctionCurves(courbe); 			// added MR
 	DoNotify();
 
 	// Si la grille est activée, changer le domain doit redessiner la grille
@@ -1026,6 +1413,8 @@ function MyRemoveDuplicate(courbe)
 	}
 	
 	if ( ReturnState ) {
+		//TODO: do we need that?
+		if (isCurveMode)	calcFunctionCurves(courbe); 			// added MR
 		DoNotify();
 		askForDrawFunctions();
 	}
@@ -1041,6 +1430,8 @@ function MySmooth(courbe)
 		courbe.pa[i].y = val2y(courbe, courbe.pa[i].valy);
 	}
 
+	//TODO
+	if (isCurveMode) 	calcFunctionCurves(courbe); 			// added MR
 	DoNotify();
 	askForDrawFunctions();
 }
@@ -1062,14 +1453,25 @@ function AllPixel2Machin()
 }
 AllPixel2Machin.local = 1;
 
-function AddOnePoint(courbe, x, y)
+function AddOnePoint(courbe, x, y, curve)
 {
 	var tmp = courbe.np;	// si tmp n'est pas modifié c'est que c'est la plus grande valeur...
 	var i;
+	
+	if (isCurveMode && LimitNP && tmp >= MAX_CURVE_NP) return -1; // don't add points if more points than curve~ return -1 for the mousing functions
+
+	if (isCurveMode) {
+		if(LimitNP && tmp >= MAX_CURVE_NP) return -1; // don't add points if more points than curve~ return -1 for the mousing functions
+	}
 
 	if (courbe.np == 0) {	// cas particulier quand il n'y a pas de point dans la courbe
-		courbe.pa[0] = new Point(x,y, x2val(courbe, x), y2val(courbe, y));
+		if (isCurveMode)
+			courbe.pa[0] = new Point(x,y, x2val(courbe, x), y2val(courbe, y), curve);
+		else		
+			courbe.pa[0] = new Point(x,y, x2val(courbe, x), y2val(courbe, y));
 		tmp = 0;
+		
+		courbe.np++;
 	}
 	else {
 		for (i = 0; i < courbe.np; i++) {
@@ -1078,10 +1480,21 @@ function AddOnePoint(courbe, x, y)
 				break;
 			}
 		}
-		courbe.pa.splice(tmp, 0, new Point(x,y, x2val(courbe, x), y2val(courbe, y)) );	// insère un point
+		
+		// insère un point
+		if (isCurveMode)
+				courbe.pa.splice(tmp, 0, new Point(x,y, x2val(courbe, x), y2val(courbe, y), curve) );	// insère un point
+		else
+			courbe.pa.splice(tmp, 0, new Point(x,y, x2val(courbe, x), y2val(courbe, y)) );
+
+		courbe.np++;	// on incrémente car il y a un point supplémentaire dans la courbe
+		
+		if (isCurveMode) {
+			calcOneCurve(courbe, tmp-1, tmp); // added - MR
+			calcOneCurve(courbe, tmp, tmp+1); // added - MR
+		}
+		
 	}
-	
-	courbe.np++;	// on incrémente car il y a un point supplémentaire dans la courbe
 
 	return tmp;		// valeur de retour utilisée comme seleected point
 }
@@ -1092,23 +1505,103 @@ function DeletePoint(courbe, lequel)
  	if (! courbe.pa[lequel].fix) {
 		courbe.pa.splice(lequel, 1);
 		courbe.np--;
+		
+		if (isCurveMode)
+			calcOneCurve(courbe, lequel-1, lequel); // added - MR
 	}
 }
 DeletePoint.local = 1;
 
-function MovePoint(courbe, lequel, newx, newy)
+function MovePoint(courbe, lequel, newx, newy, curve)
 {
+	var dx = 0;
+	
 	if (lequel >= courbe.np) {
 		ejies.error(this, "no point", lequel,"in function", courbe.name);
 		return;
 	}
-	courbe.pa[lequel].valx = newx;
+
+//	courbe.pa[lequel].valx = newx;
 	courbe.pa[lequel].valy = newy;					
-	courbe.pa[lequel].x = val2x(courbe, newx);
+//	courbe.pa[lequel].x = val2x(courbe, newx);
 	courbe.pa[lequel].y = val2y(courbe, newy);
 
-	sortingPoints(courbe);	// il faut maintenant remettre tous les points dans l'ordre
-	ApplyAutoSustain();
+	// only change curve if it's a valid value - allowing a dummy value e.g. 999 to leave it alone
+	if(curve >= CURVE_MIN && curve <= CURVE_MAX)
+		courbe.pa[lequel].curve = curve;
+	
+	if(MoveMode == 1) {
+		if(lequel > 0 && newx < courbe.pa[lequel-1].valx) 
+			newx = courbe.pa[lequel-1].valx;
+		else if(lequel < (courbe.np-1) && newx > courbe.pa[lequel+1].valx) 
+			newx = courbe.pa[lequel+1].valx;
+		
+		courbe.pa[lequel].valx = newx;
+		courbe.pa[lequel].x = val2x(courbe, newx);
+		
+	} else if(MoveMode == 2 || MoveMode == 3) {
+		
+		if(lequel > 0 && newx < courbe.pa[lequel-1].valx) newx = courbe.pa[lequel-1].valx;
+		
+		dx = newx - courbe.pa[lequel].valx;
+		
+		if(MoveMode == 3) {			
+						
+			if(dx > (courbe.domain[1] - courbe.pa[courbe.np-1].valx)) {
+				dx = courbe.domain[1] - courbe.pa[courbe.np-1].valx;
+			}
+		}
+		
+		if(dx != 0) {
+			
+			for(i = lequel; i < courbe.np; i++) {
+				courbe.pa[i].valx = ejies.clip(dx+courbe.pa[i].valx, courbe.domain[0], courbe.domain[1]);
+				courbe.pa[i].x = val2x(courbe, courbe.pa[i].valx);
+			}
+		}
+		
+	} else {
+		courbe.pa[lequel].valx = newx;
+		courbe.pa[lequel].x = val2x(courbe, newx);
+	}
+	
+	if(courbe.np == 1) {
+		//only one point
+		//..
+		;
+	}
+	else if(lequel == 0 && courbe.pa[lequel].valx <= courbe.pa[lequel+1].valx) {
+		//first point and it still is
+		if(MoveMode == 0 || MoveMode == 1)
+			calcOneCurve(courbe, lequel, lequel+1); 		// added - MR
+		else if(MoveMode == 2 || MoveMode == 3)
+			offsetNCurves(courbe, lequel, courbe.np-1, dx);
+			
+	}
+	else if(lequel == (courbe.np-1) && courbe.pa[lequel].valx >= courbe.pa[lequel-1].valx){
+		//last point and it still is
+		calcOneCurve(courbe, lequel-1, lequel); // added - MR		
+	}
+	else if(courbe.pa[lequel].valx >= courbe.pa[lequel-1].valx && courbe.pa[lequel].valx <= courbe.pa[lequel+1].valx)  {
+		// no need to sort - the order hasn't changed
+		
+		if(MoveMode == 0 || MoveMode == 1) {
+			calcOneCurve(courbe, lequel-1, lequel); 		// added - MR
+			calcOneCurve(courbe, lequel, lequel+1); 		// added - MR
+		}
+		else if(MoveMode == 2 || MoveMode == 3)
+		{
+			calcOneCurve(courbe, lequel-1, lequel); 		// added - MR
+			offsetNCurves(courbe, lequel, courbe.np-1, dx);
+		}
+	}
+	else {
+		sortingPoints(courbe);	// il faut maintenant remettre tous les points dans l'ordre
+		calcFunctionCurves(courbe);
+		
+		ApplyAutoSustain(); // moved in here - no need to do it if points aren't re-ordered
+	}
+	
 }
 MovePoint.local = 1;
 
@@ -1250,8 +1743,9 @@ function ArgsParser(courbe, msg, a)
 	// en fonction du nombre d'arguments 1 (interpolationX-Y) 2 (AddPoint) 3 (MovePoint)
 		switch (a.length) {
 			case 1: interp(courbe, a[0]); break;
-			case 2: AddOnePoint(courbe, val2x(courbe, a[0]), val2y(courbe, a[1])); askForDrawFunctions(); break;
-			case 3: MovePoint(courbe, a[0], a[1], a[2]); askForDrawFunctions(); break;
+			case 2: AddOnePoint(courbe, val2x(courbe, a[0]), val2y(courbe, a[1]), DEFAULT_CURVE); askForDrawFunctions(); break;
+			case 3: MovePoint(courbe, a[0], a[1], a[2], DEFAULT_CURVE); askForDrawFunctions(); break;
+			case 4: MovePoint(courbe, a[0], a[1], a[2], a[3]); askForDrawFunctions(); break;
 			default: ejies.error(this, "too many arguments for message", msg); break;
 		}
 		return 0;	// sort de la fonction
@@ -1380,6 +1874,10 @@ function MyNext(courbe)
 	for (i = (courbe.NextFrom + 1), idx = 0; i < courbe.np; i++) {
 		tmpArray[idx++] = courbe.pa[i].valy;
 		tmpArray[idx++] = courbe.pa[i].valx - courbe.pa[i-1].valx;
+		
+		if (isCurveMode)
+			tmpArray[idx++] = courbe.pa[i].curve; // added curve - MR
+
 		if (courbe.pa[i].sustain) {
 			courbe.NextFrom = i;
 			break;
@@ -1436,6 +1934,7 @@ function MyClear(courbe, v)
 			courbe.np--;
 		}
 	}
+	calcFunctionCurves(courbe); // added - MR
 	DoNotify();
 	askForDrawFunctions();
 }
@@ -1515,14 +2014,23 @@ function MyDump(courbe, sendname)
 		return;
 
 	if (arguments.length == 1) {
-		for (i = 0; i < courbe.np; i++) {
-			outlet(DUMP_OUTLET, courbe.name, courbe.pa[i].valx, courbe.pa[i].valy);
+		if (isCurveMode) {
+			for (i = 0; i < courbe.np; i++)
+				outlet(DUMP_OUTLET, courbe.name, courbe.pa[i].valx, courbe.pa[i].valy), courbe.pa[i].curve;
+		} else {
+			for (i = 0; i < courbe.np; i++)
+				outlet(DUMP_OUTLET, courbe.name, courbe.pa[i].valx, courbe.pa[i].valy);
 		}
+		
 		return;
 	}
 	//else -> on envoie vers un send
 	for (i = 0; i < courbe.np; i++) {
-		g.dump = [ courbe.name, courbe.pa[i].valx, courbe.pa[i].valy ];
+		if (isCurveMode)
+			g.dump = [ courbe.name, courbe.pa[i].valx, courbe.pa[i].valy, courbe.pa[i].curve ];
+		else
+			g.dump = [ courbe.name, courbe.pa[i].valx, courbe.pa[i].valy ];
+			
 		g.sendnamed(sendname,"dump");
 	}
 }
@@ -1532,11 +2040,18 @@ function checkInputMatrix(input)
 {
 	var isOk = true;
 
-	if (input.dim.length != 2) {
-		ejies.error(this, "support only 2 dim matrix");
-		isOk = false;
-	} 
-	if (input.planecount.length > 1){
+	if (isCurveMode) {
+		if (input.dim.length == 3) {
+			ejies.error(this, "support only 3 dim matrix");
+			isOk = false;
+		}
+	} else {
+		if (input.dim.length == 2) {
+			ejies.error(this, "support only 2 dim matrix");
+			isOk = false;
+		}
+	}
+	if (input.planecount.length > 1) {
 		ejies.error(this, "support only 1 plane matrix");
 		isOk = false;
 	}
@@ -1551,9 +2066,24 @@ function setPointsFromMatrix(courbe, matrixName)
 	if (checkInputMatrix(myMatrix)) {
 		courbe.np = 0;
 	
-		for (var i = 0; i < myMatrix.dim[1]; i++)
-			courbe.pa[courbe.np++] = new Point(val2x(courbe, myMatrix.getcell(0, i)[0]), val2y(courbe, myMatrix.getcell(1, i)[0]), myMatrix.getcell(0, i)[0], myMatrix.getcell(1, i)[0]);
-
+		if (isCurveMode) {
+			for (var i = 0; i < myMatrix.dim[1]; i++)
+				courbe.pa[courbe.np++] = new Point(
+					val2x(courbe, myMatrix.getcell(0, i)[0]), 
+					val2y(courbe, myMatrix.getcell(1, i)[0]), 
+					myMatrix.getcell(0, i)[0], 
+					myMatrix.getcell(1, i)[0],
+					myMatrix.getcell(2, i)[0]
+				);
+		}	else {
+			for (var i = 0; i < myMatrix.dim[1]; i++)
+				courbe.pa[courbe.np++] = new Point(
+				val2x(courbe, myMatrix.getcell(0, i)[0]),
+				val2y(courbe, myMatrix.getcell(1, i)[0]),
+				myMatrix.getcell(0, i)[0],
+				myMatrix.getcell(1, i)[0]);
+		}
+		
 		sortingPoints(courbe);
 		DoNotify();
 		askForDrawFunctions();
@@ -1568,13 +2098,24 @@ function MyDumpMatrix(courbe, sendname)
 	if (! courbe.np)
 		return;
 
-	var myMatrix = new JitterMatrix(1, "float32", 2, courbe.np);
-
-	for (p = 0; p < courbe.np; p++) {
-		myMatrix.setcell2d(0, p, courbe.pa[p].valx);
-		myMatrix.setcell2d(1, p, courbe.pa[p].valy);
+	if (isCurveMode) {
+		var myMatrix = new JitterMatrix(1, "float32", 3, courbe.np);
+		
+		for (p = 0; p < courbe.np; p++) {
+			myMatrix.setcell2d(0, p, courbe.pa[p].valx);
+			myMatrix.setcell2d(1, p, courbe.pa[p].valy);
+			myMatrix.setcell2d(2, p, courbe.pa[p].curve); // added MR
+		}
+		
+	} else {
+		var myMatrix = new JitterMatrix(1, "float32", 2, courbe.np);
+	
+		for (p = 0; p < courbe.np; p++) {
+			myMatrix.setcell2d(0, p, courbe.pa[p].valx);
+			myMatrix.setcell2d(1, p, courbe.pa[p].valy);
+		}
 	}
-
+	
 	if (arguments.length  == 1)
 		outlet(DUMP_OUTLET, courbe.name, "jit_matrix", myMatrix.name);
 	else
@@ -1590,10 +2131,18 @@ function MyListDump(courbe, sendname)
 	
 	if (! courbe.np)
 		return;
-	
-	for (i = 0, idx = 0; i < courbe.np; i++) {
-		tmpArray[idx++] = courbe.pa[i].valx;
-		tmpArray[idx++] = courbe.pa[i].valy;
+
+	if (isCurveMode) {
+		for (i = 0, idx = 0; i < courbe.np; i++) {
+			tmpArray[idx++] = courbe.pa[i].valx;
+			tmpArray[idx++] = courbe.pa[i].valy;
+			tmpArray[idx++] = courbe.pa[i].curve; // added - MR
+		}
+	} else {
+		for (i = 0, idx = 0; i < courbe.np; i++) {
+			tmpArray[idx++] = courbe.pa[i].valx;
+			tmpArray[idx++] = courbe.pa[i].valy;
+		}
 	}
 	
 	// sortie limitée à 4095 éléments (4094 + nom de la fonction)
@@ -1667,7 +2216,7 @@ MyUnfix.local = 1;
 
 function MyFlip(courbe)
 {
-	var tmpX, tmpY, tmpSustain, tmpFix;
+	var tmpX, tmpY, tmpCurve, tmpSustain, tmpFix;
 	
 	// swap points so there's no need to reorder after (avoid the "same x value" problem for the ordering)
 	for (var i = 0; i < Math.round(courbe.np / 2); i++) {
@@ -1676,9 +2225,12 @@ function MyFlip(courbe)
 			courbe.pa[i].x = val2x(courbe, courbe.pa[i].valx);
 			courbe.pa[i].valy = (courbe.range[0] + courbe.range[1]) - courbe.pa[i].valy;
 			courbe.pa[i].y = val2y(courbe, courbe.pa[i].valy);
+			
 		} else {
 			tmpX = courbe.pa[i].valx;
 			tmpY = courbe.pa[i].valy;
+			if (isCurveMode)
+				tmCurve = courbe.pa[i].curve; // added - MR
 			tmpSustain = courbe.pa[i].sustain;
 			tmpFix = courbe.pa[i].fix;
 			
@@ -1686,6 +2238,8 @@ function MyFlip(courbe)
 			courbe.pa[i].x = val2x(courbe, courbe.pa[i].valx);
 			courbe.pa[i].valy = (courbe.range[0] + courbe.range[1]) - courbe.pa[courbe.np - i - 1].valy;
 			courbe.pa[i].y = val2y(courbe, courbe.pa[i].valy);
+			if (isCurveMode)
+				courbe.pa[i].curve = courbe.pa[courbe.np - i - 1].curve;  		// added - MR
 			courbe.pa[i].sustain = courbe.pa[courbe.np - i - 1].sustain;
 			courbe.pa[i].fix = courbe.pa[courbe.np - i - 1].fix;
 	
@@ -1693,13 +2247,18 @@ function MyFlip(courbe)
 			courbe.pa[courbe.np - i - 1].x = val2x(courbe, courbe.pa[courbe.np - i - 1].valx);
 			courbe.pa[courbe.np - i - 1].valy = (courbe.range[0] + courbe.range[1]) - tmpY;
 			courbe.pa[courbe.np - i - 1].y = val2y(courbe, tmpY);
+
+			if (isCurveMode)
+				courbe.pa[courbe.np - i - 1].curve = tmpCurve;  				// added - MR
 			courbe.pa[courbe.np - i - 1].sustain = tmpSustain;
 			courbe.pa[courbe.np - i - 1].fix = tmpFix;
 		}		
 	}
 
 	ApplyAutoSustain();
-
+	
+	if (isCurveMode)
+		calcFunctionCurves(courbe); 	// added - MR
 	askForDrawFunctions();
 	askForNotify();
 }
@@ -1707,7 +2266,7 @@ MyFlip.local = 1;
 
 function MyFlipX(courbe)
 {
-	var tmpX, tmpY, tmpSustain, tmpFix;
+	var tmpX, tmpY, tmpCurve, tmpSustain, tmpFix;
 	
 	// swap points so there's no need to reorder after (avoid the "same x value" problem for the ordering)
 	for (var i = 0; i < Math.round(courbe.np / 2); i++) {
@@ -1724,6 +2283,9 @@ function MyFlipX(courbe)
 			courbe.pa[i].x = val2x(courbe, courbe.pa[i].valx);
 			courbe.pa[i].valy = courbe.pa[courbe.np - i - 1].valy;
 			courbe.pa[i].y = val2y(courbe, courbe.pa[i].valy);
+
+			if (isCurveMode)
+				courbe.pa[i].curve = courbe.pa[courbe.np - i - 1].curve;  		// added - MR
 			courbe.pa[i].sustain = courbe.pa[courbe.np - i - 1].sustain;
 			courbe.pa[i].fix = courbe.pa[courbe.np - i - 1].fix;
 	
@@ -1731,6 +2293,9 @@ function MyFlipX(courbe)
 			courbe.pa[courbe.np - i - 1].x = val2x(courbe, courbe.pa[courbe.np - i - 1].valx);
 			courbe.pa[courbe.np - i - 1].valy = tmpY;
 			courbe.pa[courbe.np - i - 1].y = val2y(courbe, tmpY);
+
+			if (isCurveMode)
+				courbe.pa[courbe.np - i - 1].curve = tmpCurve;  				// added - MR
 			courbe.pa[courbe.np - i - 1].sustain = tmpSustain;
 			courbe.pa[courbe.np - i - 1].fix = tmpFix;
 		}		
@@ -1738,6 +2303,8 @@ function MyFlipX(courbe)
 
 	ApplyAutoSustain();
 
+	if (isCurveMode)
+		calcFunctionCurves(courbe); 	// added - MR
 	askForDrawFunctions();
 	askForNotify();
 }
@@ -1750,6 +2317,8 @@ function MyFlipY(courbe)
 		courbe.pa[i].y = val2y(courbe, courbe.pa[i].valy);
 	}
 
+	if (isCurveMode)
+		calcFunctionCurves(courbe);
 	askForDrawFunctions();
 	askForNotify();
 }
@@ -1760,7 +2329,7 @@ function MyNormalizeX(courbe)
 	if (courbe.np < 2)
 		return;
 
-	var min = courbe.domain[1]
+	var min = courbe.domain[1];
 	var max = courbe.domain[0];
 	var i;
 	
@@ -1779,6 +2348,32 @@ function MyNormalizeX(courbe)
 }
 MyNormalizeX.local = 1;
 
+// added for the MoveModes MR
+function MyNormalizeXZoomOut(courbe)
+{
+	if (courbe.np < 2)
+		return;
+
+	var min = courbe.domain[1];
+	var max = courbe.domain[0];
+	var i;
+	
+	for (i = 0 ; i < courbe.np; i++) {
+		if (courbe.pa[i].valx < min)
+			min = courbe.pa[i].valx;
+		if (courbe.pa[i].valx > max)
+			max = courbe.pa[i].valx;
+	}
+	
+	// only normalize if our points are beyond our domain
+	if (max > courbe.domain[1] || min < courbe.domain[0]) {
+		ApplyNormalizeX(courbe, min, max);
+		DoNotify();
+		askForDrawFunctions();
+	}
+}
+MyNormalizeXZoomOut.local = 1;
+
 function ApplyNormalizeX(courbe, min, max)
 {
 	// method used in MyNormalize and MyNormalizeX
@@ -1789,6 +2384,9 @@ function ApplyNormalizeX(courbe, min, max)
 		courbe.pa[i].valx = (courbe.pa[i].valx + offset) * range - (0 - courbe.domain[0]);
 		courbe.pa[i].x = val2x(courbe, courbe.pa[i].valx);
 	}
+	
+	if (isCurveMode)
+		calcFunctionCurves(courbe);
 }
 ApplyNormalizeX.local = 1;
 
@@ -1826,6 +2424,9 @@ function ApplyNormalizeY(courbe, min, max)
 		courbe.pa[i].valy = (courbe.pa[i].valy + offset) * range - (0 - courbe.range[0]);
 		courbe.pa[i].y = val2y(courbe, courbe.pa[i].valy);
 	}
+
+	if (isCurveMode)	
+		calcFunctionCurves(courbe); 	// added - MR
 }
 ApplyNormalizeY.local = 1;
 
@@ -1857,7 +2458,7 @@ function MyNormalize(courbe)
 	if (minX == maxX)
 		ApplyNormalizeY(courbe, minY, maxY);	// points have the same X min/max position so process only a normalize on Y
 	else if (minY == maxY)
-			ApplyNormalizeX(courbe, minX, maxX);// points have the same Y min/max position so process only a normalize on X
+		ApplyNormalizeX(courbe, minX, maxX);	// points have the same Y min/max position so process only a normalize on X
 	else
 	{
 		// most front case
@@ -1872,6 +2473,9 @@ function MyNormalize(courbe)
 			courbe.pa[i].valy = (courbe.pa[i].valy + offsetY) * rangeY - (0 - courbe.range[0]);
 			courbe.pa[i].y = val2y(courbe, courbe.pa[i].valy);
 		}
+		
+		if (isCurveMode)
+			calcFunctionCurves(courbe); 	// added - MR
 	}
 	DoNotify();
 	askForDrawFunctions();
@@ -2411,7 +3015,9 @@ function setrange(a, b, courbe)
 		if (tmpF.pa[i].valy == 0)
 			NeedDraw++;
 	}
-
+	
+	if (isCurveMode)
+		calcFunctionCurves(tmpF); 	// added - MR (BUG updated "courbe->tmpF" 20070907)
 	DoNotify();
 
 	// NeedDraw contient le résultat de la nouvelle courbe (y a t'il un point avec y=0) OnePointAtZero c'est l'état d'avant.
@@ -2464,6 +3070,8 @@ function defaults()
 	Ghostness = 0.2;
 	NotifyRecalledState = 0;
 	MouseReportState = 0;
+	numCurvePoints = 12;
+	MoveMode = 0; // added MR
 	
 	for (c = 0; c < NbCourbes; c++) {
 		f[c].brgb =[0.8,0.8,0.8];
@@ -2596,37 +3204,73 @@ MyZoomOut.local = 1;
 //////////////// Fonctions Mouse ///////////////
 function onidle(x,y,but,cmd,shift,capslock,option,ctrl)
 {
+	// add a final argument to mouse dump which indicates whether option is held down and 
+	// the preceding value is the curve to be edited on click-drag
 	var OldIdlePoint = IdlePoint;
+	var pa = f[front]["pa"];
+	var np = f[front].np;
+	var MousePoint;
+	
 	IdlePoint = -1;
-
+	SelectedCurve = -1;
+	
 	if (AllowEdit == 0 || f[front].display == 0)
 		return;
 
-/* 	y = yOffset(y); */
-
-	for(i=0; i< f[front].np; i++) {
-
-		if ( (Math.abs(x - f[front]["pa"][i].x) < Tolerance) && (Math.abs(y - f[front]["pa"][i].y) < Tolerance) ) {
-			if (ClickMove == 1)
-				DisplayCursor(5);
-			
-			IdlePoint = i;
-
-			if ( IdlePoint != OldIdlePoint) {	// que quand c'est différent...
-				RedrawOrNot(IdlePoint);
-				break;			
+	y = yOffset(y);
+	
+	//post("idle\n");
+	
+	if(isCurveMode && option) {
+		DisplayCursor(8)
+		
+		for(i=1; i < np; i++) {
+			if(x < pa[i].x) {
+				// check to see if y is between the prev.y and curr.y
+				var y0 = pa[i].y;
+				var y1 = pa[i-1].y;
+				
+				if(y0 < y1) {
+					if(y >= y0 && y <= y1) SelectedCurve = i;
+				} else {
+					if(y >= y1 && y <= y0) SelectedCurve = i;
+				}
+								
+				break;
 			}
 		}
+		
+		MousePoint = SelectedCurve;
 	}
+	else
+	{
+		for(i=0; i< np; i++) {
 
+			if ( (Math.abs(x - pa[i].x) < Tolerance) && (Math.abs(y - pa[i].y) < Tolerance) ) {
+				if (ClickMove == 1)
+					DisplayCursor(5);
+			
+				IdlePoint = i;
+
+				if ( IdlePoint != OldIdlePoint) {	// que quand c'est différent...
+					RedrawOrNot(IdlePoint);
+					break;			
+				}
+			}
+		}
+		
+		MousePoint = IdlePoint;
+	}
+	
 	if (MouseReportState)
 		outlet(DUMPOUT, "mouseidle", 	ejies.clip(x2val(f[front], x), f[front].domain[0], f[front].domain[1]),
 										ejies.clip(y2val(f[front], y), f[front].range[0], f[front].range[1]),
 										but, IdlePoint);
 
+	// TODO ici il faut peut-êrte tester "option"
 	if (IdlePoint == -1 && shift == 1) {
 		DisplayCursor(1);
-	} else if (IdlePoint == -1 && shift == 0 && ClickAdd == 1) {
+	} else if (IdlePoint == -1 && shift == 0 && ClickAdd == 1) { // TODO: pareil
 		DisplayCursor(6);
 	}
 	
@@ -2646,7 +3290,16 @@ function yOffset(y)
 
 function onclick(x,y,but,cmd,shift,capslock,option,ctrl)
 {
-/* 	y = yOffset(y); */
+	// added a final argument to mouse dump which indicates whether option is held down and 
+	// the preceding value is the curve to be edited on drag
+	var pa = f[front]["pa"];
+	var np = f[front].np;
+	var MousePoint;
+	var i;
+	
+	prevy = y;
+	
+	//y = yOffset(y);
 	
 	if (AllowEdit == 0 || f[front].display == 0) {
 		onidle(x, y);
@@ -2657,49 +3310,97 @@ function onclick(x,y,but,cmd,shift,capslock,option,ctrl)
 	x = ejies.clip(x - 2, Bordure, BoxWidth - Bordure);
 	y = ejies.clip(y - 2, Bordure + LegendStateBordure, BoxHeight - Bordure);
 
-	if (IdlePoint != -1) {
-		SelectedPoint = IdlePoint;
-		if (cmd) {
-			f[front].pa[SelectedPoint].sustain = 1 - f[front].pa[SelectedPoint].sustain;
-			EditedWithMouse.state++;
-			drawFunctions();
-			return ;
+	
+	if (option && np > 1) {
+			SelectedCurve = 0; // we had the option key down when we clicked 0 is not a vaild curve index
+		
+		for(i=1; i < np; i++) {
+			if(x < pa[i].x) {
+				// check to see if y is between the prev.y and curr.y
+				var y0 = pa[i].y;
+				var y1 = pa[i-1].y;
+				
+				if(y0 < y1) {
+					if(y >= (y0-Tolerance) && y <= (y1+Tolerance)) SelectedCurve = i;
+				} else {
+					if(y >= (y1-Tolerance) && y <= (y0+Tolerance)) SelectedCurve = i;
+				}
+								
+				
+				break;
+			}
 		}
 		
-		if (shift && ClickAdd) {
-			DeletePoint(f[front], SelectedPoint);
+		MousePoint = SelectedCurve;
+	} else {
+		if (IdlePoint != -1) {
+			SelectedPoint = IdlePoint;
+			if (cmd) {
+				f[front].pa[SelectedPoint].sustain = 1 - f[front].pa[SelectedPoint].sustain;
+				EditedWithMouse.state++;
+				drawFunctions();
+				return ;
+			}
+		
+			if (shift && ClickAdd) {
+				DeletePoint(f[front], SelectedPoint);
+				SelectedPoint = -1;
+				ApplyAutoSustain();
+				EditedWithMouse.state++;
+				EditedWithMouse();
+				DoNotify();
+				drawFunctions();
+				onidle(x, y);	// pour ne pas afficher la position (puisqu'on y est)
+				return;
+			}
+		}
+
+		if (SelectedPoint != -2 && ClickMove == 0)	// ClickMove désactivé
 			SelectedPoint = -1;
+
+		// ajout d'un point
+		if (cmd == 0 && shift == 0 && SelectedPoint == -2 && ClickAdd == 1) {
+			if (Snap2GridState & 1)
+				x = val2x(f[front], Math.round((x2val(f[front], x) - f[front].domain[0]) / f[front].grid_x) * f[front].grid_x + f[front].domain[0]);
+			if (Snap2GridState & 2)
+				y = val2y(f[front], Math.round((y2val(f[front], y) - f[front].range[0]) / f[front].grid_y) * f[front].grid_y + f[front].range[0]);
+				
+			if (isCurveMode)
+				SelectedPoint = AddOnePoint(f[front], x, y, DEFAULT_CURVE);
+			else
+				SelectedPoint = AddOnePoint(f[front], x, y);
+			
 			ApplyAutoSustain();
 			EditedWithMouse.state++;
-			EditedWithMouse();
 			DoNotify();
-			drawFunctions();
-			onidle(x, y);	// pour ne pas afficher la position (puisqu'on y est)
-			return;
+			drawAll();
+			onidle(x,y);
+		}
+		
+		MousePoint = SelectedPoint;
+	}
+
+	if (MouseReportState) {
+		if (isCurveMode) {
+			outlet(DUMPOUT, "mouse",	ejies.clip(x2val(f[front], x), 
+										f[front].domain[0], f[front].domain[1]),
+										ejies.clip(y2val(f[front], y),
+										f[front].range[0],
+										f[front].range[1]),
+										but,
+										SelectedPoint);
+		} else {
+			outlet(DUMPOUT, "mouse",	ejies.clip(x2val(f[front], x),
+										f[front].domain[0],
+										f[front].domain[1]),
+										ejies.clip(y2val(f[front], y),
+										f[front].range[0],
+										f[front].range[1]),
+										but,
+										MousePoint,
+										SelectedCurve >= 0);
 		}
 	}
-
-	if (SelectedPoint != -2 && ClickMove == 0)	// ClickMove désactivé
-		SelectedPoint = -1;
-
-	// ajout d'un point
-	if (cmd == 0 && shift == 0 && SelectedPoint == -2 && ClickAdd == 1) {
-		if (Snap2GridState & 1)
-			x = val2x(f[front], Math.round((x2val(f[front], x) - f[front].domain[0]) / f[front].grid_x) * f[front].grid_x + f[front].domain[0]);
-		if (Snap2GridState & 2)
-			y = val2y(f[front], Math.round((y2val(f[front], y) - f[front].range[0]) / f[front].grid_y) * f[front].grid_y + f[front].range[0]);
-		SelectedPoint = AddOnePoint(f[front], x, y);
-		ApplyAutoSustain();
-		EditedWithMouse.state++;
-		DoNotify();
-		drawAll();
-		onidle(x,y);
-	}
-
-	if (MouseReportState)
-		outlet(DUMPOUT, "mouse",	ejies.clip(x2val(f[front], x), f[front].domain[0], f[front].domain[1]),
-									ejies.clip(y2val(f[front], y), f[front].range[0], f[front].range[1]),
-									but, SelectedPoint);
 }
 
 function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
@@ -2708,61 +3409,281 @@ function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 
 	if (AllowEdit == 0 || f[front].display == 0)
 		return;
-
-	if ( but == 0 ||  SelectedPoint < 0) {
-		EditedWithMouse();	// quand c'est delete c'est fait dans onidle()
-		SelectedPoint = -2;	// si on a relâché c'est qu'il n'y a plus de points sélectionnés.
-		onidle(x,y, 0);		// tout pareil...
-/* 		drawText(); */
-		return;
-	}
 	
-/* 	y = yOffset(y); // ne pas le mettre avant sinon onidle ne reçoit pas les bons coordonnées y */
-
-	if (MouseReportState)
-		outlet(DUMPOUT, "mouse", 	ejies.clip(x2val(f[front], x), f[front].domain[0], f[front].domain[1]),
-									ejies.clip(y2val(f[front], y), f[front].range[0], f[front].range[1]),
-									but, SelectedPoint);
-
-	if (SelectedPoint < f[front].np) {
-		if (f[front]["pa"][SelectedPoint].fix)
-			return;
+	// TODO: optimize that shit
+	if (isCurveMode) {
+		if(SelectedCurve >= 0) {
+			//option key must have been down when we clicked
+			var curr, prev;
 			
-		if (Snap2GridState & 1)
-			x = val2x(f[front], Math.round((x2val(f[front], x) - f[front].domain[0]) / f[front].grid_x) * f[front].grid_x + f[front].domain[0]);
-		if (Snap2GridState & 2)
-			y = val2y(f[front], Math.round((y2val(f[front], y) - f[front].range[0]) / f[front].grid_y) * f[front].grid_y + f[front].range[0]);
-		
-		x = ejies.clip(x, Bordure, BoxWidth - Bordure);
-		y = ejies.clip(y, Bordure + LegendStateBordure, BoxHeight - Bordure);
-	
-		if ( BorderSyncState == 1 && f[front].np > 2 && ( SelectedPoint == 0 || SelectedPoint == (f[front].np - 1 ) )) {
-			SelectedPoint == 0 ? borderthing = (f[front].np - 1) : borderthing = 0;
-		}
-
-		if (f[front]["np"] > 1) {
-
-			if (SelectedPoint == 0) {
-				x = ejies.clip(x, 0, f[front]["pa"][SelectedPoint+1].x );  
-			} else if (SelectedPoint > 0 && SelectedPoint < (f[front]["np"] - 1)) {
-				x = ejies.clip(x, f[front]["pa"][SelectedPoint-1].x, f[front]["pa"][SelectedPoint+1].x);
-			} else if (SelectedPoint == (f[front]["np"] - 1) ) {
-				x = ejies.clip(x, f[front]["pa"][SelectedPoint-1].x, BoxWidth);
+			if ( but == 0 ) {
+				EditedWithMouse();	// quand c'est delete c'est fait dans onidle()
+				SelectedCurve = -1;	// si on a relâché c'est qu'il n'y a plus de points sélectionnés.
+				onidle(x,y, 0);		// tout pareil...
+				return;
 			}
+			
+			if(SelectedCurve >= 1) {
+				// valid curve index
+				curr = f[front]["pa"][SelectedCurve];
+				prev = f[front]["pa"][SelectedCurve-1];
+				var dy
+				
+				DisplayCursor(0);
+				
+				if(prev.y < curr.y)
+					dy = prevy - y;
+				else
+					dy = y - prevy;
+					
+				if(shift) // option-shift-drag for fine tuning
+					curr.curve += dy * 0.001;
+				else
+					curr.curve += dy * 0.02;
+				
+				curr.curve = ejies.clip(curr.curve, CURVE_MIN, CURVE_MAX);
+				
+				if(Math.abs(curr.curve) < 0.001) 
+					curr.curve = 0.; 
+				else
+					calcOneCurve(f[front], SelectedCurve-1, SelectedCurve);
+					
+				prevy = y;
+				
+				UpdateDisplay();
+			}
+			
+			if (MouseReportState)
+					outlet(DUMPOUT, "mouse", 	ejies.clip(x2val(f[front], x), f[front].domain[0], f[front].domain[1]),
+												ejies.clip(y2val(f[front], y), f[front].range[0], f[front].range[1]),
+												but, SelectedCurve, 1, curr.curve);
 		}
+		else
+		{
+			var dx;
+			
+			if ( but == 0 ||  SelectedPoint < 0) {
+				EditedWithMouse();	// quand c'est delete c'est fait dans onidle()
+				SelectedPoint = -2;	// si on a relâché c'est qu'il n'y a plus de points sélectionnés.
+				onidle(x,y, 0);		// tout pareil...
+	/* 			drawText(); */
+				return;
+			}
+			
+		//	y = yOffset(y); // ne pas le mettre avant sinon onidle ne reçoit pas les bons coordonnées y
+		
+		if (SelectedPoint < f[front].np) {
+			if (f[front]["pa"][SelectedPoint].fix)
+				return;
+				
+			if (Snap2GridState & 1)
+				x = val2x(f[front], Math.round((x2val(f[front], x) - f[front].domain[0]) / f[front].grid_x) * f[front].grid_x + f[front].domain[0]);
+			if (Snap2GridState & 2)
+				y = val2y(f[front], Math.round((y2val(f[front], y) - f[front].range[0]) / f[front].grid_y) * f[front].grid_y + f[front].range[0]);
+			
+			x = ejies.clip(x, Bordure, BoxWidth - Bordure);
+			y = ejies.clip(y, Bordure + LegendStateBordure, BoxHeight - Bordure);
+		
+				if ( BorderSyncState == 1 && f[front].np > 2 && ( SelectedPoint == 0 || SelectedPoint == (f[front].np - 1 ) )) {
+					SelectedPoint == 0 ? borderthing = (f[front].np - 1) : borderthing = 0;
+				}
+	
+				if (f[front]["np"] > 1) {
+	
+					if (SelectedPoint == 0) {
+						x = ejies.clip(x, 0, f[front]["pa"][SelectedPoint+1].x );  
+					} else if (SelectedPoint > 0 && SelectedPoint < (f[front]["np"] - 1)) {
+						x = ejies.clip(x, f[front]["pa"][SelectedPoint-1].x, f[front]["pa"][SelectedPoint+1].x);
+					} else if (SelectedPoint == (f[front]["np"] - 1) ) {
+						x = ejies.clip(x, f[front]["pa"][SelectedPoint-1].x, BoxWidth);
+					}
+				}
+				
+				EditedWithMouse.state++;
+				
+				if(MoveMode >= 2 && MoveMode <= 6) {
+			
+					if(SelectedPoint > 0 && x < f[front]["pa"][SelectedPoint-1].x) x = f[front]["pa"][SelectedPoint-1].x;
+							
+					dx = x2val(f[front], x) - f[front]["pa"][SelectedPoint].valx;
+					
+					if(MoveMode == 3) {			
+							
+						if(dx > (f[front].domain[1] - f[front]["pa"][f[front].np-1].valx)) {
+							dx = f[front].domain[1] - f[front]["pa"][f[front].np-1].valx;
+						}
+					}
+			
+					if(dx != 0) {
+						for(i = SelectedPoint; i < f[front].np; i++) {
+							if(MoveMode >= 4 && MoveMode <= 6)
+								f[front]["pa"][i].valx = dx+f[front].pa[i].valx;
+							else
+								f[front]["pa"][i].valx = ejies.clip(dx+f[front].pa[i].valx, f[front].domain[0], f[front].domain[1]);
+							
+							f[front]["pa"][i].x = val2x(f[front], f[front].pa[i].valx);
+						}
+					}
+					
+				} else {
+					f[front]["pa"][SelectedPoint].x = x;
+					f[front]["pa"][SelectedPoint].valx = x2val(f[front], x);
+				}
+				
+				f[front]["pa"][SelectedPoint].y = y;
+				f[front]["pa"][SelectedPoint].valy = y2val(f[front], y);
+				
+				/*
+				//seems to be a BUG when some points are curves and others are linear????
+				//really broke this updating to ejies 1.57
+				
+				if(f[front].np == 1) {
+					//only one point
+					//..
+					;
+				}
+				else if(SelectedPoint == 0 
+						&& f[front]["pa"][SelectedPoint].valx <= f[front]["pa"][SelectedPoint+1].valx) 
+				{
+					//first point and it still is
+					if(MoveMode == 0 || MoveMode == 1)
+						calcOneCurve(f[front], SelectedPoint, SelectedPoint+1); 		// added - MR
+					else if(MoveMode == 2 || MoveMode == 3)
+						offsetNCurves(f[front], SelectedPoint, f[front].np-1, dx);
+					
+				}
+				else if(SelectedPoint == (f[front].np-1) 
+						&& f[front]["pa"][SelectedPoint].valx >= f[front]["pa"][SelectedPoint-1].valx) {
+					//last point and it still is
+					calcOneCurve(f[front], SelectedPoint-1, SelectedPoint); // added - MR		
+				}
+				else if(f[front]["pa"][SelectedPoint].valx >= f[front]["pa"][SelectedPoint-1].valx 
+						&& f[front]["pa"][SelectedPoint].valx <= f[front]["pa"][SelectedPoint+1].valx)  
+				{
+					// no need to sort - the order hasn't changed
+					
+					if(MoveMode == 0 || MoveMode == 1) {
+						calcOneCurve(f[front], SelectedPoint-1, SelectedPoint); 		// added - MR
+						calcOneCurve(f[front], SelectedPoint, SelectedPoint+1); 		// added - MR
+					}
+					else if(MoveMode == 2 || MoveMode == 3)
+					{
+						calcOneCurve(f[front], SelectedPoint-1, SelectedPoint); 		// added - MR
+						offsetNCurves(f[front], SelectedPoint+1, f[front].np-1, dx);
+					}
+				}
+				*/
+				
+				if(MoveMode == 5) MyNormalizeXZoomOut(f[front]);
+				else if(MoveMode == 6) MyNormalizeX(f[front]);
+				
+				calcFunctionCurves(f[front]); // need to get the logic above working instead of this
+				
+				if (borderthing != -1) {
+					f[front]["pa"][borderthing].y = y;
+					f[front]["pa"][borderthing].valy = y2val(f[front], y);
+				}
+				
+				UpdateDisplay();
+						
+			}
+			
+			if (MouseReportState)
+				outlet(DUMPOUT, "mouse", 	ejies.clip(x2val(f[front], x), f[front].domain[0], f[front].domain[1]),
+											ejies.clip(y2val(f[front], y), f[front].range[0], f[front].range[1]),
+											but, SelectedPoint, 0);
+		}
+	
+	} else {
+	
+		if ( but == 0 ||  SelectedPoint < 0) {
+			EditedWithMouse();	// quand c'est delete c'est fait dans onidle()
+			SelectedPoint = -2;	// si on a relâché c'est qu'il n'y a plus de points sélectionnés.
+			onidle(x,y, 0);		// tout pareil...
+	/* 		drawText(); */
+			return;
+		}
+		
+	/* 	y = yOffset(y); // ne pas le mettre avant sinon onidle ne reçoit pas les bons coordonnées y */
+	
+		if (MouseReportState)
+			outlet(DUMPOUT, "mouse", 	ejies.clip(x2val(f[front], x), f[front].domain[0], f[front].domain[1]),
+										ejies.clip(y2val(f[front], y), f[front].range[0], f[front].range[1]),
+										but, SelectedPoint);
+	
+		if (SelectedPoint < f[front].np) {
+			if (f[front]["pa"][SelectedPoint].fix)
+				return;
+				
+			if (Snap2GridState & 1)
+				x = val2x(f[front], Math.round((x2val(f[front], x) - f[front].domain[0]) / f[front].grid_x) * f[front].grid_x + f[front].domain[0]);
+			if (Snap2GridState & 2)
+				y = val2y(f[front], Math.round((y2val(f[front], y) - f[front].range[0]) / f[front].grid_y) * f[front].grid_y + f[front].range[0]);
+			
+			x = ejies.clip(x, Bordure, BoxWidth - Bordure);
+			y = ejies.clip(y, Bordure + LegendStateBordure, BoxHeight - Bordure);
+		
+			if ( BorderSyncState == 1 && f[front].np > 2 && ( SelectedPoint == 0 || SelectedPoint == (f[front].np - 1 ) )) {
+				SelectedPoint == 0 ? borderthing = (f[front].np - 1) : borderthing = 0;
+			}
+	
+			if (f[front]["np"] > 1) {
+	
+				if (SelectedPoint == 0) {
+					x = ejies.clip(x, 0, f[front]["pa"][SelectedPoint+1].x );  
+				} else if (SelectedPoint > 0 && SelectedPoint < (f[front]["np"] - 1)) {
+					x = ejies.clip(x, f[front]["pa"][SelectedPoint-1].x, f[front]["pa"][SelectedPoint+1].x);
+				} else if (SelectedPoint == (f[front]["np"] - 1) ) {
+					x = ejies.clip(x, f[front]["pa"][SelectedPoint-1].x, BoxWidth);
+				}
+			}
+			
+			EditedWithMouse.state++;
+			
+			if(MoveMode >= 2 && MoveMode <= 6) {
+		
+				if(SelectedPoint > 0 && x < f[front]["pa"][SelectedPoint-1].x) x = f[front]["pa"][SelectedPoint-1].x;
+						
+				dx = x2val(f[front], x) - f[front]["pa"][SelectedPoint].valx;
+				
+				if(MoveMode == 3) {			
+						
+					if(dx > (f[front].domain[1] - f[front]["pa"][f[front].np-1].valx)) {
+						dx = f[front].domain[1] - f[front]["pa"][f[front].np-1].valx;
+					}
+				}
+		
+				if(dx != 0) {
+					for(i = SelectedPoint; i < f[front].np; i++) {
+						if(MoveMode >= 4 && MoveMode <= 6)
+							f[front]["pa"][i].valx = dx+f[front].pa[i].valx;
+						else
+							f[front]["pa"][i].valx = ejies.clip(dx+f[front].pa[i].valx, f[front].domain[0], f[front].domain[1]);
+						
+						f[front]["pa"][i].x = val2x(f[front], f[front].pa[i].valx);
+					}
+				}
+				
+			} else {
+				f[front]["pa"][SelectedPoint].x = x;
+				f[front]["pa"][SelectedPoint].valx = x2val(f[front], x);
+			}
+			
+			f[front]["pa"][SelectedPoint].y = y;
+			f[front]["pa"][SelectedPoint].valy = y2val(f[front], y);
+			
+			if(MoveMode == 5) MyNormalizeXZoomOut(f[front]);
+			else if(MoveMode == 6) MyNormalizeX(f[front]);
+			
+			calcFunctionCurves(f[front]); // need to get the logic above working instead of this
 
-		EditedWithMouse.state++;		
-		f[front]["pa"][SelectedPoint].x = x;
-		f[front]["pa"][SelectedPoint].y = y;
-		f[front]["pa"][SelectedPoint].valx = x2val(f[front], x);
-		f[front]["pa"][SelectedPoint].valy = y2val(f[front], y);
-		
-		if (borderthing != -1) {
-			f[front]["pa"][borderthing].y = y;
-			f[front]["pa"][borderthing].valy = y2val(f[front], y);
+			if (borderthing != -1) {
+				f[front]["pa"][borderthing].y = y;
+				f[front]["pa"][borderthing].valy = y2val(f[front], y);
+			}
+			
+			UpdateDisplay();
 		}
-		
-		UpdateDisplay();
 	}
 }
 
@@ -2921,6 +3842,12 @@ function setvalueof()
 			
 	var FunctionVersionCheck = arguments[idx++];
 
+	// TODO: check version number	
+	if(!(FunctionVersionCheck == 2 || FunctionVersionCheck == 6)) {
+		ejies.error(this, "invalid pattr data");
+		return;
+	}
+	
 	// si le nombre de courbe n'est pas un entier, on quitte de toute urgence.
 	if ( (arguments[idx] % 1) != 0) {
 		PattrInterpError(0);
@@ -2997,6 +3924,8 @@ function setvalueof()
 		for (p = 0; p < f[i].np; p++) {
 			f[i]["pa"][p].valx = arguments[idx++];
 			f[i]["pa"][p].valy = arguments[idx++];
+			if (FunctionVersionCheck == 6)
+				f[i]["pa"][p].curve = arguments[idx++]; // added MR
 			f[i]["pa"][p].sustain = arguments[idx] & 2 ? 1 : 0; // pas d'incrémentation
 			f[i]["pa"][p].fix = arguments[idx++] & 1;	// elle est faite ici.
 		}
@@ -3007,12 +3936,14 @@ function setvalueof()
 	RedrawEnable = 1;
 	AllowEdit = 1;
 	PattrInterpError.flag = 0;
+	if (isCurveMode) calcCurves();				// added MR
 	UpdateDisplay();
 	
 	if (NotifyRecalledState)
 		outlet(DUMPOUT, "recalled");
 
-	if ( FunctionVersionCheck < 1 && FunctionVersionCheck > 5 )
+	// TODO: this appears to be a bug…
+	if ( FunctionVersionCheck < 1 && FunctionVersionCheck > 6 )
 		ejies.error(this, "bad version number - interpolation aborted");
 }
 
@@ -3023,7 +3954,7 @@ function getvalueof()
 	var idx = 0;
 	
 	//versioning to allow for future changes (technoui style...)
-	tmpData[idx++] = FUNCTIONVERSION;
+	tmpData[idx++] = FUNCTIONVERSION + isCurveMode;
 	tmpData[idx++] = NbCourbes;
 	
 	for (i = 0; i < NbCourbes; i++) {
@@ -3043,6 +3974,7 @@ function getvalueof()
 			// on stocke un minimum de chose pour pouvoir mettre plus de points
 			tmpData[idx++] = f[i]["pa"][p].valx;
 			tmpData[idx++] = f[i]["pa"][p].valy;
+			if (FUNCTIONVERSION == 6) tmpData[idx++] = f[i]["pa"][p].curve;
 			tmpData[idx++] = f[i]["pa"][p].sustain * 2 + f[i]["pa"][p].fix;	// en binaire ça prend moins de place
 		}
 	}
@@ -3085,6 +4017,9 @@ function save()
 	embedmessage("ghost", Math.round(Ghostness * 100));
 	embedmessage("notifyrecalled", NotifyRecalledState);
 	embedmessage("mousereport", MouseReportState);
+	embedmessage("numcurvepoints", numCurvePoints); 	// added MR
+	embedmessage("limitnumpoints", LimitNP);			// added MR
+	embedmessage("movemode", MoveMode);					// added MR
 	
 	
 	for (i = 0; i < NbCourbes; i++) {
@@ -3124,6 +4059,7 @@ function CreateNFunctions(v)
 	LectureInspectorFlag = 1;	// comme ça il n'y a pas de scan des arguments
 }
 
+// TODO: needs to add the version number so we can copy/paste from different modes
 function copyfunction()
 {
 	var i, c, p, idx;
@@ -3169,6 +4105,7 @@ function copyfunction()
 	}
 }
 
+// TODO: needs to add the version number so we can copy/paste from different modes
 function pastefunction()
 {
 	if (! arguments.length)
@@ -3220,12 +4157,14 @@ function MyPasteFunction(courbe)
 		courbe["pa"][p].y = cp[idx++];
 		courbe["pa"][p].valx = cp[idx++];
 		courbe["pa"][p].valy = cp[idx++];
+		// TODO: something here…
 		courbe["pa"][p].sustain = cp[idx++];
 		courbe["pa"][p].fix = cp[idx++];
 	}
 	
 	MyThings2Zoom(courbe);
 	pixel2machin(courbe);
+	calcFunctionCurves(courbe);
 }
 MyPasteFunction.local = 1;
 
@@ -3265,10 +4204,12 @@ function insertpaste()
 	MyThings2Zoom(f[front]);
 	pixel2machin(f[front]);
 
-	getname();		// mise à jour du menu
+	getname();								// mise à jour du menu
+	if (isCurveMode) calcFunctionCurves(f[front]);			// added MR
 	UpdateDisplay();
 }
 
+// NEED TO MODIFY THIS FOR CURVES - DONE
 function read(filename)
 {
 	if (arguments.length == 0) {
@@ -3401,6 +4342,7 @@ function read(filename)
 		RedrawEnable = 1;
 		AllowEdit = 1;
 		PattrInterpError.flag = 0;
+		if (isCurveMode) calcCurves();					// added MR
 		UpdateDisplay();
 
 		outlet(DUMPOUT, "read", filename, 1);
@@ -3443,7 +4385,7 @@ function write(filename)
 	var fichier = new File(filename,"write");
 	if (fichier.isopen) {
 		//versioning to allow for future changes (technoui style...)
-		tmpStr += FUNCTIONVERSION + sep;
+		tmpStr += (FUNCTIONVERSION + isCurveMode) + sep;
 		tmpStr += NbCourbes;
 		
 		fichier.writeline("ej.function format");
@@ -3483,6 +4425,7 @@ function write(filename)
 				tmpStr = "";
 				tmpStr += f[i]["pa"][p].valx + sep;
 				tmpStr += f[i]["pa"][p].valy + sep;
+				if (isCurveMode) tmpStr += f[i]["pa"][p].curve + sep; // added - MR
 				tmpStr += f[i]["pa"][p].sustain * 2 + f[i]["pa"][p].fix;	// en binaire ça prend moins de place
 				fichier.writeline(tmpStr);
 			}
