@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.98 $
-	$Date: 2007/10/05 16:11:58 $
+	$Revision: 1.99 $
+	$Date: 2007/10/25 16:37:45 $
 */
 
 // global code
@@ -145,7 +145,7 @@ function Point(x, y, valx, valy, curve)
 	this.valy = valy;
 	this.sustain = 0;
 	this.fix = 0;
-	this.curve = curve;		// curve, 0 = linear, -1 <= curve <= 1 curve, reserve out of bounds for other uses
+	this.curve = arguments.length > 4 ? curve : 0;		// curve, 0 = linear, -1 <= curve <= 1 curve, reserve out of bounds for other uses
 	this.cseg = 0;					// a CurveSeg generated when the points are changed? and/or sorted?
 									// curve points in x/y (rather than valx/valy)
 									// first point (0?) has no curve, others will need to be 
@@ -551,11 +551,9 @@ function SpriteText()
 					textalign("left","center");
 					moveto(-(BoxWidth - Bordure)/BoxHeight,(BoxHeight - LegendStateBordure - Bordure)/BoxHeight);
 					if (TimeFlag)
-						text("X" + sep + MyDomain2String(f[front]["pa"][WhichPoint].valx) + " Y" + sep + f[front]["pa"][WhichPoint].valy.toFixed(2) + 
-							" c" + sep + f[front]["pa"][WhichPoint].curve.toFixed(3));
+						text("X" + sep + MyDomain2String(f[front]["pa"][WhichPoint].valx) + " Y" + sep + f[front]["pa"][WhichPoint].valy.toFixed(2) + " c" + sep + f[front]["pa"][WhichPoint].curve.toFixed(3));
 					else
-						text("X" + sep + f[front]["pa"][WhichPoint].valx.toFixed(2) + " Y" + sep + f[front]["pa"][WhichPoint].valy.toFixed(2) + 
-							" c" + sep + f[front]["pa"][WhichPoint].curve.toFixed(3));
+						text("X" + sep + f[front]["pa"][WhichPoint].valx.toFixed(2) + " Y" + sep + f[front]["pa"][WhichPoint].valy.toFixed(2) + " c" + sep + f[front]["pa"][WhichPoint].curve.toFixed(3));
 				}
 			}
 		} else {
@@ -601,7 +599,7 @@ function SpriteFunctions()
 		glclear();
 		
 		// dessine la grille X
-		if ( GridMode  & 1) {
+		if (GridMode  & 1) {
 			glcolor(f[front]["rgb5"], Ghostness);
 			
 			for (i = 0; i < (((f[front].domain[1] - f[front].domain[0]) / f[front].grid_x)+1); i++) {
@@ -628,8 +626,8 @@ function SpriteFunctions()
 							
 					moveto(screentoworld(f[c]["pa"][0].x,f[c]["pa"][0].y ));
 					
-					if (isCurveMode) {
-						for (i = 0; i < (f[c].np - 1); i++) {e
+					if (! isCurveMode) {
+						for (i = 0; i < (f[c].np - 1); i++) {
 							lineto(screentoworld(f[c]["pa"][i+1].x,f[c]["pa"][i+1].y ));
 						}
 					} else {
@@ -1053,7 +1051,7 @@ function MyAddPoints(courbe, liste)
 		}
 	} else {
 		for (i = 1; i < (Math.floor((liste.length - 1) / 2) * 2); i += 2) {
-			courbe.pa[courbe.np++] = new Point( val2x(courbe, liste[i]), val2y(courbe, liste[i+1]), liste[i], liste[i+1]);
+			courbe.pa[courbe.np++] = new Point( val2x(courbe, liste[i]), val2y(courbe, liste[i+1]), liste[i], liste[i+1], 0);
 		}
 	}
 	
@@ -4438,6 +4436,19 @@ function write(filename)
 		ejies.error(this, "could not write file: ", filename, "... don't ask why :-)\n");
 		outlet(DUMPOUT, "write", filename, "-1");
 	}
+}
+
+function mode(v)
+{
+	isCurveMode = v ? 1 : 0;
+	
+	if (isCurveMode)
+		setoutletassist(LINE_OUTLET, "points in curve~ format");
+	else
+		setoutletassist(LINE_OUTLET, "points in line~ format");
+
+	
+	askForDrawFunctions();
 }
 
 resetall();
