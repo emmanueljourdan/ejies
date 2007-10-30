@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.99 $
-	$Date: 2007/10/25 16:37:45 $
+	$Revision: 1.100 $
+	$Date: 2007/10/30 15:12:20 $
 */
 
 // global code
@@ -3840,11 +3840,13 @@ function setvalueof()
 			
 	var FunctionVersionCheck = arguments[idx++];
 
-	// TODO: check version number	
-	if(!(FunctionVersionCheck == 2 || FunctionVersionCheck == 6)) {
-		ejies.error(this, "invalid pattr data");
-		return;
-	}
+	isCurveMode = FunctionVersionCheck == 6 ? 1 : 0;
+		
+/* 	// TODO: check version number	 */
+/* 	if(!(FunctionVersionCheck == 2 || FunctionVersionCheck == 6)) { */
+/* 		ejies.error(this, "invalid pattr data"); */
+/* 		return; */
+/* 	} */
 	
 	// si le nombre de courbe n'est pas un entier, on quitte de toute urgence.
 	if ( (arguments[idx] % 1) != 0) {
@@ -3922,7 +3924,7 @@ function setvalueof()
 		for (p = 0; p < f[i].np; p++) {
 			f[i]["pa"][p].valx = arguments[idx++];
 			f[i]["pa"][p].valy = arguments[idx++];
-			if (FunctionVersionCheck == 6)
+			if (isCurveMode)
 				f[i]["pa"][p].curve = arguments[idx++]; // added MR
 			f[i]["pa"][p].sustain = arguments[idx] & 2 ? 1 : 0; // pas d'incrŽmentation
 			f[i]["pa"][p].fix = arguments[idx++] & 1;	// elle est faite ici.
@@ -3952,7 +3954,7 @@ function getvalueof()
 	var idx = 0;
 	
 	//versioning to allow for future changes (technoui style...)
-	tmpData[idx++] = FUNCTIONVERSION + isCurveMode;
+	tmpData[idx++] = isCurveMode ? FUNCTIONVERSION : 5;
 	tmpData[idx++] = NbCourbes;
 	
 	for (i = 0; i < NbCourbes; i++) {
@@ -3972,7 +3974,7 @@ function getvalueof()
 			// on stocke un minimum de chose pour pouvoir mettre plus de points
 			tmpData[idx++] = f[i]["pa"][p].valx;
 			tmpData[idx++] = f[i]["pa"][p].valy;
-			if (FUNCTIONVERSION == 6) tmpData[idx++] = f[i]["pa"][p].curve;
+			if (isCurveMode) tmpData[idx++] = f[i]["pa"][p].curve;
 			tmpData[idx++] = f[i]["pa"][p].sustain * 2 + f[i]["pa"][p].fix;	// en binaire a prend moins de place
 		}
 	}
