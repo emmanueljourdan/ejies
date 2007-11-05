@@ -1,7 +1,7 @@
 ejies Ñ Version history
 
 *******************
-1.58: X June 2007
+1.58b1: X June 2007
 
 Bug correction:
 ej.dialog: pressing escape key close the dialog and notify the second outlet
@@ -9,6 +9,8 @@ ej.dialog: pressing escape key close the dialog and notify the second outlet
 Improvements:
 ej.ldrunk: interval attribute which outputs continuously (kinda integrated metro)
 ej.lslide: set message, slide_up slide_down minimum properly set to 1
+ej.led.js: toggle message for Kasper
+ej.function.js: curve addition (Many many thanks to Martin Robinson)
 
 
 

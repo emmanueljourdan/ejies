@@ -3,8 +3,8 @@
 	an alternative led...
 	since 1.54b3: mode button added
 	
-	$Revision: 1.9 $
-	$Date: 2006/09/04 13:35:25 $
+	$Revision: 1.10 $
+	$Date: 2007/11/05 13:40:35 $
 */
 
 // Global Code
@@ -92,6 +92,11 @@ function bangOff()
 {
 	Flash = 0;
 	draw();
+}
+
+function toggle()
+{
+	msg_float(1 - LastValue);
 }
 
 function msg_float(v)
