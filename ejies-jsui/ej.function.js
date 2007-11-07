@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.103 $
-	$Date: 2007/11/07 14:41:59 $
+	$Revision: 1.104 $
+	$Date: 2007/11/07 18:24:54 $
 */
 
 // global code
@@ -1007,7 +1007,6 @@ function MyAddPoints(courbe, liste)
 	}
 	
 	sortingPoints(courbe);
-	// TODO: do we need that?
 	calcFunctionCurves(courbe); 			// added MR
 	DoNotify();
 	askForDrawFunctions();
@@ -1060,7 +1059,6 @@ function syncpoints()
 	}
 	courbe.np = courbe.pa.length;
 
-	// TODO: do we need that?
 	calcFunctionCurves(courbe); 			// added MR
 	askForNotify();
 	askForDrawingAll();
@@ -1208,7 +1206,6 @@ function MySetDomain(start, stop, courbe)
 		courbe.pa[i].valx = x2val(courbe, courbe.pa[i].x);
 	}
 
-	//TODO: do we need that?
 	calcFunctionCurves(courbe); 			// added MR
 	DoNotify();
 
@@ -1362,7 +1359,6 @@ function MyRemoveDuplicate(courbe)
 	}
 	
 	if ( ReturnState ) {
-		//TODO: do we need that?
 		calcFunctionCurves(courbe); 			// added MR
 		DoNotify();
 		askForDrawFunctions();
@@ -3999,7 +3995,6 @@ function CreateNFunctions(v)
 	LectureInspectorFlag = 1;	// comme ça il n'y a pas de scan des arguments
 }
 
-// TODO: needs to add the version number so we can copy/paste from different modes
 function copyfunction()
 {
 	var i, c, p, idx;
@@ -4042,6 +4037,7 @@ function copyfunction()
 		cp[idx++] = f[c]["pa"][p].valy;
 		cp[idx++] = f[c]["pa"][p].sustain
 		cp[idx++] = f[c]["pa"][p].fix;
+		cp[idx++] = f[c]["pa"][p].curve;
 	}
 }
 
@@ -4097,9 +4093,9 @@ function MyPasteFunction(courbe)
 		courbe["pa"][p].y = cp[idx++];
 		courbe["pa"][p].valx = cp[idx++];
 		courbe["pa"][p].valy = cp[idx++];
-		// TODO: something here…
 		courbe["pa"][p].sustain = cp[idx++];
 		courbe["pa"][p].fix = cp[idx++];
+		courbe["pa"][p].curve = cp[idx++];
 	}
 	
 	MyThings2Zoom(courbe);
