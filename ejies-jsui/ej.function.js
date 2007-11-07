@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.100 $
-	$Date: 2007/10/30 15:12:20 $
+	$Revision: 1.101 $
+	$Date: 2007/11/07 11:09:38 $
 */
 
 // global code
@@ -23,7 +23,7 @@ var ejies = new EjiesUtils(); // lien vers ejiesUtils.js
 	Version 5: couleur pour line
 	Version 6: curve integration
 */
-const FUNCTIONVERSION = 6;
+const FUNCTIONVERSION = 5;	// the main thing stays at version 5, but there's an increment when using isCurveMode
 
 inlets = 1;
 outlets = 5;
@@ -269,7 +269,10 @@ Courbe.local = 1;
 
 function calcCurves()
 {
-	for (c = 0; c < NbCourbes; c++) {
+	if (! isCurveMode)
+		return;
+		
+	for (var c = 0; c < NbCourbes; c++) {
 		calcFunctionCurves(f[c]);
 	}
 	
@@ -278,10 +281,13 @@ calcCurves.local = 1;
 
 function calcFunctionCurves(courbe)
 {
+	if (! isCurveMode)
+		return;
+
 	if(courbe.np > 1) {
 		courbe.pa[0].cseg = 0;
 		
-		for(i = 1; i < courbe.np; i++) { // 1st point doesn't have a curve				
+		for(var i = 1; i < courbe.np; i++) { // 1st point doesn't have a curve				
 			calcOneCurve(courbe, i-1, i);
 		}
 	}	
@@ -292,10 +298,10 @@ function calcOneCurve(courbe, p0, p1)
 {	
 	var prev, curr;
 	
-	if(p0 < 0) return;
-	if(p1 < 1) return;
-	if(p0 > (courbe.np-2)) return;
-	if(p1 > (courbe.np-1)) return;
+	if (p0 < 0) return;
+	if (p1 < 1) return;
+	if (p0 > (courbe.np-2)) return;
+	if (p1 > (courbe.np-1)) return;
 	
 	prev = courbe.pa[p0];
 	curr = courbe.pa[p1];
@@ -308,7 +314,7 @@ calcOneCurve.local = 1;
 
 function calcNCurves(courbe, p0, pn)
 {
-	for(i = p0; i < pn; i++) {
+	for(var i = p0; i < pn; i++) {
 		calcOneCurve(courbe, i, i+1);
 	}
 }
@@ -332,7 +338,7 @@ function offsetOneCurve(courbe, p0, p1, dx)
 	}
 	else
 	{
-		for(i = 0; i < curr.cseg.nhops; i++) {
+		for(var i = 0; i < curr.cseg.nhops; i++) {
 			var tmpy = curr.cseg.cpa[i][1];
 			
 			curr.cseg.cpa[i] = [ curr.cseg.cpa[i][0]+dx, curr.cseg.cpa[i][1] ];
@@ -343,67 +349,12 @@ offsetOneCurve.local = 1;
 
 function offsetNCurves(courbe, p0, pn, dx)
 {
-	for(i = p0; i < pn; i++) {
+	for(var i = p0; i < pn; i++) {
 		//post("offset curve: "+i+"\n");
 		offsetOneCurve(courbe, i, i+1, dx);
 	}
 }
 offsetNCurves.local = 1;
-
-// added MR
-function allcurves(crv)
-{
-	if(f[front].np > 1) {
-		for(i = 1; i < f[front].np; i++) {
-			f[front]["pa"][i].curve = crv;
-		}
-	}
-	
-	calcCurves();
-	
-	DoNotify();
-	drawFunctions();
-}
-
-// added MR - should be attribute?
-function numcurvepoints(num)
-{
-	if(num > 1) {
-		numCurvePoints = num;
-		
-		calcCurves();
-	
-		DoNotify();
-		drawFunctions();
-	}
-}
-
-function limitnumpoints(flag)
-{
-	var redraw = 0;
-	
-	if(flag == 0) 
-		LimitNP = 0;
-	else {
-		LimitNP = 1;
-		
-		for (c = 0; c < NbCourbes; c++) {
-			var ndel = f[c].np - MAX_CURVE_NP;
-			if(ndel > 0) {
-				while(ndel-- > 0) {
-					DeletePoint(f[c], 1);
-				}
-				redraw = 1;
-			}
-		}
-		
-		if(redraw) {
-			DoNotify();
-			askForDrawFunctions();
-		}
-	}
-	
-}
 
 // added point moving modes
 function movemode(mode)
@@ -1057,7 +1008,7 @@ function MyAddPoints(courbe, liste)
 	
 	sortingPoints(courbe);
 	// TODO: do we need that?
-	if (isCurveMode)	calcFunctionCurves(courbe); 			// added MR
+	calcFunctionCurves(courbe); 			// added MR
 	DoNotify();
 	askForDrawFunctions();
 }
@@ -1110,7 +1061,7 @@ function syncpoints()
 	courbe.np = courbe.pa.length;
 
 	// TODO: do we need that?
-	if (isCurveMode)	calcFunctionCurves(courbe); 			// added MR
+	calcFunctionCurves(courbe); 			// added MR
 	askForNotify();
 	askForDrawingAll();
 }
@@ -1258,7 +1209,7 @@ function MySetDomain(start, stop, courbe)
 	}
 
 	//TODO: do we need that?
-	if (isCurveMode) 	calcFunctionCurves(courbe); 			// added MR
+	calcFunctionCurves(courbe); 			// added MR
 	DoNotify();
 
 	// Si la grille est activée, changer le domain doit redessiner la grille
@@ -1412,7 +1363,7 @@ function MyRemoveDuplicate(courbe)
 	
 	if ( ReturnState ) {
 		//TODO: do we need that?
-		if (isCurveMode)	calcFunctionCurves(courbe); 			// added MR
+		calcFunctionCurves(courbe); 			// added MR
 		DoNotify();
 		askForDrawFunctions();
 	}
@@ -1428,8 +1379,7 @@ function MySmooth(courbe)
 		courbe.pa[i].y = val2y(courbe, courbe.pa[i].valy);
 	}
 
-	//TODO
-	if (isCurveMode) 	calcFunctionCurves(courbe); 			// added MR
+	calcFunctionCurves(courbe); 			// added MR
 	DoNotify();
 	askForDrawFunctions();
 }
@@ -1481,7 +1431,7 @@ function AddOnePoint(courbe, x, y, curve)
 		
 		// insère un point
 		if (isCurveMode)
-				courbe.pa.splice(tmp, 0, new Point(x,y, x2val(courbe, x), y2val(courbe, y), curve) );	// insère un point
+			courbe.pa.splice(tmp, 0, new Point(x,y, x2val(courbe, x), y2val(courbe, y), curve) );	// insère un point
 		else
 			courbe.pa.splice(tmp, 0, new Point(x,y, x2val(courbe, x), y2val(courbe, y)) );
 
@@ -1552,7 +1502,7 @@ function MovePoint(courbe, lequel, newx, newy, curve)
 		
 		if(dx != 0) {
 			
-			for(i = lequel; i < courbe.np; i++) {
+			for(var i = lequel; i < courbe.np; i++) {
 				courbe.pa[i].valx = ejies.clip(dx+courbe.pa[i].valx, courbe.domain[0], courbe.domain[1]);
 				courbe.pa[i].x = val2x(courbe, courbe.pa[i].valx);
 			}
@@ -2255,8 +2205,7 @@ function MyFlip(courbe)
 
 	ApplyAutoSustain();
 	
-	if (isCurveMode)
-		calcFunctionCurves(courbe); 	// added - MR
+	calcFunctionCurves(courbe); 	// added - MR
 	askForDrawFunctions();
 	askForNotify();
 }
@@ -2301,8 +2250,7 @@ function MyFlipX(courbe)
 
 	ApplyAutoSustain();
 
-	if (isCurveMode)
-		calcFunctionCurves(courbe); 	// added - MR
+	calcFunctionCurves(courbe); 	// added - MR
 	askForDrawFunctions();
 	askForNotify();
 }
@@ -2315,8 +2263,7 @@ function MyFlipY(courbe)
 		courbe.pa[i].y = val2y(courbe, courbe.pa[i].valy);
 	}
 
-	if (isCurveMode)
-		calcFunctionCurves(courbe);
+	calcFunctionCurves(courbe);
 	askForDrawFunctions();
 	askForNotify();
 }
@@ -2378,13 +2325,12 @@ function ApplyNormalizeX(courbe, min, max)
 	var range = (courbe.domain[1] - courbe.domain[0]) / (max - min);
 	var offset = 0 - min;
 
-	for (i = 0; i < courbe.np; i++) {
+	for (var i = 0; i < courbe.np; i++) {
 		courbe.pa[i].valx = (courbe.pa[i].valx + offset) * range - (0 - courbe.domain[0]);
 		courbe.pa[i].x = val2x(courbe, courbe.pa[i].valx);
 	}
 	
-	if (isCurveMode)
-		calcFunctionCurves(courbe);
+	calcFunctionCurves(courbe);
 }
 ApplyNormalizeX.local = 1;
 
@@ -2418,13 +2364,12 @@ function ApplyNormalizeY(courbe, min, max)
 	var range = (courbe.range[1] - courbe.range[0]) / (max - min);
 	var offset = 0 - min;
 
-	for (i = 0; i < courbe.np; i++) {
+	for (var i = 0; i < courbe.np; i++) {
 		courbe.pa[i].valy = (courbe.pa[i].valy + offset) * range - (0 - courbe.range[0]);
 		courbe.pa[i].y = val2y(courbe, courbe.pa[i].valy);
 	}
 
-	if (isCurveMode)	
-		calcFunctionCurves(courbe); 	// added - MR
+	calcFunctionCurves(courbe); 	// added - MR
 }
 ApplyNormalizeY.local = 1;
 
@@ -2472,8 +2417,7 @@ function MyNormalize(courbe)
 			courbe.pa[i].y = val2y(courbe, courbe.pa[i].valy);
 		}
 		
-		if (isCurveMode)
-			calcFunctionCurves(courbe); 	// added - MR
+		calcFunctionCurves(courbe); 	// added - MR
 	}
 	DoNotify();
 	askForDrawFunctions();
@@ -3014,8 +2958,7 @@ function setrange(a, b, courbe)
 			NeedDraw++;
 	}
 	
-	if (isCurveMode)
-		calcFunctionCurves(tmpF); 	// added - MR (BUG updated "courbe->tmpF" 20070907)
+	calcFunctionCurves(tmpF); 	// added - MR (BUG updated "courbe->tmpF" 20070907)
 	DoNotify();
 
 	// NeedDraw contient le résultat de la nouvelle courbe (y a t'il un point avec y=0) OnePointAtZero c'est l'état d'avant.
@@ -3208,6 +3151,7 @@ function onidle(x,y,but,cmd,shift,capslock,option,ctrl)
 	var pa = f[front]["pa"];
 	var np = f[front].np;
 	var MousePoint;
+	var i;
 	
 	IdlePoint = -1;
 	SelectedCurve = -1;
@@ -3222,7 +3166,7 @@ function onidle(x,y,but,cmd,shift,capslock,option,ctrl)
 	if(isCurveMode && option) {
 		DisplayCursor(8)
 		
-		for(i=1; i < np; i++) {
+		for(var i= 1; i < np; i++) {
 			if(x < pa[i].x) {
 				// check to see if y is between the prev.y and curr.y
 				var y0 = pa[i].y;
@@ -3404,7 +3348,8 @@ function onclick(x,y,but,cmd,shift,capslock,option,ctrl)
 function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 {
 	var borderthing = -1;
-
+	var i;
+	
 	if (AllowEdit == 0 || f[front].display == 0)
 		return;
 	
@@ -3842,12 +3787,11 @@ function setvalueof()
 
 	isCurveMode = FunctionVersionCheck == 6 ? 1 : 0;
 		
-/* 	// TODO: check version number	 */
-/* 	if(!(FunctionVersionCheck == 2 || FunctionVersionCheck == 6)) { */
-/* 		ejies.error(this, "invalid pattr data"); */
-/* 		return; */
-/* 	} */
-	
+	if ( FunctionVersionCheck < 1 && FunctionVersionCheck > 6 ) {
+		ejies.error(this, "bad version number - interpolation aborted");
+		return;
+	}
+
 	// si le nombre de courbe n'est pas un entier, on quitte de toute urgence.
 	if ( (arguments[idx] % 1) != 0) {
 		PattrInterpError(0);
@@ -3936,15 +3880,11 @@ function setvalueof()
 	RedrawEnable = 1;
 	AllowEdit = 1;
 	PattrInterpError.flag = 0;
-	if (isCurveMode) calcCurves();				// added MR
+	calcCurves();				// added MR
 	UpdateDisplay();
 	
 	if (NotifyRecalledState)
 		outlet(DUMPOUT, "recalled");
-
-	// TODO: this appears to be a bug…
-	if ( FunctionVersionCheck < 1 && FunctionVersionCheck > 6 )
-		ejies.error(this, "bad version number - interpolation aborted");
 }
 
 function getvalueof()
@@ -3954,7 +3894,7 @@ function getvalueof()
 	var idx = 0;
 	
 	//versioning to allow for future changes (technoui style...)
-	tmpData[idx++] = isCurveMode ? FUNCTIONVERSION : 5;
+	tmpData[idx++] = FUNCTIONVERSION + isCurveMode;
 	tmpData[idx++] = NbCourbes;
 	
 	for (i = 0; i < NbCourbes; i++) {
@@ -4018,7 +3958,6 @@ function save()
 	embedmessage("notifyrecalled", NotifyRecalledState);
 	embedmessage("mousereport", MouseReportState);
 	embedmessage("numcurvepoints", numCurvePoints); 	// added MR
-	embedmessage("limitnumpoints", LimitNP);			// added MR
 	embedmessage("movemode", MoveMode);					// added MR
 	
 	
@@ -4205,7 +4144,7 @@ function insertpaste()
 	pixel2machin(f[front]);
 
 	getname();								// mise à jour du menu
-	if (isCurveMode) calcFunctionCurves(f[front]);			// added MR
+	calcFunctionCurves(f[front]);			// added MR
 	UpdateDisplay();
 }
 
@@ -4248,6 +4187,8 @@ function read(filename)
 		var OldNp;
 		
 		var FunctionVersionCheck = tmpLine[idx++];	// stocke le numéro de version
+
+		isCurveMode = FunctionVersionCheck == 6 ? 1 : 0;
 
 		var OldNbCourbes = NbCourbes;
 		NbCourbes = parseFloat(tmpLine[idx++]);
@@ -4325,12 +4266,14 @@ function read(filename)
 				idx = 0;
 				tmpLine = LectureNextLigne(fichier);
 				tmpLine = tmpLine.split(" ");
-				if (tmpLine.length != 3) {
+				// check the number of items: 4 when there's curve
+				if (tmpLine.length != 3 || tmpLine.length != 4) {
 					ejies.error(this, "bad file contents");
 					break;
 				}
 				f[c]["pa"][p].valx = parseFloat(tmpLine[idx++]);
 				f[c]["pa"][p].valy = parseFloat(tmpLine[idx++]);
+				f[c]["pa"][p].curve = isCurveMode ? parseFloat(tmpLine[idx++]) : 0;
 				f[c]["pa"][p].sustain = tmpLine[idx] & 2 ? 1 : 0; // pas d'incrémentation
 				f[c]["pa"][p].fix = tmpLine[idx++] & 1;	// elle est faite ici.
 			}
@@ -4342,7 +4285,7 @@ function read(filename)
 		RedrawEnable = 1;
 		AllowEdit = 1;
 		PattrInterpError.flag = 0;
-		if (isCurveMode) calcCurves();					// added MR
+		calcCurves();					// added MR
 		UpdateDisplay();
 
 		outlet(DUMPOUT, "read", filename, 1);
@@ -4451,6 +4394,17 @@ function mode(v)
 
 	
 	askForDrawFunctions();
+}
+
+// added MR - should be attribute?
+function numcurvepoints(num)
+{
+	numCurvePoints = num > 1 ? num : 1;
+		
+	calcCurves();
+
+	DoNotify();
+	drawFunctions();
 }
 
 resetall();
