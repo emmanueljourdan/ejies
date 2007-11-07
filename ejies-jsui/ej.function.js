@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.102 $
-	$Date: 2007/11/07 11:26:06 $
+	$Revision: 1.103 $
+	$Date: 2007/11/07 14:41:59 $
 */
 
 // global code
@@ -3959,6 +3959,7 @@ function save()
 	embedmessage("mousereport", MouseReportState);
 	embedmessage("numcurvepoints", numCurvePoints); 	// added MR
 	embedmessage("movemode", MoveMode);					// added MR
+	embedmessage("mode", isCurveMode);
 	
 	
 	for (i = 0; i < NbCourbes; i++) {
