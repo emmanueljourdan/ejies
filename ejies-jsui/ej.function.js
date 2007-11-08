@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.104 $
-	$Date: 2007/11/07 18:24:54 $
+	$Revision: 1.105 $
+	$Date: 2007/11/08 15:15:43 $
 */
 
 // global code
@@ -4100,7 +4100,7 @@ function MyPasteFunction(courbe)
 	
 	MyThings2Zoom(courbe);
 	pixel2machin(courbe);
-	calcFunctionCurves(courbe);
+	calcCurves();
 }
 MyPasteFunction.local = 1;
 
@@ -4389,7 +4389,7 @@ function mode(v)
 	else
 		setoutletassist(LINE_OUTLET, "points in line~ format");
 
-	
+	calcCurves();
 	askForDrawFunctions();
 }
 
