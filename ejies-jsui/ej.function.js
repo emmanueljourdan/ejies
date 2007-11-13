@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.105 $
-	$Date: 2007/11/08 15:15:43 $
+	$Revision: 1.106 $
+	$Date: 2007/11/13 10:48:19 $
 */
 
 // global code
@@ -1984,16 +1984,11 @@ function checkInputMatrix(input)
 {
 	var isOk = true;
 
-	if (isCurveMode) {
-		if (input.dim.length == 3) {
-			ejies.error(this, "support only 3 dim matrix");
-			isOk = false;
-		}
-	} else {
-		if (input.dim.length == 2) {
-			ejies.error(this, "support only 2 dim matrix");
-			isOk = false;
-		}
+	if (input.dim.length < 2 || input.dim.length > 3) {
+		post(input.dim.length);
+		post();
+		ejies.error(this, "support only 2/3 dim matrix");
+		isOk = false;
 	}
 	if (input.planecount.length > 1) {
 		ejies.error(this, "support only 1 plane matrix");
@@ -2010,7 +2005,7 @@ function setPointsFromMatrix(courbe, matrixName)
 	if (checkInputMatrix(myMatrix)) {
 		courbe.np = 0;
 	
-		if (isCurveMode) {
+		if (myMatrix.dim[0] == 3) {
 			for (var i = 0; i < myMatrix.dim[1]; i++)
 				courbe.pa[courbe.np++] = new Point(
 					val2x(courbe, myMatrix.getcell(0, i)[0]), 
@@ -2019,7 +2014,7 @@ function setPointsFromMatrix(courbe, matrixName)
 					myMatrix.getcell(1, i)[0],
 					myMatrix.getcell(2, i)[0]
 				);
-		}	else {
+		} else {
 			for (var i = 0; i < myMatrix.dim[1]; i++)
 				courbe.pa[courbe.np++] = new Point(
 				val2x(courbe, myMatrix.getcell(0, i)[0]),
