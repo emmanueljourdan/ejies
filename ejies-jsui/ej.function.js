@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.107 $
-	$Date: 2007/11/13 11:03:33 $
+	$Revision: 1.108 $
+	$Date: 2007/11/13 11:22:49 $
 */
 
 // global code
@@ -3201,7 +3201,7 @@ function onidle(x,y,but,cmd,shift,capslock,option,ctrl)
 
 	if (IdlePoint == -1 && shift == 1 && ! option)
 		DisplayCursor(1);
-	else if (IdlePoint == -1 && shift == 0 && ClickAdd == 1 && ! option) {
+	else if (IdlePoint == -1 && shift == 0 && ClickAdd == 1 && ! option)
 		DisplayCursor(6);
 	
 	RedrawOrNot(IdlePoint);
