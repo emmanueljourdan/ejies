@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.106 $
-	$Date: 2007/11/13 10:48:19 $
+	$Revision: 1.107 $
+	$Date: 2007/11/13 11:03:33 $
 */
 
 // global code
@@ -3163,11 +3163,10 @@ function onidle(x,y,but,cmd,shift,capslock,option,ctrl)
 				var y0 = pa[i].y;
 				var y1 = pa[i-1].y;
 				
-				if(y0 < y1) {
+				if(y0 < y1)
 					if(y >= y0 && y <= y1) SelectedCurve = i;
-				} else {
+				else
 					if(y >= y1 && y <= y0) SelectedCurve = i;
-				}
 								
 				break;
 			}
@@ -3200,12 +3199,10 @@ function onidle(x,y,but,cmd,shift,capslock,option,ctrl)
 										ejies.clip(y2val(f[front], y), f[front].range[0], f[front].range[1]),
 										but, IdlePoint);
 
-	// TODO ici il faut peut-rte tester "option"
-	if (IdlePoint == -1 && shift == 1) {
+	if (IdlePoint == -1 && shift == 1 && ! option)
 		DisplayCursor(1);
-	} else if (IdlePoint == -1 && shift == 0 && ClickAdd == 1) { // TODO: pareil
+	else if (IdlePoint == -1 && shift == 0 && ClickAdd == 1 && ! option) {
 		DisplayCursor(6);
-	}
 	
 	RedrawOrNot(IdlePoint);
 }
@@ -3344,7 +3341,7 @@ function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 	if (AllowEdit == 0 || f[front].display == 0)
 		return;
 	
-	// TODO: optimize that shit
+	// TODO: optimize that mess
 	if (isCurveMode) {
 		if(SelectedCurve >= 0) {
 			//option key must have been down when we clicked
@@ -3466,47 +3463,6 @@ function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 				
 				f[front]["pa"][SelectedPoint].y = y;
 				f[front]["pa"][SelectedPoint].valy = y2val(f[front], y);
-				
-				/*
-				//seems to be a BUG when some points are curves and others are linear????
-				//really broke this updating to ejies 1.57
-				
-				if(f[front].np == 1) {
-					//only one point
-					//..
-					;
-				}
-				else if(SelectedPoint == 0 
-						&& f[front]["pa"][SelectedPoint].valx <= f[front]["pa"][SelectedPoint+1].valx) 
-				{
-					//first point and it still is
-					if(MoveMode == 0 || MoveMode == 1)
-						calcOneCurve(f[front], SelectedPoint, SelectedPoint+1); 		// added - MR
-					else if(MoveMode == 2 || MoveMode == 3)
-						offsetNCurves(f[front], SelectedPoint, f[front].np-1, dx);
-					
-				}
-				else if(SelectedPoint == (f[front].np-1) 
-						&& f[front]["pa"][SelectedPoint].valx >= f[front]["pa"][SelectedPoint-1].valx) {
-					//last point and it still is
-					calcOneCurve(f[front], SelectedPoint-1, SelectedPoint); // added - MR		
-				}
-				else if(f[front]["pa"][SelectedPoint].valx >= f[front]["pa"][SelectedPoint-1].valx 
-						&& f[front]["pa"][SelectedPoint].valx <= f[front]["pa"][SelectedPoint+1].valx)  
-				{
-					// no need to sort - the order hasn't changed
-					
-					if(MoveMode == 0 || MoveMode == 1) {
-						calcOneCurve(f[front], SelectedPoint-1, SelectedPoint); 		// added - MR
-						calcOneCurve(f[front], SelectedPoint, SelectedPoint+1); 		// added - MR
-					}
-					else if(MoveMode == 2 || MoveMode == 3)
-					{
-						calcOneCurve(f[front], SelectedPoint-1, SelectedPoint); 		// added - MR
-						offsetNCurves(f[front], SelectedPoint+1, f[front].np-1, dx);
-					}
-				}
-				*/
 				
 				if(MoveMode == 5) MyNormalizeXZoomOut(f[front]);
 				else if(MoveMode == 6) MyNormalizeX(f[front]);
