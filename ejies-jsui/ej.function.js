@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.109 $
-	$Date: 2008/01/08 16:01:59 $
+	$Revision: 1.110 $
+	$Date: 2008/01/08 16:57:50 $
 */
 
 // global code
@@ -61,6 +61,7 @@ var Snap2GridState;
 var HiddenPointDisplay;
 var ClickAdd;
 var ClickMove;
+var ClickSustain;
 var AutoSustain;
 var TimeFlag = 0;
 var Ghostness;
@@ -108,7 +109,6 @@ var CLCCURVE_C1 = 1e-20;
 var CLCCURVE_C2 = 1.2;
 var CLCCURVE_C3 = 0.41;
 var CLCCURVE_C4 = 0.91;
-var DEFAULT_CURVE = 0.; // for tesing set this to 0. when finished
 var CURVE_MIN = -0.995;
 var CURVE_MAX = 0.995;
 var MAX_CURVE_NP = 43; // max points for curve~
@@ -728,6 +728,7 @@ function onresize(w,h)
 //////////////// Fonctions Internes ///////////////
 function LectureInspector()
 {
+	// Note: this is not used anymore in favor of embedmessage
 	if (LectureInspectorFlag)
 		return;
 	
@@ -738,7 +739,7 @@ function LectureInspector()
 
 		init();	// création des courbes
 
-		if (jsarguments.length != (10 + NbCourbes*18) ) {
+		if (jsarguments.length != (11 + NbCourbes*18) ) {
 			ejies.error(this, "bad number of arguments in the inspector");
 			return;
 		}
@@ -1960,7 +1961,7 @@ function MyDump(courbe, sendname)
 	if (arguments.length == 1) {
 		if (isCurveMode) {
 			for (i = 0; i < courbe.np; i++)
-				outlet(DUMP_OUTLET, courbe.name, courbe.pa[i].valx, courbe.pa[i].valy), courbe.pa[i].curve;
+				outlet(DUMP_OUTLET, courbe.name, courbe.pa[i].valx, courbe.pa[i].valy, courbe.pa[i].curve);
 		} else {
 			for (i = 0; i < courbe.np; i++)
 				outlet(DUMP_OUTLET, courbe.name, courbe.pa[i].valx, courbe.pa[i].valy);
@@ -2452,7 +2453,7 @@ function addpoints()
 
 function args4insp()
 {
-	//
+	// Shouldn't be modified anymore, it's not used since 1.52 in favor of embedmessage
 	ejies.error(this, "since 1.52 the parameters are embed with the patcher. Use the inspector insteed.");
 	return;
 	
@@ -2599,6 +2600,14 @@ function clickmove(v)
 		ClickMove = v;
 	else
 		ejies.error(this, "clickmove doesn't understand", v);
+}
+
+function clicksustain(v)
+{
+	if (v == 0 || v == 1)
+		ClickSustain= v;
+	else
+		ejies.error(this, "clicksustain doesn't understand", v);
 }
 
 function display()
@@ -2996,6 +3005,7 @@ function defaults()
 	HiddenPointDisplay = 0;
 	ClickAdd = 1;
 	ClickMove = 1;
+	ClickSustain = 1;
 	AutoSustain = 0;
 	CursorChange = 1;
 	BorderSyncState = 0;
@@ -3265,7 +3275,7 @@ function onclick(x,y,but,cmd,shift,capslock,option,ctrl)
 	} else {
 		if (IdlePoint != -1) {
 			SelectedPoint = IdlePoint;
-			if (cmd) {
+			if (cmd && ClickSustain) {
 				f[front].pa[SelectedPoint].sustain = 1 - f[front].pa[SelectedPoint].sustain;
 				EditedWithMouse.state++;
 				drawFunctions();
@@ -3673,6 +3683,7 @@ function getsnap2grid() { outlet(DUMPOUT, "snap2grid", Snap2GridState); }
 function gethiddenpoint() { outlet(DUMPOUT, "hiddenpointdisplay", HiddenPointDisplay); }
 function getclickadd() { outlet(DUMPOUT, "clickadd", ClickAdd); }
 function getclickmove() { outlet(DUMPOUT, "clickmove", ClickMove); }
+function getclicksustain() { outlet(DUMPOUT, "clicksustain", ClickSustain); }
 function getautosustain() {	outlet(DUMPOUT, "autosustain", AutoSustain); }
 function gettimedisplay() { outlet(DUMPOUT, "timedisplay", TimeFlag); }
 function getautocursor() { outlet(DUMPOUT, "autocursor", CursorChange); }
@@ -3897,6 +3908,7 @@ function save()
 	embedmessage("hiddenpoint", HiddenPointDisplay);
 	embedmessage("clickadd", ClickAdd);
 	embedmessage("clickmove", ClickMove);
+	embedmessage("clicksustain", ClickSustain);
 	embedmessage("autosustain", AutoSustain);
 	embedmessage("timedisplay", TimeFlag);
 	embedmessage("autocursor", CursorChange);

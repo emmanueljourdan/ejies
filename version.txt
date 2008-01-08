@@ -1,17 +1,19 @@
 ejies Ñ Version history
 
 *******************
-1.58b2: 13 Nov 2007
+1.58b2: 13 Jan 2008
 
 Bug correction:
 ej.dialog: pressing escape key close the dialog and notify the second outlet
 ej.function.js: fixed a bug while syncing 2 functions with curve mode (Thanks Nick)
+ej.function.js: fixed dump issue in curve mode
 
 Improvements:
 ej.ldrunk: interval attribute which outputs continuously (kinda integrated metro)
 ej.lslide: set message, slide_up slide_down minimum properly set to 1
 ej.led.js: toggle message for Kasper
 ej.function.js: curve addition (Many many thanks to Martin Robinson)
+ej.function.js: new clicksustain mode (if disable, you can't modify the sustain state via the mouse)
 
 
 
