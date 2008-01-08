@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.108 $
-	$Date: 2007/11/13 11:22:49 $
+	$Revision: 1.109 $
+	$Date: 2008/01/08 16:01:59 $
 */
 
 // global code
@@ -32,6 +32,7 @@ const LINE_OUTLET = 1;
 const DUMP_OUTLET = 2;
 const BANG_OUTLET = 3;
 const DUMPOUT = 4;
+const DEFAULT_CURVE = 0.;	//	default curve value
 setinletassist(0, "quite anything...");
 setoutletassist(INTERP_OUTLET, "interpolated Y for input X");
 setoutletassist(LINE_OUTLET, "points in line~ format");
@@ -94,7 +95,6 @@ var CLCCURVE_C1 = 1e-20;
 var CLCCURVE_C2 = 1.2;
 var CLCCURVE_C3 = 0.41;
 var CLCCURVE_C4 = 0.91;
-var DEFAULT_CURVE = 0.; // for tesing set this to 0. when finished
 var CURVE_MIN = -0.995;
 var CURVE_MAX = 0.995;
 var MAX_CURVE_NP = 43; // max points for curve~
@@ -1035,7 +1035,7 @@ function syncpoints()
 	var courbe = f[arguments[0]];
 	courbe.pa = new Array();	// clear every points
 	
-	if (isCurvePoint) {
+	if (isCurveMode) {
 		for (var i = 0; i < ((arguments.length - 1) / 4); i++) {
 			courbe.pa[i] = new Point(	val2x(courbe, arguments[i*4+1]),
 										val2y(courbe, arguments[i*4+2]),

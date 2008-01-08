@@ -1,10 +1,11 @@
 ejies Ñ Version history
 
 *******************
-1.58b1: 13 Nov 2007
+1.58b2: 13 Nov 2007
 
 Bug correction:
 ej.dialog: pressing escape key close the dialog and notify the second outlet
+ej.function.js: fixed a bug while syncing 2 functions with curve mode (Thanks Nick)
 
 Improvements:
 ej.ldrunk: interval attribute which outputs continuously (kinda integrated metro)
@@ -103,7 +104,7 @@ ej.function.js: getzoom_x/getzoom_y now report correct values
 ej.function.js: addfunction problem fixed
 ej.function.js: line output works if there's only one point
 ej.lslide: slide_up/slide_down was not choose correctly (Thanks Elvio)
-ej.vdb~ and ej.vdb-sig~: windowing was wrong... and that's really bad... (Thanks JosÂŽ-Miguel)
+ej.vdb~ and ej.vdb-sig~: windowing was wrong... and that's really bad... (Thanks JosŽ-Miguel)
 ej.lscale: was broken since 1.56b* (Thanks Antoine)
 
 
