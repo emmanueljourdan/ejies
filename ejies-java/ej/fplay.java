@@ -2,8 +2,8 @@
  *	ej.fplay by Emmanuel Jourdan, Ircam Ñ 04 2006
  *	function player
  *
- *	$Revision: 1.31 $
- *	$Date: 2008/01/10 12:29:56 $
+ *	$Revision: 1.32 $
+ *	$Date: 2008/01/10 17:58:44 $
  */
 
 /**
@@ -26,7 +26,7 @@ import com.cycling74.max.*;
 
 /**
  * Multi function editor (like ej.function.js without the graphics)
- * @version $Revision: 1.31 $
+ * @version $Revision: 1.32 $
  * @author jourdan
  * @see "ej.function.js"
  */
@@ -698,7 +698,10 @@ public class fplay extends ej {
 	 * @param val <i>[function index]</i> <i>[val_x val_y state]*</i> 
 	 */
 	public void syncpoints(double[] val) {
-		((Courbe) Courbes.get((int) val[0])).addTypedPoints(val);
+		if (mode)
+			((Courbe) Courbes.get((int) val[0])).addCurveTypedPoints(val);
+		else
+			((Courbe) Courbes.get((int) val[0])).addTypedPoints(val);
 	}
 	
 	/**
@@ -1474,7 +1477,7 @@ public class fplay extends ej {
 		
 		public void syncPoints(int courbeIdx) {
 			if (np() > 0) {
-				double[] tmp = new double[(np() * 3) + 1];
+				double[] tmp = new double[(np() * (mode ? 4 : 3)) + 1];
 				int idx = 0;
 				
 				tmp[idx++] = courbeIdx; // the first thing is the ID of the function
@@ -1482,6 +1485,8 @@ public class fplay extends ej {
 				for (int i = 0; i < np(); i++) {
 					tmp[idx++] = getPoint(i).getX();
 					tmp[idx++] = getPoint(i).getY();
+					if (mode)
+						tmp[idx++] = getPoint(i).getCurve();
 					tmp[idx++] = getPoint(i).getSustainAndFix();
 				}
 				
@@ -1491,7 +1496,7 @@ public class fplay extends ej {
 		
 		public void syncPoints(int courbeIdx, String sendName) {
 			if (np() > 0) {
-				Atom[] tmp = new Atom[np() * 3 + 1];
+				Atom[] tmp = new Atom[np() * (mode ? 4 : 3) + 1];
 				int idx = 0;
 				
 				tmp[idx++] = Atom.newAtom(courbeIdx);
@@ -1499,6 +1504,8 @@ public class fplay extends ej {
 				for (int i = 0; i < np(); i++) {
 					tmp[idx++] = Atom.newAtom(getPoint(i).getX());
 					tmp[idx++] = Atom.newAtom(getPoint(i).getY());
+					if (mode)
+						tmp[idx++] = Atom.newAtom(getPoint(i).getCurve());
 					tmp[idx++] = Atom.newAtom(getPoint(i).getSustainAndFix());
 				}
 				
@@ -1832,7 +1839,7 @@ public class fplay extends ej {
 		
 		public void addCurveTypedPoints(double[] args) {
 			for (int i = 0; i < (args.length / 4); i ++)
-				lPoints.add(new Point(args[i*4+1], args[i*4+2], (int) args[i*4+3], args[i*4+4]));
+				lPoints.add(new Point(args[i*4+1], args[i*4+2], (int) args[i*4+4], args[i*4+3]));
 			
 			applyAutoSustain();
 		}
@@ -2034,6 +2041,10 @@ public class fplay extends ej {
 		Point(double valx, double valy, int state) {
 			// x, y, sustain et fix codŽ en binaire
 			this(valx, valy, (state & 2) == 2, (state & 1) == 1, 0.);
+		}
+		
+		Point(double valx, double valy, double curve, int state) {
+			this(valx, valy, (state & 2) == 2, (state & 1) == 1, curve);
 		}
 		
 		Point(double valx, double valy, int state, double curve) {
