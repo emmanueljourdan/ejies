@@ -2,8 +2,8 @@
  *	ej.fplay by Emmanuel Jourdan, Ircam — 04 2006
  *	function player
  *
- *	$Revision: 1.30 $
- *	$Date: 2007/05/09 15:55:29 $
+ *	$Revision: 1.31 $
+ *	$Date: 2008/01/10 12:29:56 $
  */
 
 /**
@@ -26,7 +26,7 @@ import com.cycling74.max.*;
 
 /**
  * Multi function editor (like ej.function.js without the graphics)
- * @version $Revision: 1.30 $
+ * @version $Revision: 1.31 $
  * @author jourdan
  * @see "ej.function.js"
  */
@@ -37,11 +37,14 @@ public class fplay extends ej {
 	private static final int LINE_OUTLET = 1;
 	private static final int DUMP_OUTLET = 2;
 	private static final int DUMPOUT_OUTLET = 3;
-	private static final int FPLAY_VERSION_NUMBER = 3;
+	private static final int[] FPLAY_VERSION_NUMBER = new int[] { 3, 7};
+	private static final boolean CURVE_MODE = true;
+	private static final boolean LINE_MODE = false;
 	
 	private boolean isAll = false;
 	private boolean autosustain = false;
 	private boolean outputmode = false;
+	private boolean mode = false;	// 1 if it's curve mode
 	private ArrayList Courbes = new ArrayList();
 	private int current = 0;
 	private boolean isDblClickAllowed = false; // dblclick() seems to be triggered too often!
@@ -62,6 +65,7 @@ public class fplay extends ej {
 		declareAttribute("nbfunctions", "getNbFunctions", "setNbFunctions");
 		declareAttribute("autosustain");
 		declareAttribute("outputmode");	// pour sortie line~
+		declareAttribute("mode", "getCurveMode", "setCurveMode");
 
 		if (args.length >= 1) {
 			if (args[0].isInt())
@@ -85,6 +89,7 @@ public class fplay extends ej {
 			// surdéfinition de ej.dblclick()
 			post("ej.fplay infos:");
 			post("  nbfunctions: " + getNbFunctions());
+			post("  mode: " + (mode ? "curve" : "line"));
 	
 			for (int i = 0; i < getNbFunctions(); i++) {
 				post("  name: " + ((Courbe) Courbes.get(i)).getName());
@@ -631,7 +636,8 @@ public class fplay extends ej {
 	 */
 	public void sync() {
 		outlet(DUMP_OUTLET, "nbfunctions", getNbFunctions());
-
+		outlet(DUMP_OUTLET, "mode", mode);
+		
 		for (int c = 0; c < getNbFunctions(); c++) {
 			((Courbe) Courbes.get(c)).syncCourbe(c);
 			((Courbe) Courbes.get(c)).syncPoints(c);
@@ -656,6 +662,8 @@ public class fplay extends ej {
 			error(sendName + " bad receive name");
 			return;	// sauve qui peut
 		}
+		
+		MaxSystem.sendMessageToBoundObject(sendName, "mode", new Atom[] { Atom.newAtom(mode) });
 		
 		for (int c = 0; c < getNbFunctions(); c++) {
 			((Courbe) Courbes.get(c)).syncCourbe(c, sendName);
@@ -856,6 +864,8 @@ public class fplay extends ej {
 					myFix(courbeIdx, args[1].toInt(), args[2].toInt());
 			}
 
+		} else if (args.length == 4 && isNumber(args[0]) && isNumber(args[1]) && isNumber(args[2]) && isNumber(args[3])) {
+			((Courbe) Courbes.get(courbeIdx)).moveOnePoint(args[0].toInt(), args[1].toFloat(), args[2].toFloat(), args[3].toFloat());
 		}
 	}
 	
@@ -887,7 +897,7 @@ public class fplay extends ej {
 		        		tok = new StringTokenizer(lectureLigne(in));
 		        		
 		        		versionNumber = Integer.parseInt(tok.nextToken());
-		        		if (versionNumber < 1 && versionNumber > 5) {
+		        		if (versionNumber < 1 && versionNumber > 7) {
 		        			error("bad file version number (line: " + ligneNumber + ")");
 		        			in.close();
 		        			return -1;			// il faut sortir !
@@ -895,8 +905,13 @@ public class fplay extends ej {
 		        		
 		        		setNbFunctions(Integer.parseInt(tok.nextToken()));	
 		        		int[] np = new int[getNbFunctions()]; 
-		        		    
-		        		if ( getNbFunctions() > tok.countTokens()) {
+		        		
+		        		if (versionNumber == 6 || versionNumber == 7)
+		        			mode = CURVE_MODE;	// FPLAY 7 is compatible with ej.function mode 6
+		        		else
+		        			mode = LINE_MODE;
+		        		
+		        		if (getNbFunctions() > tok.countTokens()) {
 		        			error("missing informations (line: " + ligneNumber + ")");
 		        			in.close();
 		        			return -1;			// il faut sortir !
@@ -929,7 +944,10 @@ public class fplay extends ej {
 			        		// add points
 			        		for (int i = 0; i < np[c]; i++) {
 			        			tok = new StringTokenizer(lectureLigne(in));
-			        			((Courbe) Courbes.get(c)).addTypedPoint(tok.nextToken(), tok.nextToken(), tok.nextToken());
+			        			if (mode)
+				        			((Courbe) Courbes.get(c)).addTypedPoint(tok.nextToken(), tok.nextToken(), tok.nextToken(), tok.nextToken());
+			        			else
+			        				((Courbe) Courbes.get(c)).addTypedPoint(tok.nextToken(), tok.nextToken(), tok.nextToken());
 			        		}
 		        		}
 	        		} catch (NoSuchElementException e) {
@@ -992,8 +1010,6 @@ public class fplay extends ej {
 	
 		return str;
 	}
-	
-
 
 	private int writing(String filePath) {
 		boolean isEOFCorrect = false;
@@ -1005,7 +1021,7 @@ public class fplay extends ej {
 			out.write("ej.function format");
 			out.newLine();
 	
-			sb.append(FPLAY_VERSION_NUMBER + " " + getNbFunctions()); // version, Nb functions
+			sb.append(FPLAY_VERSION_NUMBER[mode ? 1 : 0]+ " " + getNbFunctions()); // version, Nb functions
 			for (c = 0; c <  getNbFunctions(); c++)
 				sb.append(" " + ((Courbe) Courbes.get(c)).np());
 	
@@ -1028,6 +1044,8 @@ public class fplay extends ej {
 					sb = new StringBuffer();
 					sb.append(((Courbe) Courbes.get(c)).getPoint(i).getX() + " ");
 					sb.append(((Courbe) Courbes.get(c)).getPoint(i).getY() + " ");
+					if (mode)
+						sb.append(((Courbe) Courbes.get(c)).getPoint(i).getCurve() + " ");
 					sb.append(((Courbe) Courbes.get(c)).getPoint(i).getSustainAndFix());
 
 					out.write(sb.toString());
@@ -1060,6 +1078,15 @@ public class fplay extends ej {
 		return nbfunctions;
 	}
 
+	private void setCurveMode(Atom[] a) {
+		if (a.length == 1 && isNumber(a[0]))
+			mode = a[0].toInt() == 1 ? CURVE_MODE : LINE_MODE;
+	}
+	
+	private boolean getCurveMode() {
+		return mode;		
+	}
+	
 	private void init() {
 		Courbes = new ArrayList();
 		for (int i = 0; i < nbfunctions; i++) {
@@ -1072,8 +1099,6 @@ public class fplay extends ej {
 			outlet(INTERP_OUTLET, ((Courbe) Courbes.get(c)).getName(), ((Courbe) Courbes.get(c)).interp(f));
 		// else on s'en fiche
 	}
-	
-	
 
 	private void listOfNumbers(int courbeIdx, float[] args) {
 		switch (args.length) {
@@ -1083,11 +1108,12 @@ public class fplay extends ej {
 		case 3:
 			((Courbe) Courbes.get(courbeIdx)).moveOnePoint((int) args[0], args[1], args[2]);
 			break;
+		case 4:
+			((Courbe) Courbes.get(courbeIdx)).moveOnePoint((int) args[0], args[1], args[2], args[3]); 
 		default:
 			error("too many arguments");
 		}
 	}
-	
 	
 	private void myName(int c, String s) {
 		if (s != null) 
@@ -1096,7 +1122,6 @@ public class fplay extends ej {
 			error("missing argument for message name");
 	}
 	
-
 	private void mySustain(int courbeIdx, int idx, int state) {
 		switch (state) {
 			case 0:
@@ -1109,8 +1134,6 @@ public class fplay extends ej {
 				error("bad argument for message sustain");
 		}
 	}
-
-	
 	
 	private void myFix(int courbeIdx, int idx, int state) {
 		switch (state) {
@@ -1125,7 +1148,6 @@ public class fplay extends ej {
 		}
 	}
 
-	
 	private void myNth(int courbeIdx, int i) {
 		if (i >= 0 && i < ((Courbe) Courbes.get(courbeIdx)).np())
 			outlet(INTERP_OUTLET, ((Courbe) Courbes.get(courbeIdx)).getPoint(i).getY());
@@ -1204,6 +1226,8 @@ public class fplay extends ej {
 			for (int i = 1; i < np(); i++) {
 				tmpArray.add(Atom.newAtom(((Point) lPoints.get(i)).getY()));
 				tmpArray.add(Atom.newAtom(((Point) lPoints.get(i)).getX() - ((Point) lPoints.get(i - 1)).getX()));
+				if (mode)
+					tmpArray.add(Atom.newAtom(((Point) lPoints.get(i)).getCurve()));
 				if (getPoint(i).getSustain()) {
 					NextFrom = i;
 					break;
@@ -1231,6 +1255,8 @@ public class fplay extends ej {
 			for (i = (NextFrom + 1); i < np(); i++) {
 				tmpArray.add(Atom.newAtom(((Point) lPoints.get(i)).getY()));
 				tmpArray.add(Atom.newAtom(((Point) lPoints.get(i)).getX() - ((Point) lPoints.get(i-1)).getX() ));
+				if (mode)
+					tmpArray.add(Atom.newAtom(((Point) lPoints.get(i)).getCurve()));
 				if (getPoint(i).getSustain()) {
 					NextFrom = i;
 					break;
@@ -1258,10 +1284,42 @@ public class fplay extends ej {
 				else
 					break;
 			}
+
+			double result;
+			double tmpRange = getPoint(a+1).getY() - getPoint(a).getY();
+			double tmpDomain = getPoint(a+1).getX() - getPoint(a).getX();
+
+			if (mode || Math.abs(getPoint(a+1).getCurve()) < 0.001) {
+				// curves
+				double hp; //h(p) = (((p + 1e-20) * 1.2) ** .41) * .91.
+				double fp; //f(p) = h(p) / (1 - h(p))
+				double gp; //g(x, p) = (exp(f(p) * x) - 1) / (exp(f(p)) - 1)
+				double gx;
+				double curve = getPoint(a+1).getCurve();
+				
+				if(curve < 0.) {
+					gx = (getPoint(a+1).getX() - v) / tmpDomain;
+					
+					hp = Math.pow((1e-20 - curve) * 1.2, 0.41) * 0.91;
+					fp = hp / (1. - hp);
+					gp = (Math.exp(fp * gx) - 1.) / (Math.exp(fp) - 1.);
+					
+					result = getPoint(a+1).getY() - gp * tmpRange;
+				} else {
+					gx = (v - getPoint(a).getX()) / tmpDomain;
+					
+					hp = Math.pow((curve + 1e-20) * 1.2, 0.41) * 0.91;
+					fp = hp / (1. - hp);
+					gp = (Math.exp(fp * gx) - 1.) / (Math.exp(fp) - 1.);
+					
+					result = gp * tmpRange + getPoint(a).getY();
+				}
+			} else {
+				// Linear
+				result = ((v - getPoint(a).getX()) /  tmpDomain) * tmpRange + getPoint(a).getY();
+			}
 			
-			return (((v - getPoint(a).getX()) /  (getPoint(a + 1).getX() - getPoint(a).getX())) *
-					(getPoint(a + 1).getY() - getPoint(a).getY()) + getPoint(a).getY()
-					);
+			return result;
 
 		}
 		
@@ -1275,33 +1333,35 @@ public class fplay extends ej {
 
 		public void dump() {
 			// implicitement, il ne se passe rien si il n'y a pas de points
-			for (int i = 0; i < np(); i++) {
-				outlet(DUMP_OUTLET, getName(), getPoint(i).getValues());
-			}
+			for (int i = 0; i < np(); i++)
+				outlet(DUMP_OUTLET, getName(), mode ? getPoint(i).getValuesWithCurve() : getPoint(i).getValues());
 		}
 
 		public void dump(String sendName) {
 			// implicitement, il ne se passe rien si il n'y a pas de points
 			for (int i = 0; i < np(); i++) {
 				// c'est très tordu : le test du if envoie les informations
-				if (MaxSystem.sendMessageToBoundObject(sendName, getName(), Atom.newAtom(getPoint(i).getValues())) == false) {
+				if (MaxSystem.sendMessageToBoundObject(sendName, getName(), mode ? Atom.newAtom(getPoint(i).getValuesWithCurve()) : Atom.newAtom(getPoint(i).getValues())) == false) {
 					// on est ici seulement si le nom du receive n'est pas bon
 					error(sendName + " bad receive name");
 					break;	// s'il n'est pas bon une fois, il ne sera pas meilleur plus tard...
 				}
 			}
+			
 		}
 		
 		public void listDump() {
 			if (np() > 0) {
 				int i, idx;
-				double[] tmp = new double[np()*2];
-				
+				double[] tmp = new double[np() * (mode ? 3: 2)];
+
 				for (i = idx = 0; i < np(); i++) {
 					tmp[idx++] = getPoint(i).getX();
 					tmp[idx++] = getPoint(i).getY();
+					if (mode)
+						tmp[idx++] = getPoint(i).getCurve();
 				}
-				
+
 				outlet(DUMP_OUTLET, getName(), tmp);
 			}
 		}
@@ -1309,11 +1369,13 @@ public class fplay extends ej {
 		public void listDump(String sendName) {
 			if (np() > 0 ) {
 				int i, idx;
-				Atom[] tmp = new Atom[np()*2];
+				Atom[] tmp = new Atom[np() * (mode ? 3 : 2)];
 				
 				for (i = idx = 0; i < np(); i++) {
 					tmp[idx++] = Atom.newAtom(getPoint(i).getX());
 					tmp[idx++] = Atom.newAtom(getPoint(i).getY());
+					if (mode)
+						tmp[idx++] = Atom.newAtom(getPoint(i).getCurve());
 				}
 	
 				if (MaxSystem.sendMessageToBoundObject(sendName, getName(), tmp) == false)
@@ -1322,7 +1384,7 @@ public class fplay extends ej {
 		}
 		
 		public void dumpMatrix() {
-			JitterMatrix myMatrix = new JitterMatrix(1, "float32", 2, np());
+			JitterMatrix myMatrix = new JitterMatrix(1, "float32", mode ? 3 : 2, np());
 			Atom[] tmp = new Atom[3];
 			tmp[0] = Atom.newAtom(getName());
 			tmp[1] = Atom.newAtom("jit_matrix");
@@ -1331,13 +1393,15 @@ public class fplay extends ej {
 			for (int i = 0; i < np(); i++) {
 				myMatrix.setcell2d(0, i, new float[]{(float) getPoint(i).getX()});
 				myMatrix.setcell2d(1, i, new float[]{(float) getPoint(i).getY()});
+				if (mode)
+					myMatrix.setcell2d(1, i, new float[]{(float) getPoint(i).getCurve()});
 			}
 			
 			outlet(DUMP_OUTLET, tmp);
 		}
 		
 		public void dumpMatrix(String sendName) {
-			JitterMatrix myMatrix = new JitterMatrix(1, "float32", 2, np());
+			JitterMatrix myMatrix = new JitterMatrix(1, "float32", mode ? 3 : 2, np());
 			Atom[] tmp = new Atom[2];
 			tmp[0] = Atom.newAtom("jit_matrix");
 			tmp[1] = Atom.newAtom(myMatrix.getName());
@@ -1345,6 +1409,8 @@ public class fplay extends ej {
 			for (int i = 0; i < np(); i++) {
 				myMatrix.setcell2d(0, i, new float[]{(float) getPoint(i).getX()});
 				myMatrix.setcell2d(1, i, new float[]{(float) getPoint(i).getY()});
+				if (mode)
+					myMatrix.setcell2d(1, i, new float[]{(float) getPoint(i).getCurve()});
 			}
 
 			if (MaxSystem.sendMessageToBoundObject(sendName, getName(), tmp) == false)
@@ -1366,8 +1432,12 @@ public class fplay extends ej {
 			}
 			
 			lPoints.clear();
-			for (int i = 0; i < dim[1]; i++)
-				lPoints.add(new Point(myMatrix.getcell2dDouble(0, i)[0], myMatrix.getcell2dDouble(1, i)[0]));
+			for (int i = 0; i < dim[1]; i++) {
+				if (mode && dim[0] == 3) // if curve mode and the value is present
+					lPoints.add(new Point(myMatrix.getcell2dDouble(0, i)[0], myMatrix.getcell2dDouble(1, i)[0], myMatrix.getcell2dDouble(2, i)[0]));
+				else
+					lPoints.add(new Point(myMatrix.getcell2dDouble(0, i)[0], myMatrix.getcell2dDouble(1, i)[0]));
+			}
 			
 			quickSort(0, np() - 1);
 			applyAutoSustain();
@@ -1745,6 +1815,14 @@ public class fplay extends ej {
 			applyAutoSustain();
 		}
 		
+		public void addCurvePoints(double[] args) {
+			for (int i = 0; i < (args.length / 3); i += 3)
+				lPoints.add(new Point(args[i], args[i+1], args[i+2]));
+			
+			quickSort(0, np() - 1);
+			applyAutoSustain();
+		}
+		
 		public void addTypedPoints(double[] args) {
 			for (int i = 0; i < (args.length / 3); i++)
 				lPoints.add(new Point(args[i*3+1], args[i*3+2], (int) args[i*3+3]));
@@ -1752,14 +1830,29 @@ public class fplay extends ej {
 			applyAutoSustain();
 		}
 		
+		public void addCurveTypedPoints(double[] args) {
+			for (int i = 0; i < (args.length / 4); i ++)
+				lPoints.add(new Point(args[i*4+1], args[i*4+2], (int) args[i*4+3], args[i*4+4]));
+			
+			applyAutoSustain();
+		}
+
 		public void addTypedPoint(double valx, double valy, int state) {
 			lPoints.add(new Point(valx, valy, state));
+		}
+		
+		public void addCurveTypedPoint(double valx, double valy, int state, double curve) {
+			lPoints.add(new Point(valx, valy, state, curve));
 		}
 		
 		public void addTypedPoint(String x, String y, String state) { 
 			lPoints.add(new Point(Double.parseDouble(x), Double.parseDouble(y), Integer.parseInt(state)));
 		}
 
+		public void addTypedPoint(String x, String y, String state, String curve) {
+			lPoints.add(new Point(Double.parseDouble(x), Double.parseDouble(y), Integer.parseInt(state), Double.parseDouble(curve)));
+		}
+		
 		public void removeOnePoint(int idx) {
 			/**
 			 * permet la suppression d'un point
@@ -1778,9 +1871,31 @@ public class fplay extends ej {
 				((Point) lPoints.get(idx)).setValues(posX, posY);
 				
 				quickSort(0, np() - 1); // car on a peut-être trop déplacé le point
-			} else if (((Point) lPoints.get(idx)).getFix() == true)
-				post("le point est fixé, on ne peut donc pas le déplacer...");
-
+			}
+			
+			applyAutoSustain();
+		}
+		
+		public void moveOnePoint(int idx, double posX, double posY, double curve) {
+			/*
+			 * s'occupe du déplacement du point, lorsque la valeur de curve est définie
+			 */
+			if (idx >= 0 && idx < np() && ((Point) lPoints.get(idx)).getFix() == false) {
+				((Point) lPoints.get(idx)).setValues(posX, posY, curve);
+				
+				quickSort(0, np() - 1);	// car on a peut-être déplacé le point
+			}
+			
+			applyAutoSustain();
+		}
+		
+		public void moveCurveOnePoint(int idx, double posX, double posY, double curve) {
+			if (idx >= 0 && idx < np() && ((Point) lPoints.get(idx)).getFix() == false) {
+				((Point) lPoints.get(idx)).setValues(posX, posY, curve);
+				
+				quickSort(0, np() - 1);
+			}
+			
 			applyAutoSustain();
 		}
 		
@@ -1902,25 +2017,35 @@ public class fplay extends ej {
 		private double valy;
 		private boolean sustain = false;
 		private boolean fix = false;
+		private double curve = 0;
 
 		Point() {
 			this(0, 0);
 		}
 		
 		Point(double valx, double valy) {
-			this(valx, valy, false, false);
+			this(valx, valy, false, false, 0.);
 		}
 		
+		Point(double valx, double valy, double curve) {
+			this(valx, valy, false, false, curve);
+		}
+
 		Point(double valx, double valy, int state) {
 			// x, y, sustain et fix codé en binaire
-			this(valx, valy, (state & 2) == 2, (state & 1) == 1);
+			this(valx, valy, (state & 2) == 2, (state & 1) == 1, 0.);
 		}
 		
-		Point(double valx, double valy, boolean sustain, boolean fix) {
+		Point(double valx, double valy, int state, double curve) {
+			this(valx, valy, (state & 2) == 2, (state & 1) == 1, curve);
+		}
+		
+		Point(double valx, double valy, boolean sustain, boolean fix, double curve) {
 			this.valx = valx;
 			this.valy = valy;
 			this.sustain = sustain;
 			this.fix = fix;
+			this.curve = curve;
 		}
 
 		void setX(double valx) {
@@ -1931,9 +2056,19 @@ public class fplay extends ej {
 			this.valy = valy;
 		}
 		
+		void setCurve(double curve) {
+			this.curve = curve;
+		}
+		
 		void setValues(double valx, double valy) {
 			this.valx = valx;
 			this.valy = valy;
+		}
+		
+		void setValues(double valx, double valy, double curve) {
+			this.valx = valx;
+			this.valy = valy;
+			this.curve = curve;
 		}
 		
 		double getX() {
@@ -1944,8 +2079,16 @@ public class fplay extends ej {
 			return valy;
 		}
 		
+		double getCurve() {
+			return curve;
+		}
+		
 		double[] getValues() {
 			return new double[] { valx, valy };
+		}
+		
+		double[] getValuesWithCurve() {
+			return new double[] { valx, valy, curve };
 		}
 		
 		public void setSustain(boolean sustain) {
