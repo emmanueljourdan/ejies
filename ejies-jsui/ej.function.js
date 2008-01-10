@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.110 $
-	$Date: 2008/01/08 16:57:50 $
+	$Revision: 1.111 $
+	$Date: 2008/01/10 10:45:04 $
 */
 
 // global code
@@ -1069,6 +1069,7 @@ function sync()
 {
 	if (arguments.length == 0) {
 		outlet(DUMP_OUTLET, "nbfunctions", f.length);
+		outlet(DUMP_OUTLET, "mode", isCurveMode);
 	
 		for (var c = 0; c < f.length; c++) {
 			outlet(DUMP_OUTLET, getSyncCourbe(c));
@@ -2006,7 +2007,7 @@ function setPointsFromMatrix(courbe, matrixName)
 	if (checkInputMatrix(myMatrix)) {
 		courbe.np = 0;
 	
-		if (myMatrix.dim[0] == 3) {
+		if (isCurveMode && myMatrix.dim[0] == 3) {
 			for (var i = 0; i < myMatrix.dim[1]; i++)
 				courbe.pa[courbe.np++] = new Point(
 					val2x(courbe, myMatrix.getcell(0, i)[0]), 
