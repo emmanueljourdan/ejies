@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.111 $
-	$Date: 2008/01/10 10:45:04 $
+	$Revision: 1.112 $
+	$Date: 2008/01/10 11:57:06 $
 */
 
 // global code
@@ -1084,6 +1084,7 @@ function sync()
 function sync2send(sendName)
 {
 	messnamed(sendName, "nbfunctions", f.length);
+	messnamed(sendName, "mode", isCurveMode);
 
 	for (var c = 0; c < f.length; c++) {
 		g.syncThings = getSyncCourbe(c);
