@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.112 $
-	$Date: 2008/01/10 11:57:06 $
+	$Revision: 1.113 $
+	$Date: 2008/01/31 17:43:12 $
 */
 
 // global code
@@ -1076,6 +1076,8 @@ function sync()
 	
 			if (f[c].np > 0)
 				outlet(DUMP_OUTLET, getSyncPoints(c));
+			else
+				outlet(DUMP_OUTLET, f[c].name, "clear");
 		}
 	} else
 		sync2send(arguments[0]);
@@ -1093,6 +1095,9 @@ function sync2send(sendName)
 		if (f[c].np > 0) {
 			g.syncThings = getSyncPoints(c);
 			g.sendnamed(sendName, "syncThings");
+		} else {
+			g.syncThings = [ f[c].name, "clear" ];
+			g.sendnamed(sendName, "syncThings");
 		}
 	}
 }
@@ -1101,22 +1106,29 @@ sync2send.local = 1;
 function synccurrent()
 {
 	if (arguments.length == 0) {
+		outlet(DUMP_OUTLET, "mode", isCurveMode);
 		outlet(DUMP_OUTLET, getSyncCourbe(front));
 		
 		if (f[front].np > 0)
 			outlet(DUMP_OUTLET, getSyncPoints(front));
+		else
+			outlet(DUMP_OUTLET, "clear");
+	
 	} else 
 		syncCurrent2Send(arguments[0]);
 }
 
 function syncCurrent2Send(sendName)
 {
+	messnamed(sendName, "mode", isCurveMode);
 	g.syngThings = getSyncCourbe(front);
 	g.sendnamed(sendName, "syncThings");
 	
 	if (f[front].np > 0) {
 		g.syncThings = getSyncPoints(front);
 		g.sendnamed(sendName, "syncThings");
+	} else {
+		messnamed(sendName, "clear");
 	}
 }
 syncCurrent2Send.local = 1;
