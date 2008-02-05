@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.113 $
-	$Date: 2008/01/31 17:43:12 $
+	$Revision: 1.114 $
+	$Date: 2008/02/05 10:17:22 $
 */
 
 // global code
@@ -3279,8 +3279,8 @@ function onclick(x,y,but,cmd,shift,capslock,option,ctrl)
 				} else {
 					if(y >= (y1-Tolerance) && y <= (y0+Tolerance)) SelectedCurve = i;
 				}
-								
-				
+			
+				EditedWithMouse.state++;
 				break;
 			}
 		}
@@ -3405,6 +3405,7 @@ function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 					
 				prevy = y;
 				
+				EditedWithMouse.state++;
 				UpdateDisplay();
 			}
 			
