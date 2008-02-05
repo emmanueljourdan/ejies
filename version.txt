@@ -14,6 +14,7 @@ ej.lslide: set message, slide_up slide_down minimum properly set to 1
 ej.led.js: toggle message for Kasper
 ej.function.js: curve addition (Many many thanks to Martin Robinson)
 ej.function.js: new clicksustain mode (if disable, you can't modify the sustain state via the mouse)
+ej.function.js: fixed bang outlet when edited the curve factor
 ej.fplay: curve addition, compatible with ej.function.js
 
 
