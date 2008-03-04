@@ -1,10 +1,11 @@
 ejies Ñ Version history
 
 *******************
-1.58b2: 13 Jan 2008
+1.58: 4 March 2008
 
 Bug correction:
 ej.dialog: pressing escape key close the dialog and notify the second outlet
+ej.dialog: fix double output while pressing the Ok button with the mouse (Thanks Patrick)
 ej.function.js: fixed a bug while syncing 2 functions with curve mode (Thanks Nick)
 ej.function.js: fixed dump issue in curve mode
 
