@@ -3,8 +3,8 @@
 	an alternative led...
 	since 1.54b3: mode button added
 	
-	$Revision: 1.10 $
-	$Date: 2007/11/05 13:40:35 $
+	$Revision: 1.11 $
+	$Date: 2008/03/10 11:41:00 $
 */
 
 // Global Code
@@ -150,7 +150,7 @@ function blinktime(v)
 function WaitAndStop()
 {
 	MyTask.schedule(FlashTime);
-/* 	MyTask.cancel();		// arrête une autre task en cours */
+/* 	MyTask.cancel();		// arr√™te une autre task en cours */
 /* 	MyTask = new Task(PutItOff); */
 /* 	MyTask.interval = FlashTime; */
 /* 	MyTask.repeat(1); */

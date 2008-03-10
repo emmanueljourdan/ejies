@@ -2,8 +2,8 @@
 	ej.numbox.js by Emmanuel Jourdan, Ircam - 08 2004
 	an alternative number box.
 
-	$Revision: 1.14 $
-	$Date: 2006/07/31 13:22:50 $
+	$Revision: 1.15 $
+	$Date: 2008/03/10 11:41:00 $
 */
 
 // Global Code
@@ -29,7 +29,7 @@ var MyBrgb2 = [0.2,0.3,0.5];
 var MyBrgb3 = [0.2,0.3,0.6]; 	// pour le double click
 var MyFrgb = [0.2,0.3,1.];
 var MyFrgb2 = [0.65,0.7,0.7];
-const MyFontSize = 0.6;			// Font size (par rapport à la hauteur de la boîte
+const MyFontSize = 0.6;			// Font size (par rapport √† la hauteur de la bo√Æte
 const MyFont = "Geneva";		// Default Font
 var RoundValue = 2;				// truncate mode
 var LeadingValue = 0;
@@ -40,13 +40,13 @@ var MinMaxState = 0;
 var MinMaxValues = new Array(0,127);
 var ChangeState = 0;
 var MouseUpState = 0;
-var TempValue;					// utilsé pour la fonction change
+var TempValue;					// utils√© pour la fonction change
 var MyVal = 0;
-var keyboard = -1;				// utilisé pour l'entrée au clavier
+var keyboard = -1;				// utilis√© pour l'entr√©e au clavier
 var RedrawEnable = 0;
 var KeyboardError = 1;
 var AllowKeyboardState = 0;
-var NumericBoite; 				// utilisé dans unselect
+var NumericBoite; 				// utilis√© dans unselect
 
 border = 0;
 sketch.fsaa = 0;
@@ -83,13 +83,13 @@ MyVal = DefaultValue;
 
 boxposition();
 
-//dimensions de la boîte
+//dimensions de la bo√Æte
 if (box.rect[2] - box.rect[0] == 64 && box.rect[3] - box.rect[1] == 64)
-	box.size(32,16);	// numbox a été créée à partie de jsui : dimensions = 64*64
+	box.size(32,16);	// numbox a √©t√© cr√©√©e √† partie de jsui : dimensions = 64*64
 else
 	box.size(Math.max(box.rect[2]-box.rect[0],32),16);	// check box size
 
-leading0(LeadingValue);							// va aussi déclencher draw() et refresh()
+leading0(LeadingValue);							// va aussi d√©clencher draw() et refresh()
 
 function loadbang()
 {
@@ -100,12 +100,12 @@ function loadbang()
 
 function notifydeleted()
 {
-	KeyboardInput(0);	// si on supprime ej.function on fait disparaître le sous patch keyboard-input
+	KeyboardInput(0);	// si on supprime ej.function on fait dispara√Ætre le sous patch keyboard-input
 }
 
 function boxposition()
 {
-	// pour le recentrage du curseur quand on relâche
+	// pour le recentrage du curseur quand on rel√¢che
 	p = this.patcher;
 	BoxCenterX = p.wind.location[0] + box.rect[0] + ((box.rect[2] - box.rect[0])/2);
 	BoxCenterY = p.wind.location[1] + box.rect[1] + ((box.rect[3] - box.rect[1])/2);
@@ -139,7 +139,7 @@ function draw()
 		textalign("center", "center");		
 		moveto(0,0)
 
-		if (MyVal == Number.NEGATIVE_INFINITY)		// = -∞
+		if (MyVal == Number.NEGATIVE_INFINITY)		// = -‚àû
 			DisplayValue = "-inf";
 		else if (MyVal == Number.POSITIVE_INFINITY) // plus l'infini...
 			DisplayValue = "+inf";
@@ -327,7 +327,7 @@ function clipping(v)
 	if ( MinMaxState & 1 ) // un peu de binaire...
 		MyVal = Math.max(MinMaxValues[0],v);
 	if ( MinMaxState & 2 )									// ici on fait attention de ne pas descendre
-		MyVal = Math.min(MinMaxValues[1],Math.max(MyVal,v));//en dessous du minimum quand il est activé
+		MyVal = Math.min(MinMaxValues[1],Math.max(MyVal,v));//en dessous du minimum quand il est activ√©
 }
 clipping.local = 1;	// private
 
@@ -401,7 +401,7 @@ function args4insp()
 
 function select()
 {
-	// positionne le curseur dans le coin en bas à droite de l'objet
+	// positionne le curseur dans le coin en bas √† droite de l'objet
 	max.pupdate(this.patcher.wind.location[0] + box.rect[2] - 3, this.patcher.wind.location[1] + box.rect[3] - 3);
 	outputidle(1);
 }
@@ -546,11 +546,11 @@ function KeyboardInput(v)
 				// unselect others objects
 				unselect();
 				
-				// si d'autres objets ej.numbox-keyboard traînent, il ne doivent pas recevoir les touches du clavier
+				// si d'autres objets ej.numbox-keyboard tra√Ænent, il ne doivent pas recevoir les touches du clavier
 				messnamed("ej.numbox-keyboard", "stop");
 				
 				keyboard = this.patcher.newdefault(-100, -100, "ej.numbox-keyboard.pat");
-				// ça serait bien d'éviter le nommage...
+				// √ßa serait bien d'√©viter le nommage...
 				// create "unique" name
 				var TempName = "num-";
 				var TempDate = new Date();
@@ -601,7 +601,7 @@ function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 	if (but == 0) {
 		cursor(1);								// affiche le curseur
 		max.pupdate(BoxCenterX,BoxCenterY);		// recentre le curseur
-		msg_float(MyVal);						// envoie la nouvelle valeur (quand on relâche)
+		msg_float(MyVal);						// envoie la nouvelle valeur (quand on rel√¢che)
 	} else {
 		var delta = y - LastY;
 	 	if (delta == 0)
@@ -609,7 +609,7 @@ function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 		else
 			LastDelta = delta;
 	 	
-		// touche shift... ça va plus vite... (même moi je l'oublie que j'ai mis ça)
+		// touche shift... √ßa va plus vite... (m√™me moi je l'oublie que j'ai mis √ßa)
 		if (shift)
 			var OffsetFromDelta = Math.max(1,Math.round(Math.abs(delta)));
 		else
@@ -644,7 +644,7 @@ onidleout.local = 1;
 
 function ondblclick()
 {
-	// il faut déjà changer la couleur, attendre puis envoyer la valeur par défaut
+	// il faut d√©j√† changer la couleur, attendre puis envoyer la valeur par d√©faut
 	tsk = new Task(flashwhiledbleclick, this);
 	tsk.interval = 300;
 	tsk.repeat(1, 50);

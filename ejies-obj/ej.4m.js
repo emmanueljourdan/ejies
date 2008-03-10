@@ -1,9 +1,9 @@
 /*
-	ej.4m.js by Emmanuel Jourdan, Ircam — 06 2004
+	ej.4m.js by Emmanuel Jourdan, Ircam ‚Äî 06 2004
 	output the min, median, mean, maximum on a int/float stream
  
-	$Revision: 1.8 $
-	$Date: 2006/10/20 10:37:37 $
+	$Revision: 1.9 $
+	$Date: 2008/03/10 11:41:00 $
 */
 
 // global code
@@ -23,7 +23,7 @@ var VerboseOrNot = 0;
 var SommeDesValeurs = 0;
 var i;
 
-// argument s'il est connu, spécifie la taille de fenêtre
+// argument s'il est connu, sp√©cifie la taille de fen√™tre
 if (jsarguments.length > 1 ) {
 	if (typeof jsarguments[1] == "number")
 		window( jsarguments[1] );
@@ -42,8 +42,8 @@ function loadbang()
 
 function msg_float(nombre)
 {
-	a.shift();			// supprime le premier élément
-	a.push(nombre);	// ajoute l'élément à la fin de 'a'
+	a.shift();			// supprime le premier √©l√©ment
+	a.push(nombre);	// ajoute l'√©l√©ment √† la fin de 'a'
 	sortie();
 }
 msg_float.immediate = 1;
@@ -51,16 +51,16 @@ msg_float.immediate = 1;
 function bang()
 {
 	if (WindowReset < a.length && WindowReset > 0) {
-		// s'il y a moins d'éléments que la taille de fenêtre, mais qu'il y en a au minimum 1.
+		// s'il y a moins d'√©l√©ments que la taille de fen√™tre, mais qu'il y en a au minimum 1.
 		var OldWindowSize = a.length;
-		// ne pas utiliser a.length puisque ça change au cours de la boucle for !!
+		// ne pas utiliser a.length puisque √ßa change au cours de la boucle for !!
 		for (i = 0 ; i < (OldWindowSize - WindowReset) ; i++ ) {
 			a.shift();
 		}
 		ejies.error(this, "using temp window size of ", a.length, " items.");
 		sortie();
 		window(OldWindowSize);
-	} else if (WindowReset >= a.length) { // il y a suffisament d'élément.
+	} else if (WindowReset >= a.length) { // il y a suffisament d'√©l√©ment.
 		sortie();
 	}
 }
@@ -70,7 +70,7 @@ function anything()
 	ejies.error(this, "doesn't understand", messagename);
 }
 
-// change la taille de la fenêtre d'analyse
+// change la taille de la fen√™tre d'analyse
 function window(l)
 {
 	a = new Array(Math.max(3,l));	// minimum 3
@@ -104,14 +104,14 @@ function sortie(v)
 	// copie de a dans b
 	b = a.slice(0);
 
-	// la sortie ne fonctionne que quand le buffer a été rempli
+	// la sortie ne fonctionne que quand le buffer a √©t√© rempli
 	if (++WindowReset >= b.length) {
-		// ordre décroissant des outlets pour permettre la sortie de gauche à droite
-		if (VerboseOrNot) outlet(4, b);			// listes des valeurs analysées
-		b.sort(function(a,b) { return a-b; });	// tri numérique croissant utilisant une fonction littérale
+		// ordre d√©croissant des outlets pour permettre la sortie de gauche √† droite
+		if (VerboseOrNot) outlet(4, b);			// listes des valeurs analys√©es
+		b.sort(function(a,b) { return a-b; });	// tri num√©rique croissant utilisant une fonction litt√©rale
 		outlet(3, b[b.length - 1]);				// max
 		outlet(2, somme()/a.length);			// moyenne
-		outlet(1, b[Math.floor(b.length/2)]);	// valeur médianne (Math.floor ne prend que la partie entière)
+		outlet(1, b[Math.floor(b.length/2)]);	// valeur m√©dianne (Math.floor ne prend que la partie enti√®re)
 		outlet(0, b[0]);						// minimum
 	}
 }

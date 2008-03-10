@@ -1,7 +1,7 @@
 /*
 	ejies-jsextensions.js by Emmanuel Jourdan, Ircam - 02 2005
 	"shared library" used for the ejies JavaScripts
-	Pour l'instant, a ne sert ˆ rien... mais ˆ l'avenir... j'en ferai sans doute un usage intensif :-)
+	Pour l'instant, Ã§a ne sert Ã  rien... mais Ã  l'avenir... j'en ferai sans doute un usage intensif :-)
 */
 
 var ejies = new EjiesUtils();
@@ -25,7 +25,7 @@ function EjiesUtils()
 	 */
 	this.error = function(x)
 	{
-		var errorString = "¥ error: " + x.jsarguments[0] + ":";
+		var errorString = "â€¢ error: " + x.jsarguments[0] + ":";
 		
 		// If the it's a string with a lenth of 1 -> it's strange...
 		// that means we passed a string to the function (and the length property refer to a string)

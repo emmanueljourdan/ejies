@@ -2,8 +2,8 @@
 	ej.nthru.js by Emmanuel Jourdan, Ircam - 05 2004
 	Ce truc ne fait rien	 :-)
  
-	$Revision: 1.5 $
-	$Date: 2006/08/01 12:39:34 $
+	$Revision: 1.6 $
+	$Date: 2008/03/10 11:41:00 $
 */
 
 // global code
@@ -52,7 +52,7 @@ function mapping()
 		// nombre d'inlet plus petit que le nombre d'outlet
 		for (i=0, j=0 ; i < MaxInOut ; i++) {
 			sortie[i] = Math.min(j++,NbInlets - 1);
-			MultiOut = 1; // choix des sorties diffŽrents
+			MultiOut = 1; // choix des sorties diffÃ©rents
 		}
 	}
 	else if (NbInlets > NbOutlets) {
@@ -64,7 +64,7 @@ function mapping()
 	}
 }
 
-// Prend tout dans la tte et l'envoie ˆ la sortie correspondante
+// Prend tout dans la tÃªte et l'envoie Ã  la sortie correspondante
 // en fonction du mapping() et du rapport inlet/outlet
 function anything()
 {
@@ -76,7 +76,7 @@ function anything()
 			outlet(sortie[inlet], a);
 		}
 		else {
-			// inversion des sorties (d'abord les sorties de droite, right to left order... Tutorial n¡7:-))
+			// inversion des sorties (d'abord les sorties de droite, right to left order... Tutorial nÂ°7:-))
 			for (i = NbOutlets - 1 ; i >= inlet ; i--) { 
 				outlet(i, a);
 			}

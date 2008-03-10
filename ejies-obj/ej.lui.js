@@ -1,9 +1,9 @@
 /*
-	ej.lui.js by Emmanuel Jourdan, Ircam — 09 2004
+	ej.lui.js by Emmanuel Jourdan, Ircam ‚Äî 09 2004
 	lui means Load jsUI...
 
-	$Revision: 1.8 $
-	$Date: 2006/08/01 12:39:34 $
+	$Revision: 1.9 $
+	$Date: 2008/03/10 11:41:00 $
  */
 
 // global code
@@ -48,7 +48,7 @@ function replace_js_by_jsui()
 
 function getversion()
 {
-	// ceci est utilisé dans ejies-overview
+	// ceci est utilis√© dans ejies-overview
 	outlet(0, ejies.VersNum);
 }
 
@@ -60,7 +60,7 @@ function testinstallation()
 		return;
 	}
 	
-	post("• WARNING Ejies are not properly installed!\n");
+	post("‚Ä¢ WARNING Ejies are not properly installed!\n");
 	post("Make sure the ejies-jsextensions.js is installed in the \"C74:/jsextensions\" folder!\n");
 }
 

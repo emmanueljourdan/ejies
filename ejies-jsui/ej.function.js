@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.114 $
-	$Date: 2008/02/05 10:17:22 $
+	$Revision: 1.115 $
+	$Date: 2008/03/10 11:41:00 $
 */
 
 // global code
@@ -41,9 +41,9 @@ setoutletassist(BANG_OUTLET, "bang when changed with mouse");
 setoutletassist(DUMPOUT, "dumpout");
 inspector = 1;						// Youpi!!!!!!
 
-var g = new Global("ej.function");	// utilisé par dump & listdump
-g["copy"] = new Array();			// Utilisé pour le copier-coller
-g["copycolors"] = new Array();		// Utilisé pour le copier-coller des couleurs
+var g = new Global("ej.function");	// utilis√© par dump & listdump
+g["copy"] = new Array();			// Utilis√© pour le copier-coller
+g["copycolors"] = new Array();		// Utilis√© pour le copier-coller des couleurs
 var NbCourbes = 1;
 var f = new Array();
 var isCurveMode = 0;
@@ -88,7 +88,7 @@ RedrawOrNot.DidYouDraw = 0;
 var tskDraw = new Task();
 var tskDel = new Task();
 var tmpString = new String();
-var tmpRange, tmpDomain;	// utilisé dans Interp
+var tmpRange, tmpDomain;	// utilis√© dans Interp
 var LineValue = -1;
 
 var numCurvePoints = 12; //MR - curve vars
@@ -118,20 +118,20 @@ var prevy = 0;
 var MoveMode = 0;
 
 var SketchFunctions = new Sketch(BoxWidth, BoxHeight);
-var slowDrawing = new Task(drawFunctions, this);	// pour empêcher le rafraichissement trop rapide
-var slowDrawingAll = new Task(drawAll, this);	// pour empêcher le rafraichissement trop rapide
-var slowNotify = new Task(notifyclients, this);		// pour empêcher la mise à jour pattr trop rapide
+var slowDrawing = new Task(drawFunctions, this);	// pour emp√™cher le rafraichissement trop rapide
+var slowDrawingAll = new Task(drawAll, this);	// pour emp√™cher le rafraichissement trop rapide
+var slowNotify = new Task(notifyclients, this);		// pour emp√™cher la mise √† jour pattr trop rapide
 
 SketchFunctions.fsaa = fsaaValue;
 
-RedrawEnable = 0;	// désactivation de l'affichage pendant l'initialisation
+RedrawEnable = 0;	// d√©sactivation de l'affichage pendant l'initialisation
 NotifyEnable = 0;
 
 if (max.version < 455)
 	ejies.error(this, "MaxMSP 4.5.5 or higher is required. Please upgrade!");
 
 if (box.rect[2] - box.rect[0] == 64 && box.rect[3] - box.rect[1] == 64) {
-	// numbox a été créée à partie de jsui : dimensions = 64*64
+	// numbox a √©t√© cr√©√©e √† partie de jsui : dimensions = 64*64
 	init();
 	onresize(200,100);
 }
@@ -208,7 +208,7 @@ function CurveSeg(y0, y1, x0, x1, curve, nhops)
 	this.delta = x1-x0;
 	this.nhops = nhops;
 	
-	// clip to ±0.995 due to curve~ bug
+	// clip to ¬±0.995 due to curve~ bug
 	
 	if(curve < CURVE_MIN) 
 		this.curve = CURVE_MIN;
@@ -262,8 +262,8 @@ function Courbe(name)
 	
 	this.PixelDomain;			// ...
 	this.PixelRange;			// ...
-	this.NextFrom = 0;			// utilisé pour le message next
-	this.OnePointAtZero = 0;	// 1 si un des points de la courbe à 0 pour valeur y
+	this.NextFrom = 0;			// utilis√© pour le message next
+	this.OnePointAtZero = 0;	// 1 si un des points de la courbe √† 0 pour valeur y
 }
 Courbe.local = 1;
 
@@ -383,7 +383,7 @@ function init()
 		f[c] = new Courbe("function" + c);
 	}
 	
-	// suppression des éventuelles courbes en trop (par resetall)
+	// suppression des √©ventuelles courbes en trop (par resetall)
 	while (f.length > NbCourbes) {
 		f.splice(f.length - 1, 1);
 	}
@@ -601,7 +601,7 @@ function SpriteFunctions()
 					}
 				}
 				
-				// dessine les points de la courbe active ou de toutes les courbes si HiddenPointDisplay est activé
+				// dessine les points de la courbe active ou de toutes les courbes si HiddenPointDisplay est activ√©
 				if ( f[c].display && ((c == front) || HiddenPointDisplay) ) {
 					// dessine les points
 					var tmpTransparency = c == front ? 1 : Ghostness;
@@ -672,7 +672,7 @@ function anything()
 	var tmp = -1;
 	var OldRedrawState = RedrawEnable;
 	
-	redrawoff();	// désactive l'affichage pendont qu'on travaille...
+	redrawoff();	// d√©sactive l'affichage pendont qu'on travaille...
 	
 	for (c = 0; c < NbCourbes; c++) {
 		if ( messagename == f[c].name ) {
@@ -681,9 +681,9 @@ function anything()
 		}
 	}
 
-	RedrawEnable = OldRedrawState;	// retour à l'état initial
+	RedrawEnable = OldRedrawState;	// retour √† l'√©tat initial
 		
-	if (tmp == -1) {	// si -1 c'est que ça ne correspond pas à un nom de function ou de message
+	if (tmp == -1) {	// si -1 c'est que √ßa ne correspond pas √† un nom de function ou de message
 		ejies.error(this, "doesn't understand", messagename, "(bad function name or message name)");
 		return;
 	}
@@ -709,7 +709,7 @@ function line(v)
 
 function onresize(w,h)
 {
-	// taille minimum 100*50 - le maximum dépend de fsaa
+	// taille minimum 100*50 - le maximum d√©pend de fsaa
 	if (sketch.fsaa)
 		box.size(ejies.clip(w, 100, 1024),ejies.clip(h, 50, 1024));
 	else
@@ -737,7 +737,7 @@ function LectureInspector()
 	if (jsarguments.length > 2) {
 		NbCourbes = jsarguments[idx++];
 
-		init();	// création des courbes
+		init();	// cr√©ation des courbes
 
 		if (jsarguments.length != (11 + NbCourbes*18) ) {
 			ejies.error(this, "bad number of arguments in the inspector");
@@ -763,8 +763,8 @@ function LectureInspector()
 		return;
 	}
 	else {
-/* 		NbCourbes = 2; // C'est déjà défini et ça fout la merde avec l'initialisation save() */
-		init();	// création des courbes
+/* 		NbCourbes = 2; // C'est d√©j√† d√©fini et √ßa fout la merde avec l'initialisation save() */
+		init();	// cr√©ation des courbes
 	}
 }
 LectureInspector.local = 1;
@@ -778,7 +778,7 @@ UpdateDisplay.local = 1;
 
 function LectureNextLigne(f)
 {
-	// ignore les lignes qui contiennt mois de 4 caractères ou //
+	// ignore les lignes qui contiennt mois de 4 caract√®res ou //
 	do {
 		tmpString = f.readline();
 	} while	(tmpString.length < 4 || (tmpString.search("//") != -1));
@@ -799,7 +799,7 @@ EditedWithMouse.local = 1;
 
 function DisplayCursor(v)
 {
-	if (this.box.ignoreclick == 1 || CursorChange == 0)		// Si la boîte est ignore click ou on ne change pas le cursor
+	if (this.box.ignoreclick == 1 || CursorChange == 0)		// Si la bo√Æte est ignore click ou on ne change pas le cursor
 		return;
 
 	if (v != DisplayCursor.state) {
@@ -992,8 +992,8 @@ ApplyAutoSustain.local = 1;
 function MyAddPoints(courbe, liste)
 {	
 	var i;
-	// ça commence à 1 car le premier élément est addfunctions
-	// Nombre d'élément réel dans la liste / 2 pour vérifier qu'il y a bien un nombre pair
+	// √ßa commence √† 1 car le premier √©l√©ment est addfunctions
+	// Nombre d'√©l√©ment r√©el dans la liste / 2 pour v√©rifier qu'il y a bien un nombre pair
 
 	if (isCurveMode) {
 		for (i = 1; i < (Math.floor((liste.length - 1) / 3) * 3); i += 3) {
@@ -1224,7 +1224,7 @@ function MySetDomain(start, stop, courbe)
 	calcFunctionCurves(courbe); 			// added MR
 	DoNotify();
 
-	// Si la grille est activée, changer le domain doit redessiner la grille
+	// Si la grille est activ√©e, changer le domain doit redessiner la grille
 	if (GridMode)
 		askForDrawFunctions();
 }
@@ -1245,7 +1245,7 @@ function MyAutoRange(courbe)
 		if (courbe.pa[i].valy < min)
 			min = courbe.pa[i].valy;
 	}
-	if (min == max)	// si le minimum et le maximum sont identiques... on arrête.
+	if (min == max)	// si le minimum et le maximum sont identiques... on arr√™te.
 		return;
 
 	range(min, max, courbe);
@@ -1267,7 +1267,7 @@ function MyAutoDomain(courbe)
 		if (courbe.pa[i].valx < min)
 			min = courbe.pa[i].valx;
 	}
-	if (min == max)	// si le minimum et le maximum sont identiques... on arrête.
+	if (min == max)	// si le minimum et le maximum sont identiques... on arr√™te.
 		return;
 
 	MyDomain(min, max, courbe);
@@ -1342,9 +1342,9 @@ ReadDialog.local = 1;
 
 function DeleteReadThings()
 {
-	// pour l'opération de suppression quand on vient de read...
-	// pour une raison qui m'échappe...
-	// il faut délayer...
+	// pour l'op√©ration de suppression quand on vient de read...
+	// pour une raison qui m'√©chappe...
+	// il faut d√©layer...
 	tskDel = new Task(function() {
 		if ( ! tskDel.running) {
 			var i;
@@ -1356,7 +1356,7 @@ function DeleteReadThings()
 	tskDel.interval = 100;
 	tskDel.repeat(1);
 	
-	OpendialogPrepend = 0;	// réinitialisation du flag
+	OpendialogPrepend = 0;	// r√©initialisation du flag
 }
 
 function MyRemoveDuplicate(courbe)
@@ -1365,10 +1365,10 @@ function MyRemoveDuplicate(courbe)
 	var ReturnState = 0;
 
 	for (i = 1; i < (courbe.np - 1); i++) {
-		// suppression du point du milieu s'il est encadré par 2 valeurs identiques
+		// suppression du point du milieu s'il est encadr√© par 2 valeurs identiques
 		if ( courbe.pa[i-1].valy == courbe.pa[i].valy && courbe.pa[i+1].valy == courbe.pa[i-1].valy) {
 			DeletePoint(courbe, i);
-			i = Math.max(0, i - 2); // la prochaine fois qu'on rentre dans la boucle for ça commencera à partir de ce point
+			i = Math.max(0, i - 2); // la prochaine fois qu'on rentre dans la boucle for √ßa commencera √† partir de ce point
 			ReturnState = 1;
 		}
 	}
@@ -1414,7 +1414,7 @@ AllPixel2Machin.local = 1;
 
 function AddOnePoint(courbe, x, y, curve)
 {
-	var tmp = courbe.np;	// si tmp n'est pas modifié c'est que c'est la plus grande valeur...
+	var tmp = courbe.np;	// si tmp n'est pas modifi√© c'est que c'est la plus grande valeur...
 	var i;
 	
 	if (isCurveMode && LimitNP && tmp >= MAX_CURVE_NP) return -1; // don't add points if more points than curve~ return -1 for the mousing functions
@@ -1440,13 +1440,13 @@ function AddOnePoint(courbe, x, y, curve)
 			}
 		}
 		
-		// insère un point
+		// ins√®re un point
 		if (isCurveMode)
-			courbe.pa.splice(tmp, 0, new Point(x,y, x2val(courbe, x), y2val(courbe, y), curve) );	// insère un point
+			courbe.pa.splice(tmp, 0, new Point(x,y, x2val(courbe, x), y2val(courbe, y), curve) );	// ins√®re un point
 		else
 			courbe.pa.splice(tmp, 0, new Point(x,y, x2val(courbe, x), y2val(courbe, y)) );
 
-		courbe.np++;	// on incrémente car il y a un point supplémentaire dans la courbe
+		courbe.np++;	// on incr√©mente car il y a un point suppl√©mentaire dans la courbe
 		
 		if (isCurveMode) {
 			calcOneCurve(courbe, tmp-1, tmp); // added - MR
@@ -1455,7 +1455,7 @@ function AddOnePoint(courbe, x, y, curve)
 		
 	}
 
-	return tmp;		// valeur de retour utilisée comme seleected point
+	return tmp;		// valeur de retour utilis√©e comme seleected point
 }
 AddOnePoint.local = 1;
 
@@ -1596,8 +1596,8 @@ sortingPoints.local = 1;
 
 function SortBulle(courbe)
 {
-	// plus utilisée...
-	// la méthode bulle pour mettre dans l'ordre... :-)
+	// plus utilis√©e...
+	// la m√©thode bulle pour mettre dans l'ordre... :-)
 	var i, bulle;
 	var max = courbe.np - 2;
 	var tmp = new Point();
@@ -1669,10 +1669,10 @@ swapPoints.local = 1;
 function RedrawOrNot(v)
 {
 	if ( v == -1) {
-		tskDraw.cancel();		// arrêt de la task précédente
-		WaitALittleBit();	// si pas de point sélectionné on attend un peu avant de faire draw()
+		tskDraw.cancel();		// arr√™t de la task pr√©c√©dente
+		WaitALittleBit();	// si pas de point s√©lectionn√© on attend un peu avant de faire draw()
 	} else {
-		if (RedrawOrNot.DidYouDraw == 0 || v != RedrawOrNot.LastValue) { // soit l'affichage a déjà été fait (== 0), soit le point est différent
+		if (RedrawOrNot.DidYouDraw == 0 || v != RedrawOrNot.LastValue) { // soit l'affichage a d√©j√† √©t√© fait (== 0), soit le point est diff√©rent
 			drawText();
 			RedrawOrNot.DidYouDraw = 1;
 		}
@@ -1695,8 +1695,8 @@ WaitALittleBit.local = 1;
 function ArgsParser(courbe, msg, a) 
 {
 /* 	var tmpReturn = -1; */
-/* 	var NeedDraw = 0;	// pour savoir si on doit réafficher */
-	var NeedNotify = -1;	// pour savoir si on doit mettre à jour psto
+/* 	var NeedDraw = 0;	// pour savoir si on doit r√©afficher */
+	var NeedNotify = -1;	// pour savoir si on doit mettre √† jour psto
 
 	if ( typeof(a[0]) == "number") {
 	// en fonction du nombre d'arguments 1 (interpolationX-Y) 2 (AddPoint) 3 (MovePoint)
@@ -1880,7 +1880,7 @@ function MyClear(courbe, v)
 		var i, j;
 		var ListeASupprimer = new Array();
 		
-/* 		Il est possible que le premier élément de v[] soit clear si ça vient de ArgParser */
+/* 		Il est possible que le premier √©l√©ment de v[] soit clear si √ßa vient de ArgParser */
 		for (i = 0, j = 0; i < v.length; i++) {
 			if (v[i] >= 0 && v[i] < courbe.np) {
 				ListeASupprimer[j++] = v[i];
@@ -1901,7 +1901,7 @@ MyClear.local = 1;
 
 function InverseSorting(a, b)
 {
-   return b - a; // sort des Nombres de manières décroissantes 
+   return b - a; // sort des Nombres de mani√®res d√©croissantes 
 }
 InverseSorting.local = 1;
 
@@ -1939,7 +1939,7 @@ MyFloat2Color.local = 1;
 function MyGridStep_x(courbe, v)
 {
 	if (typeof(v) == "number" && v > 0) {
-		if (((courbe.ZoomX[1] - courbe.ZoomX[0]) / v) < (BoxWidth-(Bordure*2) / 4) ) { /* très arbitraire tout ça */
+		if (((courbe.ZoomX[1] - courbe.ZoomX[0]) / v) < (BoxWidth-(Bordure*2) / 4) ) { /* tr√®s arbitraire tout √ßa */
 			courbe.grid_x = v;
 			DoNotify();
 			if (GridMode)
@@ -1953,7 +1953,7 @@ MyGridStep_x.local = 1;
 function MyGridStep_y(courbe, v)
 {
 	if (typeof(v) == "number" && v > 0) {
-		if (((courbe.ZoomY[1] - courbe.ZoomY[0]) / v) < BoxHeight / 4) { /* très arbitraire tout ça */
+		if (((courbe.ZoomY[1] - courbe.ZoomY[0]) / v) < BoxHeight / 4) { /* tr√®s arbitraire tout √ßa */
 			courbe.grid_y = v;
 			DoNotify();
 			if (GridMode)
@@ -2099,7 +2099,7 @@ function MyListDump(courbe, sendname)
 		}
 	}
 	
-	// sortie limitée à 4095 éléments (4094 + nom de la fonction)
+	// sortie limit√©e √† 4095 √©l√©ments (4094 + nom de la fonction)
 	if (tmpArray.length > 4094) {
 		ejies.error(this, "listdump aborted: too many points... use dump instead for now.");
 		return;
@@ -2152,7 +2152,7 @@ function SetColor(intOrcourbe, which, a, b, c)
 	else
 		ejies.error(this, "bad arguments for message", which);
 }
-//SetColor.local = 1; // utilisée par embedmessage c'est pourquoi il ne faut pas qu'elle soit locale
+//SetColor.local = 1; // utilis√©e par embedmessage c'est pourquoi il ne faut pas qu'elle soit locale
 
 function GetColor(courbe, which)
 {
@@ -2431,7 +2431,7 @@ function MyNormalize(courbe)
 MyNormalize.local = 1;
 
 
-//////////////// Fonctions "Extérieures" ///////////////
+//////////////// Fonctions "Ext√©rieures" ///////////////
 function all()
 {
 	var i;
@@ -2536,7 +2536,7 @@ function addfunction()
 	f[tmp] = new Courbe(arguments[0]);
 	NbCourbes++;
 	pixel2machin(f[tmp]);
-	getname();		// mise à jour du menu
+	getname();		// mise √† jour du menu
 }
 
 function insertfunction()
@@ -2549,8 +2549,8 @@ function insertfunction()
 	f.splice(front, 0, new Courbe(arguments[0]));		
 	NbCourbes++;
 	pixel2machin(f[front]);
-	getname();		// mise à jour du menu
-	askForDrawingAll();		// mise à jour de l'affichage, car c'est la courbe courrante
+	getname();		// mise √† jour du menu
+	askForDrawingAll();		// mise √† jour de l'affichage, car c'est la courbe courrante
 }
 
 function deletefunction()
@@ -2618,7 +2618,7 @@ function clickmove(v)
 
 function clicksustain(v)
 {
-	if (v == 0 || v == 1)
+	if (v == 0 ||¬†v == 1)
 		ClickSustain= v;
 	else
 		ejies.error(this, "clicksustain doesn't understand", v);
@@ -2667,7 +2667,7 @@ function dumpmatrix()
 
 function listdump()
 {
-	// il faut tester le nombre d'argument à cause de argsparser()
+	// il faut tester le nombre d'argument √† cause de argsparser()
 	if (arguments.length)
 		MyListDump(f[front], arguments[0]);
 	else
@@ -2686,7 +2686,7 @@ function jit_matrix(matrixName)
 
 function nbfunctions(v)
 {
-	// ajout des courbes, si nécessaire
+	// ajout des courbes, si n√©cessaire
 	if (v < NbCourbes) {
 		while (f.length > v)
 			f.splice(f.length - 1, 1);
@@ -2694,7 +2694,7 @@ function nbfunctions(v)
 		while (f.length < v)
 			f[f.length] = new Courbe("function" + (f.length - 1));
 	}
-	// si on a le même nombre de courbe, on ne fait rien
+	// si on a le m√™me nombre de courbe, on ne fait rien
 	// ce qui permet de garder les couleurs par exemple.
 
 	NbCourbes = f.length;
@@ -2759,8 +2759,8 @@ function notifyrecalled(v)
 
 function active()
 {
-	// ne pas éditer si c'est invisible
-	// quand la fonction n'est pas visible nom entre parenthèse	
+	// ne pas √©diter si c'est invisible
+	// quand la fonction n'est pas visible nom entre parenth√®se	
 	var tmpArray = arrayfromargs(messagename, arguments);
 	var i;
 	
@@ -2829,7 +2829,7 @@ function legend(v)
 	}
 	
 	LegendState = v;
-	LegendStateBordure = 12 * v;		// 12 pixels la légende...
+	LegendStateBordure = 12 * v;		// 12 pixels la l√©gende...
 	// redimensionnement du Sketch principal
 	SketchFunctions = new Sketch(BoxWidth, BoxHeight);
 	AllPixel2Machin();
@@ -2975,7 +2975,7 @@ function setrange(a, b, courbe)
 	calcFunctionCurves(tmpF); 	// added - MR (BUG updated "courbe->tmpF" 20070907)
 	DoNotify();
 
-	// NeedDraw contient le résultat de la nouvelle courbe (y a t'il un point avec y=0) OnePointAtZero c'est l'état d'avant.
+	// NeedDraw contient le r√©sultat de la nouvelle courbe (y a t'il un point avec y=0) OnePointAtZero c'est l'√©tat d'avant.
 	if (NeedDraw || tmpF.OnePointAtZero)
 		askForDrawFunctions();
 }
@@ -2994,15 +2994,15 @@ function resetall()
 {
 	NotifyEnable = 0;
 	LectureInspector();			// lecture des arguments
-	defaults();					// Applique les couleurs et paramètres pas défaut
+	defaults();					// Applique les couleurs et param√®tres pas d√©faut
 	AllPixel2Machin();			// calcule le rapport pixel/temps/range
 	sketch.default2d();
 	fsaa(fsaaValue);
-	// initialisation de propriétés de variables
+	// initialisation de propri√©t√©s de variables
 	EditedWithMouse.state = 0;	// flag initialisation
 	PattrInterpError.flag = 0;
 	PattrTooMany.flag = 1;
-	front = 0;				// première courbe est la courbe actvie
+	front = 0;				// premi√®re courbe est la courbe actvie
 	RedrawEnable = 1;
 	NotifyEnable = 1;
 	UpdateDisplay();
@@ -3010,7 +3010,7 @@ function resetall()
 
 function defaults()
 {
-	// utilisé pour la restauration des paramètres par défaut.
+	// utilis√© pour la restauration des param√®tres par d√©faut.
 	var c;
 	
 	legend(1);	// il y a aussi recalcul du facteur multiplicateur
@@ -3038,12 +3038,12 @@ function defaults()
 		f[c].rgb5 =[0.5,0.5,0.5];
 	}
 	
-	askForDrawingAll();	// si c'est utilisé dans la fonction save(), draw est désactivé automatiquement (RedrawEnable = 0);
+	askForDrawingAll();	// si c'est utilis√© dans la fonction save(), draw est d√©sactiv√© automatiquement (RedrawEnable = 0);
 }
 
 function removeduplicate()
 {
-	// si il y a eu suppression d'élément, il y aura réaffichage.
+	// si il y a eu suppression d'√©l√©ment, il y aura r√©affichage.
 	MyRemoveDuplicate(f[front]);
 }
 
@@ -3144,8 +3144,8 @@ function zoomout()
 	var OldRedrawState = RedrawEnable;
 	RedrawEnable = 0;
 	MyZoomOut(f[front]);
-	RedrawEnable = OldRedrawState;	// restauration de l'état de la variable d'avant son entrée dans la fonction
-	drawFunctions();				// on ne réaffiche donc qu'à la sortie, une seule fois.
+	RedrawEnable = OldRedrawState;	// restauration de l'√©tat de la variable d'avant son entr√©e dans la fonction
+	drawFunctions();				// on ne r√©affiche donc qu'√† la sortie, une seule fois.
 }
 
 function MyZoomOut(courbe)
@@ -3208,7 +3208,7 @@ function onidle(x,y,but,cmd,shift,capslock,option,ctrl)
 			
 				IdlePoint = i;
 
-				if ( IdlePoint != OldIdlePoint) {	// que quand c'est différent...
+				if ( IdlePoint != OldIdlePoint) {	// que quand c'est diff√©rent...
 					RedrawOrNot(IdlePoint);
 					break;			
 				}
@@ -3309,7 +3309,7 @@ function onclick(x,y,but,cmd,shift,capslock,option,ctrl)
 			}
 		}
 
-		if (SelectedPoint != -2 && ClickMove == 0)	// ClickMove désactivé
+		if (SelectedPoint != -2 && ClickMove == 0)	// ClickMove d√©sactiv√©
 			SelectedPoint = -1;
 
 		// ajout d'un point
@@ -3373,7 +3373,7 @@ function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 			
 			if ( but == 0 ) {
 				EditedWithMouse();	// quand c'est delete c'est fait dans onidle()
-				SelectedCurve = -1;	// si on a relâché c'est qu'il n'y a plus de points sélectionnés.
+				SelectedCurve = -1;	// si on a rel√¢ch√© c'est qu'il n'y a plus de points s√©lectionn√©s.
 				onidle(x,y, 0);		// tout pareil...
 				return;
 			}
@@ -3420,13 +3420,13 @@ function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 			
 			if ( but == 0 ||  SelectedPoint < 0) {
 				EditedWithMouse();	// quand c'est delete c'est fait dans onidle()
-				SelectedPoint = -2;	// si on a relâché c'est qu'il n'y a plus de points sélectionnés.
+				SelectedPoint = -2;	// si on a rel√¢ch√© c'est qu'il n'y a plus de points s√©lectionn√©s.
 				onidle(x,y, 0);		// tout pareil...
 	/* 			drawText(); */
 				return;
 			}
 			
-		//	y = yOffset(y); // ne pas le mettre avant sinon onidle ne reçoit pas les bons coordonnées y
+		//	y = yOffset(y); // ne pas le mettre avant sinon onidle ne re√ßoit pas les bons coordonn√©es y
 		
 		if (SelectedPoint < f[front].np) {
 			if (f[front]["pa"][SelectedPoint].fix)
@@ -3513,13 +3513,13 @@ function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 	
 		if ( but == 0 ||  SelectedPoint < 0) {
 			EditedWithMouse();	// quand c'est delete c'est fait dans onidle()
-			SelectedPoint = -2;	// si on a relâché c'est qu'il n'y a plus de points sélectionnés.
+			SelectedPoint = -2;	// si on a rel√¢ch√© c'est qu'il n'y a plus de points s√©lectionn√©s.
 			onidle(x,y, 0);		// tout pareil...
 	/* 		drawText(); */
 			return;
 		}
 		
-	/* 	y = yOffset(y); // ne pas le mettre avant sinon onidle ne reçoit pas les bons coordonnées y */
+	/* 	y = yOffset(y); // ne pas le mettre avant sinon onidle ne re√ßoit pas les bons coordonn√©es y */
 	
 		if (MouseReportState)
 			outlet(DUMPOUT, "mouse", 	ejies.clip(x2val(f[front], x), f[front].domain[0], f[front].domain[1]),
@@ -3691,7 +3691,7 @@ function getnbpoints(courbe)
 
 
 
-/// get généraux ///
+/// get g√©n√©raux ///
 function getlegend() { outlet(DUMPOUT, "legend", LegendState); }
 function getgrid() { outlet(DUMPOUT, "grid", GridMode); }
 function getsnap2grid() { outlet(DUMPOUT, "snap2grid", Snap2GridState); }
@@ -3782,7 +3782,7 @@ function setvalueof()
 
 	while (OldNbCourbes > NbCourbes) {
 		f.splice(--OldNbCourbes, 1);
-		// si la courbe qu'on vient de supprimer était la courbe courante... front = 0
+		// si la courbe qu'on vient de supprimer √©tait la courbe courante... front = 0
 		if (front >= NbCourbes)
 			front = 0;
 	}
@@ -3828,7 +3828,7 @@ function setvalueof()
 		OldNp = f[i].np;
 		f[i].np = (arguments[i+2]);
 
-		// création des points s'ils ne sont pas présents dans la courbe
+		// cr√©ation des points s'ils ne sont pas pr√©sents dans la courbe
 		while (OldNp < f[i].np) {
 			f[i]["pa"][OldNp++] = new Point();
 		}
@@ -3843,7 +3843,7 @@ function setvalueof()
 			f[i]["pa"][p].valy = arguments[idx++];
 			if (isCurveMode)
 				f[i]["pa"][p].curve = arguments[idx++]; // added MR
-			f[i]["pa"][p].sustain = arguments[idx] & 2 ? 1 : 0; // pas d'incrémentation
+			f[i]["pa"][p].sustain = arguments[idx] & 2 ? 1 : 0; // pas d'incr√©mentation
 			f[i]["pa"][p].fix = arguments[idx++] & 1;	// elle est faite ici.
 		}
 	}
@@ -3888,7 +3888,7 @@ function getvalueof()
 			tmpData[idx++] = f[i]["pa"][p].valx;
 			tmpData[idx++] = f[i]["pa"][p].valy;
 			if (isCurveMode) tmpData[idx++] = f[i]["pa"][p].curve;
-			tmpData[idx++] = f[i]["pa"][p].sustain * 2 + f[i]["pa"][p].fix;	// en binaire ça prend moins de place
+			tmpData[idx++] = f[i]["pa"][p].sustain * 2 + f[i]["pa"][p].fix;	// en binaire √ßa prend moins de place
 		}
 	}
 
@@ -3908,7 +3908,7 @@ function save()
 		tmpArray[i] = f[i].name;
 
 	for (j = 0; j < NbCourbes; j++) {
-		// c'est stupide... j'ai inversé range et domain dans 1.52 par rapport a psto et read/write
+		// c'est stupide... j'ai invers√© range et domain dans 1.52 par rapport a psto et read/write
 		// NE PAS INVERSER c'est trop tard :-(
 		tmpArray[i++] = f[j].range[0];
 		tmpArray[i++] = f[j].range[1];
@@ -3947,7 +3947,7 @@ function save()
 	}
 	
 	embedmessage("fsaa", fsaaValue);
-	embedmessage("redrawon");	// refresh de l'affichage après la lecture des arguments
+	embedmessage("redrawon");	// refresh de l'affichage apr√®s la lecture des arguments
 }
 
 function CreateNFunctions(v)
@@ -3970,7 +3970,7 @@ function CreateNFunctions(v)
 		MyRange2Zoom(f[i]);
 	}
 	
-	LectureInspectorFlag = 1;	// comme ça il n'y a pas de scan des arguments
+	LectureInspectorFlag = 1;	// comme √ßa il n'y a pas de scan des arguments
 }
 
 function copyfunction()
@@ -4027,7 +4027,7 @@ function pastefunction()
 	else
 		ejies.error(this, "extra arguments for message pastefunction");
 	
-	getname();			// il se peut que le nom soit changé
+	getname();			// il se peut que le nom soit chang√©
 	UpdateDisplay();
 }
 
@@ -4047,7 +4047,7 @@ function MyPasteFunction(courbe)
 	OldNp = f[front].np;
 	courbe.np = cp[idx++];
 
-	// création des points s'ils ne sont pas présents dans la courbe
+	// cr√©ation des points s'ils ne sont pas pr√©sents dans la courbe
 	while (OldNp < courbe.np) {
 		courbe["pa"][OldNp++] = new Point();
 	}
@@ -4094,7 +4094,7 @@ function insertpaste()
 		return;
 	}
 		
-	// insertion de la nouvelle courbe (le nom est bidon, puisqu'on va le remplir après)
+	// insertion de la nouvelle courbe (le nom est bidon, puisqu'on va le remplir apr√®s)
 	f.splice(front, 0, new Courbe("tmpName"));
 	NbCourbes++;
 
@@ -4118,7 +4118,7 @@ function insertpaste()
 	MyThings2Zoom(f[front]);
 	pixel2machin(f[front]);
 
-	getname();								// mise à jour du menu
+	getname();								// mise √† jour du menu
 	calcFunctionCurves(f[front]);			// added MR
 	UpdateDisplay();
 }
@@ -4153,7 +4153,7 @@ function read(filename)
 			return;
 		}
 				
-		// Lecture de la première ligne du fichier
+		// Lecture de la premi√®re ligne du fichier
 		tmpLine = LectureNextLigne(fichier);
 		tmpLine = tmpLine.split(" ");
 
@@ -4161,20 +4161,20 @@ function read(filename)
 		var c, i;
 		var OldNp;
 		
-		var FunctionVersionCheck = tmpLine[idx++];	// stocke le numéro de version
+		var FunctionVersionCheck = tmpLine[idx++];	// stocke le num√©ro de version
 
 		isCurveMode = FunctionVersionCheck == 6 ? 1 : 0;
 
 		var OldNbCourbes = NbCourbes;
 		NbCourbes = parseFloat(tmpLine[idx++]);
 		
-		while (OldNbCourbes < NbCourbes) {		// création des courbes si nécessaire
+		while (OldNbCourbes < NbCourbes) {		// cr√©ation des courbes si n√©cessaire
 			f[OldNbCourbes] = new Courbe();
 			MyThings2Zoom(f[OldNbCourbes]);
 			pixel2machin(f[OldNbCourbes++]);
 		}
 
-		while (OldNbCourbes > NbCourbes) {		// suppression des courbes si nécessaire
+		while (OldNbCourbes > NbCourbes) {		// suppression des courbes si n√©cessaire
 			f.splice(--OldNbCourbes, 1);
 			if (front >= NbCourbes)
 				front = 0;
@@ -4183,7 +4183,7 @@ function read(filename)
 		for (c = 0; c < NbCourbes; c++) {
 			OldNp = f[c].np;
 			f[c].np = parseFloat(tmpLine[idx++]);
-			// création ou suppression de points
+			// cr√©ation ou suppression de points
 			while (OldNp < f[c].np) { f[c]["pa"][OldNp++] = new Point(); }
 			while (OldNp > f[c].np) { f[c]["pa"].splice(--OldNp, 1); }
 		}
@@ -4242,14 +4242,14 @@ function read(filename)
 				tmpLine = LectureNextLigne(fichier);
 				tmpLine = tmpLine.split(" ");
 				// check the number of items: 4 when there's curve
-				if (! (tmpLine.length == 3 || tmpLine.length == 4)) {
+				if (! (tmpLine.length == 3 ||¬†tmpLine.length == 4)) {
 					ejies.error(this, "bad file contents");
 					break;
 				}
 				f[c]["pa"][p].valx = parseFloat(tmpLine[idx++]);
 				f[c]["pa"][p].valy = parseFloat(tmpLine[idx++]);
 				f[c]["pa"][p].curve = isCurveMode ? parseFloat(tmpLine[idx++]) : 0;
-				f[c]["pa"][p].sustain = tmpLine[idx] & 2 ? 1 : 0; // pas d'incrémentation
+				f[c]["pa"][p].sustain = tmpLine[idx] & 2 ? 1 : 0; // pas d'incr√©mentation
 				f[c]["pa"][p].fix = tmpLine[idx++] & 1;	// elle est faite ici.
 			}
 			c++;
@@ -4344,7 +4344,7 @@ function write(filename)
 				tmpStr += f[i]["pa"][p].valx + sep;
 				tmpStr += f[i]["pa"][p].valy + sep;
 				if (isCurveMode) tmpStr += f[i]["pa"][p].curve + sep; // added - MR
-				tmpStr += f[i]["pa"][p].sustain * 2 + f[i]["pa"][p].fix;	// en binaire ça prend moins de place
+				tmpStr += f[i]["pa"][p].sustain * 2 + f[i]["pa"][p].fix;	// en binaire √ßa prend moins de place
 				fichier.writeline(tmpStr);
 			}
 		}
