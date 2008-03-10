@@ -1,4 +1,4 @@
-ejies — Version history
+ejies ‚Äî Version history
 
 *******************
 1.58: 4 March 2008
@@ -109,7 +109,7 @@ ej.function.js: getzoom_x/getzoom_y now report correct values
 ej.function.js: addfunction problem fixed
 ej.function.js: line output works if there's only one point
 ej.lslide: slide_up/slide_down was not choose correctly (Thanks Elvio)
-ej.vdb~ and ej.vdb-sig~: windowing was wrong... and that's really bad... (Thanks José-Miguel)
+ej.vdb~ and ej.vdb-sig~: windowing was wrong... and that's really bad... (Thanks Jos√©-Miguel)
 ej.lscale: was broken since 1.56b* (Thanks Antoine)
 
 

@@ -3,63 +3,63 @@ by Emmanuel Jourdan, Ircam
 This version requires MaxMSP 4.5.6 or higher (MaxMSP 4.6.3 is highly recommended).
 
 Java externals:
-¥ ej.dx2x: create a list from intervals
-¥ ej.fplay: Non-graphical multi-breakpoint function editor 
-¥ ej.ftom: Frequency to MIDI (with tuning adjustment, works for lists)
-¥ ej.l2buffer: fill a buffer~ with a list 
-¥ ej.lchange: aware of list changes
-¥ ej.lclip: constrains a list within a certain range
-¥ ej.ldrunk: drunk for list
-¥ ej.linterp: more than a list interpolator 
-¥ ej.lop: basic mathematic operations on (big) list
-¥ ej.lquant: Quantize a stream of number or a list (sort of multiple rounding process)
-¥ ej.lscale: maps input range of lists to output range
-¥ ej.lslide: smooth-out changes in list
-¥ ej.mmmm: calculate minimum, mean, median and maximum
-¥ ej.mtof: MIDI to Frequency (with tuning adjustment, works for lists)
-¥ ej.urn: like urn, for larger random range
-¥ ej.x2dx: get the interval between successive values of a list
+â€¢ ej.dx2x: create a list from intervals
+â€¢ ej.fplay: Non-graphical multi-breakpoint function editor 
+â€¢ ej.ftom: Frequency to MIDI (with tuning adjustment, works for lists)
+â€¢ ej.l2buffer: fill a buffer~ with a list 
+â€¢ ej.lchange: aware of list changes
+â€¢ ej.lclip: constrains a list within a certain range
+â€¢ ej.ldrunk: drunk for list
+â€¢ ej.linterp: more than a list interpolator 
+â€¢ ej.lop: basic mathematic operations on (big) list
+â€¢ ej.lquant: Quantize a stream of number or a list (sort of multiple rounding process)
+â€¢ ej.lscale: maps input range of lists to output range
+â€¢ ej.lslide: smooth-out changes in list
+â€¢ ej.mmmm: calculate minimum, mean, median and maximum
+â€¢ ej.mtof: MIDI to Frequency (with tuning adjustment, works for lists)
+â€¢ ej.urn: like urn, for larger random range
+â€¢ ej.x2dx: get the interval between successive values of a list
 
 JS:
-¥ ej.4m.js: (obsolet) calculate minimum, mean, median and maximum
-¥ ej.cc.js: Change object Color
-¥ ej.cn.js: Change Name of named object
-¥ ej.cycle.js: send value to different outlets
-¥ ej.dn.js: display a named object
-¥ ej.lock.js: get/set locked mode
-¥ ej.lui.js: use the arguement to load a jsui file.
-¥ ej.nthru.js: like thru object (number of inlet/outlet can change)
-¥ ej.op.js: Open subPatcher
-¥ ej.route.js: route data types
+â€¢ ej.4m.js: (obsolet) calculate minimum, mean, median and maximum
+â€¢ ej.cc.js: Change object Color
+â€¢ ej.cn.js: Change Name of named object
+â€¢ ej.cycle.js: send value to different outlets
+â€¢ ej.dn.js: display a named object
+â€¢ ej.lock.js: get/set locked mode
+â€¢ ej.lui.js: use the arguement to load a jsui file.
+â€¢ ej.nthru.js: like thru object (number of inlet/outlet can change)
+â€¢ ej.op.js: Open subPatcher
+â€¢ ej.route.js: route data types
 
 JSUI:
-¥ ej.function.js: multi bpf editor (compatible with the function object)
-¥ ej.led.js: new jsui... which does the same as the standard LED object / button object
-¥ ej.numbox.js: an alternative number box
+â€¢ ej.function.js: multi bpf editor (compatible with the function object)
+â€¢ ej.led.js: new jsui... which does the same as the standard LED object / button object
+â€¢ ej.numbox.js: an alternative number box
 
 Abstractions:
-¥ ej.dialog: alternative dialog box for text entry
-¥ ej.jit.preview: (BPatcher) Patcher window with slowing down
-¥ ej.line: multi-segment line
-¥ ej.mout~: panpot on multiple output
-¥ ej.vdb~: Variable delay without clicks or transposition (cheaper than vdb~ in the Bennies)
-¥ ej.vdb-sig~: Same as ej.vdb~ but accepts signal as delay time
-¥ jit.getparam: grab attributes/message from jitter (and others?) objects
-¥ jit.fullscreen: create a jit.window on the second screen
-¥ kaf: kill and activate finder (OS X only, shell object required)
-¥ kd&u: report key down (1) and up (0)
-¥ nine2X: convert mac path file to Unix path file (obsolete with 4.3 and earlier)
-¥ ptt: push to talk (usefull during conferences...)
-¥ splay~: sound file player with interface
-¥ stout~: control stereo (replace dac~ or ezdac~)
+â€¢ ej.dialog: alternative dialog box for text entry
+â€¢ ej.jit.preview: (BPatcher) Patcher window with slowing down
+â€¢ ej.line: multi-segment line
+â€¢ ej.mout~: panpot on multiple output
+â€¢ ej.vdb~: Variable delay without clicks or transposition (cheaper than vdb~ in the Bennies)
+â€¢ ej.vdb-sig~: Same as ej.vdb~ but accepts signal as delay time
+â€¢ jit.getparam: grab attributes/message from jitter (and others?) objects
+â€¢ jit.fullscreen: create a jit.window on the second screen
+â€¢ kaf: kill and activate finder (OS X only, shell object required)
+â€¢ kd&u: report key down (1) and up (0)
+â€¢ nine2X: convert mac path file to Unix path file (obsolete with 4.3 and earlier)
+â€¢ ptt: push to talk (usefull during conferences...)
+â€¢ splay~: sound file player with interface
+â€¢ stout~: control stereo (replace dac~ or ezdac~)
 
 Unclassified:
 Collection of Aqua sliders.
 
 
 Other:
-¥ AddShortcuts2Max.command: Bash script (MacOS X only) which add some shortcuts to MaxMSP.
-¥ Installation.command: Bash script (MacOS X only) which allows you to install the ejies.
+â€¢ AddShortcuts2Max.command: Bash script (MacOS X only) which add some shortcuts to MaxMSP.
+â€¢ Installation.command: Bash script (MacOS X only) which allows you to install the ejies.
 
 Automatic installation for MacOS X:
 - Double click on Installation.command and follow the instructions...
