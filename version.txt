@@ -1,4 +1,13 @@
-ejies — Version history
+ejies - Version history
+
+*******************
+1.6:
+
+This version requires Max 5.0 or higher. It won't run with older versions.
+
+
+
+
 
 *******************
 1.58: 4 March 2008
