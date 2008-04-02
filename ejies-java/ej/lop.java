@@ -4,8 +4,8 @@
  *
  *  Many thanks to Ben Nevile for performances enhacement.
  *
- *	$Revision: 1.24 $
- *	$Date: 2006/11/03 11:14:38 $
+ *	$Revision: 1.25 $
+ *	$Date: 2008/04/02 15:30:40 $
  */
 
 package ej;
@@ -21,7 +21,7 @@ public class lop extends ej {
 	private static final String[] INLET_ASSIST_UNARY = new String[]{ "List to be processed", "Nothing here, for this operator" };
 	private static final String[] OUTLET_ASSIST = new String[]{ "Result", "dumpout"};
 	private static final String[] OPERATORS_LIST = new String[] {
-		"+", "-", "!-", "*", "abs", "absdiff", "/", "!/", "//", "!//", "%", "!%", "min", "max", "avg",
+		"+", "\\-", "!-", "*", "abs", "absdiff", "/", "!/", "//", "!//", "%", "!%", "min", "max", "avg",
 		">", "<", ">=", "<=", "==", "!=", ">p", "<p", ">=p", "<=p", "==p", "!=p", "sin",
 		"cos", "tan", "asin", "acos", "atan", "atan2", "ceil", "floor", "round", "trunc",
 		"exp", "ln", "log2", "log10", "pow", "sqrt", "atodb", "dbtoa" };
