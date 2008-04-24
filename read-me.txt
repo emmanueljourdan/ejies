@@ -1,6 +1,6 @@
-e j i e s (version 1.6)
+e j i e s (version 2.0)
 by Emmanuel Jourdan, Ircam
-This version requires Max 5 or higher. If you want to use ejies with a previous version or Max, you might want to download ejies 1.58.
+This version requires Max 5.0.0 or higher. If you want to use ejies with a previous version or Max, you might want to download ejies 1.58.
 
 Java externals:
 - ej.dx2x: create a list from intervals
@@ -48,7 +48,6 @@ Abstractions:
 - jit.fullscreen: create a jit.window on the second screen
 - kaf: kill and activate finder (OS X only, shell object required)
 - kd&u: report key down (1) and up (0)
-- nine2X: convert mac path file to Unix path file (obsolete with 4.3 and earlier)
 - ptt: push to talk (usefull during conferences...)
 - splay~: sound file player with interface
 - stout~: control stereo (replace dac~ or ezdac~)
@@ -69,16 +68,16 @@ Automatic installation for MacOS X:
 - If the installation doesn't work... follow the windows installation procedure.
 
 Manual installation (MacOS or Windows):
-- put the CONTENTS of the ejies-extras folder in the ../MaxMSP 4.*/patches/extras folder
+- put the CONTENTS of the ejies-extras folder in the ../Max5/patches/extras folder
 - put the CONTENTS of the ejies-init folder in the C74:/init folder
 - put the CONTENTS (ej.jar) of the ejies-java folder in the C74:/java/lib folder
 - put the CONTENTS of the ejies-jsui folder in the C74:/jsui-library folder
 - put the CONTENTS of the ejies-jsextensions folder in the C74:/jsextensions folder
-- put the CONTENTS of the ejies-prototypes folder in the ./MaxMSP 4.*/patches/object-protypes/ folder
-- put the ejies-insp folder in the ../MaxMSP 4.*/patches/inspectors/ folder
+- put the CONTENTS of the ejies-prototypes folder in the ./Max5/patches/object-protypes/ folder
+- put the ejies-insp folder in the ../Max5/patches/inspectors/ folder
 - put the ejies-obj folder in the C74:/externals or whatever you want in the Max Search path
-- put the ejies-help folder in the ../MaxMSP 4.*/max-help or whatever you want in the Max Search path
-- put the ejies-javadoc folder in the ../MaxMSP 4.*/java-doc/ or whatever you want (in the Max Search path or not...)
+- put the ejies-help folder in the ../Max5/max-help or whatever you want in the Max Search path
+- put the ejies-javadoc folder in the ../Max5/java-doc/ or whatever you want (in the Max Search path or not...)
 
 Contact:
 manu(at)e--j.com

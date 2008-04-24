@@ -1,10 +1,12 @@
 ejies - Version history
 
 *******************
-1.6:
+2.0b1: 22 April 2008
 
-This version requires Max 5.0 or higher. It won't run with older versions.
+This version requires Max 5.0.0 or higher. It won't run with older versions.
 
+Discontinued object:
+nine2X: is now dead. It has been obsolete since Max 4.3.0.
 
 
 
