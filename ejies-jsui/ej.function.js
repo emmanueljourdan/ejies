@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.118 $
-	$Date: 2008/04/24 16:58:21 $
+	$Revision: 1.119 $
+	$Date: 2008/04/24 17:02:37 $
 */
 
 // global code
@@ -4242,7 +4242,7 @@ function read(filename)
 				tmpLine = LectureNextLigne(fichier);
 				tmpLine = tmpLine.split(" ");
 				// check the number of items: 4 when there's curve
-				if (! (tmpLine.length == 3 || tmpLine.length == 4)) {
+				if (! (tmpLine.length == 3 || tmpLine.length == 4)) {
 					ejies.error(this, "bad file contents");
 					break;
 				}

@@ -2,8 +2,8 @@
 	ej.cc.js (change color) by Emmanuel Jourdan, Ircam - 01 2005
 	Allows you to rename any named object.
  
-	$Revision: 1.8 $
-	$Date: 2008/03/10 11:41:00 $
+	$Revision: 1.9 $
+	$Date: 2008/04/24 17:04:43 $
 */
 
 // global code
@@ -104,7 +104,7 @@ ResetAllColors.local = 1;
 
 function global(a)
 {
-	if (a == 1 || a == 0)
+	if (a == 1 || a == 0)
 		GlobalState = a;
 	else
 		ejies.error(this, "wrong argument for message global (1 or 0 expected)");
