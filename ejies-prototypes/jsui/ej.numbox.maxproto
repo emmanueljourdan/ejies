@@ -1,0 +1,20 @@
+{
+	"boxes" : [ 		{
+			"box" : 			{
+				"maxclass" : "jsui",
+				"prototypename" : "ej.numbox",
+				"numoutlets" : 3,
+				"jsarguments" : [  ],
+				"filename" : "ej.numbox.js",
+				"outlettype" : [ "", "", "" ],
+				"presentation_rect" : [ 0.0, 0.0, 32.0, 16.0 ],
+				"numinlets" : 1,
+				"patching_rect" : [ 230.0, 260.0, 32.0, 16.0 ],
+				"id" : "obj-6",
+				"embedstate" : [ [ "redrawoff" ], [ "brgb", 165, 178, 178 ], [ "brgb2", 51, 76, 127 ], [ "brgb3", 51, 76, 153 ], [ "frgb", 51, 76, 255 ], [ "frgb2", 165, 178, 178 ], [ "roundmode", 2 ], [ "leading0", 0 ], [ "approximation", 2 ], [ "clip", 0 ], [ "minmax", 0, 127 ], [ "initvalue", 0 ], [ "change", 0 ], [ "mouseup", 0 ], [ "allowkeyboard", 0 ], [ "redrawon" ] ]
+			}
+
+		}
+ ],
+	"preview_image" : [ 859, "png", "IBkSG0fBZn....PCIgDQRA....D....PHX....fpoEm2....DLmPIQEBHf.B7g.YHB..CHQRDEDU3wY6Z1zZSsDF.9Y937QRpEoh1qfsktQAwMtPvEWr3F+md+C3N6B2bEjtycEDsM9AtIXLVpI2LmYlWWj1dskd81JsNAlyCLDBbNm2Ydx67NSlDnkVZokVZokVxTTmwqStr5.qt5pr1ZqwxKu7kUHNFCGNjc1YG52uOPBEfwXXiM1fkVZoK5G8YhACFvVas04S.+0Se5ERvCg.uXyMY3fAWHOueUV55WGcJB7G2c2jO3AX3fAoQ.8eyaRQXOURh.95m+bJB6oRRDPTtzVT4bSRDvUVbwTD1SkjHf+3V2JEg8TIIB3126dzoa2TD5iQmtcSi.JJK4gO9wzsWuTDd.nrph+7IOIMaD5P7dOa+pWwmd+6Y796eg9r+uXwqdUVY80Y86bGJJKSq.lGvl5Nvuel8YdnwRvayMAnNpE7kzLoNMEASGpidMzTPyjt4TFf5GZZh9RZ9mLR.Rz.hEhVDo.2zZFOMmpAHFjPIDpPB0z3pY7zh7Q.RTOS.McP78v4JxKAfXgPIhuCRyBz3zLYpIeDfHfDUDCJDuFQDPGxnkAEERTgD0DCyF1JSFIf+MCPSzqQjLS.HJDQePFfA.TlX9H.IBwfhPiFuSSHnPjDcfHo.QlU.L303aLGTGPkSqBbn.T3cFhnQH2x.hZBdywx.xFAbRDAhwLJC.N92GT.hRVdhPGH.AhjQY.pSz.HJYTM.kNhtHfspghNNL1.pbZJfxHXJBH0dH5vNNhtIi1GfRGQaCXp7nvgwEQKYj.zFAUYDsxiXZv9MEZz4i.PE.8TTlYk8JKKnWUY9H.kJ.F2r2niTV0gd0YVFfR6PTATQGkkP25L5LAU5.P3n8.TUUfTmned74AzlFrUSxXAX8XqmjOSANIJqGCYr.LVOFqOemBbHsBH0cfTSq.RcGH0zJfT2ARMy06CvMcJ8e8q4C6tK6MZzY5d5tvBbyUVg6d+6i09+O7laEvW+xW3ue1ynw4NW22382m2t817o28NdvidDW6F23md8ykSA1azHdwladtG7+HSFOlW97m+S+K3t2nQ7cfLUpSQb6KY6.....PRE4DQtJDXBB" ]
+}

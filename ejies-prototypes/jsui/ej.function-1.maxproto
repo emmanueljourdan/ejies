@@ -1,0 +1,19 @@
+{
+	"boxes" : [ 		{
+			"box" : 			{
+				"maxclass" : "jsui",
+				"prototypename" : "ej.function-1",
+				"numoutlets" : 5,
+				"jsarguments" : [  ],
+				"filename" : "ej.function.js",
+				"outlettype" : [ "", "", "", "", "" ],
+				"numinlets" : 1,
+				"patching_rect" : [ 141.0, 143.0, 200.0, 100.0 ],
+				"id" : "obj-2",
+				"embedstate" : [ [ "CreateNFunctions", 1, "function0", 0, 1, 0, 1000 ], [ "legend", 1 ], [ "grid", 0 ], [ "snap2grid", 0 ], [ "hiddenpoint", 0 ], [ "clickadd", 1 ], [ "clickmove", 1 ], [ "clicksustain", 1 ], [ "autosustain", 0 ], [ "timedisplay", 0 ], [ "autocursor", 1 ], [ "bordersync", 0 ], [ "ghost", 20 ], [ "notifyrecalled", 0 ], [ "mousereport", 0 ], [ "numcurvepoints", 12 ], [ "movemode", 0 ], [ "mode", 0 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ] ]
+			}
+
+		}
+ ],
+	"preview_image" : [ 1938, "png", "IBkSG0fBZn....PCIgDQRA..A.I..D.jHX.....f+ZCy....DLmPIQEBHf.B7g.YHB..GjTRDEDU3wY6bGqZTlEF.F9ntPPHAwnfBBIM1ohDqry6.arSu.CV4EgUBowPzBKTQHnhfXong3VsEBQ13Kwb1Y1mm5YNeeEm+4EFXlw..................fkVm4X959wepEXiM1Xr4laNtxUtxepQ7S97m+730u90i2912dpLO.VVMs.x4N24F26d2ar95qeRezGKe5SeZ7rm8rwW+5Wmx7AXQ2uU.Ymc14DYnGbvAis2d6w96u+Ix4UcsqcswidziFm8rmcp6A.Khlxmb9xW9xoGOFiwX+82e77m+7YuF.rPZJAjc2c2YL1izd6s2rWA.VHMk.xG9vGlwXORe7ieb1q..KjlR.4vCObFi8H8eocAfEISIfboKcoYL1izEu3Em8J.vBooDPt90u9LF6Q5l27lydE.XgzTBH28t2cr1ZqMiQ+SVas0F25V2Z1qA.KjlR.YkUVY7fG7fwEtvElw3GiwXb9ye9wCe3CGqt5pSaG.XQ1T9gD9O992+93oO8oiW8pWM9xW9xI5Y+qb4Ke4wMtwMF24N2YrxJqbpLS.VFM0.B.r3x+gG.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..IBH.Ph.B.jHf..I+0rWfW7hWL1au8Fu4Mu4TYdW8pWcr0VaMt8su8ox73+ebmlkM+p6zm4X99+wXLF6ryNmXKz2912Fau81i2+92ehcl+N1XiMF2+92er5pqNk4yxG2oYYy+1c5o7UXcvAGLd7ie7zdPaLFi28t2MdxSdx3vCObZ6.KObmlkMGm6z+MbT.yhQMHGvi.....jTQNQjqBAlf" ]
+}

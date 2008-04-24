@@ -1,0 +1,21 @@
+{
+	"boxes" : [ 		{
+			"box" : 			{
+				"maxclass" : "pictslider",
+				"prototypename" : "ej.graph-v-big",
+				"numoutlets" : 2,
+				"topvalue" : 100,
+				"outlettype" : [ "int", "int" ],
+				"knobpict" : "ej.k-graph-v-big.pct",
+				"rightvalue" : 0,
+				"clickedimage" : 0,
+				"numinlets" : 2,
+				"patching_rect" : [ 254.0, 287.0, 17.0, 100.0 ],
+				"bkgndpict" : "ej.bg-v-big.pct",
+				"id" : "obj-27"
+			}
+
+		}
+ ],
+	"preview_image" : [ 1352, "png", "IBkSG0fBZn....PCIgDQRA...PD....QHX.....NSLor....DLmPIQEBHf.B7g.YHB..D7eRDEDU3wY6Z00RyqDD9IQsMsQhBVjBUuQD79pB0a72gW309uRvK7Z+izpHhJhBVnE+.ofH3GHk1bt3vFVW2jLylM4sumSefkT6N6r69jYmcloBLESwTLESwTLESwTLQ.GJBc80WGB.333D0xJ5zoCN+7yQ2tc01uuuOpUqFBBBvvgCguuOle94iZO8zSna2tne+9ZGeiFMPqVsv1au8u5Ko0Ooc1UWcUnLYjEB46u+FGd3g3gGdfj7999nQiFHHH.UqVEkJUBmd5o30Wekz3Was0vd6sGBBBh9NGGGDFFpUdWRZUBpDCm1nQivQGcDYx..3iO9HxJXznQnc61jIC.f6u+db7wGiwiGSRd1DBf4jxEWbA50qG646qu9BCFL.u7xK3s2di8360qGZ2tMIYYQHYw5vwwAc5zg8lQfACFfme9YiG+YmcFoi6yxQogggHLL7WleIclTteNGUTwme9owiE.3wGeLw0n.rHD.DqRSaxzQj1XdohbwGhrEx3wii9apsZ0pYzlA.nRkJv2223wuzRKQRNRDh74NtjfbaiM1vrcC.VYkUP850Md7Ma1L19j8yQlPrQa2c28GwCPEkKWFMZz.qu95vyyi83WXgEvlatIIYMhPbccgqqKaBoRkJX+82GKt3hj2LyN6rXqs1BdddnToRXmc1g0QGeeebvAGffffDWaQ6UJJ8latIJzc4mlhgCGhSN4Db2c2E6sGdddX4kWFqt5pnZ0pXt4lKp433fKu7Rzuee796uqc70qWGMa1DsZ0BdddjtEDfHgb6s2ZUBA3eCVpe+9QsxkKCOOunmxDPoRk90Sgkp3oHWGwScN8oPHjt1UbkkXf1fPjWv5VfpGOS5HpnOwMfiFMJeIDgvooXcSPbPrfUIf3HCUhQ8yhWRpgEjDwmIBgCovkPTIEweqtg0YkHSFh0mfPTiWhx5kEgPw7ScBRSmpjgpkwLyLSTKNKFQewQHbhPlDgv0mAE4sgenjzcbWqlFXQHh27T8ijV+1lTRxWjJhaOXjEBkiDlnWafeDjkAjNIBw008GNUkeZJjcPZCnyhHo0ZlrPDGSrYfYwkvHWnNNc2VwArhCQ2DZJxSeHEhEh7DpymBWjWDhptkOtKiLSHpALoagvA4kODQrI.IeTLSDhpx0USUtfRDjbgt.HUiHVVVAjW+VolppeG2HUsMnDYclsPTUB0bCRRW4AgjTILo.isPnrgSqeaEbWbGYMgPHUBw7z7No4qHmSAXag.Xmj2xiqcSa9n.xVH+eArsPr0aVSSO2j4fCHmsaRJW22m1sP1BTpFVZqGYPNaWYkm0P2ySKirpa10CgZVjYs+r.YBQNOLJH2rPRyLVWZ5peNKVdpI2Y0iLlVmB4EpZeEQdLERjp+Mf+3DxjRbJSsPf9XMLgLDxv1GhbwhnBcxqVODceVciPwOgoVGrHD4ADmx4FHVQj7VtZgn6MoNEpCTrPrEJLKD4IKIEl1DRQW1DbmmbwopNKhhLU+r.ix10Vxj2Y4ZxbX7+q6IsHnJ+jHHagnKAOJxF22YRtLpu4UWSw03.VGYrUlt5.k3P3hbs.Q5dll7oISQTOjbkPrIJBGpTsvX+K2oyBIqkHLOpZlpuC0+K.RZbBXb8Px54ap+fWlnWSyzE3+.Y6xEIU3J.K+a6JOAEUU2UQbVFTsHMJvrIIXaeQ4lODJ8mG0TU9yl3GIWrPlTJonI3e.DVciYQ.kINJ.....IUjSD4pPfIH" ]
+}
