@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.115 $
-	$Date: 2008/03/10 11:41:00 $
+	$Revision: 1.116 $
+	$Date: 2008/04/24 16:24:49 $
 */
 
 // global code
@@ -3179,7 +3179,7 @@ function onidle(x,y,but,cmd,shift,capslock,option,ctrl)
 	//post("idle\n");
 	
 	if(isCurveMode && option) {
-		DisplayCursor(8)
+		DisplayCursor(9)
 		
 		for(var i= 1; i < np; i++) {
 			if(x < pa[i].x) {
@@ -3204,7 +3204,7 @@ function onidle(x,y,but,cmd,shift,capslock,option,ctrl)
 
 			if ( (Math.abs(x - pa[i].x) < Tolerance) && (Math.abs(y - pa[i].y) < Tolerance) ) {
 				if (ClickMove == 1)
-					DisplayCursor(5);
+					DisplayCursor(10);
 			
 				IdlePoint = i;
 
