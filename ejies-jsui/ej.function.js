@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.116 $
-	$Date: 2008/04/24 16:24:49 $
+	$Revision: 1.117 $
+	$Date: 2008/04/24 16:50:14 $
 */
 
 // global code
@@ -2618,7 +2618,7 @@ function clickmove(v)
 
 function clicksustain(v)
 {
-	if (v == 0 ||Â v == 1)
+	if (v == 0 || v == 1)
 		ClickSustain= v;
 	else
 		ejies.error(this, "clicksustain doesn't understand", v);
