@@ -116,7 +116,7 @@
 , 			{
 				"box" : 				{
 					"maxclass" : "newobj",
-					"text" : "maximum 0.01",
+					"text" : "maximum 1.",
 					"numinlets" : 2,
 					"fontname" : "Arial",
 					"numoutlets" : 2,
