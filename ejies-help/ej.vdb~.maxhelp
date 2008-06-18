@@ -350,7 +350,7 @@
 , 			{
 				"box" : 				{
 					"maxclass" : "message",
-					"text" : "help ej.vdb~",
+					"text" : "help vdb~",
 					"presentation" : 0,
 					"id" : "obj-8",
 					"numinlets" : 2,
