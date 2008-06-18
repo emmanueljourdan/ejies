@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.119 $
-	$Date: 2008/04/24 17:02:37 $
+	$Revision: 1.120 $
+	$Date: 2008/06/18 15:45:07 $
 */
 
 // global code
@@ -1554,12 +1554,10 @@ function MovePoint(courbe, lequel, newx, newy, curve)
 			offsetNCurves(courbe, lequel, courbe.np-1, dx);
 		}
 	}
-	else {
-		sortingPoints(courbe);	// il faut maintenant remettre tous les points dans l'ordre
-		calcFunctionCurves(courbe);
-		
-		ApplyAutoSustain(); // moved in here - no need to do it if points aren't re-ordered
-	}
+
+	sortingPoints(courbe);	// il faut maintenant remettre tous les points dans l'ordre
+	calcFunctionCurves(courbe);
+	ApplyAutoSustain(); // moved in here - no need to do it if points aren't re-ordered
 	
 }
 MovePoint.local = 1;
