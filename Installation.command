@@ -54,7 +54,7 @@ function doInstallation {
 		echo -ne "- ejies-javadoc ($maxAppFolder/java-doc/)"
 		cp -R "$DossierDeLInstalleur"/ejies-javadoc "$maxAppFolder/java-doc/" && echo -ne "... done.\n"		
 	else
-		echo -ne "Sorry, $maxAppFolder/ doesn't exist. Extra, prototypes and inspectors can't be installed.\n"
+		echo -ne "Sorry, $maxAppFolder/ doesn't exist. Extra and prototypes can't be installed.\n"
 	fi
 
 	echo -ne "\n";

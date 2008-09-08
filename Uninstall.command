@@ -42,8 +42,8 @@ function doRemove {
 		rm -f "$maxAppFolder/patches/object-prototypes/pictctrl/"ej.*
 		rm -f "$maxAppFolder/patches/object-prototypes/pictslider/"ej.* && echo -ne "... done.\n"
 	
-		echo -ne "- inspectors ($maxAppFolder/patches/inspectors)"
-		rm -f "$maxAppFolder/patches/inspectors"/ej.* && echo -ne "... done.\n"
+# 		echo -ne "- inspectors ($maxAppFolder/patches/inspectors)"
+# 		rm -f "$maxAppFolder/patches/inspectors"/ej.* && echo -ne "... done.\n"
 	
 		echo -ne "- images ($maxAppFolder/patches/picts/)"
 		rm -Rf "$maxAppFolder/patches/pict"/ej.* && echo -ne "... done.\n"
@@ -52,7 +52,7 @@ function doRemove {
 		rm -Rf "$maxAppFolder/java-doc/"ejies-javadoc && echo -ne "... done.\n"
 		
 	else
-		echo -ne "Sorry, $maxAppFolder doesn't exist. Extra, prototypes and inspectors can't be uninstalled.\n"
+		echo -ne "Sorry, $maxAppFolder doesn't exist. Extra and prototypes can't be uninstalled.\n"
 	fi
 	
 	echo -ne "\n";
