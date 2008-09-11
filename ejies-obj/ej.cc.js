@@ -2,8 +2,13 @@
 	ej.cc.js (change color) by Emmanuel Jourdan, Ircam - 01 2005
 	Allows you to rename any named object.
  
-	$Revision: 1.9 $
-	$Date: 2008/04/24 17:04:43 $
+	$Revision: 1.10 $
+	$Date: 2008/09/11 14:43:00 $
+*/
+
+/*
+	TODO there might be a way to get the default color by creating an object, and getting his bordercolor attribute values.
+	Note that in 5.0.4 getattr is not able to get jbox attributes
 */
 
 // global code
@@ -84,8 +89,12 @@ ExecuteOperation.local = 1;
 
 function ChangeColor(MyObj)
 {
-	if (MyObj.maxclass == NomObjet )
-		MyObj.colorindex = Couleur;
+	if (MyObj.maxclass == NomObjet && MyObj.maxclass != "patcher" && !MyObj.understands("color")) {
+		if (Couleur)
+			MyObj.colorindex = Couleur;
+		else // Couleur == 0
+			MyObj.message("sendbox", "bordercolor", 0.8, 0.84, 0.7, 1.);	// sending Max 5 default color. There's no real way to get the default.
+	}
 	return true;	// pour que l'iteration continue
 }
 ChangeColor.local = 1;
@@ -97,7 +106,12 @@ function resetall()
 
 function ResetAllColors(MyObj)
 {
-	MyObj.colorindex = 0;
+	if (!MyObj.understands("color")) {
+		if (MyObj.maxclass == "patcher")
+			MyObj.colorindex = 10;	// probably not ideal, but there's no way to send the color message ta a patcher (newobj) AFAIK
+		else
+		MyObj.message("sendbox", "bordercolor", 0.8, 0.84, 0.7, 1.);
+	}
 	return true;
 }
 ResetAllColors.local = 1;
