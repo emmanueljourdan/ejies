@@ -308,6 +308,7 @@
 					"outlettype" : [ "int", "", "" ],
 					"fontsize" : 12.0,
 					"patching_rect" : [ 3.0, 5.0, 289.0, 21.0 ],
+					"bgcolor" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"id" : "obj-19",
 					"types" : [  ]
 				}
