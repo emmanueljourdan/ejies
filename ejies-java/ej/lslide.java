@@ -3,8 +3,8 @@
  *	slide for lists
  *
  *
- *	$Revision: 1.12 $
- *	$Date: 2007/09/03 11:27:44 $
+ *	$Revision: 1.13 $
+ *	$Date: 2008/09/30 22:24:01 $
  */
 
 package ej;
@@ -17,7 +17,7 @@ import com.cycling74.msp.MSPBuffer;
  * @author jourdan
  * @see ej
  * @see standart <code>slide, slide~, jit.slide</code> objects
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 public class lslide extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "List to be smoothed", "Slide Up", "Slide Down" };
@@ -44,6 +44,7 @@ public class lslide extends ej {
 		declareTypedIO("aff", "l");
 		createInfoOutlet(true);
 		
+		post("coucouc");
 		setSlideUp(slideUp);
 		setSlideDown(slideDown);
 		declareAttribute("slide_up", "getSlideUp", "setSlideUp");
@@ -189,6 +190,13 @@ public class lslide extends ej {
 	 		firstIsMade = true;
 	 	}
 	 }
+	 
+	 /**
+	  * Reset the object if the filter explode (it shouldn't be necessary anymore though) 
+	  */
+	public void reset() {
+		firstIsMade = false;
+	}
 	
 	private void calculeChoice() {
 		// redimensionne tout le monde
@@ -206,10 +214,10 @@ public class lslide extends ej {
 		for (int i = 0; i < resultat.length; i++) {
 			yN_1 = resultat[i];
 
-			if (a[i] - resultat[i] >= 0)
-				resultat[i] = yN_1 + ((a[i] - yN_1) / slide_up);
-			else
-				resultat[i] = yN_1 + ((a[i] - yN_1) / slide_down);
+			if (a[i] - resultat[i] >= 0) {
+				resultat[i] = (float)fixNaN(yN_1 + ((a[i] - yN_1) / slide_up)); 
+			} else
+				resultat[i] = (float)fixNaN(yN_1 + ((a[i] - yN_1) / slide_down));
 		}
 		
 		doOutput();
@@ -220,9 +228,9 @@ public class lslide extends ej {
 		
 		for (int i = 0; i < resultat.length; i++) {
 			if (a[i] >= 0)
-				resultat[i] = yN_1 + ((a[i] - yN_1) / slide_up);
+				resultat[i] = (float)fixNaN(yN_1 + ((a[i] - yN_1) / slide_up));
 			else
-				resultat[i] = yN_1 + ((a[i] - yN_1) / slide_down);
+				resultat[i] = (float)fixNaN(yN_1 + ((a[i] - yN_1) / slide_down));
 		}
 		
 		doOutput();
@@ -244,6 +252,13 @@ public class lslide extends ej {
 		if (buf_name != null && resultat.length > 0) {
 			MSPBuffer.poke(buf_name, resultat);
 		}
+	}
+	
+	private double fixNaN(double d) {
+		if (Double.isNaN(d))
+			return 0;
+
+		return d;
 	}
 }
 
