@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.120 $
-	$Date: 2008/06/18 15:45:07 $
+	$Revision: 1.121 $
+	$Date: 2008/09/30 22:24:31 $
 */
 
 // global code
@@ -126,6 +126,27 @@ SketchFunctions.fsaa = fsaaValue;
 
 RedrawEnable = 0;	// désactivation de l'affichage pendant l'initialisation
 NotifyEnable = 0;
+
+
+/* declareattribute("CreateNFunctions"); */
+declareattribute("nbfunction",			"getattr_nbfunctions",			"setattr_nbfunctions", 1);
+declareattribute("legend",				"getattr_legend",				"setattr_legend", 1);
+declareattribute("grid",				"getattr_grid",					"setattr_grid", 1);
+declareattribute("snap2grid",			"getattr_snap2grid",			"setattr_snap2grid", 1);
+declareattribute("hiddenpoint",			"getattr_hiddenpoint",			"setattr_hiddenpoint", 1);
+declareattribute("clickadd",			"getattr_clickadd",				"setattr_clickadd", 1);
+declareattribute("clickmove",			"getattr_clickmove",			"setattr_clickmove", 1);
+declareattribute("clicksustain",		"getattr_clicksustain",			"setattr_clicksustain", 1);
+declareattribute("autosustain",			"getattr_autosustain",			"setattr_autosustain", 1);
+declareattribute("timedisplay",			"getattr_timedisplay",			"setattr_timedisplay", 1);
+declareattribute("autocursor",			"getattr_autocursor",			"setattr_autocursor", 1);
+declareattribute("bordersync",			"getattr_bordersync",			"setattr_bordersync", 1);
+declareattribute("ghost",				"getattr_ghost",				"setattr_ghost", 1);
+declareattribute("notifyrecalled",		"getattr_notifyrecalled",		"setattr_notifyrecalled", 1);
+declareattribute("mousereport",			"getattr_mousereport",			"setattr_mousereport", 1);
+declareattribute("numcurvepoints",		"getattr_numcurvepoints",		"setattr_numcurvepoints", 1);
+declareattribute("movemode",			"getattr_movemode",				"setattr_movemode", 1);
+declareattribute("mode",				"getattr_mode",					"setattr_mode", 1);
 
 if (max.version < 455)
 	ejies.error(this, "MaxMSP 4.5.5 or higher is required. Please upgrade!");
@@ -357,7 +378,7 @@ function offsetNCurves(courbe, p0, pn, dx)
 offsetNCurves.local = 1;
 
 // added point moving modes
-function movemode(mode)
+function setattr_movemode(mode)
 {
 	if(mode < 0) mode = 0;
 	if(mode > 6) mode = 6;
@@ -373,6 +394,12 @@ function movemode(mode)
 		5 - "shift-zoom" - points may exceed the maximum domain and if so we zoom out
 		6 - "auto-zoom" - points may exceed the maximum domain always normalize the x axis
 	*/
+}
+
+function getattr_movemode()
+{
+	outlet(DUMPOUT, "movemode", MoveMode);
+	return MoveMode;
 }
 
 function init()
@@ -2496,7 +2523,7 @@ function args4insp()
 	outlet(DUMPOUT, tmpArray);
 }
 
-function autosustain(v)
+function setattr_autosustain(v)
 {
 	if (v != 0 && v != 1) {
 		ejies.error(this, "autosustain doesn't understand", v);
@@ -2514,7 +2541,7 @@ function flip()			{	MyFlip(f[front]);		}
 function flip_x()		{	MyFlipX(f[front]);		}
 function flip_y()		{	MyFlipY(f[front]);		}
 
-function autocursor(v)
+function setattr_autocursor(v)
 {
 	if (v != 0 && v != 1)
 		ejies.error(this, "autocursor doesn't understand", v);
@@ -2590,7 +2617,7 @@ function deletefunction()
 	askForDrawFunctions();
 }
 
-function bordersync(v)
+function setattr_bordersync(v)
 {
 	if (v == 0 || v == 1)
 		BorderSyncState = v;
@@ -2598,7 +2625,7 @@ function bordersync(v)
 		ejies.error(this, "bordersync doesn't understand", v);
 }
 
-function clickadd(v)
+function setattr_clickadd(v)
 {
 	if (v == 0 || v == 1)
 		ClickAdd = v;
@@ -2606,7 +2633,7 @@ function clickadd(v)
 		ejies.error(this, "clickadd doesn't understand", v);
 }
 
-function clickmove(v)
+function setattr_clickmove(v)
 {
 	if (v == 0 || v == 1)
 		ClickMove = v;
@@ -2614,7 +2641,7 @@ function clickmove(v)
 		ejies.error(this, "clickmove doesn't understand", v);
 }
 
-function clicksustain(v)
+function setattr_clicksustain(v)
 {
 	if (v == 0 || v == 1)
 		ClickSustain= v;
@@ -2682,7 +2709,7 @@ function jit_matrix(matrixName)
 		ejies.error(this,"extra arguments for messagae jit_matrix")
 }
 
-function nbfunctions(v)
+function setattr_nbfunctions(v)
 {
 	// ajout des courbes, si nécessaire
 	if (v < NbCourbes) {
@@ -2730,7 +2757,7 @@ function unfix()
 		MyUnfix(f[front]);
 }
 
-function grid(v)
+function setattr_grid(v)
 {
 	if (v >= 0 && v <= 3) {
 		GridMode = v;
@@ -2747,7 +2774,7 @@ function nth(v)
 		ejies.error(this, "bad argument for message nth");
 }
 
-function notifyrecalled(v)
+function setattr_notifyrecalled(v)
 {
 	if (v == 0 || v == 1)
 		NotifyRecalledState = v;
@@ -2787,7 +2814,7 @@ function active()
 	drawAll();
 }
 
-function snap2grid(v)
+function setattr_snap2grid(v)
 {
 	if (v >= 0 && v <= 3)
 		Snap2GridState = v;
@@ -2810,7 +2837,7 @@ function gridstep_y(v)
 	MyGridStep_y(f[front], v);
 }
 
-function hiddenpoint(v)
+function setattr_hiddenpoint(v)
 {
 	if (v == 0 || v == 1) {
 		HiddenPointDisplay = v;
@@ -2819,7 +2846,7 @@ function hiddenpoint(v)
 		ejies.error(this, "hiddenpoint doesn't understand", v);
 }
 
-function legend(v)
+function setattr_legend(v)
 {
 	if (v != 0 && v != 1) {
 		perror("legend doesn't understand", v);
@@ -2835,7 +2862,7 @@ function legend(v)
 	askForDrawingAll();
 }
 
-function ghost(v)
+function setattr_ghost(v)
 {
 	if (v < 0 && v > 100)
 		ejies.error(this, "ghost percentage between 0 and 100 % expected", v);
@@ -2845,7 +2872,7 @@ function ghost(v)
 	}
 }
 
-function timedisplay(v)
+function setattr_timedisplay(v)
 {
 	if (v == 0 || v == 1)
 		TimeFlag = v;
@@ -2853,7 +2880,7 @@ function timedisplay(v)
 		ejies.error(this, "timedisplay doesn't understand", v);
 }
 
-function mousereport(v)
+function setattr_mousereport(v)
 {
 	if (v == 0 || v == 1)
 		MouseReportState = v;
@@ -3011,7 +3038,7 @@ function defaults()
 	// utilisé pour la restauration des paramètres par défaut.
 	var c;
 	
-	legend(1);	// il y a aussi recalcul du facteur multiplicateur
+	setattr_legend(1);	// il y a aussi recalcul du facteur multiplicateur
 	GridMode = 0;
 	Snap2GridState = 0;
 	HiddenPointDisplay = 0;
@@ -3690,22 +3717,22 @@ function getnbpoints(courbe)
 
 
 /// get généraux ///
-function getlegend() { outlet(DUMPOUT, "legend", LegendState); }
-function getgrid() { outlet(DUMPOUT, "grid", GridMode); }
-function getsnap2grid() { outlet(DUMPOUT, "snap2grid", Snap2GridState); }
-function gethiddenpoint() { outlet(DUMPOUT, "hiddenpointdisplay", HiddenPointDisplay); }
-function getclickadd() { outlet(DUMPOUT, "clickadd", ClickAdd); }
-function getclickmove() { outlet(DUMPOUT, "clickmove", ClickMove); }
-function getclicksustain() { outlet(DUMPOUT, "clicksustain", ClickSustain); }
-function getautosustain() {	outlet(DUMPOUT, "autosustain", AutoSustain); }
-function gettimedisplay() { outlet(DUMPOUT, "timedisplay", TimeFlag); }
-function getautocursor() { outlet(DUMPOUT, "autocursor", CursorChange); }
-function getbordersync() { outlet(DUMPOUT, "bordersync", BorderSyncState); }
-function getghost() { outlet(DUMPOUT, "ghost", Math.round(Ghostness * 100) ); }
-function getnotifyrecalled() { outlet(DUMPOUT, "notifyrecalled", NotifyRecalledState ); }
-function getmousereport() { outlet(DUMPOUT, "mousereport", MouseReportState ); }
+function getattr_legend() { outlet(DUMPOUT, "legend", LegendState); return LegendState; }
+function getattr_grid() { outlet(DUMPOUT, "grid", GridMode); return GridMode; }
+function getattr_snap2grid() { outlet(DUMPOUT, "snap2grid", Snap2GridState); return Snap2GridState; }
+function getattr_hiddenpoint() { outlet(DUMPOUT, "hiddenpointdisplay", HiddenPointDisplay); return HiddenPointDisplay; }
+function getattr_clickadd() { outlet(DUMPOUT, "clickadd", ClickAdd); return ClickAdd; }
+function getattr_clickmove() { outlet(DUMPOUT, "clickmove", ClickMove); return ClickMove; }
+function getattr_clicksustain() { outlet(DUMPOUT, "clicksustain", ClickSustain); return ClickSustain; }
+function getattr_autosustain() {	outlet(DUMPOUT, "autosustain", AutoSustain); return AutoSustain; }
+function getattr_timedisplay() { outlet(DUMPOUT, "timedisplay", TimeFlag); return TimeFlag; }
+function getattr_autocursor() { outlet(DUMPOUT, "autocursor", CursorChange); return CursorChange; }
+function getattr_bordersync() { outlet(DUMPOUT, "bordersync", BorderSyncState); return BorderSyncState; }
+function getattr_ghost() { outlet(DUMPOUT, "ghost", Math.round(Ghostness * 100) ); return Math.round(Ghostness * 100); }
+function getattr_notifyrecalled() { outlet(DUMPOUT, "notifyrecalled", NotifyRecalledState ); return NotifyRecalledState ; }
+function getattr_mousereport() { outlet(DUMPOUT, "mousereport", MouseReportState ); return MouseReportState ; }
 
-function getnbfunctions() { outlet(DUMPOUT, "nbfunctions", NbCourbes); }
+function getattr_nbfunctions() { outlet(DUMPOUT, "nbfunctions", NbCourbes); return NbCourbes; }
 
 function getname()
 {
@@ -3915,23 +3942,23 @@ function save()
 	}
 	
 	embedmessage("CreateNFunctions", NbCourbes, tmpArray);	// required for the number of color to save
-	embedmessage("legend", LegendState);
-	embedmessage("grid", GridMode);
-	embedmessage("snap2grid", Snap2GridState);
-	embedmessage("hiddenpoint", HiddenPointDisplay);
-	embedmessage("clickadd", ClickAdd);
-	embedmessage("clickmove", ClickMove);
-	embedmessage("clicksustain", ClickSustain);
-	embedmessage("autosustain", AutoSustain);
-	embedmessage("timedisplay", TimeFlag);
-	embedmessage("autocursor", CursorChange);
-	embedmessage("bordersync", BorderSyncState);
-	embedmessage("ghost", Math.round(Ghostness * 100));
-	embedmessage("notifyrecalled", NotifyRecalledState);
-	embedmessage("mousereport", MouseReportState);
-	embedmessage("numcurvepoints", numCurvePoints); 	// added MR
-	embedmessage("movemode", MoveMode);					// added MR
-	embedmessage("mode", isCurveMode);
+/* 	embedmessage("legend", LegendState); */
+/* 	embedmessage("grid", GridMode); */
+/* 	embedmessage("snap2grid", Snap2GridState); */
+/* 	embedmessage("hiddenpoint", HiddenPointDisplay); */
+/* 	embedmessage("clickadd", ClickAdd); */
+/* 	embedmessage("clickmove", ClickMove); */
+/* 	embedmessage("clicksustain", ClickSustain); */
+/* 	embedmessage("autosustain", AutoSustain); */
+/* 	embedmessage("timedisplay", TimeFlag); */
+/* 	embedmessage("autocursor", CursorChange); */
+/* 	embedmessage("bordersync", BorderSyncState); */
+/* 	embedmessage("ghost", Math.round(Ghostness * 100)); */
+/* 	embedmessage("notifyrecalled", NotifyRecalledState); */
+/* 	embedmessage("mousereport", MouseReportState); */
+/* 	embedmessage("numcurvepoints", numCurvePoints); 	// added MR */
+/* 	embedmessage("movemode", MoveMode);					// added MR */
+/* 	embedmessage("mode", isCurveMode); */
 	
 	
 	for (i = 0; i < NbCourbes; i++) {
@@ -3951,7 +3978,7 @@ function save()
 function CreateNFunctions(v)
 {
 	RedrawEnable = 0;
-	NbCourbes = v;
+	NbCourbes = arguments[0];
 	init();
 
 	// utilise le Nom, Range et Domain embed dans le patch
@@ -4356,7 +4383,7 @@ function write(filename)
 	}
 }
 
-function mode(v)
+function setattr_mode(v)
 {
 	isCurveMode = v ? 1 : 0;
 	
@@ -4369,8 +4396,14 @@ function mode(v)
 	askForDrawFunctions();
 }
 
+function getattr_mode()
+{
+	outlet(DUMPOUT, "mode", isCurveMode);
+	return isCurveMode;
+}
+
 // added MR - should be attribute?
-function numcurvepoints(num)
+function setattr_numcurvepoints(num)
 {
 	numCurvePoints = num > 1 ? num : 1;
 		
@@ -4378,6 +4411,12 @@ function numcurvepoints(num)
 
 	DoNotify();
 	drawFunctions();
+}
+
+function getattr_numcurvepoints()
+{
+	outlet(DUMPOUT, "numcurvepoints", numCurvePoints);
+	return numCurvePoints;
 }
 
 resetall();
