@@ -3,8 +3,8 @@
 	an alternative led...
 	since 1.54b3: mode button added
 	
-	$Revision: 1.11 $
-	$Date: 2008/03/10 11:41:00 $
+	$Revision: 1.12 $
+	$Date: 2008/10/02 09:25:39 $
 */
 
 // Global Code
@@ -35,6 +35,13 @@ border = 0;
 sketch.fsaa = 1;
 sketch.default3d();
 
+declareattribute("mode",		"getattr_mode", 		"setattr_mode",			1);
+declareattribute("circlesize",	"getattr_circlesize", 	"setattr_circlesize",	1);
+declareattribute("blinktime",	"getattr_blinktime", 	"setattr_blinktime",	1);
+declareattribute("brgb",		"getattr_brgb", 		"setattr_brgb",			1);
+declareattribute("brgb2",		"getattr_brgb2", 		"setattr_brgb2",		1);
+declareattribute("frgb",		"getattr_frgb", 		"setattr_frgb",			1);
+declareattribute("frgb2",		"getattr_frgb2", 		"setattr_frgb2",		1);
 
 function draw()
 {
@@ -139,7 +146,7 @@ function set(v)
 	}
 }
 
-function blinktime(v)
+function setattr_blinktime(v)
 {
 	if (v > 0)
 		FlashTime = v;
@@ -173,7 +180,7 @@ function ForceDisplay()
 }
 ForceDisplay.local = 1;
 
-function mode(v)
+function setattr_mode(v)
 {
 	if ( v == 0 || v == 1) {
 		LedMode = v;
@@ -257,21 +264,24 @@ function forcesize(w,h)
 }
 forcesize.local = 1; //private
 
+/*
+	Note: everything is stored in attribute now, so this shouldn'tbe necessary anymore
+	
 function save()
 {
-/* 	save states */
 	embedmessage("redrawoff");
-	embedmessage("mode", LedMode);
-	embedmessage("circlesize", CircleRatio);
-	embedmessage("blinktime", FlashTime);
-	embedmessage("brgb", Math.floor(MyBrgb[0]*255), Math.floor(MyBrgb[1]*255), Math.floor(MyBrgb[2]*255));
-	embedmessage("brgb2", Math.floor(MyBrgb2[0]*255), Math.floor(MyBrgb2[1]*255), Math.floor(MyBrgb2[2]*255));
-	embedmessage("frgb", Math.floor(MyFrgb[0]*255), Math.floor(MyFrgb[1]*255), Math.floor(MyFrgb[2]*255));
-	embedmessage("frgb2", Math.floor(MyFrgb2[0]*255), Math.floor(MyFrgb2[1]*255), Math.floor(MyFrgb2[2]*255));
+	// embedmessage("mode", LedMode);
+	// embedmessage("circlesize", CircleRatio);
+	// embedmessage("blinktime", FlashTime);
+	// embedmessage("brgb", Math.floor(MyBrgb[0]*255), Math.floor(MyBrgb[1]*255), Math.floor(MyBrgb[2]*255));
+	// embedmessage("brgb2", Math.floor(MyBrgb2[0]*255), Math.floor(MyBrgb2[1]*255), Math.floor(MyBrgb2[2]*255));
+	// embedmessage("frgb", Math.floor(MyFrgb[0]*255), Math.floor(MyFrgb[1]*255), Math.floor(MyFrgb[2]*255));
+	// embedmessage("frgb2", Math.floor(MyFrgb2[0]*255), Math.floor(MyFrgb2[1]*255), Math.floor(MyFrgb2[2]*255));
 	embedmessage("redrawon");
 }
+*/
 
-function circlesize(v)
+function setattr_circlesize(v)
 {
 	if (v >= 0 && v <= 1) {
 		CircleRatio = v;
@@ -281,7 +291,7 @@ function circlesize(v)
 		ejies.error(this, "bad argument for message circlesize");
 }
 
-function frgb(r,g,b)
+function setattr_frgb(r,g,b)
 {
 	MyFrgb[0] = r/255.;
 	MyFrgb[1] = g/255.;
@@ -289,7 +299,7 @@ function frgb(r,g,b)
 	ForceDisplay();
 }
 
-function frgb2(r,g,b)
+function setattr_frgb2(r,g,b)
 {
 	MyFrgb2[0] = r/255.;
 	MyFrgb2[1] = g/255.;
@@ -297,7 +307,7 @@ function frgb2(r,g,b)
 	ForceDisplay();
 }
 
-function brgb(r,g,b)
+function setattr_brgb(r,g,b)
 {
 	MyBrgb[0] = r/255.;
 	MyBrgb[1] = g/255.;
@@ -305,7 +315,7 @@ function brgb(r,g,b)
 	ForceDisplay();
 }
 
-function brgb2(r,g,b)
+function setattr_brgb2(r,g,b)
 {
 	MyBrgb2[0] = r/255.;
 	MyBrgb2[1] = g/255.;
@@ -313,13 +323,22 @@ function brgb2(r,g,b)
 	ForceDisplay();
 }
 
-function getbrgb() { getcolor("brgb", 0); }
+function getattr_mode()			{ return getter_outlet_and_return("mode", LedMode); }
+function getattr_circlesize()	{ return getter_outlet_and_return("circlesize", CircleRatio); }
+function getattr_blinktime()	{ return getter_outlet_and_return("blinktime", FlashTime); }
+function getattr_brgb()			{ return getcolor("brgb", 0); }
+function getattr_brgb2()		{ return getcolor("brgb2", 1); }
+function getattr_frgb()			{ return getcolor("frgb", 2); }
+function getattr_frgb2()		{ return getcolor("frgb2", 3); }
 
-function getbrgb2() { getcolor("brgb2", 1); }
-
-function getfrgb() { getcolor("frgb", 3); }
-
-function getfrgb2() { getcolor("frgb2", 4); }
+// this is just an utility function to send attributes values to the dumpout outlet
+// and to return the value to the getattr so the inspector can display it.
+function getter_outlet_and_return(whatever, value)
+{
+	outlet(DUMP_OUTLET, whatever, value);
+	return value;
+}
+getter_outlet_and_return.local = 1;
 
 // pour simplifier le travail et supprimer des lignes de code inutiles
 function getcolor(MsgName,ColorItem)
@@ -330,6 +349,7 @@ function getcolor(MsgName,ColorItem)
 		MsgArgs[i+1] = Math.floor(ColorList[ColorItem][i]*255);
 	}
 	outlet(DUMP_OUTLET, MsgArgs);
+	return MsgArgs.slice(1);
 }
 getcolor.local = 1;	// private
 
