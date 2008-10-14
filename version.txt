@@ -1,7 +1,7 @@
 ejies - Version history
 
 *******************
-2.0b2: 2 october 2008
+2.0b2: 14 october 2008
 
 This version requires Max 5.0.0 or higher (5.0.5 or higher is highly recommended). It won't run with older versions.
 
