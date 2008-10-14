@@ -3,8 +3,8 @@
  *	slide for lists
  *
  *
- *	$Revision: 1.13 $
- *	$Date: 2008/09/30 22:24:01 $
+ *	$Revision: 1.14 $
+ *	$Date: 2008/10/14 17:08:52 $
  */
 
 package ej;
@@ -17,7 +17,7 @@ import com.cycling74.msp.MSPBuffer;
  * @author jourdan
  * @see ej
  * @see standart <code>slide, slide~, jit.slide</code> objects
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 public class lslide extends ej {
 	private static final String[] INLET_ASSIST = new String[]{ "List to be smoothed", "Slide Up", "Slide Down" };
@@ -44,7 +44,6 @@ public class lslide extends ej {
 		declareTypedIO("aff", "l");
 		createInfoOutlet(true);
 		
-		post("coucouc");
 		setSlideUp(slideUp);
 		setSlideDown(slideDown);
 		declareAttribute("slide_up", "getSlideUp", "setSlideUp");
