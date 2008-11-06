@@ -225,7 +225,7 @@
 , 			{
 				"box" : 				{
 					"maxclass" : "message",
-					"text" : "load ejies-overview.pat",
+					"text" : "load ejies-overview.maxpat",
 					"outlettype" : [ "" ],
 					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"bgcolor2" : [ 0.867, 0.867, 0.867, 1.0 ],

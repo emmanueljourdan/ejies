@@ -264,7 +264,7 @@
 , 			{
 				"box" : 				{
 					"maxclass" : "message",
-					"text" : "load ejies-overview.pat",
+					"text" : "load ejies-overview.maxpat",
 					"numoutlets" : 1,
 					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
 					"fontname" : "Arial",

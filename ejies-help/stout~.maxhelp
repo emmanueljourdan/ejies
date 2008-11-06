@@ -157,7 +157,7 @@
 , 			{
 				"box" : 				{
 					"maxclass" : "message",
-					"text" : "load ejies-overview.pat",
+					"text" : "load ejies-overview.maxpat",
 					"numoutlets" : 1,
 					"fontname" : "Arial",
 					"outlettype" : [ "" ],

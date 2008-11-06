@@ -158,7 +158,7 @@
 , 			{
 				"box" : 				{
 					"maxclass" : "message",
-					"text" : "load ejies-overview.pat",
+					"text" : "load ejies-overview.maxpat",
 					"numoutlets" : 1,
 					"patching_rect" : [ 529.0, 24.0, 143.0, 18.0 ],
 					"hidden" : 1,

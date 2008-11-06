@@ -174,7 +174,7 @@
 , 			{
 				"box" : 				{
 					"maxclass" : "message",
-					"text" : "load ejies-overview.pat",
+					"text" : "load ejies-overview.maxpat",
 					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
 					"numinlets" : 2,
 					"patching_rect" : [ 527.0, 20.0, 143.0, 18.0 ],

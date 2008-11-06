@@ -247,7 +247,7 @@
 , 			{
 				"box" : 				{
 					"maxclass" : "message",
-					"text" : "load ejies-overview.pat",
+					"text" : "load ejies-overview.maxpat",
 					"presentation" : 0,
 					"numoutlets" : 1,
 					"gradient" : 0,

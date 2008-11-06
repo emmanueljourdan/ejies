@@ -157,7 +157,7 @@
 , 			{
 				"box" : 				{
 					"maxclass" : "message",
-					"text" : "load ejies-overview.pat",
+					"text" : "load ejies-overview.maxpat",
 					"id" : "obj-31",
 					"numinlets" : 2,
 					"numoutlets" : 1,
