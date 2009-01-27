@@ -1193,7 +1193,7 @@
 , 			{
 				"box" : 				{
 					"maxclass" : "comment",
-					"text" : "argument (optional): 1 search a named oject which contains the string",
+					"text" : "argument (optional): 1 search a named object which contains the string",
 					"presentation" : 0,
 					"id" : "obj-43",
 					"numinlets" : 1,
