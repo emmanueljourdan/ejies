@@ -2,8 +2,8 @@
 	ej.cc.js (change color) by Emmanuel Jourdan, Ircam - 01 2005
 	Allows you to rename any named object.
  
-	$Revision: 1.10 $
-	$Date: 2008/09/11 14:43:00 $
+	$Revision: 1.11 $
+	$Date: 2009/01/29 15:29:12 $
 */
 
 /*
@@ -89,7 +89,7 @@ ExecuteOperation.local = 1;
 
 function ChangeColor(MyObj)
 {
-	if (MyObj.maxclass == NomObjet && MyObj.maxclass != "patcher" && !MyObj.understands("color")) {
+	if (MyObj.maxclass == NomObjet && MyObj.maxclass != "patcher" && !MyObj.understands("color") && MyObj.maxclass != "inlet" && MyObj.maxclass != "outlet") {
 		if (Couleur)
 			MyObj.colorindex = Couleur;
 		else // Couleur == 0
@@ -106,7 +106,7 @@ function resetall()
 
 function ResetAllColors(MyObj)
 {
-	if (!MyObj.understands("color")) {
+	if (!MyObj.understands("color") && MyObj.maxclass != "inlet" && MyObj.maxclass != "outlet") {
 		if (MyObj.maxclass == "patcher")
 			MyObj.colorindex = 10;	// probably not ideal, but there's no way to send the color message ta a patcher (newobj) AFAIK
 		else
