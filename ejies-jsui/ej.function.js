@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.121 $
-	$Date: 2008/09/30 22:24:31 $
+	$Revision: 1.122 $
+	$Date: 2009/02/18 15:31:24 $
 */
 
 // global code
@@ -2711,18 +2711,25 @@ function jit_matrix(matrixName)
 
 function setattr_nbfunctions(v)
 {
-	// ajout des courbes, si nécessaire
-	if (v < NbCourbes) {
-		while (f.length > v)
-			f.splice(f.length - 1, 1);
-	} else if (v > NbCourbes) {
-		while (f.length < v)
-			f[f.length] = new Courbe("function" + (f.length - 1));
-	}
 	// si on a le même nombre de courbe, on ne fait rien
 	// ce qui permet de garder les couleurs par exemple.
+	// ajout des courbes, si nécessaire
+	if (v < NbCourbes) {
+		while (f.length > v) {
+			f.splice(f.length - 1, 1);
+			NbCourbes--;
+		}
+	} else if (v > NbCourbes) {
+		while (f.length < v) {
+			f[NbCourbes] = new Courbe("function" + (NbCourbes - 1));
+ 			pixel2machin(f[NbCourbes]);
+ 			NbCourbes++;
+		}
+	}
 
-	NbCourbes = f.length;
+	// make sure the function in front really exists, otherwise display the first one
+	if (front >= NbCourbes)
+		front = 0;
 }
 
 function clear()

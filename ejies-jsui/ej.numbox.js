@@ -2,8 +2,8 @@
 	ej.numbox.js by Emmanuel Jourdan, Ircam - 08 2004
 	an alternative number box.
 
-	$Revision: 1.15 $
-	$Date: 2008/03/10 11:41:00 $
+	$Revision: 1.16 $
+	$Date: 2009/02/18 15:31:24 $
 */
 
 // Global Code
@@ -51,6 +51,23 @@ var NumericBoite; 				// utilisé dans unselect
 border = 0;
 sketch.fsaa = 0;
 sketch.default2d();
+
+declareattribute("brgb",			"getattr_brgb", 		"setattr_brgb",			1);
+declareattribute("brgb2",			"getattr_brgb", 		"setattr_brgb",			1);
+declareattribute("brgb3",			"getattr_brgb", 		"setattr_brgb",			1);
+declareattribute("frgb",			"getattr_brgb", 		"setattr_brgb",			1);
+declareattribute("frgb2",			"getattr_brgb", 		"setattr_brgb",			1);
+declareattribute("frgb3",			"getattr_brgb", 		"setattr_brgb",			1);
+declareattribute("roundmode",		"getattr_brgb", 		"setattr_brgb",			1);
+declareattribute("leading0",		"getattr_brgb", 		"setattr_brgb",			1);
+declareattribute("approximation",	"getattr_brgb", 		"setattr_brgb",			1);
+declareattribute("clip",			"getattr_brgb", 		"setattr_brgb",			1);
+declareattribute("minmax",			"getattr_brgb", 		"setattr_brgb",			1);
+declareattribute("change",			"getattr_brgb", 		"setattr_brgb",			1);
+declareattribute("mouseup",			"getattr_brgb", 		"setattr_brgb",			1);
+declareattribute("allowkeyboard",	"getattr_brgb", 		"setattr_brgb",			1);
+
+
 
 // process arguments
 if (jsarguments.length>1)	MyBrgb[0] = jsarguments[1]/255.;
