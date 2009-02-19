@@ -2,8 +2,8 @@
 	ej.numbox.js by Emmanuel Jourdan, Ircam - 08 2004
 	an alternative number box.
 
-	$Revision: 1.16 $
-	$Date: 2009/02/18 15:31:24 $
+	$Revision: 1.17 $
+	$Date: 2009/02/19 15:47:39 $
 */
 
 // Global Code
@@ -53,17 +53,17 @@ sketch.fsaa = 0;
 sketch.default2d();
 
 declareattribute("brgb",			"getattr_brgb", 		"setattr_brgb",			1);
-declareattribute("brgb2",			"getattr_brgb", 		"setattr_brgb",			1);
-declareattribute("brgb3",			"getattr_brgb", 		"setattr_brgb",			1);
-declareattribute("frgb",			"getattr_brgb", 		"setattr_brgb",			1);
-declareattribute("frgb2",			"getattr_brgb", 		"setattr_brgb",			1);
-declareattribute("frgb3",			"getattr_brgb", 		"setattr_brgb",			1);
-declareattribute("roundmode",		"getattr_brgb", 		"setattr_brgb",			1);
-declareattribute("leading0",		"getattr_brgb", 		"setattr_brgb",			1);
-declareattribute("approximation",	"getattr_brgb", 		"setattr_brgb",			1);
-declareattribute("clip",			"getattr_brgb", 		"setattr_brgb",			1);
-declareattribute("minmax",			"getattr_brgb", 		"setattr_brgb",			1);
-declareattribute("change",			"getattr_brgb", 		"setattr_brgb",			1);
+declareattribute("brgb2",			"getattr_brgb2", 		"setattr_brgb2",		1);
+declareattribute("brgb3",			"getattr_brgb3", 		"setattr_brgb3",		1);
+declareattribute("frgb",			"getattr_frgb", 		"setattr_frgb",			1);
+declareattribute("frgb2",			"getattr_frgb2", 		"setattr_frgb2",		1);
+declareattribute("frgb3",			"getattr_frgb3", 		"setattr_frgb3",		1);
+declareattribute("roundmode",		"getattr_roundmode", 	"setattr_roundmmode",	1);
+declareattribute("leading0",		"getattr_leading0", 	"setattr_leading0",		1);
+declareattribute("approximation",	"getattr_approx", 		"setattr_approx",		1);
+declareattribute("clip",			"getattr_clip", 		"setattr_clip",			1);
+declareattribute("minmax",			"getattr_minmax", 		"setattr_minmax",		1);
+declareattribute("change",			"getattr_change", 		"setattr_change",		1);
 declareattribute("mouseup",			"getattr_brgb", 		"setattr_brgb",			1);
 declareattribute("allowkeyboard",	"getattr_brgb", 		"setattr_brgb",			1);
 
@@ -175,19 +175,24 @@ function draw()
 }
 draw.local = 1;	// private
 
-function approximation(v)
+function setattr_approx(v)
 {
 	if (v > 0 && v < 7)		// entre 1 et 6
 		ApproxiValue = v;
 	msg_float(MyVal);
 }
 
-function getapproximation()
+function getattr_approx()
 {
 	outlet(2, "approximation", ApproxiValue);
 }
 
-function leading0(v)
+function getattr_clip()
+{
+	outlet(2, "clip", MinMaxState);
+}
+
+function setattr_leading0(v)
 {
 	if (v == 1){
 		LeadingValue = v;
@@ -203,7 +208,7 @@ function leading0(v)
 	refresh();
 }
 
-function getleading0()
+function getattr_leading0()
 {
 	outlet(2, "leading0", LeadingValue);
 }
@@ -251,7 +256,7 @@ function getmouseup()
 	outlet(2, "mouseup", MouseUpState);
 }
 
-function roundmode(v)
+function setattr_roundmmode(v)
 {
 	if (v >= 0 && v <= 2) {
 		RoundValue = v;
@@ -260,7 +265,7 @@ function roundmode(v)
 		ejies.error(this, "roundmode ", v, "wrong argument (must be 0, 1 or 2)");
 }
 
-function getroundmode()
+function getattr_roundmode()
 {
 	outlet(2, "roundmode", RoundValue);
 }
@@ -278,19 +283,24 @@ function onresize(w,h)
 }
 onresize.local = 1; // private
 
-function minmax(v,w)
+function setattr_minmax(v,w)
 {
 	MinMaxValues[0] = v;
 	MinMaxValues[1] = w;
 }
 
-function clip(v)
+function getattr_minmax()
+{
+	outlet(2, "minmax", MinMaxValues[0], MinMaxValues[1]);
+}
+
+function setattr_clip(v)
 {
 	MinMaxState = v;
 	msg_float(MyVal);
 }
 
-function change(v)
+function setattr_change(v)
 {
 	if (v == 1 || v == 0) {
 		ChangeState = v;
@@ -298,7 +308,7 @@ function change(v)
 		ejies.error(this, "change ", v, "wrong argument");
 }
 
-function getchange()
+function getattr_change()
 {
 	outlet(2, "change", ChangeState);
 }
@@ -472,11 +482,11 @@ function save()
 
 function getattributes()
 {
-	var attributes = new Array("attributes", "roundmode", "brgb", "brgb2", "brgb3", "frgb", "frgb2", "approximation", "leading0", "initvalue", "change", "mouseup")
+	var attributes = new Array("attributes", "roundmode", "brgb", "brgb2", "brgb3", "frgb", "frgb2", "approximation", "leading0", "initvalue", "change", "mouseup", "allowkeyboard");
 	outlet(2, attributes);
 }
 
-function frgb(r,g,b)
+function setattr_frgb(r,g,b)
 {
 	MyFrgb[0] = r/255.;
 	MyFrgb[1] = g/255.;
@@ -485,7 +495,7 @@ function frgb(r,g,b)
 	refresh();
 }
 
-function frgb2(r,g,b)
+function setattr_frgb2(r,g,b)
 {
 	MyFrgb2[0] = r/255.;
 	MyFrgb2[1] = g/255.;
@@ -494,7 +504,7 @@ function frgb2(r,g,b)
 	refresh();
 }
 
-function brgb(r,g,b)
+function setattr_brgb(r,g,b)
 {
 	MyBrgb[0] = r/255.;
 	MyBrgb[1] = g/255.;
@@ -503,7 +513,7 @@ function brgb(r,g,b)
 	refresh();
 }
 
-function brgb2(r,g,b)
+function setattr_brgb2(r,g,b)
 {
 	MyBrgb2[0] = r/255.;
 	MyBrgb2[1] = g/255.;
@@ -512,22 +522,22 @@ function brgb2(r,g,b)
 	refresh();
 }
 
-function brgb3(r,g,b)
+function setattr_brgb3(r,g,b)
 {
 	MyBrgb3[0] = r/255.;
 	MyBrgb3[1] = g/255.;
 	MyBrgb3[2] = b/255.;
 }
 
-function getbrgb() { getcolor("brgb", 0); }
+function getattr_brgb() { getcolor("brgb", 0); }
 
-function getbrgb2() { getcolor("brgb2", 1); }
+function getattr_brgb2() { getcolor("brgb2", 1); }
 
-function getbrgb3() { getcolor("brgb3", 2); }
+function getattr_brgb3() { getcolor("brgb3", 2); }
 
-function getfrgb() { getcolor("frgb", 3); }
+function getattr_frgb() { getcolor("frgb", 3); }
 
-function getfrgb2() { getcolor("frgb2", 4); }
+function getattr_rgb2() { getcolor("frgb2", 4); }
 
 // pour simplifier le travail et supprimer des lignes de code inutiles
 function getcolor(MsgName,ColorItem)
