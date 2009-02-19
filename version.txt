@@ -1,12 +1,13 @@
 ejies - Version history
 
 *******************
-2.0b3: 14 December 2008
+2.0b3: 19 February 2009
 
-This version requires Max 5.0.0 or higher (5.0.5 or higher is highly recommended). It won't run with older versions.
+This version requires Max 5.0.0 or higher (5.0.5 or higher is highly recommended). It won't run with older versions (there's a version compatible with Max 4).
 
 Improvements:
-ej.function.js: uses attribute so it appears in the inspector
+ej.function.js: uses attributes so it appears in the inspector
+ej.numbox.js: uses attributes so it appears in the inspector
 ej.lslide: outputs 0 instead of NaNs
 ej.lslide: reset message in case the filter exploded (which shouldn't happen anymore)
 ej.led.js: uses attribute so it appears in the inspector
@@ -19,7 +20,6 @@ ej.cc.js: is more or less compatible with Max 5 (not ideal solution, but it does
 
 Discontinued object:
 nine2X: is now dead. It has been obsolete since Max 4.3.0.
-
 
 
 
@@ -78,6 +78,7 @@ stout~: finally the 0 dB is at 0 dB, not -0.6dB...
 java classes: now included as one jar files which contains classes and sources
 Installation.command: interactive installation works back
 ej.lslide: interval attribute which outputs continuously (kinda integrated metro)
+
 
 
 *******************
@@ -156,6 +157,7 @@ splay~: doesn't loose "signal connection style cable" anymore :-)
 
 Bug correction:
 ej.function.js: interpolation problem solved (Thanks Mikhail)
+
 
 
 *******************
