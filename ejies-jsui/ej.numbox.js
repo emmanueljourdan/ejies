@@ -2,8 +2,8 @@
 	ej.numbox.js by Emmanuel Jourdan, Ircam - 08 2004
 	an alternative number box.
 
-	$Revision: 1.17 $
-	$Date: 2009/02/19 15:47:39 $
+	$Revision: 1.18 $
+	$Date: 2009/02/19 16:24:22 $
 */
 
 // Global Code
@@ -57,15 +57,14 @@ declareattribute("brgb2",			"getattr_brgb2", 		"setattr_brgb2",		1);
 declareattribute("brgb3",			"getattr_brgb3", 		"setattr_brgb3",		1);
 declareattribute("frgb",			"getattr_frgb", 		"setattr_frgb",			1);
 declareattribute("frgb2",			"getattr_frgb2", 		"setattr_frgb2",		1);
-declareattribute("frgb3",			"getattr_frgb3", 		"setattr_frgb3",		1);
 declareattribute("roundmode",		"getattr_roundmode", 	"setattr_roundmmode",	1);
 declareattribute("leading0",		"getattr_leading0", 	"setattr_leading0",		1);
 declareattribute("approximation",	"getattr_approx", 		"setattr_approx",		1);
 declareattribute("clip",			"getattr_clip", 		"setattr_clip",			1);
 declareattribute("minmax",			"getattr_minmax", 		"setattr_minmax",		1);
 declareattribute("change",			"getattr_change", 		"setattr_change",		1);
-declareattribute("mouseup",			"getattr_brgb", 		"setattr_brgb",			1);
-declareattribute("allowkeyboard",	"getattr_brgb", 		"setattr_brgb",			1);
+declareattribute("mouseup",			"getattr_mouseup", 		"setattr_mouseup",		1);
+declareattribute("allowkeyboard",	"getattr_key", 			"setattr_key",			1);
 
 
 
@@ -92,8 +91,8 @@ if (jsarguments.length>19)	MinMaxState = jsarguments[19];
 if (jsarguments.length>20)	MinMaxValues[0] = jsarguments[20];
 if (jsarguments.length>21)	MinMaxValues[1] = jsarguments[21];
 if (jsarguments.length>22)	DefaultValue = jsarguments[22];
-if (jsarguments.length>23)	change(jsarguments[23]);
-if (jsarguments.length>24)	mouseup(jsarguments[24]);
+if (jsarguments.length>23)	setattr_change(jsarguments[23]);
+if (jsarguments.length>24)	setattr_mouseup(jsarguments[24]);
 if (jsarguments.length>25)	ejies.error(this, "extra arguments - check the inspector");
 
 MyVal = DefaultValue;
@@ -106,7 +105,7 @@ if (box.rect[2] - box.rect[0] == 64 && box.rect[3] - box.rect[1] == 64)
 else
 	box.size(Math.max(box.rect[2]-box.rect[0],32),16);	// check box size
 
-leading0(LeadingValue);							// va aussi déclencher draw() et refresh()
+setattr_leading0(LeadingValue);							// va aussi déclencher draw() et refresh()
 
 function loadbang()
 {
@@ -185,11 +184,13 @@ function setattr_approx(v)
 function getattr_approx()
 {
 	outlet(2, "approximation", ApproxiValue);
+	return ApproxiValue;
 }
 
 function getattr_clip()
 {
 	outlet(2, "clip", MinMaxState);
+	return MinMaxState;
 }
 
 function setattr_leading0(v)
@@ -211,6 +212,7 @@ function setattr_leading0(v)
 function getattr_leading0()
 {
 	outlet(2, "leading0", LeadingValue);
+	return LeadingValue;
 }
 
 function outputidle(v)
@@ -251,9 +253,10 @@ function mouseup(v)
 		ejies.error(this, "mouseup ", v, "wrong argument");
 }
 
-function getmouseup()
+function getattr_mouseup()
 {
 	outlet(2, "mouseup", MouseUpState);
+	return MouseUpState;
 }
 
 function setattr_roundmmode(v)
@@ -268,6 +271,7 @@ function setattr_roundmmode(v)
 function getattr_roundmode()
 {
 	outlet(2, "roundmode", RoundValue);
+	return RoundValue;
 }
 
 function sendval()
@@ -292,6 +296,7 @@ function setattr_minmax(v,w)
 function getattr_minmax()
 {
 	outlet(2, "minmax", MinMaxValues[0], MinMaxValues[1]);
+	return MinMaxValues;
 }
 
 function setattr_clip(v)
@@ -311,6 +316,7 @@ function setattr_change(v)
 function getattr_change()
 {
 	outlet(2, "change", ChangeState);
+	return ChangeState;
 }
 
 function msg_float(v)
@@ -529,25 +535,24 @@ function setattr_brgb3(r,g,b)
 	MyBrgb3[2] = b/255.;
 }
 
-function getattr_brgb() { getcolor("brgb", 0); }
+function getattr_brgb() { outlet(2, "brgb", getcolor(0)); return getcolor(0); }
 
-function getattr_brgb2() { getcolor("brgb2", 1); }
+function getattr_brgb2() { outlet(2, "brgb2", getcolor(1)); return getcolor(1); }
 
-function getattr_brgb3() { getcolor("brgb3", 2); }
+function getattr_brgb3() { outlet(2, "brgb3", getcolor(2)); return getcolor(2); }
 
-function getattr_frgb() { getcolor("frgb", 3); }
+function getattr_frgb() { outlet(2, "frgb", getcolor(3)); return getcolor(3); }
 
-function getattr_rgb2() { getcolor("frgb2", 4); }
+function getattr_frgb2() { outlet(2, "frgb2", getcolor(4)); return getcolor(4); }
 
 // pour simplifier le travail et supprimer des lignes de code inutiles
-function getcolor(MsgName,ColorItem)
+function getcolor(ColorItem)
 {
-	var MsgArgs = new Array(4);
-	MsgArgs[0] = MsgName;
+	var MsgArgs = new Array(3);
 	for (i = 0 ; i < 3 ; i++ ) {
-		MsgArgs[i+1] = Math.floor(ColorList[ColorItem][i]*255);
+		MsgArgs[i] = Math.floor(ColorList[ColorItem][i]*255);
 	}
-	outlet(2, MsgArgs);
+	return (MsgArgs);
 }
 getcolor.local = 1;	// private
 
@@ -560,9 +565,15 @@ function cursor(c)
 }
 cursor.local = 1;
 
-function allowkeyboard(v)
+function setattr_key(v)
 {
-	AllowKeyboardState = v;
+	AllowKeyboardState = v != 0 ? 1: 0;
+}
+
+function getattr_key()
+{
+	outlet(2, "allowkeyboard", AllowKeyboardState);
+	return AllowKeyboardState;
 }
 
 function KeyboardInput(v)
@@ -576,7 +587,7 @@ function KeyboardInput(v)
 				// si d'autres objets ej.numbox-keyboard traînent, il ne doivent pas recevoir les touches du clavier
 				messnamed("ej.numbox-keyboard", "stop");
 				
-				keyboard = this.patcher.newdefault(-100, -100, "ej.numbox-keyboard.pat");
+				keyboard = this.patcher.newdefault(-100, -100, "ej.numbox-keyboard.maxpat");
 				// ça serait bien d'éviter le nommage...
 				// create "unique" name
 				var TempName = "num-";
