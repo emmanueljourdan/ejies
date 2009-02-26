@@ -2,8 +2,8 @@
 	ej.numbox.js by Emmanuel Jourdan, Ircam - 08 2004
 	an alternative number box.
 
-	$Revision: 1.18 $
-	$Date: 2009/02/19 16:24:22 $
+	$Revision: 1.19 $
+	$Date: 2009/02/26 12:06:19 $
 */
 
 // Global Code
@@ -245,7 +245,7 @@ function redrawon()
 	draw();
 }
 
-function mouseup(v)
+function setattr_mouseup(v)
 {
 	if (v == 1 || v == 0)
 		MouseUpState = v;
