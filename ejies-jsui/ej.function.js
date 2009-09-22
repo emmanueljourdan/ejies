@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.122 $
-	$Date: 2009/02/18 15:31:24 $
+	$Revision: 1.123 $
+	$Date: 2009/09/22 15:37:09 $
 */
 
 // global code
@@ -1373,15 +1373,12 @@ function DeleteReadThings()
 	// pour une raison qui m'échappe...
 	// il faut délayer...
 	tskDel = new Task(function() {
-		if ( ! tskDel.running) {
-			var i;
-			for (i = 0; i < ReadDialogObjectRef.length; i++)
-				this.patcher.remove(ReadDialogObjectRef[i]);
-		}
+		var i;
+		for (i = 0; i < ReadDialogObjectRef.length; i++)
+			this.patcher.remove(ReadDialogObjectRef[i]);
 	}, this);
 		
-	tskDel.interval = 100;
-	tskDel.repeat(1);
+	tskDel.schedule(100);
 	
 	OpendialogPrepend = 0;	// réinitialisation du flag
 }
@@ -4155,7 +4152,6 @@ function insertpaste()
 	UpdateDisplay();
 }
 
-// NEED TO MODIFY THIS FOR CURVES - DONE
 function read(filename)
 {
 	if (arguments.length == 0) {
