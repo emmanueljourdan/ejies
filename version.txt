@@ -1,5 +1,15 @@
 ejies - Version history
 
+
+*******************
+2.0b4: 22 September 2009
+
+Bug corrections:
+ej.dialog no longer output text while pressing the cancel button
+stout~ doesn't complain anymore about ej.numbox (Thanks Jérome)
+ej.function.js removes properly all the unnecessary objects created after a read message (Thanks Mikhail)
+
+
 *******************
 2.0b3: 19 February 2009
 
