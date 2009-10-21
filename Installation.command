@@ -35,7 +35,7 @@ function doInstallation {
 		echo -ne "- java lib file ($C74Folder/java/lib/ej.jar)"
 		cp -R "$DossierDeLInstalleur"/ejies-java/ej.jar "$C74Folder/java/lib/" && echo -ne "... done.\n"
 	else
-		echo -ne "Sorry, $C74Folder doen't exist. Init, jsui and jsextensions can't be installed.\n"
+		echo -ne "Sorry, $C74Folder doesn't exist. Init, jsui and jsextensions can't be installed.\n"
 	fi
 	
 	if [ -e "$maxAppFolder" ] ; then
@@ -132,5 +132,7 @@ fi
 # Fin de l'installation
 echo -ne "\nend of the installation... enjoy!\n"
 echo -ne "(you can quit the Terminal now...)\n"
+
+sleep 5 # under Snow Leopard it seems to quit really fast the terminal after installing
 
 exit 0;
