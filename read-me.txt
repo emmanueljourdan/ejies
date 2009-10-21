@@ -1,6 +1,6 @@
 e j i e s (version 2.0)
 by Emmanuel Jourdan, Ircam
-This version requires Max 5.0.0 or higher (5.0.5 or higher is highly recommended). If you want to use ejies with a previous version or Max, you might want to download ejies 1.58.
+This version requires Max 5.0.0 or higher (5.0.8 or higher is highly recommended). If you want to use ejies with a previous version or Max, you might want to download ejies 1.58.
 
 Java externals:
 - ej.dx2x: create a list from intervals
@@ -62,10 +62,8 @@ Other:
 
 Automatic installation for MacOS X:
 - Double click on Installation.command and follow the instructions...
-- You'll be asked for a couple of questions... please answer...
-- The Installation.command allows you to install also the shortcuts (same as AddShortcuts2Max.command)
 - At the end of the installation you can quit the Terminal application.
-- If the installation doesn't work... follow the windows installation procedure.
+- If the installation doesn't work... you might have some problem of permission. follow the windows installation procedure.
 
 Manual installation (MacOS or Windows):
 - put the CONTENTS of the ejies-extras folder in the ../Max5/patches/extras folder
