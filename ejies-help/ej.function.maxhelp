@@ -1887,7 +1887,7 @@
 , 							{
 								"box" : 								{
 									"maxclass" : "comment",
-									"text" : "You can use one of the three following approaches:\r\r• new object\r    - select \"js ej.lui ej.function.js\" in the ejies category\r• use the jsui prototypes\r    - select ej.function-? prototype in the object palette jsui prototype",
+									"text" : "You can use one of the two following approaches:\r\r• new object\r    - select \"js ej.lui ej.function.js\" in the ejies category\r• use the jsui prototypes\r    - select ej.function-? prototype in the object palette jsui prototype",
 									"linecount" : 6,
 									"patching_rect" : [ 18.0, 36.0, 359.0, 86.0 ],
 									"id" : "obj-2",
