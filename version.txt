@@ -2,6 +2,14 @@ ejies - Version history
 
 
 *******************
+2.0: 22 September 2009
+
+Bug corrections:
+ej.function: displays proper errors in the Max window when you attempt to set the name of a function which is not a symbol
+ej.cc.js: some improvements to reduce the number of errors... it's an ongoing work, I guess.
+
+
+*******************
 2.0b4: 22 September 2009
 
 Bug corrections:
