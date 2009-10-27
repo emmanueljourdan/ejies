@@ -4,9 +4,11 @@ ejies - Version history
 *******************
 2.0: 22 September 2009
 
-Bug corrections:
+Improvments:
+Installation.command now stops for a while at the end of the installation so you can enjoy more.
 ej.function: displays proper errors in the Max window when you attempt to set the name of a function which is not a symbol
 ej.cc.js: some improvements to reduce the number of errors... it's an ongoing work, I guess.
+
 
 
 *******************
@@ -16,6 +18,7 @@ Bug corrections:
 ej.dialog no longer output text while pressing the cancel button
 stout~ doesn't complain anymore about ej.numbox (Thanks Jérome)
 ej.function.js removes properly all the unnecessary objects created after a read message (Thanks Mikhail)
+
 
 
 *******************
