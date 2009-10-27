@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.123 $
-	$Date: 2009/09/22 15:37:09 $
+	$Revision: 1.124 $
+	$Date: 2009/10/27 16:12:37 $
 */
 
 // global code
@@ -2567,23 +2567,26 @@ function insertfunction()
 		ejies.error(this, "missing argument (name) for message insertfunction");
 		return;
 	}
-
-	f.splice(front, 0, new Courbe(arguments[0]));		
-	NbCourbes++;
-	pixel2machin(f[front]);
-	getname();		// mise à jour du menu
-	askForDrawingAll();		// mise à jour de l'affichage, car c'est la courbe courrante
+	
+	if (typeof(arguments[0]) == "string") {
+		f.splice(front, 0, new Courbe(arguments[0]));
+		NbCourbes++;
+		pixel2machin(f[front]);
+		getname();		// mise à jour du menu
+		askForDrawingAll();		// mise à jour de l'affichage, car c'est la courbe courrante
+	} else
+		ejies.error(this, "function name must be a symbol");
 }
 
 function deletefunction()
 {
 	var c;
-	var which = -1;
+	var which;
 
 	if (NbCourbes == 1)
 		return;				// si une seule courbe on ne peut pas supprimer
 	
-	if (! arguments.length)
+	if (!arguments.length)
 		which = front;
 	else {
 		for (c = 0; c < NbCourbes; c++) {
@@ -2594,7 +2597,7 @@ function deletefunction()
 		}
 	}
 	
-	if (which == -1) {
+	if (which != undefined) {
 		ejies.error(this, arguments[0], "bad function name (deletefunction aborted)");
 		return;
 	}
