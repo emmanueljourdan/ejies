@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.124 $
-	$Date: 2009/10/27 16:12:37 $
+	$Revision: 1.125 $
+	$Date: 2009/10/27 16:16:05 $
 */
 
 // global code
@@ -2141,13 +2141,7 @@ MyListDump.local = 1;
 
 function MyName(courbe, name)
 {
-	if (typeof(name) == "string")
-		courbe.name = name;
-	else {
-		ejies.error(this, "function name must be a symbol");
-		return;
-	}
-	
+	courbe.name = name;
 	DoNotify();
 	drawText();
 }
@@ -2568,14 +2562,11 @@ function insertfunction()
 		return;
 	}
 	
-	if (typeof(arguments[0]) == "string") {
-		f.splice(front, 0, new Courbe(arguments[0]));
-		NbCourbes++;
-		pixel2machin(f[front]);
-		getname();		// mise à jour du menu
-		askForDrawingAll();		// mise à jour de l'affichage, car c'est la courbe courrante
-	} else
-		ejies.error(this, "function name must be a symbol");
+	f.splice(front, 0, new Courbe(arguments[0]));
+	NbCourbes++;
+	pixel2machin(f[front]);
+	getname();		// mise à jour du menu
+	askForDrawingAll();		// mise à jour de l'affichage, car c'est la courbe courrante
 }
 
 function deletefunction()
