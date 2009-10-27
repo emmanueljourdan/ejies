@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.125 $
-	$Date: 2009/10/27 16:16:05 $
+	$Revision: 1.126 $
+	$Date: 2009/10/27 16:29:45 $
 */
 
 // global code
@@ -2141,7 +2141,13 @@ MyListDump.local = 1;
 
 function MyName(courbe, name)
 {
-	courbe.name = name;
+	if (typeof(name) == "string")
+		courbe.name = name;
+	else {
+		ejies.error(this, "function name must be a symbol");
+		return;
+	}
+	
 	DoNotify();
 	drawText();
 }
@@ -2547,12 +2553,14 @@ function addfunction()
 		return;
 	}
 	
-	var tmp = f.length;
-	
-	f[tmp] = new Courbe(arguments[0]);
-	NbCourbes++;
-	pixel2machin(f[tmp]);
-	getname();		// mise à jour du menu
+	if (typeof(arguments[0]) == "string") {
+		var tmp = f.length;
+		f[tmp] = new Courbe(arguments[0]);
+		NbCourbes++;
+		pixel2machin(f[tmp]);
+		getname();		// mise à jour du menu
+	} else
+		ejies.error(this, "function name must be a symbol");
 }
 
 function insertfunction()
@@ -2562,11 +2570,14 @@ function insertfunction()
 		return;
 	}
 	
-	f.splice(front, 0, new Courbe(arguments[0]));
-	NbCourbes++;
-	pixel2machin(f[front]);
-	getname();		// mise à jour du menu
-	askForDrawingAll();		// mise à jour de l'affichage, car c'est la courbe courrante
+	if (typeof(arguments[0]) == "string") {
+		f.splice(front, 0, new Courbe(arguments[0]));
+		NbCourbes++;
+		pixel2machin(f[front]);
+		getname();		// mise à jour du menu
+		askForDrawingAll();		// mise à jour de l'affichage, car c'est la courbe courrante
+	} else
+		ejies.error(this, "function name must be a symbol");
 }
 
 function deletefunction()
@@ -2580,6 +2591,10 @@ function deletefunction()
 	if (!arguments.length)
 		which = front;
 	else {
+		if (typeof(arguments[0]) != "string") {
+			ejies.error(this, "function name must be a symbol");	
+			return;
+		}
 		for (c = 0; c < NbCourbes; c++) {
 			if (f[c].name == arguments[0]) {
 				which = c;
@@ -2588,7 +2603,7 @@ function deletefunction()
 		}
 	}
 	
-	if (which != undefined) {
+	if (which == undefined) {
 		ejies.error(this, arguments[0], "bad function name (deletefunction aborted)");
 		return;
 	}
