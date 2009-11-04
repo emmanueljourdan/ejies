@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.126 $
-	$Date: 2009/10/27 16:29:45 $
+	$Revision: 1.127 $
+	$Date: 2009/11/04 10:52:13 $
 */
 
 // global code
@@ -1968,7 +1968,7 @@ function MyGridStep_x(courbe, v)
 				askForDrawFunctions();
 		}
 	} else
-		ejies.error(this, "bad argument for message gridstep");
+		ejies.error(this, "bad argument for message gridstep_x");
 }
 MyGridStep_x.local = 1;
 
