@@ -2,8 +2,8 @@
 	ej.cc.js (change color) by Emmanuel Jourdan, Ircam - 01 2005
 	Allows you to rename any named object.
  
-	$Revision: 1.11 $
-	$Date: 2009/01/29 15:29:12 $
+	$Revision: 1.12 $
+	$Date: 2009/11/04 16:52:31 $
 */
 
 /*
@@ -47,7 +47,7 @@ function defaults()
 	InternalExecuteOperation("forward",6);
 	InternalExecuteOperation("pvar",6);
 	InternalExecuteOperation("coll",14);
-	InternalExecuteOperation("patcher",5);
+	InternalExecuteOperation("patcher",10);
 	InternalExecuteOperation("poly~",5);
 	InternalExecuteOperation("loadbang",4);
 	InternalExecuteOperation("loadmess",4);
@@ -78,18 +78,18 @@ function msg_int(i)
 	InternalExecuteOperation("int", i);
 }
 
-function ExecuteOperation(toto)
+function ExecuteOperation(fn)
 {
 	if (GlobalState)
-		this.patcher.applydeep(toto);
+		this.patcher.applydeep(fn);
 	else
-		this.patcher.apply(toto);
+		this.patcher.apply(fn);
 }
 ExecuteOperation.local = 1;
 
 function ChangeColor(MyObj)
 {
-	if (MyObj.maxclass == NomObjet && MyObj.maxclass != "patcher" && !MyObj.understands("color") && MyObj.maxclass != "inlet" && MyObj.maxclass != "outlet") {
+	if (MyObj.maxclass == NomObjet && MyObj.maxclass != "patcher" && !MyObj.understands("color") &&  understandsBordercolor(MyObj)) {
 		if (Couleur)
 			MyObj.colorindex = Couleur;
 		else // Couleur == 0
@@ -106,11 +106,11 @@ function resetall()
 
 function ResetAllColors(MyObj)
 {
-	if (!MyObj.understands("color") && MyObj.maxclass != "inlet" && MyObj.maxclass != "outlet") {
+	if (!MyObj.understands("color") && understandsBordercolor(MyObj)) {
 		if (MyObj.maxclass == "patcher")
 			MyObj.colorindex = 10;	// probably not ideal, but there's no way to send the color message ta a patcher (newobj) AFAIK
 		else
-		MyObj.message("sendbox", "bordercolor", 0.8, 0.84, 0.7, 1.);
+			MyObj.message("sendbox", "bordercolor", 0.8, 0.84, 0.7, 1.);
 	}
 	return true;
 }
@@ -131,6 +131,36 @@ function InternalExecuteOperation(a, b)
 	this.patcher.applydeep(ChangeColor);
 }
 InternalExecuteOperation.local = 1;
+
+function understandsBordercolor(MyObj)
+{
+	// identify UI objects who don't understand bordercolor to suppress tha worrying error post in the max window
+	if (	MyObj.maxclass == "inlet"		|
+			MyObj.maxclass == "outlet"		|
+			MyObj.maxclass == "playbar"		|
+			MyObj.maxclass == "matrixctrl"	|
+			MyObj.maxclass == "pictctrl"	|
+			MyObj.maxclass == "pictslider"	|
+			MyObj.maxclass == "ezdac~"		|
+			MyObj.maxclass == "ezadc~"		|
+			MyObj.maxclass == "fpic"		|
+			MyObj.maxclass == "gswitch"		|
+			MyObj.maxclass == "gswitch2"	|
+			MyObj.maxclass == "hint"		|
+			MyObj.maxclass == "imovie"		|
+			MyObj.maxclass == "jit.pwindow"	|
+			MyObj.maxclass == "jit.scope"	|
+			MyObj.maxclass == "jweb"		|
+			MyObj.maxclass == "lcd"			|
+			MyObj.maxclass == "led"			|
+			MyObj.maxclass == "radiogroup"	|
+			MyObj.maxclass == "suckah"		|
+			MyObj.maxclass == "swatch"		|
+			MyObj.maxclass == "ubutton")
+		return 0;
+	else 
+		return 1;
+}
 
 // Pour la compilation automatique
 // autowatch = 1;
