@@ -2,7 +2,7 @@ ejies - Version history
 
 
 *******************
-2.0: 22 September 2009
+2.0: 4 November 2009
 
 Improvments:
 Installation.command now stops for a while at the end of the installation so you can enjoy more.
