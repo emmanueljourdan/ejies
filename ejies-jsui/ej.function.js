@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.127 $
-	$Date: 2009/11/04 10:52:13 $
+	$Revision: 1.128 $
+	$Date: 2009/12/22 16:57:33 $
 */
 
 // global code
@@ -4042,6 +4042,10 @@ function copyfunction()
 	cp[idx++] = f[c].domain[1];
 	cp[idx++] = f[c].range[0];
 	cp[idx++] = f[c].range[1];
+	cp[idx++] = f[c].ZoomX[0];
+	cp[idx++] = f[c].ZoomX[1];
+	cp[idx++] = f[c].ZoomY[0];
+	cp[idx++] = f[c].ZoomY[1];
 	cp[idx++] = f[c].grid_x;
 	cp[idx++] = f[c].grid_y;
 	cp[idx++] = f[c].display;
@@ -4100,6 +4104,10 @@ function MyPasteFunction(courbe)
 	courbe.domain[1] = cp[idx++];
 	courbe.range[0] = cp[idx++];
 	courbe.range[1] = cp[idx++];
+	courbe.ZoomX[0] = cp[idx++];
+	courbe.ZoomX[1] = cp[idx++];
+	courbe.ZoomY[0] = cp[idx++];
+	courbe.ZoomY[1] = cp[idx++];
 	courbe.grid_x = cp[idx++];
 	courbe.grid_y = cp[idx++];
 	courbe.display = cp[idx++];
@@ -4114,8 +4122,8 @@ function MyPasteFunction(courbe)
 		courbe["pa"][p].curve = cp[idx++];
 	}
 	
-	MyThings2Zoom(courbe);
 	pixel2machin(courbe);
+	ValRecalculate();
 	calcCurves();
 }
 MyPasteFunction.local = 1;

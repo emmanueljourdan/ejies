@@ -2,6 +2,12 @@ ejies - Version history
 
 
 *******************
+2.0.1:
+
+Bug corrections:
+ej.function.js is no longer confused by pasting a function in curve mode while zoom is set.
+
+*******************
 2.0: 4 November 2009
 
 Improvments:
