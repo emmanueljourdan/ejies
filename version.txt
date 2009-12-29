@@ -5,7 +5,8 @@ ejies - Version history
 2.0.1:
 
 Bug corrections:
-ej.function.js is no longer confused by pasting a function in curve mode while zoom is set.
+ej.function.js is no longer confused by pasting a function in curve mode while zoom is set (Thanks Peimain).
+ej.function.js: flip and flip_x now works properly in curve mode (Thanks again Peiman)
 
 *******************
 2.0: 4 November 2009

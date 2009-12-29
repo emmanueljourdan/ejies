@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.128 $
-	$Date: 2009/12/22 16:57:33 $
+	$Revision: 1.129 $
+	$Date: 2009/12/29 22:32:51 $
 */
 
 // global code
@@ -2192,47 +2192,53 @@ MyUnfix.local = 1;
 
 function MyFlip(courbe)
 {
-	var tmpX, tmpY, tmpCurve, tmpSustain, tmpFix;
+	var tmpX, tmpY, tmpSustain, tmpFix;
 	
 	// swap points so there's no need to reorder after (avoid the "same x value" problem for the ordering)
 	for (var i = 0; i < Math.round(courbe.np / 2); i++) {
 		if (i == courbe.np - i - 1) { // odd number of points (the middle stay at the middle position)
 			courbe.pa[i].valx = (courbe.domain[0] + courbe.domain[1]) - courbe.pa[i].valx;
-			courbe.pa[i].x = val2x(courbe, courbe.pa[i].valx);
 			courbe.pa[i].valy = (courbe.range[0] + courbe.range[1]) - courbe.pa[i].valy;
-			courbe.pa[i].y = val2y(courbe, courbe.pa[i].valy);
-			
 		} else {
 			tmpX = courbe.pa[i].valx;
 			tmpY = courbe.pa[i].valy;
-			if (isCurveMode)
-				tmCurve = courbe.pa[i].curve; // added - MR
 			tmpSustain = courbe.pa[i].sustain;
 			tmpFix = courbe.pa[i].fix;
 			
 			courbe.pa[i].valx = (courbe.domain[0] + courbe.domain[1]) - courbe.pa[courbe.np - i - 1].valx;
-			courbe.pa[i].x = val2x(courbe, courbe.pa[i].valx);
 			courbe.pa[i].valy = (courbe.range[0] + courbe.range[1]) - courbe.pa[courbe.np - i - 1].valy;
-			courbe.pa[i].y = val2y(courbe, courbe.pa[i].valy);
-			if (isCurveMode)
-				courbe.pa[i].curve = courbe.pa[courbe.np - i - 1].curve;  		// added - MR
+			
 			courbe.pa[i].sustain = courbe.pa[courbe.np - i - 1].sustain;
 			courbe.pa[i].fix = courbe.pa[courbe.np - i - 1].fix;
-	
+			
 			courbe.pa[courbe.np - i - 1].valx = (courbe.domain[0] + courbe.domain[1]) - tmpX;
-			courbe.pa[courbe.np - i - 1].x = val2x(courbe, courbe.pa[courbe.np - i - 1].valx);
 			courbe.pa[courbe.np - i - 1].valy = (courbe.range[0] + courbe.range[1]) - tmpY;
-			courbe.pa[courbe.np - i - 1].y = val2y(courbe, tmpY);
-
-			if (isCurveMode)
-				courbe.pa[courbe.np - i - 1].curve = tmpCurve;  				// added - MR
+			
 			courbe.pa[courbe.np - i - 1].sustain = tmpSustain;
 			courbe.pa[courbe.np - i - 1].fix = tmpFix;
-		}		
+		}
+	}
+	
+	// copy the curve values
+	// curve value is always stored starting at the second index
+	if (isCurveMode && courbe.np > 1) {
+		var tmpCurve = new Array(courbe.np-1);
+		
+		// make the copy of the original curve values
+		for (var i=1; i < courbe.np; i++) {
+			tmpCurve[i-1] = courbe.pa[i].curve;
+		}
+		
+		// store the new one in reverse mode (j--), and inverse the sign of the curve
+		courbe.pa[0].curve = 0;
+		for (var i=1, j = courbe.np-2; i < courbe.np; i++, j--) {
+			courbe.pa[i].curve = -(tmpCurve[j]);	// inverse the sign
+		}
 	}
 
 	ApplyAutoSustain();
 	
+	ValRecalculate();
 	calcFunctionCurves(courbe); 	// added - MR
 	askForDrawFunctions();
 	askForNotify();
@@ -2259,8 +2265,6 @@ function MyFlipX(courbe)
 			courbe.pa[i].valy = courbe.pa[courbe.np - i - 1].valy;
 			courbe.pa[i].y = val2y(courbe, courbe.pa[i].valy);
 
-			if (isCurveMode)
-				courbe.pa[i].curve = courbe.pa[courbe.np - i - 1].curve;  		// added - MR
 			courbe.pa[i].sustain = courbe.pa[courbe.np - i - 1].sustain;
 			courbe.pa[i].fix = courbe.pa[courbe.np - i - 1].fix;
 	
@@ -2269,11 +2273,26 @@ function MyFlipX(courbe)
 			courbe.pa[courbe.np - i - 1].valy = tmpY;
 			courbe.pa[courbe.np - i - 1].y = val2y(courbe, tmpY);
 
-			if (isCurveMode)
-				courbe.pa[courbe.np - i - 1].curve = tmpCurve;  				// added - MR
 			courbe.pa[courbe.np - i - 1].sustain = tmpSustain;
 			courbe.pa[courbe.np - i - 1].fix = tmpFix;
 		}		
+	}
+	
+	// copy the curve values
+	// curve value is always stored starting at the second index
+	if (isCurveMode && courbe.np > 1) {
+		var tmpCurve = new Array(courbe.np-1);
+		
+		// make the copy of the original curve values
+		for (var i=1; i < courbe.np; i++) {
+			tmpCurve[i-1] = courbe.pa[i].curve;
+		}
+		
+		// store the new one in reverse mode (j--), and inverse the sign of the curve
+		courbe.pa[0].curve = 0;
+		for (var i=1, j = courbe.np-2; i < courbe.np; i++, j--) {
+			courbe.pa[i].curve = -(tmpCurve[j]);	// inverse the sign
+		}
 	}
 
 	ApplyAutoSustain();
