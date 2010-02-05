@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.129 $
-	$Date: 2009/12/29 22:32:51 $
+	$Revision: 1.130 $
+	$Date: 2010/02/05 16:54:27 $
 */
 
 // global code
@@ -90,19 +90,6 @@ var tskDel = new Task();
 var tmpString = new String();
 var tmpRange, tmpDomain;	// utilisé dans Interp
 var LineValue = -1;
-
-var numCurvePoints = 12; //MR - curve vars
-var CLCCURVE_C1 = 1e-20;
-var CLCCURVE_C2 = 1.2;
-var CLCCURVE_C3 = 0.41;
-var CLCCURVE_C4 = 0.91;
-var CURVE_MIN = -0.995;
-var CURVE_MAX = 0.995;
-var MAX_CURVE_NP = 43; // max points for curve~
-var LimitNP = 1; // clip num points MAX_CURVE_NP
-var SelectedCurve = -1;
-var prevy = 0;
-var MoveMode = 0;
 
 var numCurvePoints = 12; //MR - curve vars
 var CLCCURVE_C1 = 1e-20;
