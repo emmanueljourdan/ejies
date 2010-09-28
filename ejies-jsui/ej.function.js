@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.130 $
-	$Date: 2010/02/05 16:54:27 $
+	$Revision: 1.131 $
+	$Date: 2010/09/28 16:09:09 $
 */
 
 // global code
@@ -2719,6 +2719,12 @@ function jit_matrix(matrixName)
 		setPointsFromMatrix(f[front], matrixName);
 	else
 		ejies.error(this,"extra arguments for messagae jit_matrix")
+}
+
+// this is an alias... it looks like I screwed up when transforming nbfunctions into an attribute... the name was improperly set to nbfunction
+function nbfunctions(v)
+{
+	setattr_nbfunctions(v);
 }
 
 function setattr_nbfunctions(v)
