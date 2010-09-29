@@ -2,8 +2,8 @@
  *	ej.fplay by Emmanuel Jourdan, Ircam Ñ 04 2006
  *	function player
  *
- *	$Revision: 1.32 $
- *	$Date: 2008/01/10 17:58:44 $
+ *	$Revision: 1.33 $
+ *	$Date: 2010/09/29 10:41:06 $
  */
 
 /**
@@ -26,7 +26,7 @@ import com.cycling74.max.*;
 
 /**
  * Multi function editor (like ej.function.js without the graphics)
- * @version $Revision: 1.32 $
+ * @version $Revision: 1.33 $
  * @author jourdan
  * @see "ej.function.js"
  */
@@ -657,12 +657,7 @@ public class fplay extends ej {
 	 * @param sendName name of the receive object you'll send the values to
 	 */
 	public void sync(String sendName) {
-		if (MaxSystem.sendMessageToBoundObject(sendName, "nbfunctions", new Atom[] { Atom.newAtom(getNbFunctions()) }) == false) {
-			// on est ici seulement si le nom du receive n'est pas bon
-			error(sendName + " bad receive name");
-			return;	// sauve qui peut
-		}
-		
+		MaxSystem.sendMessageToBoundObject(sendName, "nbfunctions", new Atom[] { Atom.newAtom(getNbFunctions()) });
 		MaxSystem.sendMessageToBoundObject(sendName, "mode", new Atom[] { Atom.newAtom(mode) });
 		
 		for (int c = 0; c < getNbFunctions(); c++) {
@@ -1343,12 +1338,7 @@ public class fplay extends ej {
 		public void dump(String sendName) {
 			// implicitement, il ne se passe rien si il n'y a pas de points
 			for (int i = 0; i < np(); i++) {
-				// c'est trs tordu : le test du if envoie les informations
-				if (MaxSystem.sendMessageToBoundObject(sendName, getName(), mode ? Atom.newAtom(getPoint(i).getValuesWithCurve()) : Atom.newAtom(getPoint(i).getValues())) == false) {
-					// on est ici seulement si le nom du receive n'est pas bon
-					error(sendName + " bad receive name");
-					break;	// s'il n'est pas bon une fois, il ne sera pas meilleur plus tard...
-				}
+				MaxSystem.sendMessageToBoundObject(sendName, getName(), mode ? Atom.newAtom(getPoint(i).getValuesWithCurve()) : Atom.newAtom(getPoint(i).getValues()));
 			}
 			
 		}
@@ -1381,8 +1371,7 @@ public class fplay extends ej {
 						tmp[idx++] = Atom.newAtom(getPoint(i).getCurve());
 				}
 	
-				if (MaxSystem.sendMessageToBoundObject(sendName, getName(), tmp) == false)
-					error(sendName + " bad receive name");
+				MaxSystem.sendMessageToBoundObject(sendName, getName(), tmp);
 			}
 		}
 		
@@ -1416,8 +1405,7 @@ public class fplay extends ej {
 					myMatrix.setcell2d(1, i, new float[]{(float) getPoint(i).getCurve()});
 			}
 
-			if (MaxSystem.sendMessageToBoundObject(sendName, getName(), tmp) == false)
-				error(sendName + " bad recevie name");
+			MaxSystem.sendMessageToBoundObject(sendName, getName(), tmp);
 		}
 		
 		public void jitMatrix(String inName) {
