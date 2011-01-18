@@ -12,11 +12,11 @@ package ej;
  * interface used to perform ListAbsDiff math operation
  * @author jourdan
  * @see ej.lop
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class ListAbsDiff implements ListOperator {
 	/**
-	 * permform the ListAbsDiff math operation 
+	 * perform the ListAbsDiff math operation 
 	 * @param a floating point value from the leftmost input
 	 * @param b list from the rightmost input
 	 */
@@ -31,7 +31,7 @@ public class ListAbsDiff implements ListOperator {
 	}
 
 	/**
-	 * permform the ListAbsDiff math operation 
+	 * perform the ListAbsDiff math operation 
 	 * @param a list from the leftmost input
 	 * @param b floating point value from the rightmost input
 	 */
@@ -46,7 +46,7 @@ public class ListAbsDiff implements ListOperator {
 	}
 
 	/**
-	 * permform the ListAbsDiff math operation 
+	 * perform the ListAbsDiff math operation 
 	 * @param a list from the leftmost input
 	 * @param b list from the rightmost input
 	 */

@@ -11,12 +11,12 @@ package ej;
  * ListAtan2:
  * interface used to perform ListAtan2 math operation
  * @author jourdan
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  * @see ej.lop
  */
 public class ListAtan2 implements ListOperator {
 	/**
-	 * permform the ListAtan2 math operation 
+	 * perform the ListAtan2 math operation 
 	 * @param a floating point value from the leftmost input
 	 * @param b list from the rightmost input
 	 */
@@ -31,7 +31,7 @@ public class ListAtan2 implements ListOperator {
 	}
 
 	/**
-	 * permform the ListAtan2 math operation 
+	 * perform the ListAtan2 math operation 
 	 * @param a list from the leftmost input
 	 * @param b floating point value from the rightmost input
 	 */
@@ -46,7 +46,7 @@ public class ListAtan2 implements ListOperator {
 	}
 
 	/**
-	 * permform the ListAtan2 math operation 
+	 * perform the ListAtan2 math operation 
 	 * @param a list from the leftmost input
 	 * @param b list from the rightmost input
 	 */

@@ -11,12 +11,12 @@ package ej;
  * ListInvIntDiv:
  * interface used to perform ListInvIntDiv math operation
  * @author jourdan
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  * @see ej.lop
  */
 public class ListInvIntDiv implements ListOperator {
 	/**
-	 * permform the ListInvIntDiv math operation 
+	 * perform the ListInvIntDiv math operation 
 	 * @param a floating point value from the leftmost input
 	 * @param b list from the rightmost input
 	 */
@@ -31,7 +31,7 @@ public class ListInvIntDiv implements ListOperator {
 	}
 
 	/**
-	 * permform the ListInvIntDiv math operation 
+	 * perform the ListInvIntDiv math operation 
 	 * @param a list from the leftmost input
 	 * @param b floating point value from the rightmost input
 	 */
@@ -46,7 +46,7 @@ public class ListInvIntDiv implements ListOperator {
 	}
 
 	/**
-	 * permform the ListInvIntDiv math operation 
+	 * perform the ListInvIntDiv math operation 
 	 * @param a list from the leftmost input
 	 * @param b list from the rightmost input
 	 */

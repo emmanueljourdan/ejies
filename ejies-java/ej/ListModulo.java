@@ -11,12 +11,12 @@ package ej;
  * ListModulo:
  * interface used to perform ListModulo math operation
  * @author jourdan
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  * @see ej.lop
  */
 public class ListModulo implements ListOperator {
 	/**
-	 * permform the ListModulo math operation 
+	 * perform the ListModulo math operation 
 	 * @param a floating point value from the leftmost input
 	 * @param b list from the rightmost input
 	 */
@@ -31,7 +31,7 @@ public class ListModulo implements ListOperator {
 	}
 
 	/**
-	 * permform the ListModulo math operation 
+	 * perform the ListModulo math operation 
 	 * @param a list from the leftmost input
 	 * @param b floating point value from the rightmost input
 	 */
@@ -46,7 +46,7 @@ public class ListModulo implements ListOperator {
 	}
 
 	/**
-	 * permform the ListModulo math operation 
+	 * perform the ListModulo math operation 
 	 * @param a list from the leftmost input
 	 * @param b list from the rightmost input
 	 */

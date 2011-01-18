@@ -11,12 +11,12 @@ package ej;
  * ListExp:
  * interface used to perform ListExp math operation
  * @author jourdan
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  * @see ej.lop
  */
 public class ListExp implements ListOperator {
 	/**
-	 * permform the ListExp math operation 
+	 * perform the ListExp math operation 
 	 * @param a floating point value from the leftmost input
 	 * @param b list from the rightmost input
 	 */
@@ -31,7 +31,7 @@ public class ListExp implements ListOperator {
 	}
 
 	/**
-	 * permform the ListExp math operation 
+	 * perform the ListExp math operation 
 	 * @param a list from the leftmost input
 	 * @param b floating point value from the rightmost input
 	 */
@@ -46,7 +46,7 @@ public class ListExp implements ListOperator {
 	}
 
 	/**
-	 * permform the ListExp math operation 
+	 * perform the ListExp math operation 
 	 * @param a list from the leftmost input
 	 * @param b list from the rightmost input
 	 */

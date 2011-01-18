@@ -11,12 +11,12 @@ package ej;
  * ListGTPass:
  * interface used to perform ListGTPass math operation
  * @author jourdan
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  * @see ej.lop
  */
 public class ListGTPass implements ListOperator {
 	/**
-	 * permform the ListGTPass math operation 
+	 * perform the ListGTPass math operation 
 	 * @param a floating point value from the leftmost input
 	 * @param b list from the rightmost input
 	 */
@@ -31,7 +31,7 @@ public class ListGTPass implements ListOperator {
 	}
 
 	/**
-	 * permform the ListGTPass math operation 
+	 * perform the ListGTPass math operation 
 	 * @param a list from the leftmost input
 	 * @param b floating point value from the rightmost input
 	 */
@@ -46,7 +46,7 @@ public class ListGTPass implements ListOperator {
 	}
 
 	/**
-	 * permform the ListGTPass math operation 
+	 * perform the ListGTPass math operation 
 	 * @param a list from the leftmost input
 	 * @param b list from the rightmost input
 	 */

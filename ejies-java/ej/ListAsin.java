@@ -11,12 +11,12 @@ package ej;
  * ListAsin:
  * interface used to perform ListAsin math operation
  * @author jourdan
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  * @see ej.lop
  */
 public class ListAsin implements ListOperator {
 	/**
-	 * permform the ListAsin math operation 
+	 * perform the ListAsin math operation 
 	 * @param a floating point value from the leftmost input
 	 * @param b list from the rightmost input
 	 */
@@ -31,7 +31,7 @@ public class ListAsin implements ListOperator {
 	}
 
 	/**
-	 * permform the ListAsin math operation 
+	 * perform the ListAsin math operation 
 	 * @param a list from the leftmost input
 	 * @param b floating point value from the rightmost input
 	 */
@@ -46,7 +46,7 @@ public class ListAsin implements ListOperator {
 	}
 
 	/**
-	 * permform the ListAsin math operation 
+	 * perform the ListAsin math operation 
 	 * @param a list from the leftmost input
 	 * @param b list from the rightmost input
 	 */

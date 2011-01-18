@@ -11,12 +11,12 @@ package ej;
  * ListRound:
  * interface used to perform ListRound math operation
  * @author jourdan
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  * @see ej.lop
  */
 public class ListRound implements ListOperator {
 	/**
-	 * permform the ListRound math operation 
+	 * perform the ListRound math operation 
 	 * @param a floating point value from the leftmost input
 	 * @param b list from the rightmost input
 	 */
@@ -31,7 +31,7 @@ public class ListRound implements ListOperator {
 	}
 
 	/**
-	 * permform the ListRound math operation 
+	 * perform the ListRound math operation 
 	 * @param a list from the leftmost input
 	 * @param b floating point value from the rightmost input
 	 */
@@ -46,7 +46,7 @@ public class ListRound implements ListOperator {
 	}
 
 	/**
-	 * permform the ListRound math operation 
+	 * perform the ListRound math operation 
 	 * @param a list from the leftmost input
 	 * @param b list from the rightmost input
 	 */

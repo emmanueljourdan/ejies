@@ -11,12 +11,12 @@ package ej;
  * ListNotEqual:
  * interface used to perform ListNotEqual math operation
  * @author jourdan
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  * @see ej.lop
  */
 public class ListNotEqual implements ListOperator {
 	/**
-	 * permform the ListNotEqual math operation 
+	 * perform the ListNotEqual math operation 
 	 * @param a floating point value from the leftmost input
 	 * @param b list from the rightmost input
 	 */
@@ -31,7 +31,7 @@ public class ListNotEqual implements ListOperator {
 	}
 
 	/**
-	 * permform the ListNotEqual math operation 
+	 * perform the ListNotEqual math operation 
 	 * @param a list from the leftmost input
 	 * @param b floating point value from the rightmost input
 	 */
@@ -46,7 +46,7 @@ public class ListNotEqual implements ListOperator {
 	}
 
 	/**
-	 * permform the ListNotEqual math operation 
+	 * perform the ListNotEqual math operation 
 	 * @param a list from the leftmost input
 	 * @param b list from the rightmost input
 	 */

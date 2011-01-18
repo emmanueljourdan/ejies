@@ -11,12 +11,12 @@ package ej;
  * ListProduit:
  * interface used to perform ListProduit math operation
  * @author jourdan
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  * @see ej.lop
  */
 public class ListProduit implements ListOperator {
 	/**
-	 * permform the ListProduit math operation 
+	 * perform the ListProduit math operation 
 	 * @param a floating point value from the leftmost input
 	 * @param b list from the rightmost input
 	 */
@@ -31,7 +31,7 @@ public class ListProduit implements ListOperator {
 	}
 
 	/**
-	 * permform the ListProduit math operation 
+	 * perform the ListProduit math operation 
 	 * @param a list from the leftmost input
 	 * @param b floating point value from the rightmost input
 	 */
@@ -46,7 +46,7 @@ public class ListProduit implements ListOperator {
 	}
 
 	/**
-	 * permform the ListProduit math operation 
+	 * perform the ListProduit math operation 
 	 * @param a list from the leftmost input
 	 * @param b list from the rightmost input
 	 */

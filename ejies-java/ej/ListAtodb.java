@@ -11,12 +11,12 @@ package ej;
  * ListAtodb:
  * interface used to perform ListAtodb math operation
  * @author jourdan
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  * @see ej.lop
  */
 public class ListAtodb implements ListOperator {
 	/**
-	 * permform the ListAtodb math operation 
+	 * perform the ListAtodb math operation 
 	 * @param a floating point value from the leftmost input
 	 * @param b list from the rightmost input
 	 */
@@ -31,7 +31,7 @@ public class ListAtodb implements ListOperator {
 	}
 
 	/**
-	 * permform the ListAtodb math operation 
+	 * perform the ListAtodb math operation 
 	 * @param a list from the leftmost input
 	 * @param b floating point value from the rightmost input
 	 */
@@ -46,7 +46,7 @@ public class ListAtodb implements ListOperator {
 	}
 
 	/**
-	 * permform the ListAtodb math operation 
+	 * perform the ListAtodb math operation 
 	 * @param a list from the leftmost input
 	 * @param b list from the rightmost input
 	 */

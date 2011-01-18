@@ -11,12 +11,12 @@ package ej;
  * ListCeil:
  * interface used to perform ListCeil math operation
  * @author jourdan
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  * @see ej.lop
  */
 public class ListCeil implements ListOperator {
 	/**
-	 * permform the ListCeil math operation 
+	 * perform the ListCeil math operation 
 	 * @param a floating point value from the leftmost input
 	 * @param b list from the rightmost input
 	 */
@@ -31,7 +31,7 @@ public class ListCeil implements ListOperator {
 	}
 
 	/**
-	 * permform the ListCeil math operation 
+	 * perform the ListCeil math operation 
 	 * @param a list from the leftmost input
 	 * @param b floating point value from the rightmost input
 	 */
@@ -46,7 +46,7 @@ public class ListCeil implements ListOperator {
 	}
 
 	/**
-	 * permform the ListCeil math operation 
+	 * perform the ListCeil math operation 
 	 * @param a list from the leftmost input
 	 * @param b list from the rightmost input
 	 */

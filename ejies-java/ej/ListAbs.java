@@ -11,13 +11,13 @@ package ej;
  * ListAbs:
  * interface used to perform ListAbs math operation
  * @author jourdan
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  * @see ej.lop
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class ListAbs implements ListOperator {
 	/**
-	 * permform the ListAbs math operation 
+	 * perform the ListAbs math operation 
 	 * @param a floating point value from the leftmost input
 	 * @param b list from the rightmost input
 	 */
@@ -32,7 +32,7 @@ public class ListAbs implements ListOperator {
 	}
 
 	/**
-	 * permform the ListAbs math operation 
+	 * perform the ListAbs math operation 
 	 * @param a list from the leftmost input
 	 * @param b floating point value from the rightmost input
 	 */
@@ -47,7 +47,7 @@ public class ListAbs implements ListOperator {
 	}
 
 	/**
-	 * permform the ListAbs math operation 
+	 * perform the ListAbs math operation 
 	 * @param a list from the leftmost input
 	 * @param b list from the rightmost input
 	 */

@@ -11,12 +11,12 @@ package ej;
  * ListLog10:
  * interface used to perform ListLog10 math operation
  * @author jourdan
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  * @see ej.lop
  */
 public class ListLog10 implements ListOperator {
 	/**
-	 * permform the ListLog10 math operation 
+	 * perform the ListLog10 math operation 
 	 * @param a floating point value from the leftmost input
 	 * @param b list from the rightmost input
 	 */
@@ -31,7 +31,7 @@ public class ListLog10 implements ListOperator {
 	}
 
 	/**
-	 * permform the ListLog10 math operation 
+	 * perform the ListLog10 math operation 
 	 * @param a list from the leftmost input
 	 * @param b floating point value from the rightmost input
 	 */
@@ -46,7 +46,7 @@ public class ListLog10 implements ListOperator {
 	}
 
 	/**
-	 * permform the ListLog10 math operation 
+	 * perform the ListLog10 math operation 
 	 * @param a list from the leftmost input
 	 * @param b list from the rightmost input
 	 */
