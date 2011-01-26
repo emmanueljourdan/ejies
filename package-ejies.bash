@@ -43,6 +43,9 @@ if [ $# == 2 ] ; then
 	rm -Rf ejies_tmp
 	echo -ne "done\n"	
 #	../install-ejies.bash ejies_$1.$2
+
+	echo "build finished: ejies_$1.$2.zip is on the ~/Desktop"
+	open ~/Desktop
 	exit 0
 fi
 echo "Usage: folder to install missing..."
