@@ -1,6 +1,6 @@
-e j i e s (version 2.0)
+e j i e s (version 2.01)
 by Emmanuel Jourdan, Ircam
-This version requires Max 5.0.0 or higher (5.0.8 or higher is highly recommended). If you want to use ejies with a previous version or Max, you might want to download ejies 1.58.
+This version requires Max 5.1.7 or higher. If you want to use ejies with Max 4.6.x, you might want to download ejies 1.58.
 
 Java externals:
 - ej.dx2x: create a list from intervals
@@ -77,5 +77,5 @@ Manual installation (MacOS or Windows):
 - put the ejies-javadoc folder in the ../Max5/java-doc/ or whatever you want (in the Max Search path or not...)
 
 Contact:
-manu(at)e--j.com
+web(at)e--j.com
 emmanuel.jourdan(at)ircam.fr

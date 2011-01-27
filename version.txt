@@ -11,8 +11,7 @@ Bug corrections:
 ej.function.js is no longer confused by pasting a function in curve mode while zoom is set (Thanks Peimain).
 ej.function.js: flip and flip_x now works properly in curve mode (Thanks again Peiman)
 ej.function.js: nbfunctions is now an alias of nbfunction so ej.fplay synchronizes again.
-
-
+ej.fplay: synch message works fine now, requires Max 5.1.7 or higher (Thanks Emar)
 
 
 
