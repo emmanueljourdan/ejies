@@ -53,7 +53,7 @@
 , 			{
 				"box" : 				{
 					"maxclass" : "comment",
-					"text" : "ej.cc.js",
+					"text" : "ej.cn.js",
 					"presentation" : 1,
 					"numoutlets" : 0,
 					"ignoreclick" : 1,

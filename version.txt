@@ -8,6 +8,7 @@ Improvments:
 ej.mout~: offset 1/0 attribute (default 1): when offset is set to 0, the position 0 corresponds to the first speaker. When offset is set to 1, the position 0 corresponds to the center of the first two speakers.
 
 Bug corrections:
+ej.cn.maxhelp fixed typo (Thanks Werner).
 ej.function.js is no longer confused by pasting a function in curve mode while zoom is set (Thanks Peimain).
 ej.function.js: flip and flip_x now works properly in curve mode (Thanks again Peiman)
 ej.function.js: nbfunctions is now an alias of nbfunction so ej.fplay synchronizes again.
