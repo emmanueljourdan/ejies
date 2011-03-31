@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.131 $
-	$Date: 2010/09/28 16:09:09 $
+	$Revision: 1.132 $
+	$Date: 2011/03/31 14:49:14 $
 */
 
 // global code
@@ -103,6 +103,7 @@ var LimitNP = 1; // clip num points MAX_CURVE_NP
 var SelectedCurve = -1;
 var prevy = 0;
 var MoveMode = 0;
+var PointSize = 5;
 
 var SketchFunctions = new Sketch(BoxWidth, BoxHeight);
 var slowDrawing = new Task(drawFunctions, this);	// pour empêcher le rafraichissement trop rapide
@@ -134,6 +135,7 @@ declareattribute("mousereport",			"getattr_mousereport",			"setattr_mousereport"
 declareattribute("numcurvepoints",		"getattr_numcurvepoints",		"setattr_numcurvepoints", 1);
 declareattribute("movemode",			"getattr_movemode",				"setattr_movemode", 1);
 declareattribute("mode",				"getattr_mode",					"setattr_mode", 1);
+declareattribute("pointsize",			"getattr_pointsize",			"setattr_pointsize", 1);
 
 if (max.version < 455)
 	ejies.error(this, "MaxMSP 4.5.5 or higher is required. Please upgrade!");
@@ -364,6 +366,12 @@ function offsetNCurves(courbe, p0, pn, dx)
 }
 offsetNCurves.local = 1;
 
+function setattr_pointsize(psize)
+{
+	PointSize = Math.max(1., Math.min(500., psize));
+	askForDrawFunctions();
+}
+
 // added point moving modes
 function setattr_movemode(mode)
 {
@@ -387,6 +395,12 @@ function getattr_movemode()
 {
 	outlet(DUMPOUT, "movemode", MoveMode);
 	return MoveMode;
+}
+
+function getattr_pointsize()
+{
+	outlet(DUMPOUT, "pointsize", PointSize);
+	return PointSize;
 }
 
 function init()
@@ -627,15 +641,15 @@ function SpriteFunctions()
 						
 						if ( f[c]["pa"][i].sustain) {
 							glcolor(f[c]["rgb3"], tmpTransparency);
-							circle(5 / BoxHeight); // 5 pixels le point...
+							circle(PointSize / BoxHeight); // 5 pixels le point...
 							glcolor(f[c]["frgb"], tmpTransparency);
 						}
 						else {
 							if (f[c]["pa"][i].valy == 0) {
 								f[c].OnePointAtZero = 1;
-								framecircle(5 / BoxHeight); // 5 pixels le point...
+								framecircle(PointSize / BoxHeight); // 5 pixels le point...
 							} else
-								circle(5 / BoxHeight); // 5 pixels le point...
+								circle(PointSize / BoxHeight); // 5 pixels le point...
 						}
 					}
 				}
@@ -3251,14 +3265,14 @@ function onidle(x,y,but,cmd,shift,capslock,option,ctrl)
 	else
 	{
 		for(i=0; i< np; i++) {
-
-			if ( (Math.abs(x - pa[i].x) < Tolerance) && (Math.abs(y - pa[i].y) < Tolerance) ) {
+			var dist = Math.sqrt((x - pa[i].x)*(x - pa[i].x) + (y - pa[i].y) * (y - pa[i].y));	// calculate disance from the point
+			if (dist <= (PointSize*0.5)) {
 				if (ClickMove == 1)
 					DisplayCursor(10);
 			
 				IdlePoint = i;
 
-				if ( IdlePoint != OldIdlePoint) {	// que quand c'est différent...
+				if (IdlePoint != OldIdlePoint) {	// que quand c'est différent...
 					RedrawOrNot(IdlePoint);
 					break;			
 				}

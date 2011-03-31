@@ -3,6 +3,8 @@ ejies - Version history
 *******************
 2.0.2:
 
+Improvments:
+ej.function now has a pointsize attribute (Contribution of Emar Vegt, Thanks!).
 
 Bug corrections:
 ej.cn.maxhelp fixed typo (Thanks Waj).
