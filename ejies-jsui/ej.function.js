@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.132 $
-	$Date: 2011/03/31 14:49:14 $
+	$Revision: 1.133 $
+	$Date: 2011/04/14 14:07:33 $
 */
 
 // global code
@@ -104,6 +104,7 @@ var SelectedCurve = -1;
 var prevy = 0;
 var MoveMode = 0;
 var PointSize = 5;
+var DrawToEdges = 0;
 
 var SketchFunctions = new Sketch(BoxWidth, BoxHeight);
 var slowDrawing = new Task(drawFunctions, this);	// pour empêcher le rafraichissement trop rapide
@@ -136,6 +137,7 @@ declareattribute("numcurvepoints",		"getattr_numcurvepoints",		"setattr_numcurve
 declareattribute("movemode",			"getattr_movemode",				"setattr_movemode", 1);
 declareattribute("mode",				"getattr_mode",					"setattr_mode", 1);
 declareattribute("pointsize",			"getattr_pointsize",			"setattr_pointsize", 1);
+declareattribute("drawtoedges",			"getattr_drawtoedges",			"setattr_drawtoedges", 1);
 
 if (max.version < 455)
 	ejies.error(this, "MaxMSP 4.5.5 or higher is required. Please upgrade!");
@@ -239,7 +241,7 @@ function CurveSeg(y0, y1, x0, x1, curve, nhops)
 	hopsize = this.delta / this.nhops;
 	vv = this.coeffs.bbp;
 				
-	for(j = 0; j < this.nhops; j++) {
+	for (var j = 0; j < this.nhops; j++) {
 		var cy = (vv - this.coeffs.bbp) * dy + this.y0;
 						
 		vv *= this.coeffs.mmp;		
@@ -372,6 +374,16 @@ function setattr_pointsize(psize)
 	askForDrawFunctions();
 }
 
+function setattr_drawtoedges(v)
+{
+	if (v == 0 || v == 1)
+		DrawToEdges = v;
+	else
+		ejies.error(this, "drawtoedges doesn't understand", v);
+		
+	askForDrawFunctions();
+}
+
 // added point moving modes
 function setattr_movemode(mode)
 {
@@ -401,6 +413,12 @@ function getattr_pointsize()
 {
 	outlet(DUMPOUT, "pointsize", PointSize);
 	return PointSize;
+}
+
+function getattr_drawtoedges()
+{
+	outlet(DUMPOUT, "drawtoedges", DrawToEdges);
+	return DrawToEdges;
 }
 
 function init()
@@ -571,7 +589,7 @@ SpriteLine.local = 1;
 function SpriteFunctions()
 {
 /* 	post("SpriteFunctions\n"); */
-	var c, i;
+	var c, i, j;
 	
 	with ( SketchFunctions ) {
 		glclearcolor(f[front].brgb);
@@ -602,8 +620,12 @@ function SpriteFunctions()
 				// dessine les segments
 				if ( f[c].display ) {
 					glcolor(f[c]["rgb2"], (c == front ? 1 : Ghostness));
-							
-					moveto(screentoworld(f[c]["pa"][0].x,f[c]["pa"][0].y ));
+					
+					if (DrawToEdges) {
+						moveto(screentoworld( val2x(f[front], f[front].domain[0]), f[c]["pa"][0].y )); //go to left limit and y of first point
+						lineto(screentoworld(f[c]["pa"][0].x,f[c]["pa"][0].y )); //draw a line to the first point
+					} else
+						moveto(screentoworld(f[c]["pa"][0].x,f[c]["pa"][0].y ));
 					
 					if (! isCurveMode) {
 						for (i = 0; i < (f[c].np - 1); i++) {
@@ -627,6 +649,9 @@ function SpriteFunctions()
 							lineto(screentoworld(thePoint.x, thePoint.y));		
 						}
 					}
+					
+					if (DrawToEdges)
+						lineto( screentoworld( val2x(f[front], f[front].domain[1]), f[c]["pa"][i].y ) ); //draw a line from last point to right limit
 				}
 				
 				// dessine les points de la courbe active ou de toutes les courbes si HiddenPointDisplay est activé
@@ -926,15 +951,22 @@ function interp(courbe, v)
 {
 	var i, a;
 	
-	if ( courbe.np < 2 )
+	// less than one point... abort!
+	if (courbe.np < 1)
 		return;
 	
-	if ( v < courbe.pa[0].valx ) {	// v est plus petit que le premier point
+	// 1 point output the Y value.
+	if (courbe.np < 2) {
+		outlet(INTERP_OUTLET, courbe.name, courbe.pa[0].valy);
+		return;
+	}
+	
+	if (v < courbe.pa[0].valx) {	// v est plus petit que le premier point
 		outlet(INTERP_OUTLET, courbe.name, courbe.pa[0].valy);
 		return;
 	}
 
-	if ( v > courbe.pa[courbe.np - 1].valx ) {	// v est plus grand que le dernier point
+	if (v > courbe.pa[courbe.np - 1].valx) {	// v est plus grand que le dernier point
 		outlet(INTERP_OUTLET, courbe.name, courbe.pa[courbe.np - 1].valy);
 		return;
 	}
@@ -4268,7 +4300,7 @@ function read(filename)
 
 			idx = 0;
 
-			var p;
+			var p, j;
 			var NeedUpdate = 0;
 			f[c].name = tmpLine[idx++];
 
