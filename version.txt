@@ -5,6 +5,7 @@ ejies - Version history
 
 Improvments:
 updated Max installer to work properly with Max 5 and Max 6
+removed unused old Max 4 inspector patches...
 ej.function now has a pointsize attribute (Contribution of Emar Vegt, Thanks!).
 ej.function now has a drawtoedges attribute (Contribution of Ingo Randolf, Thanks!).
 
