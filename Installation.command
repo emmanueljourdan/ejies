@@ -4,12 +4,6 @@
 ################################
 # Installations Methodes
 ################################
-function do5Installation {
-	echo "Installing ejies for Max 5, in $maxAppFolder:";
-	
-	doInstallation;
-}
-
 function doInstallation {
 	if [ -e "$C74Folder" ] ; then
 
@@ -86,47 +80,42 @@ DossierDeLInstalleur=$(dirname "$PathDeLInstalleur")
 ################################
 #  Version checking
 ################################
-whichVersion=0;
+installedAtLeastOneVersion=0;
 
+echo -ne "Checking version... ";
 if [ -e "/Applications/Max5" ]; then
-	whichVersion=1;
+	maxAppFolder="/Applications/Max5";
+	C74Folder="$maxAppFolder/Cycling '74";
+	
+	echo "Installing ejies for Max 5, in $maxAppFolder:";
+	doInstallationForMax5;
+	installedAtLeastOneVersion=1;
 fi
 
+if [ -e "/Applications/Max6" ]; then
+	maxAppFolder="/Applications/Max6";
+	C74Folder="$maxAppFolder/Cycling '74";
+	
+	echo "Installing ejies for Max 6, in $maxAppFolder:";
+	doInstallationForMax6;
+	installedAtLeastOneVersion=1;
+fi
+
+# on my C74 computer...
 if [ -e "/sysbuild/Development" ]; then
-	let "whichVersion = $whichVersion + 2";
+	maxAppFolder="/sysbuild/Development";
+	C74Folder="$maxAppFolder/Cycling '74";
+	
+	echo "Installing ejies for Max 6, in $maxAppFolder:";
+	doInstallationForMax6;
+	installedAtLeastOneVersion=1;
 fi
 
-if [[ $whichVersion == 0 ]]; then
-	echo "Max 5 is not installed in the /Applications folder. The ejies's automatic installation is not possible.";
+if [[ $installedAtLeastOneVersion == 0 ]]; then
+	echo "Max 5 or 6 is not installed in the /Applications folder. The ejies's automatic installation is not possible. Sorry...";
 	exit 1;
 fi
 
-echo -ne "Checking version... ";
-if [[ $whichVersion == 1 ]]; then 
-	echo "MaxMSP 5 is installed.";
-elif [[ $whichVersion == 2 ]]; then 
-	echo "A sysbuild Developement version is installed.";	# on my C74 computer...
-elif [[ $whichVersion == 3 ]]; then
-	echo "Max 5 and sysbuild Development build installed.";
-fi
-
-if [[ $whichVersion == 1 ]]; then
-		maxAppFolder="/Applications/Max5";
-		C74Folder="$maxAppFolder/Cycling '74";
-		do5Installation;
-elif [[ $whichVersion == 2 ]]; then
-		maxAppFolder="/sysbuild/Development";
-		C74Folder="$maxAppFolder/Cycling '74";
-		do5Installation;
-elif [[ $whichVersion == 3 ]]; then
-		maxAppFolder="/Applications/Max5";
-		C74Folder="$maxAppFolder/Cycling '74";
-		do5Installation;
-
-		maxAppFolder="/sysbuild/Development";
-		C74Folder="$maxAppFolder/Cycling '74";
-		do5Installation;
-fi
 
 ################################
 # Fin de l'installation
