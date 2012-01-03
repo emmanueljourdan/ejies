@@ -88,7 +88,7 @@ if [ -e "/Applications/Max5" ]; then
 	C74Folder="$maxAppFolder/Cycling '74";
 	
 	echo "Installing ejies for Max 5, in $maxAppFolder:";
-	doInstallationForMax5;
+	doInstallation;
 	installedAtLeastOneVersion=1;
 fi
 
@@ -97,7 +97,7 @@ if [ -e "/Applications/Max6" ]; then
 	C74Folder="$maxAppFolder/Cycling '74";
 	
 	echo "Installing ejies for Max 6, in $maxAppFolder:";
-	doInstallationForMax6;
+	doInstallation;
 	installedAtLeastOneVersion=1;
 fi
 
@@ -107,7 +107,7 @@ if [ -e "/sysbuild/Development" ]; then
 	C74Folder="$maxAppFolder/Cycling '74";
 	
 	echo "Installing ejies for Max 6, in $maxAppFolder:";
-	doInstallationForMax6;
+	doInstallation;
 	installedAtLeastOneVersion=1;
 fi
 
