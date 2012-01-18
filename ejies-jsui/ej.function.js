@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.133 $
-	$Date: 2011/04/14 14:07:33 $
+	$Revision: 1.134 $
+	$Date: 2012/01/18 16:33:53 $
 */
 
 // global code
@@ -106,12 +106,14 @@ var MoveMode = 0;
 var PointSize = 5;
 var DrawToEdges = 0;
 
-var SketchFunctions = new Sketch(BoxWidth, BoxHeight);
+
+mgraphics.init();				// initialize mgraphics
+mgraphics.relative_coords = 0;	// coordinate system: x, y, width height
+mgraphics.autofill = 0;			// we want to fill the paths ourself
+
 var slowDrawing = new Task(drawFunctions, this);	// pour empêcher le rafraichissement trop rapide
 var slowDrawingAll = new Task(drawAll, this);	// pour empêcher le rafraichissement trop rapide
 var slowNotify = new Task(notifyclients, this);		// pour empêcher la mise à jour pattr trop rapide
-
-SketchFunctions.fsaa = fsaaValue;
 
 RedrawEnable = 0;	// désactivation de l'affichage pendant l'initialisation
 NotifyEnable = 0;
@@ -437,19 +439,21 @@ function init()
 init.local = 1;
 
 //////////////// Fonctions Affichage ///////////////
+/*
 function draw()
 {
-	sketch.copypixels(SketchFunctions, 0, 0);
-
+	post("function draw...\n");
+	SpriteFunctions();
+	
 	if ( LegendState )
 		SpriteText();
 
 	if (LineValue >= f[front].domain[0])
 		SpriteLine();
 
-/* 	post("draw operation completed\n"); */
+// 	post("draw operation completed\n"); 
 	refresh();
-}
+}*/
 
 function askForDrawFunctions()
 {	
@@ -465,37 +469,11 @@ askForDrawingAll.local = 1;
 
 function drawAll()
 {
-	if (RedrawEnable) {
-		SpriteFunctions();
-		draw();
-		drawText.display = 0;
-		drawFunctions.display = 0;
-	} else {
-		drawText.display = 1;
-		drawFunctions.display = 1;
-	}
+	mgraphics.redraw();
 }
 
-function drawText()
-{
-	if (RedrawEnable) {
-		draw();
-		drawText.display = 0;
-	} else
-		drawText.display = 1;
-}
-drawText.local = 1;
-
-function drawFunctions()
-{
-	if (RedrawEnable) {
-		SpriteFunctions();
-		draw();
-		drawFunctions.display = 0;
-	} else
-		drawFunctions.display = 1;
-}
-drawFunctions.local = 1;
+function drawText() { drawAll(); }
+function drawFunctions() { drawAll(); }
 
 function askForNotify()
 {
@@ -516,27 +494,47 @@ function DoNotify()
 }
 DoNotify.local = 1;
 
-function SpriteText()
+function paint()
 {
-	with ( sketch ) {
+	paintFunctions();
+	if (LegendState)
+		paintText();
+
+	if (LineValue >= f[front].domain[0])
+		paintLine();
+}
+
+function paintText()
+{
+	var str, strW, strH;
+	var fontmeasure, baselineoffset;
+	var width = this.box.rect[2] - this.box.rect[0];
+	var height = this.box.rect[3] - this.box.rect[1];
+
+	with ( mgraphics ) {
 		// Nom de la Courbe
-		moveto((BoxWidth - Bordure)/BoxHeight,(BoxHeight - LegendStateBordure - Bordure)/BoxHeight);
+		select_font_face("Arial", "normal", "normal");
+		set_font_size(11.0);
+		set_source_rgb(f[front].rgb4);
+		fontmeasure = mgraphics.font_extents();
+		baselineoffset = -fontmeasure[1] + (fontmeasure[0]+fontmeasure[1]) / 2;
 
-		font("Arial");
-		fontsize(11);
-		textalign("right","center");
-		glcolor(f[front].rgb4);
-		
-		if ( BoxWidth < 130 && (SelectedPoint >= 0  || IdlePoint >= 0) ) { ;} //
-		else {
+		if ( BoxWidth < 130 && (SelectedPoint >= 0  || IdlePoint >= 0) ) {
+			;	// don't do anything if there's not enough space
+		} else {
 			if (f[front].display)
-				text(f[front].name);
+				str = f[front].name;
 			 else
-				text("("+f[front].name+")");
+				str = "("+ f[front].name + ")";
 		}
-
+		strW = text_measure(str)[0];
+		strH = text_measure(str)[1];
+		
+		move_to(width - Bordure - strW, Bordure + strH - baselineoffset);
+		show_text(str);
+		
 		if (isCurveMode) {
-					if (f[front].np > 0 && (SelectedPoint >= 0  || IdlePoint >= 0) || SelectedCurve > 0) {
+			if (f[front].np > 0 && (SelectedPoint >= 0  || IdlePoint >= 0) || SelectedCurve > 0) {
 				var WhichPoint = SelectedCurve > 0 ? (SelectedCurve) : ((SelectedPoint >=0 ) ? SelectedPoint : IdlePoint);
 	
 				if ( WhichPoint < f[front].np) {
@@ -544,13 +542,15 @@ function SpriteText()
 					if (f[front].pa[WhichPoint].fix)
 						sep = "=";
 	
-					fontsize(10);
-					textalign("left","center");
-					moveto(-(BoxWidth - Bordure)/BoxHeight,(BoxHeight - LegendStateBordure - Bordure)/BoxHeight);
 					if (TimeFlag)
-						text("X" + sep + MyDomain2String(f[front]["pa"][WhichPoint].valx) + " Y" + sep + f[front]["pa"][WhichPoint].valy.toFixed(2) + " c" + sep + f[front]["pa"][WhichPoint].curve.toFixed(3));
+						str = "X" + sep + MyDomain2String(f[front]["pa"][WhichPoint].valx) + " Y" + sep + f[front]["pa"][WhichPoint].valy.toFixed(2) + " c" + sep + f[front]["pa"][WhichPoint].curve.toFixed(3);
 					else
-						text("X" + sep + f[front]["pa"][WhichPoint].valx.toFixed(2) + " Y" + sep + f[front]["pa"][WhichPoint].valy.toFixed(2) + " c" + sep + f[front]["pa"][WhichPoint].curve.toFixed(3));
+						str = "X" + sep + f[front]["pa"][WhichPoint].valx.toFixed(2) + " Y" + sep + f[front]["pa"][WhichPoint].valy.toFixed(2) + " c" + sep + f[front]["pa"][WhichPoint].curve.toFixed(3);
+					
+					strW = text_measure(str)[0];
+					strH = text_measure(str)[1];
+					move_to(Bordure, Bordure + strH - baselineoffset);
+					show_text(str);
 				}
 			}
 		} else {
@@ -562,56 +562,62 @@ function SpriteText()
 					if (f[front].pa[WhichPoint].fix)
 						sep = "=";
 	
-					fontsize(10);
-					textalign("left","center");
-					moveto(-(BoxWidth - Bordure)/BoxHeight,(BoxHeight - LegendStateBordure - Bordure)/BoxHeight);
 					if (TimeFlag)
-						text("X" + sep + MyDomain2String(f[front]["pa"][WhichPoint].valx) + " Y" + sep + f[front]["pa"][WhichPoint].valy.toFixed(2));
+						str = "X" + sep + MyDomain2String(f[front]["pa"][WhichPoint].valx) + " Y" + sep + f[front]["pa"][WhichPoint].valy.toFixed(2);
 					else
-						text("X" + sep + f[front]["pa"][WhichPoint].valx.toFixed(2) + " Y" + sep + f[front]["pa"][WhichPoint].valy.toFixed(2));
+						str = "X" + sep + f[front]["pa"][WhichPoint].valx.toFixed(2) + " Y" + sep + f[front]["pa"][WhichPoint].valy.toFixed(2);
+					
+					strW = text_measure(str)[0];
+					strH = text_measure(str)[1];
+					move_to(Bordure, Bordure + strH - baselineoffset);
+					show_text(str);
 				}
 			}
 		}
-	}
-}
-SpriteText.local = 1;
-
-function SpriteLine()
-{
-	with ( sketch ) {
-		glcolor(f[front].rgb6);
-		linesegment(	screentoworld(val2x(f[front], LineValue), BoxHeight),
-						screentoworld(val2x(f[front], LineValue), 0));
-	}
-}
-SpriteLine.local = 1;
-
-function SpriteFunctions()
-{
-/* 	post("SpriteFunctions\n"); */
-	var c, i, j;
-	
-	with ( SketchFunctions ) {
-		glclearcolor(f[front].brgb);
-		glclear();
 		
-		// dessine la grille X
+	}
+}
+
+function paintLine()
+{
+	with ( mgraphics ) {
+		set_source_rgb(f[front].rgb6);
+		move_to(val2x(f[front], LineValue), this.box.rect[3] - this.box.rect[1]);
+		line_to(val2x(f[front], LineValue), 0);
+		stroke();
+	}
+}
+
+function paintFunctions()
+{
+	var c, i, j;
+	var width = this.box.rect[2] - this.box.rect[0];
+	var height = this.box.rect[3] - this.box.rect[1];
+
+	with ( mgraphics ) {
+		set_source_rgb(f[front].brgb);
+		rectangle(0, 0, width, height);
+		fill();
+		
+				// dessine la grille X
 		if (GridMode  & 1) {
-			glcolor(f[front]["rgb5"], Ghostness);
+			set_source_rgba(f[front]["rgb5"], Ghostness);
 			
 			for (i = 0; i < (((f[front].domain[1] - f[front].domain[0]) / f[front].grid_x)+1); i++) {
-			linesegment( screentoworld(val2x(f[front], i*f[front].grid_x + f[front].domain[0]), val2y(f[front], f[front].range[0]) ),
-				screentoworld( val2x(f[front], i*f[front].grid_x + f[front].domain[0]), val2y(f[front], f[front].range[1]) ) );
+				move_to(val2x(f[front], i*f[front].grid_x + f[front].domain[0]), val2y(f[front], f[front].range[0]));
+				line_to(val2x(f[front], i*f[front].grid_x + f[front].domain[0]), val2y(f[front], f[front].range[1]));
 			}
+			stroke();
 		}
 		// dessine le grille Y
 		if (GridMode & 2) {
-			glcolor(f[front]["rgb5"], Ghostness);
+			set_source_rgba(f[front]["rgb5"], Ghostness);
 			
 			for (i = 0; i < (((f[front].range[1] - f[front].range[0]) / f[front].grid_y)+1); i++) {
-				linesegment(screentoworld(val2x(f[front], f[front].domain[0]), val2y(f[front], i*f[front].grid_y + f[front].range[0])),
-				screentoworld(val2x(f[front], f[front].domain[1]), val2y(f[front], i *f[front].grid_y + f[front].range[0])));
+				move_to(val2x(f[front], f[front].domain[0]), val2y(f[front], i*f[front].grid_y + f[front].range[0]));
+				line_to(val2x(f[front], f[front].domain[1]), val2y(f[front], i *f[front].grid_y + f[front].range[0]));
 			}
+			stroke();
 		}
 	
 		for (c = 0; c < NbCourbes; c++) {
@@ -619,23 +625,23 @@ function SpriteFunctions()
 
 				// dessine les segments
 				if ( f[c].display ) {
-					glcolor(f[c]["rgb2"], (c == front ? 1 : Ghostness));
+					set_source_rgba(f[c]["rgb2"], (c == front ? 1 : Ghostness));
 					
 					if (DrawToEdges) {
-						moveto(screentoworld( val2x(f[front], f[front].domain[0]), f[c]["pa"][0].y )); //go to left limit and y of first point
-						lineto(screentoworld(f[c]["pa"][0].x,f[c]["pa"][0].y )); //draw a line to the first point
+						move_to(val2x(f[front],  f[front].domain[0]), f[c]["pa"][0].y ); //go to left limit and y of first point
+						line_to(f[c]["pa"][0].x, f[c]["pa"][0].y); //draw a line to the first point
 					} else
-						moveto(screentoworld(f[c]["pa"][0].x,f[c]["pa"][0].y ));
+						move_to(f[c]["pa"][0].x, f[c]["pa"][0].y);
 					
 					if (! isCurveMode) {
 						for (i = 0; i < (f[c].np - 1); i++) {
-							lineto(screentoworld(f[c]["pa"][i+1].x,f[c]["pa"][i+1].y ));
+							line_to(f[c]["pa"][i+1].x, f[c]["pa"][i+1].y);
 						}
 					} else {
 						for (i = 0; i < (f[c].np - 1); i++) {
 							var thePoint = f[c]["pa"][i+1];
 							
-							if(Math.abs(thePoint.curve) >= 0.001) {
+							if (Math.abs(thePoint.curve) >= 0.001) {
 								var cseg 	= thePoint.cseg;
 								var cpa 	= cseg.cpa; 
 								
@@ -643,38 +649,43 @@ function SpriteFunctions()
 									var cx = val2x(f[c], cpa[j][0]);
 									var cy = val2y(f[c], cpa[j][1]);
 									
-									lineto(screentoworld(cx, cy));
+									line_to(cx, cy);
 								}
 							}	
-							lineto(screentoworld(thePoint.x, thePoint.y));		
+							line_to(thePoint.x, thePoint.y);
 						}
 					}
 					
-					if (DrawToEdges)
-						lineto( screentoworld( val2x(f[front], f[front].domain[1]), f[c]["pa"][i].y ) ); //draw a line from last point to right limit
+					if (DrawToEdges) {
+						line_to(val2x(f[front], f[front].domain[1]), f[c]["pa"][i].y ); //draw a line from last point to right limit
+					}
+					
+					stroke();
 				}
 				
 				// dessine les points de la courbe active ou de toutes les courbes si HiddenPointDisplay est activé
 				if ( f[c].display && ((c == front) || HiddenPointDisplay) ) {
 					// dessine les points
 					var tmpTransparency = c == front ? 1 : Ghostness;
-					glcolor(f[c]["frgb"], tmpTransparency);
+					set_source_rgba(f[c]["frgb"], tmpTransparency);
 	
 					f[c].OnePointAtZero = 0;
 					for (i = 0; i < f[c].np; i++) {							
-						moveto(screentoworld(f[c]["pa"][i].x,f[c]["pa"][i].y ));
-						
 						if ( f[c]["pa"][i].sustain) {
-							glcolor(f[c]["rgb3"], tmpTransparency);
-							circle(PointSize / BoxHeight); // 5 pixels le point...
-							glcolor(f[c]["frgb"], tmpTransparency);
+							set_source_rgba(f[c]["rgb3"], tmpTransparency);
+							ellipse(f[c]["pa"][i].x - 5/2, f[c]["pa"][i].y - 5/2, 5, 5);// 5 pixels le point...
+							fill();
+							set_source_rgba(f[c]["frgb"], tmpTransparency);
 						}
 						else {
 							if (f[c]["pa"][i].valy == 0) {
 								f[c].OnePointAtZero = 1;
-								framecircle(PointSize / BoxHeight); // 5 pixels le point...
-							} else
-								circle(PointSize / BoxHeight); // 5 pixels le point...
+								ellipse(f[c]["pa"][i].x - 5/2, f[c]["pa"][i].y - 5/2, 5, 5);// 5 pixels le point...
+								stroke();
+							} else {
+								ellipse(f[c]["pa"][i].x - 5/2, f[c]["pa"][i].y - 5/2, 5, 5);// 5 pixels le point...
+								fill();
+							}
 						}
 					}
 				}
@@ -682,12 +693,11 @@ function SpriteFunctions()
 		}
 	}
 }
-SpriteFunctions.local = 1;
 
 function fsaa(v)
 {
 	fsaaValue = v;
-	SketchFunctions.fsaa = v;
+	//SketchFunctions.fsaa = v;
 	askForDrawingAll();
 }
 
@@ -757,7 +767,7 @@ function anything()
 function line(v)
 {
 	LineValue = v;
-	draw();
+	drawAll();
 }
 
 function onresize(w,h)
@@ -770,8 +780,6 @@ function onresize(w,h)
 	
 	BoxWidth = box.rect[2] - box.rect[0];
 	BoxHeight = box.rect[3] - box.rect[1];
-	SketchFunctions = new Sketch(BoxWidth, BoxHeight);
-	SketchFunctions.fsaa = fsaaValue;
 	AllPixel2Machin();
 	ValRecalculate();
 	drawAll();
@@ -2927,7 +2935,7 @@ function setattr_legend(v)
 	LegendState = v;
 	LegendStateBordure = 12 * v;		// 12 pixels la légende...
 	// redimensionnement du Sketch principal
-	SketchFunctions = new Sketch(BoxWidth, BoxHeight);
+//	SketchFunctions = new Sketch(BoxWidth, BoxHeight);
 	AllPixel2Machin();
 	ValRecalculate();
 	askForDrawingAll();
@@ -3092,8 +3100,8 @@ function resetall()
 	LectureInspector();			// lecture des arguments
 	defaults();					// Applique les couleurs et paramètres pas défaut
 	AllPixel2Machin();			// calcule le rapport pixel/temps/range
-	sketch.default2d();
-	fsaa(fsaaValue);
+	//sketch.default2d();
+	//fsaa(fsaaValue);
 	// initialisation de propriétés de variables
 	EditedWithMouse.state = 0;	// flag initialisation
 	PattrInterpError.flag = 0;
