@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.134 $
-	$Date: 2012/01/18 16:33:53 $
+	$Revision: 1.135 $
+	$Date: 2012/01/18 16:44:18 $
 */
 
 // global code
@@ -50,8 +50,6 @@ var isCurveMode = 0;
 var Tolerance = 4;
 var Bordure = 4;
 var LegendStateBordure = 12;
-var BoxWidth = box.rect[2] - box.rect[0];
-var BoxHeight = box.rect[3] - box.rect[1] ;
 var PixelDomain;
 var PixelRange;
 var front = 0;	// c'est plus court que "current"
@@ -519,7 +517,7 @@ function paintText()
 		fontmeasure = mgraphics.font_extents();
 		baselineoffset = -fontmeasure[1] + (fontmeasure[0]+fontmeasure[1]) / 2;
 
-		if ( BoxWidth < 130 && (SelectedPoint >= 0  || IdlePoint >= 0) ) {
+		if ( width < 130 && (SelectedPoint >= 0  || IdlePoint >= 0) ) {
 			;	// don't do anything if there's not enough space
 		} else {
 			if (f[front].display)
@@ -696,9 +694,7 @@ function paintFunctions()
 
 function fsaa(v)
 {
-	fsaaValue = v;
-	//SketchFunctions.fsaa = v;
-	askForDrawingAll();
+	// just for legacy
 }
 
 
@@ -772,14 +768,7 @@ function line(v)
 
 function onresize(w,h)
 {
-	// taille minimum 100*50 - le maximum dépend de fsaa
-	if (sketch.fsaa)
-		box.size(ejies.clip(w, 100, 1024),ejies.clip(h, 50, 1024));
-	else
-		box.size(ejies.clip(w, 100, 2048),ejies.clip(h, 50, 2048));
-	
-	BoxWidth = box.rect[2] - box.rect[0];
-	BoxHeight = box.rect[3] - box.rect[1];
+	box.size(ejies.clip(w, 100, 2048),ejies.clip(h, 50, 2048));
 	AllPixel2Machin();
 	ValRecalculate();
 	drawAll();
@@ -1463,8 +1452,8 @@ MySmooth.local = 1;
 
 function pixel2machin(courbe)
 {
-	courbe.PixelDomain = (courbe.ZoomX[1] - courbe.ZoomX[0]) / (BoxWidth-(Bordure*2));
-	courbe.PixelRange = (courbe.ZoomY[1] - courbe.ZoomY[0]) / (BoxHeight-LegendStateBordure-((Bordure*2)));
+	courbe.PixelDomain = (courbe.ZoomX[1] - courbe.ZoomX[0]) / ((this.box.rect[2]-this.box.rect[0])-(Bordure*2));
+	courbe.PixelRange = (courbe.ZoomY[1] - courbe.ZoomY[0]) / ((this.box.rect[3]-this.box.rect[1])-LegendStateBordure-((Bordure*2)));
 }
 pixel2machin.local = 1.;
 
@@ -2002,7 +1991,7 @@ MyFloat2Color.local = 1;
 function MyGridStep_x(courbe, v)
 {
 	if (typeof(v) == "number" && v > 0) {
-		if (((courbe.ZoomX[1] - courbe.ZoomX[0]) / v) < (BoxWidth-(Bordure*2) / 4) ) { /* très arbitraire tout ça */
+		if (((courbe.ZoomX[1] - courbe.ZoomX[0]) / v) < ((this.box.rect[2]-this.box.rect[0])-(Bordure*2) / 4) ) { /* très arbitraire tout ça */
 			courbe.grid_x = v;
 			DoNotify();
 			if (GridMode)
@@ -2016,7 +2005,7 @@ MyGridStep_x.local = 1;
 function MyGridStep_y(courbe, v)
 {
 	if (typeof(v) == "number" && v > 0) {
-		if (((courbe.ZoomY[1] - courbe.ZoomY[0]) / v) < BoxHeight / 4) { /* très arbitraire tout ça */
+		if (((courbe.ZoomY[1] - courbe.ZoomY[0]) / v) < (this.box.rect[3] - this.box.rect[1]) / 4) { /* très arbitraire tout ça */
 			courbe.grid_y = v;
 			DoNotify();
 			if (GridMode)
@@ -2934,8 +2923,6 @@ function setattr_legend(v)
 	
 	LegendState = v;
 	LegendStateBordure = 12 * v;		// 12 pixels la légende...
-	// redimensionnement du Sketch principal
-//	SketchFunctions = new Sketch(BoxWidth, BoxHeight);
 	AllPixel2Machin();
 	ValRecalculate();
 	askForDrawingAll();
@@ -3100,7 +3087,6 @@ function resetall()
 	LectureInspector();			// lecture des arguments
 	defaults();					// Applique les couleurs et paramètres pas défaut
 	AllPixel2Machin();			// calcule le rapport pixel/temps/range
-	//sketch.default2d();
 	//fsaa(fsaaValue);
 	// initialisation de propriétés de variables
 	EditedWithMouse.state = 0;	// flag initialisation
@@ -3354,7 +3340,9 @@ function onclick(x,y,but,cmd,shift,capslock,option,ctrl)
 	var np = f[front].np;
 	var MousePoint;
 	var i;
-	
+	var width = this.box.rect[2] - this.box.rect[0];
+	var height = this.box.rect[3] - this.box.rect[1];
+
 	prevy = y;
 	
 	//y = yOffset(y);
@@ -3365,8 +3353,8 @@ function onclick(x,y,but,cmd,shift,capslock,option,ctrl)
 	}
 	
 	SelectedPoint = -2;
-	x = ejies.clip(x - 2, Bordure, BoxWidth - Bordure);
-	y = ejies.clip(y - 2, Bordure + LegendStateBordure, BoxHeight - Bordure);
+	x = ejies.clip(x - 2, Bordure, width - Bordure);
+	y = ejies.clip(y - 2, Bordure + LegendStateBordure, height - Bordure);
 
 	
 	if (option && np > 1) {
@@ -3465,7 +3453,9 @@ function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 {
 	var borderthing = -1;
 	var i;
-	
+	var width = this.box.rect[2] - this.box.rect[0];
+	var height = this.box.rect[3] - this.box.rect[1];
+
 	if (AllowEdit == 0 || f[front].display == 0)
 		return;
 	
@@ -3541,8 +3531,8 @@ function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 			if (Snap2GridState & 2)
 				y = val2y(f[front], Math.round((y2val(f[front], y) - f[front].range[0]) / f[front].grid_y) * f[front].grid_y + f[front].range[0]);
 			
-			x = ejies.clip(x, Bordure, BoxWidth - Bordure);
-			y = ejies.clip(y, Bordure + LegendStateBordure, BoxHeight - Bordure);
+			x = ejies.clip(x, Bordure, width - Bordure);
+			y = ejies.clip(y, Bordure + LegendStateBordure, height - Bordure);
 		
 				if ( BorderSyncState == 1 && f[front].np > 2 && ( SelectedPoint == 0 || SelectedPoint == (f[front].np - 1 ) )) {
 					SelectedPoint == 0 ? borderthing = (f[front].np - 1) : borderthing = 0;
@@ -3555,7 +3545,7 @@ function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 					} else if (SelectedPoint > 0 && SelectedPoint < (f[front]["np"] - 1)) {
 						x = ejies.clip(x, f[front]["pa"][SelectedPoint-1].x, f[front]["pa"][SelectedPoint+1].x);
 					} else if (SelectedPoint == (f[front]["np"] - 1) ) {
-						x = ejies.clip(x, f[front]["pa"][SelectedPoint-1].x, BoxWidth);
+						x = ejies.clip(x, f[front]["pa"][SelectedPoint-1].x, width);
 					}
 				}
 				
@@ -3639,8 +3629,8 @@ function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 			if (Snap2GridState & 2)
 				y = val2y(f[front], Math.round((y2val(f[front], y) - f[front].range[0]) / f[front].grid_y) * f[front].grid_y + f[front].range[0]);
 			
-			x = ejies.clip(x, Bordure, BoxWidth - Bordure);
-			y = ejies.clip(y, Bordure + LegendStateBordure, BoxHeight - Bordure);
+			x = ejies.clip(x, Bordure, width - Bordure);
+			y = ejies.clip(y, Bordure + LegendStateBordure, height - Bordure);
 		
 			if ( BorderSyncState == 1 && f[front].np > 2 && ( SelectedPoint == 0 || SelectedPoint == (f[front].np - 1 ) )) {
 				SelectedPoint == 0 ? borderthing = (f[front].np - 1) : borderthing = 0;
@@ -3653,7 +3643,7 @@ function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 				} else if (SelectedPoint > 0 && SelectedPoint < (f[front]["np"] - 1)) {
 					x = ejies.clip(x, f[front]["pa"][SelectedPoint-1].x, f[front]["pa"][SelectedPoint+1].x);
 				} else if (SelectedPoint == (f[front]["np"] - 1) ) {
-					x = ejies.clip(x, f[front]["pa"][SelectedPoint-1].x, BoxWidth);
+					x = ejies.clip(x, f[front]["pa"][SelectedPoint-1].x, width);
 				}
 			}
 			
