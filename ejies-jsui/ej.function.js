@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.136 $
-	$Date: 2012/01/19 10:52:00 $
+	$Revision: 1.137 $
+	$Date: 2012/01/19 14:28:19 $
 */
 
 // global code
@@ -84,8 +84,6 @@ var paintTextImage = null;
 var paintFunctionsImage = null;
 swapPoints.tmp = new Point();
 DoNotify.done = 0;
-RedrawOrNot.DidYouDraw = 0;
-var tskDrawText = new Task();
 var tskDel = new Task();
 var tmpString = new String();
 var tmpRange, tmpDomain;	// utilisé dans Interp
@@ -459,22 +457,6 @@ function init()
 init.local = 1;
 
 //////////////// Fonctions Affichage ///////////////
-/*
-function draw()
-{
-	post("function draw...\n");
-	SpriteFunctions();
-	
-	if ( LegendState )
-		SpriteText();
-
-	if (LineValue >= f[front].domain[0])
-		SpriteLine();
-
-// 	post("draw operation completed\n"); 
-	refresh();
-}*/
-
 function askForDrawFunctions()
 {	
 	slowDrawing.schedule(20); // trigger the task one time
@@ -496,7 +478,6 @@ function drawAll()
 
 function drawText()
 {
-	post("drawText()\n");
 	paintTextNeedsRedraw = true;
 	mgraphics.redraw();
 }
@@ -529,6 +510,7 @@ DoNotify.local = 1;
 function paint()
 {
 	paintFunctions();
+	
 	if (LegendState)
 		paintText();
 
@@ -548,12 +530,13 @@ function paintText()
 			paintTextToContext(mg, width, height);
 			
 			paintTextImage = new Image(mg);
-			paintTextNeedsRedraw = false;
 		}
 	
 		mgraphics.image_surface_draw(paintTextImage);	// simply copying the image surface
 	} else
 		paintTextToContext(mgraphics, width, height);
+	
+	paintTextNeedsRedraw = false;
 }
 
 function paintTextToContext(context, width, height)
@@ -648,12 +631,13 @@ function paintFunctions()
 			paintFunctionsToContext(mg, width, height);
 			
 			paintFunctionsImage = new Image(mg);
-			paintFunctionsNeedsRedraw = false;
 		}
 		
 		mgraphics.image_surface_draw(paintFunctionsImage);
 	} else
 		paintFunctionsToContext(mgraphics, width, height);
+	
+	paintFunctionsNeedsRedraw = false;
 }
 
 function paintFunctionsToContext(context, width, height)
@@ -821,7 +805,7 @@ function anything()
 
 	// affichage si besoin est.
 	if ( (paintFunctionsNeedsRedraw + paintTextNeedsRedraw) == 2)
-		drawAll();
+		askForDrawingAll();
 	else if (paintTextNeedsRedraw)
 		drawText();
 	else if (paintFunctionsNeedsRedraw)
@@ -1785,33 +1769,6 @@ function swapPoints(courbe, num1, num2)
 	courbe.pa[num2] = swapPoints.tmp;
 }
 swapPoints.local = 1;
-
-function RedrawOrNot(v)
-{
-	post("redrawOrNot("+v+")\n");
-	if ( v == -1) {
-		tskDraw.cancel();		// arrêt de la task précédente
-		WaitALittleBit();	// si pas de point sélectionné on attend un peu avant de faire draw()
-	} else {
-		if (RedrawOrNot.DidYouDraw == 0 || v != RedrawOrNot.LastValue) { // soit l'affichage a déjà été fait (== 0), soit le point est différent
-			drawText();
-			RedrawOrNot.DidYouDraw = 1;
-		}
-		tskDraw.cancel();
-		RedrawOrNot.LastValue = v;
-	}
-}
-RedrawOrNot.local = 1;
-
-function WaitALittleBit()
-{
-	tskDraw.cancel();
-	// attend 750ms avant de redessiner
-	tskDraw = new Task(function() { if (! tskDraw.running) { drawText(); RedrawOrNot.DidYouDraw = 0; }  }, this);
-	tskDraw.interval = 750;
-	tskDraw.repeat(1);
-}
-WaitALittleBit.local = 1;
 
 function ArgsParser(courbe, msg, a) 
 {
@@ -3366,11 +3323,9 @@ function onidle(x,y,but,cmd,shift,capslock,option,ctrl)
 					DisplayCursor(10);
 			
 				IdlePoint = i;
-
-				if (IdlePoint != OldIdlePoint) {	// que quand c'est différent...
-					RedrawOrNot(IdlePoint);
+				
+				if (IdlePoint != OldIdlePoint)	// que quand c'est différent...
 					break;			
-				}
 			}
 		}
 		
@@ -3387,7 +3342,8 @@ function onidle(x,y,but,cmd,shift,capslock,option,ctrl)
 	else if (IdlePoint == -1 && shift == 0 && ClickAdd == 1 && ! option)
 		DisplayCursor(6);
 	
-	RedrawOrNot(IdlePoint);
+	if (IdlePoint != OldIdlePoint)	// que quand c'est différent...
+		drawText();
 }
 
 function onidleout()
@@ -4545,7 +4501,6 @@ function getattr_mode()
 	return isCurveMode;
 }
 
-// added MR - should be attribute?
 function setattr_numcurvepoints(num)
 {
 	numCurvePoints = num > 1 ? num : 1;
