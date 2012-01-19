@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.135 $
-	$Date: 2012/01/18 16:44:18 $
+	$Revision: 1.136 $
+	$Date: 2012/01/19 10:52:00 $
 */
 
 // global code
@@ -78,12 +78,14 @@ var CursorChange;
 var NotifyRecalledState;	// utilise pour l'envoi d'un message lors du rappel pattr
 var MouseReportState;
 var fsaaValue = 1;
+var paintTextNeedsRedraw = true;
+var paintFunctionsNeedsRedraw = true;
+var paintTextImage = null;
+var paintFunctionsImage = null;
 swapPoints.tmp = new Point();
-drawText.display = 0;
-drawFunctions.display = 0;
 DoNotify.done = 0;
 RedrawOrNot.DidYouDraw = 0;
-var tskDraw = new Task();
+var tskDrawText = new Task();
 var tskDel = new Task();
 var tmpString = new String();
 var tmpRange, tmpDomain;	// utilisé dans Interp
@@ -103,6 +105,7 @@ var prevy = 0;
 var MoveMode = 0;
 var PointSize = 5;
 var DrawToEdges = 0;
+var CachedDrawing = true;
 
 
 mgraphics.init();				// initialize mgraphics
@@ -138,6 +141,7 @@ declareattribute("movemode",			"getattr_movemode",				"setattr_movemode", 1);
 declareattribute("mode",				"getattr_mode",					"setattr_mode", 1);
 declareattribute("pointsize",			"getattr_pointsize",			"setattr_pointsize", 1);
 declareattribute("drawtoedges",			"getattr_drawtoedges",			"setattr_drawtoedges", 1);
+declareattribute("cacheddrawing",		"getattr_cacheddrawing",		"setattr_cacheddrawing", 1);
 
 if (max.version < 455)
 	ejies.error(this, "MaxMSP 4.5.5 or higher is required. Please upgrade!");
@@ -384,6 +388,18 @@ function setattr_drawtoedges(v)
 	askForDrawFunctions();
 }
 
+function setattr_cacheddrawing(v)
+{
+	if (v == 0 || v == 1) {
+		CachedDrawing = v;
+		paintTextNeedsRedraw = true;
+		paintFunctionsNeedsRedraw = true;
+	} else
+		ejies.error(this, "cacheddrawing doesn't understand", v);
+		
+	askForDrawingAll();
+}
+
 // added point moving modes
 function setattr_movemode(mode)
 {
@@ -419,6 +435,12 @@ function getattr_drawtoedges()
 {
 	outlet(DUMPOUT, "drawtoedges", DrawToEdges);
 	return DrawToEdges;
+}
+
+function getattr_cacheddrawing()
+{
+	outlet(DUMPOUT, "cacheddrawing", CachedDrawing);
+	return CachedDrawing;
 }
 
 function init()
@@ -467,11 +489,23 @@ askForDrawingAll.local = 1;
 
 function drawAll()
 {
+	paintTextNeedsRedraw = true;
+	paintFunctionsNeedsRedraw = true;
 	mgraphics.redraw();
 }
 
-function drawText() { drawAll(); }
-function drawFunctions() { drawAll(); }
+function drawText()
+{
+	post("drawText()\n");
+	paintTextNeedsRedraw = true;
+	mgraphics.redraw();
+}
+
+function drawFunctions()
+{
+	paintFunctionsNeedsRedraw = true;
+	mgraphics.redraw();
+}
 
 function askForNotify()
 {
@@ -504,12 +538,30 @@ function paint()
 
 function paintText()
 {
-	var str, strW, strH;
-	var fontmeasure, baselineoffset;
 	var width = this.box.rect[2] - this.box.rect[0];
 	var height = this.box.rect[3] - this.box.rect[1];
 
-	with ( mgraphics ) {
+	if (CachedDrawing) {
+		if (paintTextNeedsRedraw) {
+			var mg = new MGraphics(width, height);
+			
+			paintTextToContext(mg, width, height);
+			
+			paintTextImage = new Image(mg);
+			paintTextNeedsRedraw = false;
+		}
+	
+		mgraphics.image_surface_draw(paintTextImage);	// simply copying the image surface
+	} else
+		paintTextToContext(mgraphics, width, height);
+}
+
+function paintTextToContext(context, width, height)
+{
+	var str, strW, strH;
+	var fontmeasure, baselineoffset;
+	
+	with ( context ) {
 		// Nom de la Courbe
 		select_font_face("Arial", "normal", "normal");
 		set_font_size(11.0);
@@ -572,10 +624,8 @@ function paintText()
 				}
 			}
 		}
-		
 	}
 }
-
 function paintLine()
 {
 	with ( mgraphics ) {
@@ -588,11 +638,29 @@ function paintLine()
 
 function paintFunctions()
 {
-	var c, i, j;
 	var width = this.box.rect[2] - this.box.rect[0];
 	var height = this.box.rect[3] - this.box.rect[1];
 
-	with ( mgraphics ) {
+	if (CachedDrawing) {
+		if (paintFunctionsNeedsRedraw) {
+			var mg = new MGraphics(width, height);
+		
+			paintFunctionsToContext(mg, width, height);
+			
+			paintFunctionsImage = new Image(mg);
+			paintFunctionsNeedsRedraw = false;
+		}
+		
+		mgraphics.image_surface_draw(paintFunctionsImage);
+	} else
+		paintFunctionsToContext(mgraphics, width, height);
+}
+
+function paintFunctionsToContext(context, width, height)
+{
+	var c, i, j;
+
+	with ( context ) {
 		set_source_rgb(f[front].brgb);
 		rectangle(0, 0, width, height);
 		fill();
@@ -752,11 +820,11 @@ function anything()
 		DoNotify();
 
 	// affichage si besoin est.
-	if ( (drawFunctions.display + drawText.display) == 2)
+	if ( (paintFunctionsNeedsRedraw + paintTextNeedsRedraw) == 2)
 		drawAll();
-	else if (drawText.display)
+	else if (paintTextNeedsRedraw)
 		drawText();
-	else if (drawFunctions.display)
+	else if (paintFunctionsNeedsRedraw)
 		askForDrawFunctions();
 }
 
@@ -1720,6 +1788,7 @@ swapPoints.local = 1;
 
 function RedrawOrNot(v)
 {
+	post("redrawOrNot("+v+")\n");
 	if ( v == -1) {
 		tskDraw.cancel();		// arrêt de la task précédente
 		WaitALittleBit();	// si pas de point sélectionné on attend un peu avant de faire draw()
@@ -2523,11 +2592,11 @@ function all()
 	DoNotify();
 		
 	// affichage
-	if ( (drawFunctions.display + drawText.display) == 2)
+	if ( (paintFunctionsNeedsRedraw + paintTextNeedsRedraw) == 2)
 		askForDrawingAll();
-	else if (drawText.display)
+	else if (paintTextNeedsRedraw)
 		drawText();
-	else if (drawFunctions.display)
+	else if (paintFunctionsNeedsRedraw)
 		askForDrawFunctions();
 }
 
@@ -3516,7 +3585,6 @@ function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 				EditedWithMouse();	// quand c'est delete c'est fait dans onidle()
 				SelectedPoint = -2;	// si on a relâché c'est qu'il n'y a plus de points sélectionnés.
 				onidle(x,y, 0);		// tout pareil...
-	/* 			drawText(); */
 				return;
 			}
 			
@@ -3609,7 +3677,6 @@ function ondrag(x,y,but,cmd,shift,capslock,option,ctrl)
 			EditedWithMouse();	// quand c'est delete c'est fait dans onidle()
 			SelectedPoint = -2;	// si on a relâché c'est qu'il n'y a plus de points sélectionnés.
 			onidle(x,y, 0);		// tout pareil...
-	/* 		drawText(); */
 			return;
 		}
 		
