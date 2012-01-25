@@ -8,8 +8,7 @@ This version no longer works with Max 5.
 
 Improvments:
 ej.function.js: using Max 6's Mgraphics, you'll get at from 2.5x to 10x speed up! plus it's beautiful ;-)
-
-
+ej.mout~: uses a bigger window for nicer interpolation
 
 
 
