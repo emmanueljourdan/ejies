@@ -7,8 +7,8 @@
 	also based on parts of "cyclone" (pd) for the curve~ algorithm
 	http://suita.chopin.edu.pl/~czaja/miXed/externs/cyclone.html
 
-	$Revision: 1.137 $
-	$Date: 2012/01/19 14:28:19 $
+	$Revision: 1.138 $
+	$Date: 2012/01/25 10:27:13 $
 */
 
 // global code
@@ -111,6 +111,7 @@ mgraphics.relative_coords = 0;	// coordinate system: x, y, width height
 mgraphics.autofill = 0;			// we want to fill the paths ourself
 
 var slowDrawing = new Task(drawFunctions, this);	// pour empêcher le rafraichissement trop rapide
+var slowDrawingText = new Task(drawText, this);	// pour empêcher le rafraichissement trop rapide
 var slowDrawingAll = new Task(drawAll, this);	// pour empêcher le rafraichissement trop rapide
 var slowNotify = new Task(notifyclients, this);		// pour empêcher la mise à jour pattr trop rapide
 
@@ -462,6 +463,12 @@ function askForDrawFunctions()
 	slowDrawing.schedule(20); // trigger the task one time
 }
 askForDrawFunctions.local = 1;
+
+function askForDrawText()
+{
+	slowDrawingText.schedule(750);
+}
+askForDrawText.local = 1;
 
 function askForDrawingAll()
 {
@@ -3342,8 +3349,14 @@ function onidle(x,y,but,cmd,shift,capslock,option,ctrl)
 	else if (IdlePoint == -1 && shift == 0 && ClickAdd == 1 && ! option)
 		DisplayCursor(6);
 	
-	if (IdlePoint != OldIdlePoint)	// que quand c'est différent...
-		drawText();
+	if (IdlePoint != OldIdlePoint) {	// que quand c'est différent...
+		if (IdlePoint == -1)
+			askForDrawText();
+		else {
+			slowDrawingText.cancel();
+			drawText();
+		}
+	}
 }
 
 function onidleout()
