@@ -1,6 +1,19 @@
 ejies - Version history
 
 *******************
+3.0b2: X January 2012
+
+Note:
+This version no longer works with Max 5.
+
+Improvments:
+ej.function.js: using Max 6's Mgraphics, you'll get at from 2.5x to 10x speed up! plus it's beautiful ;-)
+
+
+
+
+
+*******************
 3.0b1: 3 January 2012
 
 Improvments:
