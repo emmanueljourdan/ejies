@@ -3,8 +3,8 @@
 	an alternative led...
 	since 1.54b3: mode button added
 	
-	$Revision: 1.12 $
-	$Date: 2008/10/02 09:25:39 $
+	$Revision: 1.13 $
+	$Date: 2012/01/26 07:47:16 $
 */
 
 // Global Code
@@ -32,8 +32,6 @@ var LedMode = 0;
 const MIN_SIZE = 15;
 const DUMP_OUTLET = 1;
 border = 0;
-sketch.fsaa = 1;
-sketch.default3d();
 
 declareattribute("mode",		"getattr_mode", 		"setattr_mode",			1);
 declareattribute("circlesize",	"getattr_circlesize", 	"setattr_circlesize",	1);
@@ -43,6 +41,10 @@ declareattribute("brgb2",		"getattr_brgb2", 		"setattr_brgb2",		1);
 declareattribute("frgb",		"getattr_frgb", 		"setattr_frgb",			1);
 declareattribute("frgb2",		"getattr_frgb2", 		"setattr_frgb2",		1);
 
+mgraphics.init();				// initialize mgraphics
+mgraphics.relative_coords = 0;	// coordinate system: x, y, width height
+mgraphics.autofill = 0;			// we want to fill the paths ourself
+
 function draw()
 {
 	if (! RedrawEnable)
@@ -51,29 +53,37 @@ function draw()
 	// optimisation of the display (appends only when the state changes)
 	if (Flash == OldFlash)
 		return;
+        
+    mgraphics.redraw();
+}
+draw.local = 1;	// private
 
-	with (sketch) {
+function paint()
+{
+    var width = this.box.rect[2] - this.box.rect[0];
+    var height = this.box.rect[3] - this.box.rect[1];
+    
+    // put the code here...
+    with (mgraphics) {
 		if (Flash)
-			glclearcolor(MyBrgb2);
+			set_source_rgb(MyBrgb2);
 		else
-			glclearcolor(MyBrgb);
+			set_source_rgb(MyBrgb);
 
-		glclear();			
+		rectangle(0, 0, width, height);
+        fill();
 
 		if (Flash)
-			glcolor(MyFrgb2);
+			set_source_rgb(MyFrgb2);
 		else
-			glcolor(MyFrgb);
+			set_source_rgb(MyFrgb);
 		
-		sphere(CircleRatio);
+		ellipse(width/2, height /2, width, height);
+        fill();
 	}
 
 	OldFlash = Flash;
-	
-	refresh();
-/* 	post("draw\n"); */
 }
-draw.local = 1;	// private
 
 function bang()
 {
@@ -157,19 +167,13 @@ function setattr_blinktime(v)
 function WaitAndStop()
 {
 	MyTask.schedule(FlashTime);
-/* 	MyTask.cancel();		// arrête une autre task en cours */
-/* 	MyTask = new Task(PutItOff); */
-/* 	MyTask.interval = FlashTime; */
-/* 	MyTask.repeat(1); */
 }
 WaitAndStop.local = 1;
 
 function PutItOff()
 {
-/* 	if ( ! arguments.callee.task.running) { */
-		Flash = 0;
-		draw();
-/* 	} */
+	Flash = 0;
+    draw();
 }
 PutItOff.local = 1;
 
