@@ -78,7 +78,7 @@ function paint()
 		else
 			set_source_rgb(MyFrgb);
 		
-		ellipse(width/2, height /2, width, height);
+		ellipse(width * (1.0 - CircleRatio) * 0.5, height * (1.0 - CircleRatio) * 0.5, width * CircleRatio, height * CircleRatio);
         fill();
 	}
 
