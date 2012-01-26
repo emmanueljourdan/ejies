@@ -1,6 +1,10 @@
-e j i e s (version 2.01)
+e j i e s (version 3.0b2)
 by Emmanuel Jourdan, Ircam
-This version requires Max 5.1.7 or higher. If you want to use ejies with Max 4.6.x, you might want to download ejies 1.58.
+This version requires Max 6.0.4 or higher.
+
+Older Version compatibility:
+- Max 5.1.7 or higher, use ejies 3.0b1
+- Max 4.6.x, you might want to download ejies 1.58.
 
 Java externals:
 - ej.dx2x: create a list from intervals
