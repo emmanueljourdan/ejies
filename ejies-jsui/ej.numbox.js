@@ -49,8 +49,10 @@ var AllowKeyboardState = 0;
 var NumericBoite; 				// utilisé dans unselect
 
 border = 0;
-sketch.fsaa = 0;
-sketch.default2d();
+
+mgraphics.init();				// initialize mgraphics
+mgraphics.relative_coords = 0;	// coordinate system: x, y, width height
+mgraphics.autofill = 0;			// we want to fill the paths ourself
 
 declareattribute("brgb",			"getattr_brgb", 		"setattr_brgb",			1);
 declareattribute("brgb2",			"getattr_brgb2", 		"setattr_brgb2",		1);
@@ -133,27 +135,34 @@ function draw()
 	if (! RedrawEnable)
 		return;
 	
+	mgraphics.redraw();
+}
+
+function paint()
+{
+	var width = this.box.rect[2] - this.box.rect[0];
+	var height = this.box.rect[3] - this.box.rect[1];
+	var strW, strH;
+
 	var DisplayValue ;
 	
-	with (sketch) {
-		fontsize(MyFontSize*(box.rect[3]-box.rect[1]));
-		font(MyFont);
+	with (mgraphics) {
+		//fontsize(MyFontSize*(box.rect[3]-box.rect[1]));
+		select_font_face("Arial", "normal", "normal");
+		set_font_size(MyFontSize*(box.rect[3]-box.rect[1]));
 
 		if (inside)
-			glclearcolor(MyBrgb2);
+			set_source_rgb(MyBrgb2);
 		else
-			glclearcolor(MyBrgb);
+			set_source_rgb(MyBrgb);
 			
-		
-		glclear();			
+		rectangle(0, 0, width, height);
+		fill();
 
 		if (inside)
-			glcolor(MyFrgb2);
+			set_source_rgb(MyFrgb2);
 	    else
-			glcolor(MyFrgb);
-		
-		textalign("center", "center");		
-		moveto(0,0)
+			set_source_rgb(MyFrgb);
 
 		if (MyVal == Number.NEGATIVE_INFINITY)		// = -∞
 			DisplayValue = "-inf";
@@ -166,8 +175,11 @@ function draw()
 				DisplayValue = "-" + LeadingText + Math.abs(MyVal).toFixed(approxi);
 		else										// tout le reste
 			DisplayValue = MyVal.toFixed(approxi); 
-			
-		text(DisplayValue);
+		
+		strW = text_measure(DisplayValue)[0];
+		strH = text_measure(DisplayValue)[1];
+		move_to((width - strW) * 0.5, height - (height - strH));
+		show_text(DisplayValue);
 		
 /* 		post("draw\n"); */
 	}
