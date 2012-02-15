@@ -103,7 +103,7 @@ var prevy = 0;
 var MoveMode = 0;
 var PointSize = 5;
 var DrawToEdges = 0;
-var CachedDrawing = true;
+var CachedDrawing = false;  // it doesn't seem to be really faster in my tests so let's make it nice.
 
 
 mgraphics.init();				// initialize mgraphics
