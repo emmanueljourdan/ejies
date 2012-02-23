@@ -12,41 +12,41 @@ function doInstallation {
 		fi
 		
 		echo -ne "- objects ($C74Folder/ejies/ejies-obj)"
-		cp -R "$DossierDeLInstalleur"/ejies-obj "$C74Folder/ejies/" && echo -ne "... done.\n"
+		cp -R "$InstallationSourceFolder"/ejies-obj "$C74Folder/ejies/" && echo -ne "... done.\n"
 
 		echo -ne "- help files ($C74Folder/ejies/ejies-help)"
-		cp -R "$DossierDeLInstalleur"/ejies-help "$C74Folder/ejies/" && echo -ne "... done.\n"
+		cp -R "$InstallationSourceFolder"/ejies-help "$C74Folder/ejies/" && echo -ne "... done.\n"
 		
 		echo -ne "- init files ($C74Folder/init/)"
-		cp -R "$DossierDeLInstalleur"/ejies-init/* "$C74Folder/init/" && echo -ne "... done.\n"
+		cp -R "$InstallationSourceFolder"/ejies-init/* "$C74Folder/init/" && echo -ne "... done.\n"
 		
 		echo -ne "- jsui files ($C74Folder/jsui-library/)"
-		cp -R "$DossierDeLInstalleur"/ejies-jsui/* "$C74Folder/jsui-library/" && echo -ne "... done.\n"
+		cp -R "$InstallationSourceFolder"/ejies-jsui/* "$C74Folder/jsui-library/" && echo -ne "... done.\n"
 		
 		echo -ne "- jsextensions file ($C74Folder/jsextensions/)"
-		cp -R "$DossierDeLInstalleur"/ejies-jsextensions/* "$C74Folder/jsextensions/" && echo -ne "... done.\n"
+		cp -R "$InstallationSourceFolder"/ejies-jsextensions/* "$C74Folder/jsextensions/" && echo -ne "... done.\n"
 	
 		echo -ne "- java lib file ($C74Folder/java/lib/ej.jar)"
-		cp -R "$DossierDeLInstalleur"/ejies-java/ej.jar "$C74Folder/java/lib/" && echo -ne "... done.\n"
+		cp -R "$InstallationSourceFolder"/ejies-java/ej.jar "$C74Folder/java/lib/" && echo -ne "... done.\n"
 	else
 		echo -ne "Sorry, $C74Folder doesn't exist. Init, jsui and jsextensions can't be installed.\n"
 	fi
 	
 	if [ -e "$maxAppFolder" ] ; then
 		echo -ne "- extras file ($maxAppFolder/patches/extras/)"
-		cp "$DossierDeLInstalleur"/ejies-extras/ejies-overview.maxpat "$maxAppFolder/patches/extras/" && echo -ne "... done.\n"
+		cp "$InstallationSourceFolder"/ejies-extras/ejies-overview.maxpat "$maxAppFolder/patches/extras/" && echo -ne "... done.\n"
 	
 		echo -ne "- prototypes ($maxAppFolder/patches/object-prototypes/)"
-		cp -R "$DossierDeLInstalleur"/ejies-prototypes/* "$maxAppFolder/patches/object-prototypes/" && echo -ne "... done.\n"
+		cp -R "$InstallationSourceFolder"/ejies-prototypes/* "$maxAppFolder/patches/object-prototypes/" && echo -ne "... done.\n"
 	
 # 		echo -ne "- inspectors ($maxAppFolder/patches/inspectors)"
-# 		cp "$DossierDeLInstalleur"/ejies-insp/* "$maxAppFolder/patches/inspectors/" && echo -ne "... done.\n"
+# 		cp "$InstallationSourceFolder"/ejies-insp/* "$maxAppFolder/patches/inspectors/" && echo -ne "... done.\n"
 		
 		echo -ne "- images ($maxAppFolder/patches/picts)"
-		cp -R "$DossierDeLInstalleur"/ejies-pict/* "$maxAppFolder/patches/picts/" && echo -ne "... done.\n"
+		cp -R "$InstallationSourceFolder"/ejies-pict/* "$maxAppFolder/patches/picts/" && echo -ne "... done.\n"
 		
 		echo -ne "- ejies-javadoc ($maxAppFolder/java-doc/)"
-		cp -R "$DossierDeLInstalleur"/ejies-javadoc "$maxAppFolder/java-doc/" && echo -ne "... done.\n"		
+		cp -R "$InstallationSourceFolder"/ejies-javadoc "$maxAppFolder/java-doc/" && echo -ne "... done.\n"		
 	else
 		echo -ne "Sorry, $maxAppFolder/ doesn't exist. Extra and prototypes can't be installed.\n"
 	fi
@@ -73,8 +73,8 @@ echo ""
 ################################
 # making PATH
 ################################
-PathDeLInstalleur=$0
-DossierDeLInstalleur=$(dirname "$PathDeLInstalleur")
+InstallationCommandPath=$0
+InstallationSourceFolder=$(dirname "$InstallationCommandPath")
 
 
 ################################
