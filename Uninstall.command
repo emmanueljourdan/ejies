@@ -3,9 +3,11 @@
 
 
 ################################
-# Uninstallations Methodes
+# Uninstallations Methods
 ################################
 function doRemove {
+	C74Folder="$maxAppFolder/Cycling '74";
+
 	if [ -e "$C74Folder" ] ; then
 		echo -ne "- init files ($C74Folder/init/)"
 		rm -f "$C74Folder/init"/ejies-* && echo -ne "... done.\n"
@@ -69,38 +71,35 @@ echo ""
 ################################
 #  Version checking
 ################################
-installedAtLeastOneVersion=0;
+removedAtLeastOneVersion=0;
 
 echo -ne "Checking version... ";
 if [ -e "/Applications/Max5" ]; then
 	maxAppFolder="/Applications/Max5";
-	C74Folder="$maxAppFolder/Cycling '74";
 	
 	echo "Uninstalling ejies for Max 5, in $maxAppFolder:";
 	doRemove;
-	installedAtLeastOneVersion=1;
+	removedAtLeastOneVersion=1;
 fi
 
 if [ -e "/Applications/Max6" ]; then
 	maxAppFolder="/Applications/Max6";
-	C74Folder="$maxAppFolder/Cycling '74";
 	
 	echo "Uninstalling ejies for Max 6, in $maxAppFolder:";
 	doRemove;
-	installedAtLeastOneVersion=1;
+	removedAtLeastOneVersion=1;
 fi
 
 # on my C74 computer...
 if [ -e "/sysbuild/Development" ]; then
 	maxAppFolder="/sysbuild/Development";
-	C74Folder="$maxAppFolder/Cycling '74";
 	
 	echo "Uninstalling ejies for Max 6, in $maxAppFolder:";
 	doRemove;
-	installedAtLeastOneVersion=1;
+	removedAtLeastOneVersion=1;
 fi
 
-if [[ $installedAtLeastOneVersion == 0 ]]; then
+if [[ $removedAtLeastOneVersion == 0 ]]; then
 	echo "Max 5 or 6 is not installed in the /Applications folder. The ejies's automatic uninstallation can't proceed. Sorry...";
 	exit 1;
 fi
