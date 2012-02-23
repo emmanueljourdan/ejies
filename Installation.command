@@ -1,8 +1,8 @@
 #!/bin/bash
-# This file must be saved in UTF-8 (because of the sortcuts)
+# This file must be saved in UTF-8
 
 ################################
-# Installations Methodes
+# Installations Methods
 ################################
 function doInstallation {
 	if [ -e "$C74Folder" ] ; then
@@ -39,9 +39,6 @@ function doInstallation {
 		echo -ne "- prototypes ($maxAppFolder/patches/object-prototypes/)"
 		cp -R "$InstallationSourceFolder"/ejies-prototypes/* "$maxAppFolder/patches/object-prototypes/" && echo -ne "... done.\n"
 	
-# 		echo -ne "- inspectors ($maxAppFolder/patches/inspectors)"
-# 		cp "$InstallationSourceFolder"/ejies-insp/* "$maxAppFolder/patches/inspectors/" && echo -ne "... done.\n"
-		
 		echo -ne "- images ($maxAppFolder/patches/picts)"
 		cp -R "$InstallationSourceFolder"/ejies-pict/* "$maxAppFolder/patches/picts/" && echo -ne "... done.\n"
 		
