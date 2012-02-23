@@ -5,6 +5,8 @@
 # Installations Methods
 ################################
 function doInstallation {
+	C74Folder="$maxAppFolder/Cycling '74";
+
 	if [ -e "$C74Folder" ] ; then
 
 		if [[ ! -e "$C74Folder/ejies" ]] ; then
@@ -82,7 +84,6 @@ installedAtLeastOneVersion=0;
 echo -ne "Checking version... ";
 if [ -e "/Applications/Max5" ]; then
 	maxAppFolder="/Applications/Max5";
-	C74Folder="$maxAppFolder/Cycling '74";
 	
 	echo "Installing ejies for Max 5, in $maxAppFolder:";
 	doInstallation;
@@ -91,7 +92,6 @@ fi
 
 if [ -e "/Applications/Max6" ]; then
 	maxAppFolder="/Applications/Max6";
-	C74Folder="$maxAppFolder/Cycling '74";
 	
 	echo "Installing ejies for Max 6, in $maxAppFolder:";
 	doInstallation;
@@ -101,7 +101,6 @@ fi
 # on my C74 computer...
 if [ -e "/sysbuild/Development" ]; then
 	maxAppFolder="/sysbuild/Development";
-	C74Folder="$maxAppFolder/Cycling '74";
 	
 	echo "Installing ejies for Max 6, in $maxAppFolder:";
 	doInstallation;
@@ -116,8 +115,8 @@ fi
 
 ################################
 # Fin de l'installation
-echo -ne "\nend of the installation... enjoy!\n"
-echo -ne "(you can quit the Terminal now...)\n"
+echo -ne "\nEnd of the installation... enjoy!\n"
+echo -ne "(You can quit the Terminal now...)\n"
 
 sleep 5 # under Snow Leopard it seems to quit really fast the terminal after installing
 
