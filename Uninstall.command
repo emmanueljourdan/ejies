@@ -5,12 +5,6 @@
 ################################
 # Uninstallations Methodes
 ################################
-function remove5 {
-	echo "Removing ejies for MaxMSP 5.:";
-	
-	doRemove;
-}
-
 function doRemove {
 	if [ -e "$C74Folder" ] ; then
 		echo -ne "- init files ($C74Folder/init/)"
@@ -75,39 +69,41 @@ echo ""
 ################################
 #  Version checking
 ################################
-whichVersion=0;
+installedAtLeastOneVersion=0;
 
-# if [ -e "/Applications/MaxMSP 4.5" ]; then
-# 	whichVersion=1;
-# fi
-# 
-# if [ -e "/Applications/MaxMSP 4.6" ]; then
-# 	let "whichVersion = $whichVersion + 2";
-# fi
-# 
-# if [[ $whichVersion == 0 ]]; then
-# 	echo "MaxMSP is not installed in the /Applications folder. The ejies's automatic uninstallation is not possible.";
-# 	exit 1;
-# fi
-# 
-# if [[ $whichVersion == 1 ]]; then 
-# 	remove45;	
-# elif [[ $whichVersion == 2 ]]; then 
-# 	remove46;
-# elif [[ $whichVersion == 3 ]]; then
-# 	remove45;	
-# 	remove46;
-# fi
-
-if [[ -e "/sysbuild/Development" ]]; then
-	maxAppFolder="/sysbuild/Development";
+echo -ne "Checking version... ";
+if [ -e "/Applications/Max5" ]; then
+	maxAppFolder="/Applications/Max5";
 	C74Folder="$maxAppFolder/Cycling '74";
-	remove5;
+	
+	echo "Uninstalling ejies for Max 5, in $maxAppFolder:";
+	doRemove;
+	installedAtLeastOneVersion=1;
 fi
 
-maxAppFolder="/Applications/Max5";
-C74Folder="$maxAppFolder/Cycling '74";
-remove5;
+if [ -e "/Applications/Max6" ]; then
+	maxAppFolder="/Applications/Max6";
+	C74Folder="$maxAppFolder/Cycling '74";
+	
+	echo "Uninstalling ejies for Max 6, in $maxAppFolder:";
+	doRemove;
+	installedAtLeastOneVersion=1;
+fi
+
+# on my C74 computer...
+if [ -e "/sysbuild/Development" ]; then
+	maxAppFolder="/sysbuild/Development";
+	C74Folder="$maxAppFolder/Cycling '74";
+	
+	echo "Uninstalling ejies for Max 6, in $maxAppFolder:";
+	doRemove;
+	installedAtLeastOneVersion=1;
+fi
+
+if [[ $installedAtLeastOneVersion == 0 ]]; then
+	echo "Max 5 or 6 is not installed in the /Applications folder. The ejies's automatic uninstallation can't proceed. Sorry...";
+	exit 1;
+fi
 
 echo -ne "done"
 echo -ne "\n\nend of the installation... enjoy!\n"
