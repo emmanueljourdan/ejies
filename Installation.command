@@ -75,21 +75,12 @@ echo ""
 InstallationCommandPath=$0
 InstallationSourceFolder=$(dirname "$InstallationCommandPath")
 
-
 ################################
 #  Version checking
 ################################
 installedAtLeastOneVersion=0;
 
 echo -ne "Checking version... ";
-if [ -e "/Applications/Max5" ]; then
-	maxAppFolder="/Applications/Max5";
-	
-	echo "Installing ejies for Max 5, in $maxAppFolder:";
-	doInstallation;
-	installedAtLeastOneVersion=1;
-fi
-
 if [ -e "/Applications/Max6" ]; then
 	maxAppFolder="/Applications/Max6";
 	
@@ -98,9 +89,10 @@ if [ -e "/Applications/Max6" ]; then
 	installedAtLeastOneVersion=1;
 fi
 
-# on my C74 computer...
-if [ -e "/sysbuild/Development" ]; then
-	maxAppFolder="/sysbuild/Development";
+# on any folder
+# you better hope it's a valid one
+if [[ $# -gt 0 ]]; then
+	maxAppFolder=$1;
 	
 	echo "Installing ejies for Max 6, in $maxAppFolder:";
 	doInstallation;
@@ -108,7 +100,7 @@ if [ -e "/sysbuild/Development" ]; then
 fi
 
 if [[ $installedAtLeastOneVersion == 0 ]]; then
-	echo "Max 5 or 6 is not installed in the /Applications folder. The ejies's automatic installation is not possible. Sorry...";
+	echo "Max 6 is not installed in the /Applications folder. The ejies's automatic installation is not possible. Sorry...";
 	exit 1;
 fi
 
