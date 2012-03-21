@@ -780,7 +780,7 @@ msg_float.immediate = 1;
 
 function list()
 {
-	ArgsParser(f[front], "list", arguments)
+	ArgsParser(f[front], "list", arguments);
 	DoNotify();
 }
 
@@ -2573,33 +2573,6 @@ function args4insp()
 {
 	// Shouldn't be modified anymore, it's not used since 1.52 in favor of embedmessage
 	ejies.error(this, "since 1.52 the parameters are embed with the patcher. Use the inspector insteed.");
-	return;
-	
-	var i, j;
-	var idx = 0;
-	var tmpArray = new Array();
-	tmpArray[idx++] = "args4insp";
-	
-	tmpArray[idx++] = NbCourbes;
-	tmpArray[idx++] = LegendState;
-	tmpArray[idx++] = GridMode;
-	tmpArray[idx++] = Snap2GridState;
-	tmpArray[idx++] = HiddenPointDisplay;
-	tmpArray[idx++] = ClickAdd;
-	tmpArray[idx++] = ClickMove;
-	tmpArray[idx++] = AutoSustain;
-	tmpArray[idx++] = TimeFlag;
-
-	for (i = 0; i < NbCourbes; i++) {
-		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(f[i].brgb[j] * 255); }
-		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(f[i].frgb[j] * 255); }
-		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(f[i].rgb2[j] * 255); }
-		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(f[i].rgb3[j] * 255); }
-		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(f[i].rgb4[j] * 255); }
-		for (j=0; j < 3; j++) { tmpArray[idx++] = Math.round(f[i].rgb5[j] * 255); }
-	}
-
-	outlet(DUMPOUT, tmpArray);
 }
 
 function setattr_autosustain(v)
