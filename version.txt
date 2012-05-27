@@ -13,6 +13,7 @@ ej.numbox.js: using Max 6's MGraphics
 ej.mout~: uses a bigger window for nicer interpolation
 ej.dialog: now has a floating window which allows you to move the dialog around
 Installation.command: can take an argument from the command line so you can install ejies anywhere you want (#6)
+ej.vdb~ and ej.vdb-sig~: improved efficiency of the windowing (about 2 times faster)
 
 
 
