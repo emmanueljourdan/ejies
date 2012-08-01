@@ -48,5 +48,5 @@ if [ $# == 2 ] ; then
 	open ~/Desktop
 	exit 0
 fi
-echo "Usage: folder to install missing..."
+echo -ne "Usage: folder to install missing...\n./package-ejies.bash /path/to/some/folder/where/you/want/the/archive/to/be/stored\n\n"
 
