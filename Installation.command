@@ -62,6 +62,21 @@ function doInstallation {
 # Installation process
 ################################
 clear
+
+
+################################
+# posting help just because
+# sometimes one forgots how
+# it's supposed to work
+################################
+if [[ $#0 -gt 0 && $1 == "-h" ]]; then
+	echo -ne "Usage:\n./Installation.command <optional>path_to_some_Max_folder\n";
+	exit 1;
+fi
+
+################################
+# installation starts
+################################
 echo "------------------------"
 echo "-- ejies Installation --"
 echo "------------------------"
