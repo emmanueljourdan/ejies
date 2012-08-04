@@ -3272,8 +3272,6 @@ function onidle(x,y,but,cmd,shift,capslock,option,ctrl)
 
 	y = yOffset(y);
 	
-	//post("idle\n");
-	
 	if(isCurveMode && option) {
 		DisplayCursor(9)
 		
