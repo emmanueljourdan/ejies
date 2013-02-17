@@ -1,5 +1,17 @@
 ejies - Version history
 
+
+*******************
+3.1b1: 19 February 2013
+
+Note:
+This version requires Max 6.1 or higher.
+
+Improvements:
+There's no installer anymore, ejies is package ready! Just drag the folder in one of the packages folders of Max.
+
+
+
 *******************
 3.0b2: X February 2012
 

@@ -1,8 +1,9 @@
-e j i e s (version 3.0b2)
-by Emmanuel Jourdan, Ircam
-This version requires Max 6.0.4 or higher.
+e j i e s (version 3.1b1)
+by Emmanuel Jourdan, e--j dev
+This version requires Max 6.1 or higher.
 
 Older Version compatibility:
+- Max 6.0.x: use ejies 3.0b2
 - Max 5.1.7 or higher, use ejies 3.0b1
 - Max 4.6.x, you might want to download ejies 1.58.
 
@@ -60,26 +61,9 @@ Unclassified:
 Collection of Aqua sliders.
 
 
-Other:
-- Installation.command: Bash script (MacOS X only) which allows you to install the ejies.
-- Unstallation.command: Bash script (MacOS X only) which allows you to uninstall the ejies (Why would you do that?).
-
-Automatic installation for MacOS X:
-- Double click on Installation.command and follow the instructions...
-- At the end of the installation you can quit the Terminal application.
-- If the installation doesn't work... you might have some problem of permission. follow the windows installation procedure.
-
-Manual installation (MacOS or Windows):
-- put the CONTENTS of the ejies-extras folder in the ../Max5/patches/extras folder
-- put the CONTENTS of the ejies-init folder in the C74:/init folder
-- put the CONTENTS (ej.jar) of the ejies-java folder in the C74:/java/lib folder
-- put the CONTENTS of the ejies-jsui folder in the C74:/jsui-library folder
-- put the CONTENTS of the ejies-jsextensions folder in the C74:/jsextensions folder
-- put the CONTENTS of the ejies-prototypes folder in the ./Max5/patches/object-protypes/ folder
-- put the ejies-obj folder in the C74:/ejies or whatever you want in the Max Search path
-- put the ejies-help folder in the C74:/ejies or whatever you want in the Max Search path
-- put the ejies-javadoc folder in the ../Max5/java-doc/ or whatever you want (in the Max Search path or not...)
+Installation:
+Drag the folder in one of Max's supported package folder.
 
 Contact:
-web(at)e--j.com
-emmanuel.jourdan(at)ircam.fr
+support(at)e--j.com
+http://support.e--j.com
