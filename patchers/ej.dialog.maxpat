@@ -807,7 +807,7 @@
 					"imagemask" : 1,
 					"maxclass" : "pictctrl",
 					"multiplier" : 1,
-					"name" : "ej.cancel.pct",
+					"name" : "ej.cancel.png",
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "int" ],
@@ -843,7 +843,7 @@
 					"imagemask" : 1,
 					"maxclass" : "pictctrl",
 					"multiplier" : 1,
-					"name" : "ej.ok.pct",
+					"name" : "ej.ok.png",
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "int" ],
@@ -866,7 +866,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 0.0, 0.0, 304.0, 106.0 ],
-					"pic" : "ej.dialog.pct"
+					"pic" : "ej.dialog.png"
 				}
 
 			}
@@ -1433,24 +1433,24 @@
 			}
  ],
 		"dependency_cache" : [ 			{
-				"name" : "ej.dialog.pct",
+				"name" : "ej.dialog.png",
 				"bootpath" : "/Users/ej/Perso-works/ejies/ejies-obj",
 				"patcherrelativepath" : "",
-				"type" : "PICT",
+				"type" : "PNG ",
 				"implicit" : 1
 			}
 , 			{
-				"name" : "ej.ok.pct",
+				"name" : "ej.ok.png",
 				"bootpath" : "/Users/ej/Perso-works/ejies/ejies-obj",
 				"patcherrelativepath" : "",
-				"type" : "PICT",
+				"type" : "PNG ",
 				"implicit" : 1
 			}
 , 			{
-				"name" : "ej.cancel.pct",
+				"name" : "ej.cancel.png",
 				"bootpath" : "/Users/ej/Perso-works/ejies/ejies-obj",
 				"patcherrelativepath" : "",
-				"type" : "PICT",
+				"type" : "PNG ",
 				"implicit" : 1
 			}
  ]
