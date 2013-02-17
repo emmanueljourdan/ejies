@@ -6,12 +6,12 @@
 				"numoutlets" : 2,
 				"topvalue" : 0,
 				"outlettype" : [ "int", "int" ],
-				"knobpict" : "ej.k-blue-h-tiny.pct",
+				"knobpict" : "ej.k-blue-h-tiny.png",
 				"rightvalue" : 100,
 				"clickedimage" : 0,
 				"numinlets" : 2,
 				"patching_rect" : [ 311.0, 340.0, 96.0, 10.0 ],
-				"bkgndpict" : "ej.bg-h-tiny.pct",
+				"bkgndpict" : "ej.bg-h-tiny.png",
 				"id" : "obj-13"
 			}
 

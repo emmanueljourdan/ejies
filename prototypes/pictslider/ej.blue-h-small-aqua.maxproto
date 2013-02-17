@@ -7,13 +7,13 @@
 				"horizontaltracking" : 0.0,
 				"topvalue" : 0,
 				"outlettype" : [ "int", "int" ],
-				"knobpict" : "ej.k-blue-h-small-aqua.pct",
+				"knobpict" : "ej.k-blue-h-small-aqua.png",
 				"verticaltracking" : 0.0,
 				"rightvalue" : 100,
 				"clickedimage" : 0,
 				"numinlets" : 2,
 				"patching_rect" : [ 147.0, 288.0, 96.0, 12.0 ],
-				"bkgndpict" : "ej.bg-h-small-aqua.pct",
+				"bkgndpict" : "ej.bg-h-small-aqua.png",
 				"id" : "obj-12"
 			}
 

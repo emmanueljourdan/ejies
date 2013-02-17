@@ -6,12 +6,12 @@
 				"numoutlets" : 2,
 				"topvalue" : 100,
 				"outlettype" : [ "int", "int" ],
-				"knobpict" : "ej.k-graph-v-big-aqua.pct",
+				"knobpict" : "ej.k-graph-v-big-aqua.png",
 				"rightvalue" : 0,
 				"clickedimage" : 0,
 				"numinlets" : 2,
 				"patching_rect" : [ 294.0, 291.0, 17.0, 100.0 ],
-				"bkgndpict" : "ej.bg-v-big-aqua.pct",
+				"bkgndpict" : "ej.bg-v-big-aqua.png",
 				"id" : "obj-28"
 			}
 

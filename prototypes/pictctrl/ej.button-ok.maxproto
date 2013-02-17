@@ -4,7 +4,7 @@
 				"maxclass" : "pictctrl",
 				"prototypename" : "ej.button-ok",
 				"numoutlets" : 1,
-				"name" : "ej.ok.pct",
+				"name" : "ej.ok.png",
 				"tracking" : 1,
 				"outlettype" : [ "int" ],
 				"multiplier" : 1,
