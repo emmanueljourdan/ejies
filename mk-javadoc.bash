@@ -1,12 +1,12 @@
 #!/bin/bash
 
-cd ejies-java
+cd java-classes
 
 if [ -e docflex* ] ; then
 	echo "DocFlex/Doclet is installed! Great!"
 	echo ""
 else
-	echo "DocFlex/Doclet doesn't seem to be installed in your system in: ejies-java folder"
+	echo "DocFlex/Doclet doesn't seem to be installed in your system in:java-classes folder"
 	echo "This is required for creating the java documentation"
 	echo "you can download it from: http://www.filigris.com/downloads/"
 	
