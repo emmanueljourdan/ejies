@@ -1,4 +1,4 @@
-e j i e s (version 3.1b1)
+e j i e s (version 3.1)
 by Emmanuel Jourdan, e--j dev
 This version requires Max 6.1 or higher.
 
