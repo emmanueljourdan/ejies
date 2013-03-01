@@ -19,7 +19,7 @@ import com.cycling74.msp.*;
  * @see ej.lop
  * @version $Revision: 1.14 $
  */
-public class linterp extends ej {
+public class linterp extends ejies {
 	private static final String[] INLET_ASSIST = new String[]{ "interpolation factor (0. = A -> 1. = B)", "List A", "List B" };
 	private static final String[] INLET_ASSIST_QUAD = new String[]{ "interpolation factor (list)", "List A", "List B", "List C", "List D" };
 	private static final String[] INLET_ASSIST_CUBE = new String[]{ "interpolation factor (list)", "List A", "List B", "List C", "List D", "List E", "List F", "List G", "List H" };

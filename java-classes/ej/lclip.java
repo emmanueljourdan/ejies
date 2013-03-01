@@ -16,7 +16,7 @@ import com.cycling74.msp.MSPBuffer;
  * @see ej
  * @version $Revision: 1.6 $
  */
-public class lclip extends ej {
+public class lclip extends ejies {
 	private static final String[] INLET_ASSIST = new String[]{ "List to be constrained", "Minimum", "Maximum" };
 	private static final String[] OUTLET_ASSIST = new String[]{ "Constrained list output"};	
 

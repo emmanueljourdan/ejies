@@ -15,7 +15,7 @@ import com.cycling74.msp.*;
  * @author jourdan
  * @see ej
  */
-public class l2buffer extends ej {
+public class l2buffer extends ejies {
 	private static final String[] INLET_ASSIST = new String[]{ "Samples values to write", "Channel" };
 
 	private String buf_name = null;

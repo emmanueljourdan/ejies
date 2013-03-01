@@ -15,7 +15,7 @@ import com.cycling74.max.*;
  * @see ej
  * @version $Revision: 1.3 $
  */
-public class x2dx extends ej {
+public class x2dx extends ejies {
 	private static final String[] INLET_ASSIST = new String[]{ "List" };
 	private static final String[] OUTLET_ASSIST = new String[]{ "intervals"};	
 

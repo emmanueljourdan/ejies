@@ -19,7 +19,7 @@ import com.cycling74.msp.MSPBuffer;
  * @see standart <code>slide, slide~, jit.slide</code> objects
  * @version $Revision: 1.14 $
  */
-public class lslide extends ej {
+public class lslide extends ejies {
 	private static final String[] INLET_ASSIST = new String[]{ "List to be smoothed", "Slide Up", "Slide Down" };
 	private static final String[] OUTLET_ASSIST = new String[]{ "Slided list"};	
 

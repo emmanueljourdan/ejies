@@ -16,7 +16,7 @@ import com.cycling74.max.*;
  * @see ej
  * @version $Revision: 1.11 $
  */
-public class lchange extends ej
+public class lchange extends ejies
 {
 	private static final String[] INLET_ASSIST = new String[]{ "Anything to be tested" };
 	private static final String[][] OUTLET_ASSIST = new String[][] {

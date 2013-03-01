@@ -16,7 +16,7 @@ import com.cycling74.max.*;
  * @author jourdan
  * @see ej
  */
-public class lop extends ej {
+public class lop extends ejies {
 	private static final String[] INLET_ASSIST = new String[]{ "Left Operand", "Right Operand" };
 	private static final String[] INLET_ASSIST_UNARY = new String[]{ "List to be processed", "Nothing here, for this operator" };
 	private static final String[] OUTLET_ASSIST = new String[]{ "Result", "dumpout"};

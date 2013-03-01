@@ -21,7 +21,7 @@ import java.util.Arrays;
  * @see ej
  * @version $Revision: 1.8 $
  */
-public class lscale extends ej {
+public class lscale extends ejies {
 	private static final String[] INLET_ASSIST = new String[]{ "List to be scaled", "Low input value", "High input value", "Low output value", "High output value", "Exponent" };
 	private static final String[] OUTLET_ASSIST = new String[]{ "Scaled list"};	
 

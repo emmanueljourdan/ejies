@@ -16,7 +16,7 @@ import com.cycling74.max.*;
  * @see ej
  * @version $Revision: 1.7 $
  */
-public class mtof extends ej {
+public class mtof extends ejies {
 	private static final String[] INLET_ASSIST = new String[]{ "MIDI note number in (int/float/list)" };
 	private static final String[] OUTLET_ASSIST = new String[]{ "Frequency out"};
 

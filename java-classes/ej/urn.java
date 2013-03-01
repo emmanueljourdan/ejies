@@ -17,7 +17,7 @@ import java.util.Random;
  * @see ej
  * @version $Revision: 1.5 $
  */
-public class urn extends ej {
+public class urn extends ejies {
 	private static final String[] INLET_ASSIST = new String[]{ "bang Generates Random Number", "Set Range of Random Number" };
 	private static final String[] OUTLET_ASSIST = new String[]{ "Random Number Output", "bang if All Numbers in Range Chosen" };
 	private int urnSize = 0;

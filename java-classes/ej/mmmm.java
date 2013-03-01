@@ -18,7 +18,7 @@ import java.util.Arrays;
  * @see ej
  * @version $Revision: 1.7 $
  */
-public class mmmm extends ej
+public class mmmm extends ejies
 {
 	private static final String[] INLET_ASSIST = new String[]{ "int/float" };
 	private static final String[] OUTLET_ASSIST = new String[]{ "minimum", "median", "mean", "maximum", "list of values / dumpout" };

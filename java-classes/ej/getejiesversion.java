@@ -18,7 +18,7 @@ import java.net.URL;
  * @author jourdan
  * @see ej
  */
-public class getejiesversion extends ej {
+public class getejiesversion extends ejies {
 	private static final String[] INLET_ASSIST = new String[] { "bang"};
 	private static final String[] OUTLET_ASSIST = new String[]{ "Current available version", "Current installed version" };
 

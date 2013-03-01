@@ -19,7 +19,7 @@ import com.cycling74.msp.MSPBuffer;
  * @author jourdan
  * @see ej
  */
-public class lquant extends ej {
+public class lquant extends ejies {
 	private static final String[] INLET_ASSIST = new String[]{ "List to be quantized", "Quantzing list"};
 	private static final String[] OUTLET_ASSIST = new String[]{ "Quantized list"};	
 

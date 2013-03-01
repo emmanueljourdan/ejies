@@ -30,7 +30,7 @@ import com.cycling74.max.*;
  * @author jourdan
  * @see "ej.function.js"
  */
-public class fplay extends ej {
+public class fplay extends ejies {
 	private static final String[] INLET_ASSIST = new String[]{ "quite anything..."};
 	private static final String[] OUTLET_ASSIST = new String[]{ "interpolated Y for input X", "points in line~ format", "dump message output", "sync outlet"	};
 	private static final int INTERP_OUTLET = 0;

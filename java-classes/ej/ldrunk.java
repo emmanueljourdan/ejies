@@ -18,7 +18,7 @@ import com.cycling74.msp.MSPBuffer;
  * @see ej
  * @version $Revision: 1.10 $
  */
-public class ldrunk extends ej {
+public class ldrunk extends ejies {
 	private static final String[] INLET_ASSIST = new String[]{ "clean list", "Random range (float/list)", "random step (± step / 2)", "probability of random (%)" };
 	private static final String[] OUTLET_ASSIST = new String[]{ "Drunked list"};	
 
