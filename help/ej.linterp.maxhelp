@@ -4243,7 +4243,7 @@
 									"maxclass" : "pictslider",
 									"id" : "obj-39",
 									"numinlets" : 2,
-									"knobpict" : "SliderDefaultKnob.pct",
+									"knobpict" : "SliderDefaultKnob.png",
 									"numoutlets" : 2,
 									"topvalue" : 100,
 									"rightmargin" : 4,
@@ -4253,7 +4253,7 @@
 									"topmargin" : 4,
 									"rightvalue" : 100,
 									"imagemask" : 1,
-									"bkgndpict" : "SliderDefaultBkgnd.pct",
+									"bkgndpict" : "SliderDefaultBkgnd.png",
 									"patching_rect" : [ 285.0, 196.0, 100.0, 100.0 ]
 								}
 
@@ -5144,7 +5144,7 @@
 									"maxclass" : "pictslider",
 									"id" : "obj-16",
 									"numinlets" : 2,
-									"knobpict" : "SliderDefaultKnob.pct",
+									"knobpict" : "SliderDefaultKnob.png",
 									"numoutlets" : 2,
 									"topvalue" : 100,
 									"rightmargin" : 4,
@@ -5154,7 +5154,7 @@
 									"topmargin" : 4,
 									"rightvalue" : 100,
 									"imagemask" : 1,
-									"bkgndpict" : "SliderDefaultBkgnd.pct",
+									"bkgndpict" : "SliderDefaultBkgnd.png",
 									"patching_rect" : [ 90.0, 213.0, 100.0, 100.0 ]
 								}
 
