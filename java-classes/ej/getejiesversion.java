@@ -1,5 +1,5 @@
 /*
- *	ej.getejiesversion by Emmanuel Jourdan, Ircam Ñ 05 2007
+ *	ej.getejiesversion by Emmanuel Jourdan, e--j dev Ñ 05 2007
  *
  *	$Revision: 1.3 $
  *	$Date: 2007/05/30 14:35:42 $

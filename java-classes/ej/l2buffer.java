@@ -1,5 +1,5 @@
 /*
- *	ej.l2buffer by Emmanuel Jourdan, Ircam Ñ 06 2005
+ *	ej.l2buffer by Emmanuel Jourdan, e--j dev Ñ 06 2005
  *
  *	$Revision: 1.6 $
  *	$Date: 2007/09/06 15:47:59 $

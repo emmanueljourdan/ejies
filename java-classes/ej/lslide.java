@@ -1,5 +1,5 @@
 /*
- *	ej.lslide by Emmanuel Jourdan, Ircam Ñ 02 2005
+ *	ej.lslide by Emmanuel Jourdan, e--j dev Ñ 02 2005
  *	slide for lists
  *
  *

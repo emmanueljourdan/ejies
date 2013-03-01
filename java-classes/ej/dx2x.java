@@ -1,5 +1,5 @@
 /*
- *	ej.x2x by Emmanuel Jourdan, Ircam Ñ 08 2005
+ *	ej.x2x by Emmanuel Jourdan, e--j dev Ñ 08 2005
  *	the famous dx->x
  *
  *	$Revision: 1.4 $

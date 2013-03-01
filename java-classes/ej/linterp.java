@@ -1,5 +1,5 @@
 /*
- *	ej.linterp by Emmanuel Jourdan, Ircam Ñ 04 2005
+ *	ej.linterp by Emmanuel Jourdan, e--j dev Ñ 04 2005
  *	simple list interpolator
  *
  *

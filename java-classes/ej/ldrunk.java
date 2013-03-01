@@ -1,5 +1,5 @@
 /*
- *	ej.ldrunk by Emmanuel Jourdan, Ircam Ñ 04 2005
+ *	ej.ldrunk by Emmanuel Jourdan, e--j dev Ñ 04 2005
  *	drunk for list
  *
  *

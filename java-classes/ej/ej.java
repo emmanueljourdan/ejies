@@ -1,5 +1,5 @@
 /*
- *	ejies Java externals by Emmanuel Jourdan, Ircam Ñ 12 2005
+ *	ejies Java externals by Emmanuel Jourdan, e--j dev Ñ 12 2005
  *
  *	$Revision: 1.14 $
  *	$Date: 2007/05/22 17:33:28 $
@@ -20,7 +20,7 @@ import java.io.*;
 public abstract class ej extends MaxObject
 {
 	private static boolean printedMessage;
-	private static String theMessage = "ejies Java externals by Emmanuel Jourdan, Ircam";
+	private static String theMessage = "ejies Java externals by Emmanuel Jourdan, e--j dev";
 
 	/** print the ejies copyright message once */
 	public ej() {
