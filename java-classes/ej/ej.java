@@ -34,51 +34,6 @@ public abstract class ej extends MaxObject
 	public void dblclick() {
 		// c'est super amusant, on peut faire un double clic...
 		post(theMessage);
-		String[] tmp = findVersion();
-		
-		if (tmp[0] != null && tmp[1] != null)
-			post("    version " + tmp[0] + "   ---   " + tmp[1]);
-
-	}
-
-	protected String[] findVersion() {
-		/*
-		 il faut chercher ceci :
-		 VersNum = "1.56b3"; 
-		 VersDate = "(04/2006)";
-		 */
-		
-		String theFile = MaxSystem.locateFile("ejies-jsextensions.js");
-		String[] versions = new String[2];
-	
-		BufferedReader inputFile = null;
-		try {   
-			inputFile = new BufferedReader(new FileReader(theFile));
-			String line = null;
-			Pattern pVers = Pattern.compile(".*VersNum = \\\"(.*)\\\".*");
-			Pattern pDate = Pattern.compile(".*VersDate = \\\"\\((\\d*/\\d*).*"); 
-			Matcher mVers, mDate;
-	
-			while((line = inputFile.readLine()) != null) {
-				mVers = pVers.matcher(line);
-				mDate = pDate.matcher(line);
-				
-				if (mVers.matches()) {
-					versions[0] = mVers.replaceAll("$1");
-				} else if (mDate.matches()) {
-					versions[1] = mDate.replaceAll("$1");
-					break;    // normalement la date est après le numbéro de version
-				}
-			}
-		} catch (Exception e) { /* l'utilisateur s'en fiche */ } 
-		finally {
-			try {
-				if (inputFile != null)
-					inputFile.close();
-			}
-			catch (IOException e) { /* pareil */ }
-		}
-		return versions;
 	}
 
 	/**

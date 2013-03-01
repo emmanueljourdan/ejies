@@ -26,7 +26,7 @@ public class getejiesversion extends ej {
 	 * create a getejiesversion object
 	 */
 	public getejiesversion()	{
-		declareIO(1, 2);
+		declareIO(1, 1);
 		
 		createInfoOutlet(false);
 		setInletAssist(INLET_ASSIST);
@@ -37,8 +37,6 @@ public class getejiesversion extends ej {
 	 * returns installed version number and current available version
 	 */
 	public void bang()  {
-		outlet(1, findVersion()[0]); // current installed version (defined in ej.class)
-
 		Thread t = new Thread (new Runnable() {
 			public void run() {
 		      	try {
