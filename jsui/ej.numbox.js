@@ -1,5 +1,5 @@
 /*
-	ej.numbox.js by Emmanuel Jourdan, Ircam - 08 2004
+	ej.numbox.js by Emmanuel Jourdan, e--j dev - 08 2004
 	an alternative number box.
 
 	$Revision: 1.19 $

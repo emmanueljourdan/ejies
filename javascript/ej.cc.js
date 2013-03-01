@@ -1,5 +1,5 @@
 /*
-	ej.cc.js (change color) by Emmanuel Jourdan, Ircam - 01 2005
+	ej.cc.js (change color) by Emmanuel Jourdan, e--j dev - 01 2005
 	Allows you to rename any named object.
  
 	$Revision: 1.12 $

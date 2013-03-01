@@ -1,5 +1,5 @@
 /*
-	ej.lui.js by Emmanuel Jourdan, Ircam — 09 2004
+	ej.lui.js by Emmanuel Jourdan, e--j dev — 09 2004
 	lui means Load jsUI...
 
 	$Revision: 1.9 $

@@ -760,7 +760,7 @@
 , 			{
 				"box" : 				{
 					"maxclass" : "message",
-					"text" : ";\rmax launchbrowser mailto:emmanuel.jourdan@ircam.fr?subject=ejies&body=Hi",
+					"text" : ";\rmax launchbrowser http://support.e--j.com",
 					"linecount" : 2,
 					"presentation" : 0,
 					"id" : "obj-50",
@@ -785,7 +785,7 @@
 , 			{
 				"box" : 				{
 					"maxclass" : "comment",
-					"text" : "© Emmanuel Jourdan, Ircam",
+					"text" : "© Emmanuel Jourdan, e--j dev",
 					"presentation" : 1,
 					"id" : "obj-51",
 					"numinlets" : 1,

@@ -1,5 +1,5 @@
 /*
-	ej.4m.js by Emmanuel Jourdan, Ircam — 06 2004
+	ej.4m.js by Emmanuel Jourdan, e--j dev — 06 2004
 	output the min, median, mean, maximum on a int/float stream
  
 	$Revision: 1.9 $

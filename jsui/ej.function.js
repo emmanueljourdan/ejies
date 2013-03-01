@@ -1,5 +1,5 @@
 /* 
-	ej.function.js by Emmanuel Jourdan, Ircam - 03 2005
+	ej.function.js by Emmanuel Jourdan, e--j dev - 03 2005
 	multi bpf editor (compatible with Max standart function GUI)
 	
 	curve additions from Martin Robinson

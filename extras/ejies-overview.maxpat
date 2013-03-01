@@ -698,7 +698,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 745.0, 386.0, 370.0, 25.0 ],
-					"text" : ";\rmax launchbrowser mailto:emmanuel.jourdan@ircam.fr?subject=ejies&body=Hi"
+					"text" : ";\rmax launchbrowser http://support.e--j.com"
 				}
 
 			}
@@ -714,7 +714,7 @@
 					"patching_rect" : [ 704.0, 321.0, 174.0, 19.0 ],
 					"presentation" : 1,
 					"presentation_rect" : [ 476.0, 303.0, 158.0, 19.0 ],
-					"text" : "© Emmanuel Jourdan, Ircam",
+					"text" : "© Emmanuel Jourdan, e--j dev",
 					"textcolor" : [ 0.356863, 0.356863, 0.356863, 1.0 ]
 				}
 

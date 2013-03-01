@@ -1,5 +1,5 @@
 /*
-	ej.dn.js by Emmanuel Jourdan, Ircam — 09 2004
+	ej.dn.js by Emmanuel Jourdan, e--j dev — 09 2004
 	display named objets (open the subpatcher)
 
 	$Revision: 1.6 $

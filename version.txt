@@ -452,5 +452,4 @@ Bug corrections:
 
 *******************
 Contact:
-manu(at)e--j.com
-emmanuel.jourdan(at)ircam.fr
+http://support.e--j.com

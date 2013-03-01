@@ -1,5 +1,5 @@
 /*
-	ej.op.js by Emmanuel Jourdan, Ircam — 09 2004
+	ej.op.js by Emmanuel Jourdan, e--j dev — 09 2004
 	open patchers
 
 	$Revision: 1.7 $

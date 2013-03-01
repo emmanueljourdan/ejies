@@ -1,5 +1,5 @@
 /*
-	ej.lock.js by Emmanuel Jourdan, Ircam — 07 2004
+	ej.lock.js by Emmanuel Jourdan, e--j dev — 07 2004
 	lock/unlock the actual patcher
 
 	$Revision: 1.7 $

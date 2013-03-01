@@ -35,7 +35,7 @@
 , 			{
 				"box" : 				{
 					"maxclass" : "message",
-					"text" : ";\rmax launchbrowser mailto:emmanuel.jourdan@ircam.fr?subject=ejies&body=Hi",
+					"text" : ";\rmax launchbrowser http://support.e--j.com",
 					"linecount" : 2,
 					"outlettype" : [ "" ],
 					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
@@ -52,7 +52,7 @@
 , 			{
 				"box" : 				{
 					"maxclass" : "comment",
-					"text" : "© Emmanuel Jourdan, Ircam",
+					"text" : "© Emmanuel Jourdan, e--j dev",
 					"presentation_rect" : [ 641.0, 468.0, 158.0, 20.0 ],
 					"patching_rect" : [ 366.0, 275.0, 158.0, 20.0 ],
 					"presentation" : 1,

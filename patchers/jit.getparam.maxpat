@@ -3189,7 +3189,7 @@
 , 			{
 				"box" : 				{
 					"maxclass" : "comment",
-					"text" : "© Emmanuel Jourdan, Ircam",
+					"text" : "© Emmanuel Jourdan, e--j dev",
 					"textcolor" : [ 0.356863, 0.356863, 0.356863, 1.0 ],
 					"numinlets" : 1,
 					"fontname" : "Arial",

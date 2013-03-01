@@ -1,5 +1,5 @@
 /*
-	ejies-jsextensions.js by Emmanuel Jourdan, Ircam - 02 2005
+	ejies-jsextensions.js by Emmanuel Jourdan, e--j dev - 02 2005
 	"shared library" used for the ejies JavaScripts
 	Pour l'instant, ça ne sert à rien... mais à l'avenir... j'en ferai sans doute un usage intensif :-)
 */

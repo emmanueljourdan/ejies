@@ -1,5 +1,5 @@
 /*
-	ej.cycle.js by Emmanuel Jourdan, Ircam - 02 2004
+	ej.cycle.js by Emmanuel Jourdan, e--j dev - 02 2004
 	send any type of data to the next outlet
  
 	$Revision: 1.6 $

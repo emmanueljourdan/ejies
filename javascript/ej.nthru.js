@@ -1,5 +1,5 @@
 /*
-	ej.nthru.js by Emmanuel Jourdan, Ircam - 05 2004
+	ej.nthru.js by Emmanuel Jourdan, e--j dev - 05 2004
 	Ce truc ne fait rien	 :-)
  
 	$Revision: 1.6 $

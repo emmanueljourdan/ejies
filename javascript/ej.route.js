@@ -1,5 +1,5 @@
 /*
-	ej.route.js by Emmanuel Jourdan, Ircam - 09 2004
+	ej.route.js by Emmanuel Jourdan, e--j dev - 09 2004
 	route data types (work for signal)
 
 	$Revision: 1.5 $

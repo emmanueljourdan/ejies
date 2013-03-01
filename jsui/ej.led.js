@@ -1,5 +1,5 @@
 /*
-	ej.led.js by Emmanuel Jourdan, Ircam - 09 2004
+	ej.led.js by Emmanuel Jourdan, e--j dev - 09 2004
 	an alternative led...
 	since 1.54b3: mode button added
 	

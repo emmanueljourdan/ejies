@@ -1,5 +1,5 @@
 /*
-	ej.cn.js (change name) by Emmanuel Jourdan, Ircam - 12 2004
+	ej.cn.js (change name) by Emmanuel Jourdan, e--j dev - 12 2004
 	Allows you to rename any named object.
 
 	$Revision: 1.5 $
