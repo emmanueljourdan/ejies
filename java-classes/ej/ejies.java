@@ -17,13 +17,13 @@ import java.io.*;
  * @see <a href="http://www.e--j.com">ejies</a>
  * @version $Revision: 1.14 $
  */
-public abstract class ej extends MaxObject
+public abstract class ejies extends MaxObject
 {
 	private static boolean printedMessage;
 	private static String theMessage = "ejies Java externals by Emmanuel Jourdan, e--j dev";
 
 	/** print the ejies copyright message once */
-	public ej() {
+	public ejies() {
 		if (printedMessage == false) {
 			dblclick();
 			printedMessage = true;
