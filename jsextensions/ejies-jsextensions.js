@@ -6,7 +6,7 @@
 
 var ejies = new EjiesUtils();
 post("\nejies", ejies.VersNum, ejies.VersDate);
-post("\n     by Emmanuel Jourdan\, Ircam\n");
+post("\n     by Emmanuel Jourdan\, e--j dev\n");
 
 function EjiesUtils()
 { 
