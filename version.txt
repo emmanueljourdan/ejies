@@ -2,6 +2,12 @@ ejies - Version history
 
 
 *******************
+3.11: 25 March 2013
+
+prototypes folder renamed object-prototypes so it works properly with the packages format.
+
+
+*******************
 3.1: 27 February 2013
 
 Note:
