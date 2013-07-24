@@ -21,6 +21,7 @@ public class buffer2l extends ejies {
 
 	private int grain = 512;
 	private String buf_name = null;
+	private int channel = 0;
 	private float[] sb = new float[0];
 	private float[] sbNegatives = new float[0];
 	private float[] sRMS = new float[0];
@@ -32,6 +33,7 @@ public class buffer2l extends ejies {
 		
 		declareAttribute("grain",  null, "setattrGrain");
 		declareAttribute("buf_name", null, "setattrBufName");
+		declareAttribute("channel", null, "setattrChannel");
 
 		setInletAssist(INLET_ASSIST);
 		setOutletAssist(OUTLET_ASSIST);
@@ -50,6 +52,13 @@ public class buffer2l extends ejies {
 	private void setattrBufName(String s) {
 		if (s != null)
 			this.buf_name = s;
+	}
+	
+	private void setattrChannel(int n) {
+		if (n > 0 && n <= 4)
+			channel = n;
+		else
+			error("ej.buffer2l: wrong channel (1-4)");
 	}
 	
 	private void calculateSamples() {
@@ -72,9 +81,9 @@ public class buffer2l extends ejies {
 		double inc = (double)frames / (double)blocks;
 		
 		for (int i = 0; i < Math.round(blocks); i++) {
-			sb[i] = peak(MSPBuffer.peek(buf_name, 0, Math.round(i * inc), Math.round(inc)));
-			sRMS[i] = rms(MSPBuffer.peek(buf_name, 0, Math.round(i *inc), Math.round(inc)));
-			sbNegatives[i] = peakNegatives(MSPBuffer.peek(buf_name, 0, Math.round(i * inc), Math.round(inc)));
+			sb[i] = peak(MSPBuffer.peek(buf_name, this.channel, Math.round(i * inc), Math.round(inc)));
+			sRMS[i] = rms(MSPBuffer.peek(buf_name, this.channel, Math.round(i *inc), Math.round(inc)));
+			sbNegatives[i] = peakNegatives(MSPBuffer.peek(buf_name, this.channel, Math.round(i * inc), Math.round(inc)));
 			sRMStimesMinus1[i] = sRMS[i] * -1;
 		}
 	}
