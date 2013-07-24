@@ -4,7 +4,7 @@
 		"appversion" : 		{
 			"major" : 6,
 			"minor" : 1,
-			"revision" : 0,
+			"revision" : 3,
 			"architecture" : "x86"
 		}
 ,
@@ -266,11 +266,11 @@
 					"numoutlets" : 3,
 					"outlettype" : [ "int", "", "" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 499.0, 413.0, 162.0, 157.0 ],
+					"patching_rect" : [ 499.0, 413.0, 170.0, 154.0 ],
 					"presentation" : 1,
 					"presentation_rect" : [ 453.0, 107.293159, 172.178345, 135.580688 ],
 					"tabcolor" : [ 0.937255, 0.92549, 0.792157, 1.0 ],
-					"tabs" : [ "ej.dx2x", "ej.fplay", "ej.ftom", "ej.l2buffer", "ej.lchange", "ej.lclip", "ej.ldrunk", "ej.linterp", "ej.lop", "ej.lquant", "ej.lscale", "ej.lslide", "ej.mmmm", "ej.mtof", "ej.urn", "ej.x2dx" ],
+					"tabs" : [ "ej.buffer2l", "ej.dx2x", "ej.fplay", "ej.ftom", "ej.l2buffer", "ej.lchange", "ej.lclip", "ej.ldrunk", "ej.linterp", "ej.lop", "ej.lquant", "ej.lscale", "ej.lslide", "ej.mmmm", "ej.mtof", "ej.urn", "ej.x2dx" ],
 					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ]
 				}
 
@@ -339,10 +339,6 @@
 					"htabcolor" : [ 0.937255, 0.92549, 0.792157, 1.0 ],
 					"htextcolor" : [ 0.015686, 0.388235, 0.501961, 1.0 ],
 					"id" : "obj-115",
-					"instance_attributes" : 					{
-
-					}
-,
 					"maxclass" : "tab",
 					"numinlets" : 1,
 					"numoutlets" : 3,
@@ -421,8 +417,8 @@
 					"id" : "obj-3",
 					"maxclass" : "newobj",
 					"numinlets" : 1,
-					"numoutlets" : 2,
-					"outlettype" : [ "", "" ],
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
 					"patching_rect" : [ 854.0, 133.0, 113.0, 17.0 ],
 					"text" : "mxj ej.getejiesversion"
 				}
@@ -572,7 +568,7 @@
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
 					"id" : "obj-38",
-					"items" : "<empty>",
+					"items" : "need internet",
 					"maxclass" : "umenu",
 					"menumode" : 2,
 					"numinlets" : 1,
@@ -624,7 +620,7 @@
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
 					"id" : "obj-41",
-					"items" : "<empty>",
+					"items" : "3.11",
 					"maxclass" : "umenu",
 					"menumode" : 2,
 					"numinlets" : 1,
@@ -713,7 +709,7 @@
 					"numoutlets" : 0,
 					"patching_rect" : [ 704.0, 321.0, 174.0, 19.0 ],
 					"presentation" : 1,
-					"presentation_rect" : [ 476.0, 303.0, 158.0, 19.0 ],
+					"presentation_rect" : [ 476.0, 303.0, 166.0, 19.0 ],
 					"text" : "© Emmanuel Jourdan, e--j dev",
 					"textcolor" : [ 0.356863, 0.356863, 0.356863, 1.0 ]
 				}

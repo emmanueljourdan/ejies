@@ -8,6 +8,7 @@ Older Version compatibility:
 - Max 4.6.x, you might want to download ejies 1.58.
 
 Java externals:
+- ej.buffer2l: output "meaningful" samples of a buffer as a list
 - ej.dx2x: create a list from intervals
 - ej.fplay: Non-graphical multi-breakpoint function editor 
 - ej.ftom: Frequency to MIDI (with tuning adjustment, works for lists)
