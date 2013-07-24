@@ -21,7 +21,7 @@ public class buffer2l extends ejies {
 
 	private int grain = 512;
 	private String buf_name = null;
-	private int channel = 0;
+	private int channel = 1;
 	private float[] zoom = new float[] { 0f, 1f};
 	private float[] sb = new float[0];
 	private float[] sbNegatives = new float[0];

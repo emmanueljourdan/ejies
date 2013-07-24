@@ -1,10 +1,17 @@
 ejies - Version history
 
+*******************
+3.12: 24 July 2013
+
+Added:
+ej.buffer2l: output meaningful samples out of a buffer~ object
+
 
 *******************
 3.11: 25 March 2013
 
 prototypes folder renamed object-prototypes so it works properly with the packages format.
+
 
 
 *******************

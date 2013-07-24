@@ -10,8 +10,8 @@ post("\n     by Emmanuel Jourdan\, e--j dev\n");
 
 function EjiesUtils()
 { 
-	this.VersNum = "3.11";			// Version Number
-	this.VersDate = "(03/2013)";	// Version release date
+	this.VersNum = "3.12";			// Version Number
+	this.VersDate = "(07/2013)";	// Version release date
 
 	// clip method
 	this.clip = function(x, min, max)
