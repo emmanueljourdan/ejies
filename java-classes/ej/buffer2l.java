@@ -22,6 +22,7 @@ public class buffer2l extends ejies {
 	private int grain = 512;
 	private String buf_name = null;
 	private int channel = 0;
+	private float[] zoom = new float[] { 0f, 1f};
 	private float[] sb = new float[0];
 	private float[] sbNegatives = new float[0];
 	private float[] sRMS = new float[0];
@@ -34,6 +35,7 @@ public class buffer2l extends ejies {
 		declareAttribute("grain",  null, "setattrGrain");
 		declareAttribute("buf_name", null, "setattrBufName");
 		declareAttribute("channel", null, "setattrChannel");
+		declareAttribute("zoom", null, null);
 
 		setInletAssist(INLET_ASSIST);
 		setOutletAssist(OUTLET_ASSIST);
@@ -61,6 +63,26 @@ public class buffer2l extends ejies {
 			error("ej.buffer2l: wrong channel (1-4)");
 	}
 	
+	private void setattrZoom(float[] f) {
+		if (f.length == 2) {
+			float min = f[0];
+			float max = f[1];
+			
+			if (min > max)
+				error("ej.buffer2l: zoom wrong arguments");
+				
+			if (min < 0f)
+				min = 0f;
+			if (min > 1f)
+				min = 1f;
+			if (max < 0f)
+				max = 0f;
+			if (max > 1f)
+				max = 1f;
+		} else 
+			error("ej.buffer2l: zoom wrong arguments");
+	}
+	
 	private void calculateSamples() {
 		if (buf_name == null) {
 			error("ej.buffer2l: no buffer set");
@@ -77,13 +99,15 @@ public class buffer2l extends ejies {
 		this.sRMS = new float[this.grain];
 		this.sbNegatives = new float[this.grain];
 		this.sRMStimesMinus1 = new float[this.grain];
-		long blocks = this.grain;
-		double inc = (double)frames / (double)blocks;
+		double length = zoom[1] - zoom[0];
+		int offset = (int)Math.round(zoom[0] * (double)frames);
+		int blocks = this.grain;
+		double inc = (double)(frames * length) / (double)blocks;
 		
-		for (int i = 0; i < Math.round(blocks); i++) {
-			sb[i] = peak(MSPBuffer.peek(buf_name, this.channel, Math.round(i * inc), Math.round(inc)));
-			sRMS[i] = rms(MSPBuffer.peek(buf_name, this.channel, Math.round(i *inc), Math.round(inc)));
-			sbNegatives[i] = peakNegatives(MSPBuffer.peek(buf_name, this.channel, Math.round(i * inc), Math.round(inc)));
+		for (int i = 0; i < blocks; i++) {
+			sb[i] = peak(MSPBuffer.peek(buf_name, this.channel, Math.round(i * inc + offset), Math.round(inc)));
+			sRMS[i] = rms(MSPBuffer.peek(buf_name, this.channel, Math.round(i *inc + offset), Math.round(inc)));
+			sbNegatives[i] = peakNegatives(MSPBuffer.peek(buf_name, this.channel, Math.round(i * inc + offset), Math.round(inc)));
 			sRMStimesMinus1[i] = sRMS[i] * -1;
 		}
 	}
