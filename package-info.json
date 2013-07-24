@@ -10,9 +10,9 @@
 	"min_osx_version": "6.1.0",
 	"min_win_version": "6.1.0",
 	"website": "http://www.e--j.com/?page_id=494",
-	"link_mac32": "http://download.e--j.com/software/ejies_3.11.zip",
-	"link_mac64": "http://download.e--j.com/software/ejies_3.11.zip",
-	"link_win32": "http://download.e--j.com/software/ejies_3.11.zip",
-	"link_win64": "http://download.e--j.com/software/ejies_3.11.zip",
+	"link_mac32": "http://download.e--j.com/software/ejies_3.12.zip",
+	"link_mac64": "http://download.e--j.com/software/ejies_3.12.zip",
+	"link_win32": "http://download.e--j.com/software/ejies_3.12.zip",
+	"link_win64": "http://download.e--j.com/software/ejies_3.12.zip",
 	"relative_path": "None"
 }
