@@ -71,7 +71,6 @@
 						"description" : "",
 						"digest" : "",
 						"tags" : "",
-						"visible" : 1,
 						"boxes" : [ 							{
 								"box" : 								{
 									"id" : "obj-40",
@@ -2359,24 +2358,24 @@
 			}
  ],
 		"parameters" : 		{
-			"obj-21::obj-7" : [ "multislider[7]", "multislider", 0 ],
-			"obj-5::obj-3" : [ "multislider[14]", "multislider", 0 ],
-			"obj-11" : [ "multislider[2]", "multislider[1]", 0 ],
-			"obj-5::obj-37" : [ "multislider[15]", "multislider[15]", 0 ],
-			"obj-5::obj-11" : [ "rslider[1]", "rslider", 0 ],
-			"obj-5::obj-27" : [ "multislider[11]", "multislider[1]", 0 ],
-			"obj-21::obj-2" : [ "multislider[9]", "multislider", 0 ],
-			"obj-21::obj-10" : [ "multislider[6]", "multislider[1]", 0 ],
-			"obj-5::obj-10" : [ "multislider[13]", "multislider[1]", 0 ],
-			"obj-21::obj-1" : [ "multislider[8]", "multislider[1]", 0 ],
-			"obj-10" : [ "multislider[1]", "multislider[1]", 0 ],
-			"obj-5::obj-28" : [ "multislider[12]", "multislider", 0 ],
-			"obj-5::obj-31" : [ "multislider[10]", "multislider[4]", 0 ],
-			"obj-15" : [ "multislider[5]", "multislider", 0 ],
 			"obj-1" : [ "rslider", "rslider", 0 ],
 			"obj-12" : [ "multislider[3]", "multislider", 0 ],
+			"obj-5::obj-11" : [ "rslider[1]", "rslider", 0 ],
+			"obj-5::obj-31" : [ "multislider[10]", "multislider[4]", 0 ],
+			"obj-5::obj-37" : [ "multislider[15]", "multislider[15]", 0 ],
+			"obj-5::obj-3" : [ "multislider[14]", "multislider", 0 ],
+			"obj-7" : [ "multislider", "multislider", 0 ],
+			"obj-5::obj-27" : [ "multislider[11]", "multislider[1]", 0 ],
+			"obj-5::obj-10" : [ "multislider[13]", "multislider[1]", 0 ],
+			"obj-21::obj-7" : [ "multislider[7]", "multislider", 0 ],
 			"obj-14" : [ "multislider[4]", "multislider[1]", 0 ],
-			"obj-7" : [ "multislider", "multislider", 0 ]
+			"obj-15" : [ "multislider[5]", "multislider", 0 ],
+			"obj-10" : [ "multislider[1]", "multislider[1]", 0 ],
+			"obj-5::obj-28" : [ "multislider[12]", "multislider", 0 ],
+			"obj-21::obj-2" : [ "multislider[9]", "multislider", 0 ],
+			"obj-21::obj-10" : [ "multislider[6]", "multislider[1]", 0 ],
+			"obj-11" : [ "multislider[2]", "multislider[1]", 0 ],
+			"obj-21::obj-1" : [ "multislider[8]", "multislider[1]", 0 ]
 		}
 ,
 		"dependency_cache" : [ 			{
