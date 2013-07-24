@@ -40,7 +40,11 @@ public class buffer2l extends ejies {
 		setInletAssist(INLET_ASSIST);
 		setOutletAssist(OUTLET_ASSIST);
 	}
-
+	
+	public void loadbang() {
+		bang();
+	}
+	
 	public void bang() {
 		calculateSamples();
 		outputSamples();
