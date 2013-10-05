@@ -57,6 +57,7 @@ var LegendState;
 var GridMode;
 var Snap2GridState;
 var HiddenPointDisplay;
+var OutputMode; //ajout Alexis
 var ClickAdd;
 var ClickMove;
 var ClickSustain;
@@ -125,6 +126,7 @@ declareattribute("legend",				"getattr_legend",				"setattr_legend", 1);
 declareattribute("grid",				"getattr_grid",					"setattr_grid", 1);
 declareattribute("snap2grid",			"getattr_snap2grid",			"setattr_snap2grid", 1);
 declareattribute("hiddenpoint",			"getattr_hiddenpoint",			"setattr_hiddenpoint", 1);
+declareattribute("outputmode",			"getattr_outputmode",			"setattr_outputmode", 1); //ajout Alexis
 declareattribute("clickadd",			"getattr_clickadd",				"setattr_clickadd", 1);
 declareattribute("clickmove",			"getattr_clickmove",			"setattr_clickmove", 1);
 declareattribute("clicksustain",		"getattr_clicksustain",			"setattr_clicksustain", 1);
@@ -985,18 +987,34 @@ function doLineOutput(courbe)
 		return;		// si pas de point... pas de line... pas de bras... pas de chocolat...
 	
 	courbe.NextFrom = 0;
-
-	for (i = 1, idx = 0; i < courbe.np; i++) {
-		tmpArray[idx++] = courbe.pa[i].valy;
-		tmpArray[idx++] = courbe.pa[i].valx - courbe.pa[i-1].valx;
-		if (isCurveMode)	tmpArray[idx++] = courbe.pa[i].curve;
-		if (courbe.pa[i].sustain) {
-			courbe.NextFrom = i;
-			break;
-		}
-	}
 	
-	outlet(LINE_OUTLET, courbe.name, courbe.pa[0].valy);
+	idx=0;
+	if(OutputMode) {//ajout Alexis
+		tmpArray[idx++] = courbe.pa[0].valy;
+		tmpArray[idx++] = 0;
+		if (isCurveMode)	tmpArray[idx++] = 1;
+		for (i = 1; i < courbe.np; i++) {
+			tmpArray[idx++] = courbe.pa[i].valy;
+			tmpArray[idx++] = courbe.pa[i].valx - courbe.pa[i-1].valx;
+			if (isCurveMode)	tmpArray[idx++] = courbe.pa[i].curve;
+			if (courbe.pa[i].sustain) {
+				courbe.NextFrom = i;
+				break;
+			}
+		}
+	} else {
+		if (isCurveMode)	tmpArray[idx++] = 1;
+		for (i = 1; i < courbe.np; i++) {
+			tmpArray[idx++] = courbe.pa[i].valy;
+			tmpArray[idx++] = courbe.pa[i].valx - courbe.pa[i-1].valx;
+			if (isCurveMode)	tmpArray[idx++] = courbe.pa[i].curve;
+			if (courbe.pa[i].sustain) {
+				courbe.NextFrom = i;
+				break;
+			}
+		}
+		outlet(LINE_OUTLET, courbe.name, courbe.pa[0].valy);
+	}
 
 	if (tmpArray.length > 1)
 		outlet(LINE_OUTLET, courbe.name, tmpArray);
@@ -2686,6 +2704,14 @@ function setattr_bordersync(v)
 		ejies.error(this, "bordersync doesn't understand", v);
 }
 
+function setattr_outputmode(v)//ajout Alexis
+{
+	if (v == 0 || v == 1)
+		OutputMode = v;
+	else
+		ejies.error(this, "outputmode doesn't understand", v);
+}
+
 function setattr_clickadd(v)
 {
 	if (v == 0 || v == 1)
@@ -3113,6 +3139,7 @@ function defaults()
 	GridMode = 0;
 	Snap2GridState = 0;
 	HiddenPointDisplay = 0;
+	OutputMode = 0;//ajout Alexis
 	ClickAdd = 1;
 	ClickMove = 1;
 	ClickSustain = 1;
@@ -3797,6 +3824,7 @@ function getattr_legend() { outlet(DUMPOUT, "legend", LegendState); return Legen
 function getattr_grid() { outlet(DUMPOUT, "grid", GridMode); return GridMode; }
 function getattr_snap2grid() { outlet(DUMPOUT, "snap2grid", Snap2GridState); return Snap2GridState; }
 function getattr_hiddenpoint() { outlet(DUMPOUT, "hiddenpointdisplay", HiddenPointDisplay); return HiddenPointDisplay; }
+function getattr_outputmode() { outlet(DUMPOUT, "outputmode", OutputMode); return OutputMode; }//ajout Alexis
 function getattr_clickadd() { outlet(DUMPOUT, "clickadd", ClickAdd); return ClickAdd; }
 function getattr_clickmove() { outlet(DUMPOUT, "clickmove", ClickMove); return ClickMove; }
 function getattr_clicksustain() { outlet(DUMPOUT, "clicksustain", ClickSustain); return ClickSustain; }
