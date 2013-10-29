@@ -12,12 +12,6 @@ if [ $# == 2 ] ; then
 	cd ejies_tmp
 	_dst="$PWD"
 	
-	echo -ne "Creating jar..."
-	cd "$_dst"/ejies_$1.$2/java-classes
-	jar -cf ej.jar ej/*.class ej/*.java
-	echo -ne "done\n"
-	rm -Rf ej
-	
 	echo -ne "Copie de javadoc (I hope it's up to date)... "
 	cd "$_root"
 	cp -R java-classes/ejies-javadoc "$_dst"/ejies_$1.$2/java-doc
