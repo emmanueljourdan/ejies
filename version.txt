@@ -1,5 +1,12 @@
 ejies - Version history
 
+*******************
+3.14: 29 October 2013
+
+Improvements:
+java classes are no longer grouped into a jar. This seems to cause some issue on Mavericks, go figure...
+
+
 
 *******************
 3.13: 24 July 2013
