@@ -1,6 +1,14 @@
 ejies - Version history
 
 *******************
+3.15: 8 February 2014
+
+Bug correction:
+ej.function.js: curve mode works again (bug introduced in 3.13)
+
+
+
+*******************
 3.14: 29 October 2013
 
 Improvements:
