@@ -1003,7 +1003,6 @@ function doLineOutput(courbe)
 			}
 		}
 	} else {
-		if (isCurveMode)	tmpArray[idx++] = 1;
 		for (i = 1; i < courbe.np; i++) {
 			tmpArray[idx++] = courbe.pa[i].valy;
 			tmpArray[idx++] = courbe.pa[i].valx - courbe.pa[i-1].valx;
