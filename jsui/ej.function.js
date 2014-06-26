@@ -1218,6 +1218,11 @@ function sync()
 
 function sync2send(sendName)
 {
+	if (typeof(sendName) != "string") {
+		ejies.error(this, "send name must be a symbol");
+		return;
+	}
+
 	messnamed(sendName, "nbfunctions", f.length);
 	messnamed(sendName, "mode", isCurveMode);
 
@@ -1253,6 +1258,11 @@ function synccurrent()
 
 function syncCurrent2Send(sendName)
 {
+	if (typeof(sendName) != "string") {
+		ejies.error(this, "send name must be a symbol");
+		return;
+	}
+
 	messnamed(sendName, "mode", isCurveMode);
 	g.syngThings = getSyncCourbe(front);
 	g.sendnamed(sendName, "syncThings");
@@ -2066,13 +2076,18 @@ function MyGridStep_y(courbe, v)
 }
 MyGridStep_y.local = 1;
 
-function MyDump(courbe, sendname)
+function MyDump(courbe, sendName)
 {
 /* 	var tmpF = courbe; */
 	var i, str;
 	
 	if (! courbe.np)
 		return;
+
+	if (typeof(sendName) != "string") {
+		ejies.error(this, "send name must be a symbol");
+		return;
+	}
 
 	if (arguments.length == 1) {
 		if (isCurveMode) {
@@ -2092,7 +2107,7 @@ function MyDump(courbe, sendname)
 		else
 			g.dump = [ courbe.name, courbe.pa[i].valx, courbe.pa[i].valy ];
 			
-		g.sendnamed(sendname,"dump");
+		g.sendnamed(sendName,"dump");
 	}
 }
 MyDump.local = 1;
@@ -2147,12 +2162,17 @@ function setPointsFromMatrix(courbe, matrixName)
 }
 setPointsFromMatrix.local = 1;
 
-function MyDumpMatrix(courbe, sendname)
+function MyDumpMatrix(courbe, sendName)
 {
 	var p;
 
 	if (! courbe.np)
 		return;
+
+	if (typeof(sendName) != "string") {
+		ejies.error(this, "send name must be a symbol");
+		return;
+	}
 
 	if (isCurveMode) {
 		var myMatrix = new JitterMatrix(1, "float32", 3, courbe.np);
@@ -2175,11 +2195,11 @@ function MyDumpMatrix(courbe, sendname)
 	if (arguments.length  == 1)
 		outlet(DUMP_OUTLET, courbe.name, "jit_matrix", myMatrix.name);
 	else
-		messnamed(sendname, courbe.name, "jit_matrix", myMatrix.name);
+		messnamed(sendName, courbe.name, "jit_matrix", myMatrix.name);
 }
 MyDumpMatrix.local = 1;
 
-function MyListDump(courbe, sendname)
+function MyListDump(courbe, sendName)
 {
 /* 	var tmpF = courbe; */
 	var tmpArray = new Array();
@@ -2187,6 +2207,11 @@ function MyListDump(courbe, sendname)
 	
 	if (! courbe.np)
 		return;
+
+	if (typeof(sendName) != "string") {
+		ejies.error(this, "send name must be a symbol");
+		return;
+	}
 
 	if (isCurveMode) {
 		for (i = 0, idx = 0; i < courbe.np; i++) {
@@ -2215,7 +2240,7 @@ function MyListDump(courbe, sendname)
 	// else -> on envoie vers un send
 	tmpArray.unshift(courbe.name);
 	g.listdump = tmpArray;
-	g.sendnamed(sendname, "listdump");
+	g.sendnamed(sendName, "listdump");
 }
 MyListDump.local = 1;
 
