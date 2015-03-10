@@ -54,7 +54,6 @@
 					"maxclass" : "message",
 					"text" : ";\rmax launchbrowser http://support.e--j.com",
 					"linecount" : 2,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
 					"numinlets" : 2,
 					"patching_rect" : [ 422.0, 303.0, 370.0, 26.0 ],
 					"numoutlets" : 1,
@@ -175,7 +174,6 @@
 				"box" : 				{
 					"maxclass" : "message",
 					"text" : "load ejies-overview.maxpat",
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
 					"numinlets" : 2,
 					"patching_rect" : [ 527.0, 20.0, 143.0, 18.0 ],
 					"numoutlets" : 1,

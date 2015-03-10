@@ -133,7 +133,6 @@
 					"outlettype" : [ "" ],
 					"fontsize" : 11.595187,
 					"id" : "obj-108",
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
 					"numinlets" : 2
 				}
 
@@ -166,7 +165,6 @@
 					"outlettype" : [ "" ],
 					"fontsize" : 11.595187,
 					"id" : "obj-110",
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
 					"numinlets" : 2
 				}
 

@@ -84,7 +84,6 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
 					"fontsize" : 9.160198,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
 					"patching_rect" : [ 427.0, 310.0, 370.0, 26.0 ],
 					"id" : "obj-50"
 				}
@@ -205,7 +204,6 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
 					"fontsize" : 11.595187,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
 					"patching_rect" : [ 527.0, 20.0, 143.0, 18.0 ],
 					"id" : "obj-36"
 				}
@@ -303,7 +301,6 @@
 , 			{
 				"box" : 				{
 					"maxclass" : "number",
-					"htextcolor" : [ 0.870588, 0.870588, 0.870588, 1.0 ],
 					"numinlets" : 1,
 					"fontname" : "Arial",
 					"triscale" : 0.9,

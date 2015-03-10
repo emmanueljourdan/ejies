@@ -118,7 +118,6 @@
 					"hidden" : 1,
 					"outlettype" : [ "" ],
 					"fontsize" : 9.160198,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
 					"patching_rect" : [ 397.0, 361.0, 370.0, 26.0 ]
 				}
 
@@ -165,7 +164,6 @@
 					"hidden" : 1,
 					"outlettype" : [ "" ],
 					"fontsize" : 11.595187,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
 					"patching_rect" : [ 527.0, 20.0, 143.0, 18.0 ]
 				}
 
@@ -181,7 +179,6 @@
 					"hidden" : 1,
 					"outlettype" : [ "" ],
 					"fontsize" : 11.595187,
-					"color" : [ 1.0, 1.0, 1.0, 1.0 ],
 					"patching_rect" : [ 527.0, 39.0, 57.0, 20.0 ]
 				}
 
@@ -313,7 +310,6 @@
 					"maxclass" : "flonum",
 					"id" : "obj-16",
 					"numinlets" : 1,
-					"htextcolor" : [ 0.870588, 0.870588, 0.870588, 1.0 ],
 					"numoutlets" : 2,
 					"triscale" : 0.9,
 					"fontname" : "Arial",

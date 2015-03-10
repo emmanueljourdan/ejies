@@ -237,7 +237,6 @@
 			}
 , 			{
 				"box" : 				{
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
 					"hidden" : 1,
@@ -285,7 +284,6 @@
 			}
 , 			{
 				"box" : 				{
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
 					"hidden" : 1,
@@ -301,7 +299,6 @@
 			}
 , 			{
 				"box" : 				{
-					"color" : [ 1.0, 1.0, 1.0, 1.0 ],
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
 					"hidden" : 1,
@@ -699,7 +696,6 @@
 				"box" : 				{
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
-					"htextcolor" : [ 0.870588, 0.870588, 0.870588, 1.0 ],
 					"id" : "obj-37",
 					"maxclass" : "number",
 					"maximum" : 4,
