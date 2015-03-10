@@ -1017,8 +1017,7 @@
 				"patchline" : 				{
 					"source" : [ "obj-7", 0 ],
 					"destination" : [ "obj-29", 0 ],
-					"hidden" : 0,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ]
+					"hidden" : 0
 				}
 
 			}
@@ -1026,8 +1025,7 @@
 				"patchline" : 				{
 					"source" : [ "obj-9", 0 ],
 					"destination" : [ "obj-29", 0 ],
-					"hidden" : 0,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ]
+					"hidden" : 0
 				}
 
 			}
@@ -1035,8 +1033,7 @@
 				"patchline" : 				{
 					"source" : [ "obj-10", 0 ],
 					"destination" : [ "obj-29", 0 ],
-					"hidden" : 0,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ]
+					"hidden" : 0
 				}
 
 			}
@@ -1044,8 +1041,7 @@
 				"patchline" : 				{
 					"source" : [ "obj-15", 0 ],
 					"destination" : [ "obj-29", 0 ],
-					"hidden" : 0,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ]
+					"hidden" : 0
 				}
 
 			}
@@ -1053,8 +1049,7 @@
 				"patchline" : 				{
 					"source" : [ "obj-29", 0 ],
 					"destination" : [ "obj-27", 0 ],
-					"hidden" : 0,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ]
+					"hidden" : 0
 				}
 
 			}
@@ -1062,8 +1057,7 @@
 				"patchline" : 				{
 					"source" : [ "obj-29", 1 ],
 					"destination" : [ "obj-26", 0 ],
-					"hidden" : 0,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ]
+					"hidden" : 0
 				}
 
 			}
@@ -1071,8 +1065,7 @@
 				"patchline" : 				{
 					"source" : [ "obj-29", 2 ],
 					"destination" : [ "obj-25", 0 ],
-					"hidden" : 0,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ]
+					"hidden" : 0
 				}
 
 			}
@@ -1080,8 +1073,7 @@
 				"patchline" : 				{
 					"source" : [ "obj-29", 3 ],
 					"destination" : [ "obj-24", 0 ],
-					"hidden" : 0,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ]
+					"hidden" : 0
 				}
 
 			}
@@ -1089,8 +1081,7 @@
 				"patchline" : 				{
 					"source" : [ "obj-29", 4 ],
 					"destination" : [ "obj-11", 0 ],
-					"hidden" : 0,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ]
+					"hidden" : 0
 				}
 
 			}
@@ -1098,8 +1089,7 @@
 				"patchline" : 				{
 					"source" : [ "obj-23", 0 ],
 					"destination" : [ "obj-29", 0 ],
-					"hidden" : 0,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ]
+					"hidden" : 0
 				}
 
 			}
@@ -1107,8 +1097,7 @@
 				"patchline" : 				{
 					"source" : [ "obj-28", 0 ],
 					"destination" : [ "obj-29", 0 ],
-					"hidden" : 0,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ]
+					"hidden" : 0
 				}
 
 			}
@@ -1116,8 +1105,7 @@
 				"patchline" : 				{
 					"source" : [ "obj-8", 0 ],
 					"destination" : [ "obj-9", 0 ],
-					"hidden" : 0,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ]
+					"hidden" : 0
 				}
 
 			}
@@ -1125,8 +1113,7 @@
 				"patchline" : 				{
 					"source" : [ "obj-55", 0 ],
 					"destination" : [ "obj-31", 0 ],
-					"hidden" : 1,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ]
+					"hidden" : 1
 				}
 
 			}
@@ -1134,8 +1121,7 @@
 				"patchline" : 				{
 					"source" : [ "obj-31", 0 ],
 					"destination" : [ "obj-32", 0 ],
-					"hidden" : 1,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ]
+					"hidden" : 1
 				}
 
 			}
@@ -1143,8 +1129,7 @@
 				"patchline" : 				{
 					"source" : [ "obj-48", 1 ],
 					"destination" : [ "obj-50", 0 ],
-					"hidden" : 1,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ]
+					"hidden" : 1
 				}
 
 			}
@@ -1152,8 +1137,7 @@
 				"patchline" : 				{
 					"source" : [ "obj-12", 0 ],
 					"destination" : [ "obj-27", 0 ],
-					"hidden" : 1,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ]
+					"hidden" : 1
 				}
 
 			}
@@ -1161,8 +1145,7 @@
 				"patchline" : 				{
 					"source" : [ "obj-12", 0 ],
 					"destination" : [ "obj-26", 0 ],
-					"hidden" : 1,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ]
+					"hidden" : 1
 				}
 
 			}
@@ -1170,8 +1153,7 @@
 				"patchline" : 				{
 					"source" : [ "obj-12", 0 ],
 					"destination" : [ "obj-25", 0 ],
-					"hidden" : 1,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ]
+					"hidden" : 1
 				}
 
 			}
@@ -1179,8 +1161,7 @@
 				"patchline" : 				{
 					"source" : [ "obj-12", 0 ],
 					"destination" : [ "obj-24", 0 ],
-					"hidden" : 1,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ]
+					"hidden" : 1
 				}
 
 			}
@@ -1188,8 +1169,7 @@
 				"patchline" : 				{
 					"source" : [ "obj-12", 0 ],
 					"destination" : [ "obj-11", 0 ],
-					"hidden" : 1,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ]
+					"hidden" : 1
 				}
 
 			}

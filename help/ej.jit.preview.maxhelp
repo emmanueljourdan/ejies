@@ -589,8 +589,7 @@
 				"patchline" : 				{
 					"source" : [ "obj-2", 0 ],
 					"destination" : [ "obj-3", 0 ],
-					"hidden" : 1,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ]
+					"hidden" : 1
 				}
 
 			}
@@ -598,8 +597,7 @@
 				"patchline" : 				{
 					"source" : [ "obj-1", 0 ],
 					"destination" : [ "obj-2", 0 ],
-					"hidden" : 1,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ]
+					"hidden" : 1
 				}
 
 			}
@@ -607,8 +605,7 @@
 				"patchline" : 				{
 					"source" : [ "obj-17", 0 ],
 					"destination" : [ "obj-19", 1 ],
-					"hidden" : 0,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ]
+					"hidden" : 0
 				}
 
 			}
@@ -616,8 +613,7 @@
 				"patchline" : 				{
 					"source" : [ "obj-20", 0 ],
 					"destination" : [ "obj-8", 0 ],
-					"hidden" : 0,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ]
+					"hidden" : 0
 				}
 
 			}
@@ -626,7 +622,6 @@
 					"source" : [ "obj-5", 0 ],
 					"destination" : [ "obj-20", 0 ],
 					"hidden" : 0,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"midpoints" : [ 249.5, 154.0, 50.5, 154.0 ]
 				}
 
@@ -636,7 +631,6 @@
 					"source" : [ "obj-16", 0 ],
 					"destination" : [ "obj-20", 0 ],
 					"hidden" : 0,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"midpoints" : [ 152.5, 154.0, 50.5, 154.0 ]
 				}
 
@@ -645,8 +639,7 @@
 				"patchline" : 				{
 					"source" : [ "obj-19", 0 ],
 					"destination" : [ "obj-20", 0 ],
-					"hidden" : 0,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ]
+					"hidden" : 0
 				}
 
 			}
@@ -654,8 +647,7 @@
 				"patchline" : 				{
 					"source" : [ "obj-18", 0 ],
 					"destination" : [ "obj-19", 0 ],
-					"hidden" : 0,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ]
+					"hidden" : 0
 				}
 
 			}
@@ -663,8 +655,7 @@
 				"patchline" : 				{
 					"source" : [ "obj-55", 0 ],
 					"destination" : [ "obj-9", 0 ],
-					"hidden" : 1,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ]
+					"hidden" : 1
 				}
 
 			}
@@ -672,8 +663,7 @@
 				"patchline" : 				{
 					"source" : [ "obj-9", 0 ],
 					"destination" : [ "obj-32", 0 ],
-					"hidden" : 1,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ]
+					"hidden" : 1
 				}
 
 			}
@@ -681,8 +671,7 @@
 				"patchline" : 				{
 					"source" : [ "obj-48", 1 ],
 					"destination" : [ "obj-50", 0 ],
-					"hidden" : 1,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ]
+					"hidden" : 1
 				}
 
 			}
@@ -690,8 +679,7 @@
 				"patchline" : 				{
 					"source" : [ "obj-8", 0 ],
 					"destination" : [ "obj-7", 0 ],
-					"hidden" : 0,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ]
+					"hidden" : 0
 				}
 
 			}

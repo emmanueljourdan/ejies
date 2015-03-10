@@ -1203,8 +1203,7 @@
 				"patchline" : 				{
 					"source" : [ "obj-29", 1 ],
 					"destination" : [ "obj-6", 0 ],
-					"hidden" : 0,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ]
+					"hidden" : 0
 				}
 
 			}
@@ -1213,7 +1212,6 @@
 					"source" : [ "obj-8", 0 ],
 					"destination" : [ "obj-29", 1 ],
 					"hidden" : 0,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"midpoints" : [ 273.5, 189.0, 179.5, 189.0 ]
 				}
 
@@ -1222,8 +1220,7 @@
 				"patchline" : 				{
 					"source" : [ "obj-29", 0 ],
 					"destination" : [ "obj-12", 0 ],
-					"hidden" : 0,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ]
+					"hidden" : 0
 				}
 
 			}
@@ -1232,7 +1229,6 @@
 					"source" : [ "obj-11", 0 ],
 					"destination" : [ "obj-29", 0 ],
 					"hidden" : 0,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"midpoints" : [ 100.5, 168.0, 121.5, 168.0 ]
 				}
 
@@ -1242,7 +1238,6 @@
 					"source" : [ "obj-4", 0 ],
 					"destination" : [ "obj-29", 0 ],
 					"hidden" : 0,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"midpoints" : [ 379.5, 168.0, 121.5, 168.0 ]
 				}
 
@@ -1252,7 +1247,6 @@
 					"source" : [ "obj-9", 0 ],
 					"destination" : [ "obj-29", 0 ],
 					"hidden" : 0,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"midpoints" : [ 134.5, 168.0, 121.5, 168.0 ]
 				}
 
@@ -1262,7 +1256,6 @@
 					"source" : [ "obj-3", 0 ],
 					"destination" : [ "obj-29", 0 ],
 					"hidden" : 0,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"midpoints" : [ 459.5, 168.0, 121.5, 168.0 ]
 				}
 
@@ -1271,8 +1264,7 @@
 				"patchline" : 				{
 					"source" : [ "obj-48", 1 ],
 					"destination" : [ "obj-50", 0 ],
-					"hidden" : 1,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ]
+					"hidden" : 1
 				}
 
 			}
@@ -1280,8 +1272,7 @@
 				"patchline" : 				{
 					"source" : [ "obj-41", 0 ],
 					"destination" : [ "obj-42", 0 ],
-					"hidden" : 1,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ]
+					"hidden" : 1
 				}
 
 			}
@@ -1289,8 +1280,7 @@
 				"patchline" : 				{
 					"source" : [ "obj-55", 0 ],
 					"destination" : [ "obj-41", 0 ],
-					"hidden" : 1,
-					"color" : [ 0.0, 0.0, 0.0, 1.0 ]
+					"hidden" : 1
 				}
 
 			}
