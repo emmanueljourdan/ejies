@@ -166,7 +166,6 @@
 					"handoffdelay" : 250,
 					"hidden" : 0,
 					"hilite" : 0,
-					"hltcolor" : [ 0.475, 0.695, 1.0, 0.5 ],
 					"id" : "obj-48",
 					"ignoreclick" : 0,
 					"maxclass" : "ubutton",
@@ -185,8 +184,6 @@
 , 			{
 				"box" : 				{
 					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
-					"bgcolor2" : [ 0.867, 0.867, 0.867, 1.0 ],
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 9.160198,
@@ -203,7 +200,6 @@
 					"presentation" : 0,
 					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"text" : ";\rmax launchbrowser http://support.e--j.com",
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"textjustification" : 0
 				}
 
@@ -239,8 +235,6 @@
 , 			{
 				"box" : 				{
 					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
-					"color" : [ 0.8, 0.84, 0.71, 1.0 ],
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
@@ -254,7 +248,6 @@
 					"presentation" : 0,
 					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"text" : "bgcolor 0.937255 0.92549 0.792157 1.",
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"textjustification" : 0
 				}
 
@@ -262,8 +255,6 @@
 , 			{
 				"box" : 				{
 					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
-					"bgcolor2" : [ 0.867, 0.867, 0.867, 1.0 ],
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
@@ -279,7 +270,6 @@
 					"presentation" : 0,
 					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"text" : "load ejies-overview.maxpat",
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"textjustification" : 0
 				}
 
@@ -287,8 +277,6 @@
 , 			{
 				"box" : 				{
 					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
-					"color" : [ 1.0, 1.0, 1.0, 1.0 ],
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
@@ -303,7 +291,6 @@
 					"presentation" : 0,
 					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"text" : "pcontrol",
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"textjustification" : 0
 				}
 
@@ -311,8 +298,6 @@
 , 			{
 				"box" : 				{
 					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
-					"color" : [ 0.8, 0.84, 0.71, 1.0 ],
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
@@ -601,7 +586,6 @@
 					}
 ,
 					"text" : "p movemode",
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"textjustification" : 0,
 					"varname" : "pattr[7]"
 				}
@@ -610,8 +594,6 @@
 , 			{
 				"box" : 				{
 					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
-					"color" : [ 0.8, 0.84, 0.71, 1.0 ],
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
@@ -723,7 +705,6 @@
 							}
 , 							{
 								"box" : 								{
-									"bgcolor" : [ 0.529412, 0.529412, 0.529412, 1.0 ],
 									"id" : "obj-6",
 									"maxclass" : "scope~",
 									"numinlets" : 2,
@@ -736,7 +717,6 @@
 							}
 , 							{
 								"box" : 								{
-									"bgcolor" : [ 0.529412, 0.529412, 0.529412, 1.0 ],
 									"id" : "obj-7",
 									"maxclass" : "scope~",
 									"numinlets" : 2,
@@ -907,7 +887,6 @@
 					}
 ,
 					"text" : "p curve",
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"textjustification" : 0,
 					"varname" : "pattr[6]"
 				}
@@ -916,8 +895,6 @@
 , 			{
 				"box" : 				{
 					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
-					"color" : [ 0.8, 0.84, 0.71, 1.0 ],
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
@@ -1142,7 +1119,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 0.4, 0.4, 0.8, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"hidden" : 1,
@@ -1360,7 +1336,6 @@
 					}
 ,
 					"text" : "p \"Progress Bar\"",
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"textjustification" : 0,
 					"varname" : "pattr[5]"
 				}
@@ -1397,8 +1372,6 @@
 , 			{
 				"box" : 				{
 					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
-					"color" : [ 0.8, 0.84, 0.71, 1.0 ],
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
@@ -1413,7 +1386,6 @@
 					"presentation" : 0,
 					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"text" : "prepend help",
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"textjustification" : 0
 				}
 
@@ -1421,8 +1393,6 @@
 , 			{
 				"box" : 				{
 					"background" : 0,
-					"bgcolor" : [ 0.867, 0.867, 0.867, 1.0 ],
-					"bgcolor2" : [ 0.867, 0.867, 0.867, 1.0 ],
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
@@ -1438,7 +1408,6 @@
 					"presentation" : 0,
 					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"text" : "ej.fplay",
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"textjustification" : 0
 				}
 
@@ -1446,8 +1415,6 @@
 , 			{
 				"box" : 				{
 					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
-					"color" : [ 0.8, 0.84, 0.71, 1.0 ],
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
@@ -1462,7 +1429,6 @@
 					"presentation" : 0,
 					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"text" : "pcontrol",
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"textjustification" : 0
 				}
 
@@ -1470,8 +1436,6 @@
 , 			{
 				"box" : 				{
 					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
-					"color" : [ 0.8, 0.84, 0.71, 1.0 ],
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
@@ -1527,7 +1491,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 1.0, 0.611765, 0.611765, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"hidden" : 1,
@@ -1644,7 +1607,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 0.4, 0.4, 0.8, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"id" : "obj-10",
@@ -1749,7 +1711,6 @@
 , 							{
 								"box" : 								{
 									"autorestore" : "ej.function.xml",
-									"color" : [ 0.4, 0.4, 0.8, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"id" : "obj-17",
@@ -1959,7 +1920,6 @@
 					}
 ,
 					"text" : "p pattr",
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"textjustification" : 0,
 					"varname" : "pattr[4]"
 				}
@@ -1968,8 +1928,6 @@
 , 			{
 				"box" : 				{
 					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
-					"color" : [ 0.8, 0.84, 0.71, 1.0 ],
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
@@ -2072,7 +2030,6 @@
 					}
 ,
 					"text" : "p \"How to create me?\"",
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"textjustification" : 0,
 					"varname" : "Copy & Paste...[1]"
 				}
@@ -2081,8 +2038,6 @@
 , 			{
 				"box" : 				{
 					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
-					"color" : [ 0.8, 0.84, 0.71, 1.0 ],
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
@@ -2164,7 +2119,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 0.4, 0.4, 0.8, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"hidden" : 1,
@@ -2357,7 +2311,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 0.156863, 0.8, 0.54902, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"hidden" : 1,
@@ -2373,7 +2326,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 0.156863, 0.8, 0.54902, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"hidden" : 1,
@@ -2389,7 +2341,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 0.156863, 0.8, 0.54902, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"hidden" : 1,
@@ -2435,7 +2386,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 0.156863, 0.8, 0.54902, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"hidden" : 1,
@@ -2495,7 +2445,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 1.0, 0.890196, 0.090196, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"hidden" : 1,
@@ -2822,7 +2771,6 @@
 					}
 ,
 					"text" : "p mouse",
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"textjustification" : 0,
 					"varname" : "domain range and zooming[1]"
 				}
@@ -2860,8 +2808,6 @@
 , 			{
 				"box" : 				{
 					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
-					"color" : [ 0.8, 0.84, 0.71, 1.0 ],
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
@@ -2875,7 +2821,6 @@
 					"presentation" : 0,
 					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"text" : "print dumpout",
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"textjustification" : 0
 				}
 
@@ -2883,8 +2828,6 @@
 , 			{
 				"box" : 				{
 					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
-					"color" : [ 0.8, 0.84, 0.71, 1.0 ],
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
@@ -3060,7 +3003,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 0.156863, 0.8, 0.54902, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"hidden" : 1,
@@ -3076,7 +3018,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 0.156863, 0.8, 0.54902, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"hidden" : 1,
@@ -3092,7 +3033,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 0.156863, 0.8, 0.54902, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"hidden" : 1,
@@ -3123,7 +3063,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 0.156863, 0.8, 0.54902, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"hidden" : 1,
@@ -3139,7 +3078,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 0.156863, 0.8, 0.54902, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"hidden" : 1,
@@ -3173,7 +3111,6 @@
 									"cantchange" : 1,
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
-									"htextcolor" : [ 0.870588, 0.870588, 0.870588, 1.0 ],
 									"id" : "obj-16",
 									"maxclass" : "flonum",
 									"numinlets" : 1,
@@ -3193,7 +3130,6 @@
 									"cantchange" : 1,
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
-									"htextcolor" : [ 0.870588, 0.870588, 0.870588, 1.0 ],
 									"id" : "obj-17",
 									"maxclass" : "flonum",
 									"numinlets" : 1,
@@ -3213,7 +3149,6 @@
 									"cantchange" : 1,
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
-									"htextcolor" : [ 0.870588, 0.870588, 0.870588, 1.0 ],
 									"id" : "obj-18",
 									"maxclass" : "flonum",
 									"numinlets" : 1,
@@ -3233,7 +3168,6 @@
 									"cantchange" : 1,
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
-									"htextcolor" : [ 0.870588, 0.870588, 0.870588, 1.0 ],
 									"id" : "obj-19",
 									"maxclass" : "flonum",
 									"numinlets" : 1,
@@ -3295,7 +3229,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 0.156863, 0.8, 0.54902, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"hidden" : 1,
@@ -3371,7 +3304,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 0.4, 0.4, 0.8, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"hidden" : 1,
@@ -3389,7 +3321,7 @@
 										"range" : [ 0, 100 ],
 										"rangeMax" : [ 1.0 ],
 										"rangeMin" : [ 0.0 ],
-										"temp-20054141156" : [ 5, 1, 13, "function0", 0, 2311.54195, 0, 1, 100, 0.1, 0.0, 0.45, 0, 470.027274, 0.775, 0, 1101.955668, 0.4, 0, 1120.374248, 1, 0, 1135.753763, 1, 0, 1155.164896, 0.325, 0, 1191.377541, 0.175, 0, 1209.693948, 0.55, 0, 1209.693948, 0.95, 0, 1282.959206, 0.3875, 0, 1769.77426, 0.0875, 0, 1968.040613, 1, 0, 2311.54195, 0.5875, 0 ]
+										"temp-20054141156" : [ 5, 1, 13, "function0", 0, 2311.541992, 0, 1, 100, 0.1, 0.0, 0.45, 0, 470.027283, 0.775, 0, 1101.955688, 0.4, 0, 1120.374268, 1, 0, 1135.753784, 1, 0, 1155.164917, 0.325, 0, 1191.377563, 0.175, 0, 1209.69397, 0.55, 0, 1209.69397, 0.95, 0, 1282.959229, 0.3875, 0, 1769.774292, 0.0875, 0, 1968.040649, 1, 0, 2311.541992, 0.5875, 0 ]
 									}
 ,
 									"text" : "autopattr",
@@ -3473,7 +3405,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 0.156863, 0.8, 0.54902, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"hidden" : 1,
@@ -3489,7 +3420,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 0.156863, 0.8, 0.54902, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"hidden" : 1,
@@ -3505,7 +3435,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 0.156863, 0.8, 0.54902, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"hidden" : 1,
@@ -3686,7 +3615,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 1.0, 0.611765, 0.611765, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"hidden" : 1,
@@ -3840,7 +3768,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 1.0, 0.611765, 0.611765, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"hidden" : 1,
@@ -3857,28 +3784,22 @@
 							}
 , 							{
 								"box" : 								{
-									"bgcolor" : [ 0.235294, 0.698039, 0.678431, 1.0 ],
 									"buffername" : "anton",
 									"fontsize" : 11.595187,
-									"gridcolor" : [ 0.392157, 0.392157, 0.392157, 1.0 ],
 									"id" : "obj-60",
-									"labelbgcolor" : [ 0.745098, 0.537255, 1.0, 1.0 ],
-									"linecolor" : [ 0.392157, 0.392157, 0.392157, 1.0 ],
 									"maxclass" : "waveform~",
 									"norulerclick" : 1,
 									"numinlets" : 5,
 									"numoutlets" : 6,
 									"outlettype" : [ "float", "float", "float", "float", "list", "" ],
 									"patching_rect" : [ 28.0, 33.0, 205.0, 74.0 ],
-									"selectioncolor" : [ 0.0, 0.372549, 1.0, 0.5 ],
-									"setmode" : 3,
-									"waveformcolor" : [ 0.129412, 0.0, 0.0, 1.0 ]
+									"setmode" : 3
 								}
 
 							}
 , 							{
 								"box" : 								{
-									"embedstate" : [ [ "CreateNFunctions", 1, "function0", 0, 1, 0, 2311.54195 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "timedisplay", 0 ], [ "hiddenpoint", 0 ], [ "mousereport", 0 ], [ "clickadd", 1 ], [ "pointsize", 5 ], [ "movemode", 0 ], [ "autocursor", 1 ], [ "numcurvepoints", 12 ], [ "clickmove", 1 ], [ "drawtoedges", 0 ], [ "nbfunction", 1 ], [ "bordersync", 0 ], [ "grid", 0 ], [ "clicksustain", 1 ], [ "outputmode", 0 ], [ "cacheddrawing", 0 ], [ "ghost", 20 ], [ "legend", 1 ], [ "autosustain", 0 ], [ "mode", 0 ], [ "snap2grid", 0 ], [ "notifyrecalled", 0 ] ],
+									"embedstate" : [ [ "CreateNFunctions", 1, "function0", 0, 1, 0, 2311.541992 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "timedisplay", 0 ], [ "hiddenpoint", 0 ], [ "mousereport", 0 ], [ "clickadd", 1 ], [ "pointsize", 5 ], [ "movemode", 0 ], [ "autocursor", 1 ], [ "numcurvepoints", 12 ], [ "clickmove", 1 ], [ "drawtoedges", 0 ], [ "nbfunction", 1 ], [ "bordersync", 0 ], [ "grid", 0 ], [ "clicksustain", 1 ], [ "outputmode", 0 ], [ "cacheddrawing", 0 ], [ "ghost", 20 ], [ "legend", 1 ], [ "autosustain", 0 ], [ "mode", 0 ], [ "snap2grid", 0 ], [ "notifyrecalled", 0 ] ],
 									"filename" : "ej.function.js",
 									"id" : "obj-61",
 									"maxclass" : "jsui",
@@ -4499,7 +4420,6 @@
 					}
 ,
 					"text" : "p zooming",
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"textjustification" : 0,
 					"varname" : "domain range and zooming"
 				}
@@ -4508,8 +4428,6 @@
 , 			{
 				"box" : 				{
 					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
-					"color" : [ 1.0, 0.890196, 0.090196, 1.0 ],
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
@@ -4564,7 +4482,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 1.0, 0.611765, 0.611765, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"id" : "obj-2",
@@ -4633,7 +4550,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 0.156863, 0.8, 0.54902, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"id" : "obj-7",
@@ -4721,7 +4637,6 @@
 					}
 ,
 					"text" : "p choose",
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"textjustification" : 0
 				}
 
@@ -4730,22 +4645,15 @@
 				"box" : 				{
 					"align" : 0,
 					"arrow" : 1,
-					"arrowbgcolor" : [ 0.86, 0.86, 0.86, 1.0 ],
-					"arrowcolor" : [ 0.22, 0.22, 0.22, 1.0 ],
 					"arrowframe" : 1,
 					"arrowlink" : 1,
 					"autopopulate" : 0,
 					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 0.0 ],
-					"bgcolor2" : [ 1.0, 1.0, 1.0, 1.0 ],
 					"depth" : 0,
-					"discolor" : [ 0.43, 0.43, 0.43, 1.0 ],
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
-					"framecolor" : [ 0.5, 0.5, 0.5, 1.0 ],
 					"hidden" : 0,
-					"hltcolor" : [ 0.92, 0.92, 0.92, 1.0 ],
 					"id" : "obj-19",
 					"ignoreclick" : 0,
 					"items" : [ "command", "+", "dble", "click", "to", "switch", "of", "function", ",", "ctrl", "+", "dble", "click", "to", "switch", "of", "function" ],
@@ -4764,9 +4672,6 @@
 					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"rounded" : 8,
 					"showdotfiles" : 0,
-					"textcolor" : [ 0.15, 0.15, 0.15, 1.0 ],
-					"textcolor2" : [ 0.15, 0.15, 0.15, 1.0 ],
-					"togcolor" : [ 0.55, 0.55, 0.55, 1.0 ],
 					"truncate" : 1,
 					"underline" : 0
 				}
@@ -4775,8 +4680,6 @@
 , 			{
 				"box" : 				{
 					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
-					"color" : [ 0.8, 0.84, 0.71, 1.0 ],
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
@@ -5134,7 +5037,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 1.0, 0.611765, 0.611765, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"hidden" : 1,
@@ -5150,7 +5052,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 0.4, 0.4, 0.8, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"hidden" : 1,
@@ -5489,7 +5390,6 @@
 					}
 ,
 					"text" : "p \"Copy & Paste...\"",
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"textjustification" : 0,
 					"varname" : "Copy & Paste..."
 				}
@@ -5498,8 +5398,6 @@
 , 			{
 				"box" : 				{
 					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
-					"color" : [ 0.8, 0.84, 0.71, 1.0 ],
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
@@ -5668,7 +5566,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 0.4, 0.4, 0.8, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"hidden" : 1,
@@ -5798,7 +5695,6 @@
 					}
 ,
 					"text" : "p \"read write\"",
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"textjustification" : 0,
 					"varname" : "pattr[3]"
 				}
@@ -5807,8 +5703,6 @@
 , 			{
 				"box" : 				{
 					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
-					"color" : [ 0.8, 0.84, 0.71, 1.0 ],
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
@@ -6354,7 +6248,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 0.156863, 0.8, 0.54902, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"id" : "obj-37",
@@ -6611,7 +6504,6 @@
 					}
 ,
 					"text" : "p \"get informations\"",
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"textjustification" : 0
 				}
 
@@ -6619,8 +6511,6 @@
 , 			{
 				"box" : 				{
 					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
-					"color" : [ 0.8, 0.84, 0.71, 1.0 ],
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
@@ -6675,7 +6565,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 1.0, 0.611765, 0.611765, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"hidden" : 1,
@@ -6863,7 +6752,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 0.4, 0.4, 0.8, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"hidden" : 1,
@@ -7186,7 +7074,6 @@
 					}
 ,
 					"text" : "p (in)active",
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"textjustification" : 0,
 					"varname" : "pattr[2]"
 				}
@@ -7195,8 +7082,6 @@
 , 			{
 				"box" : 				{
 					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
-					"color" : [ 0.8, 0.84, 0.71, 1.0 ],
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
@@ -7251,7 +7136,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 1.0, 0.890196, 0.090196, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"hidden" : 1,
@@ -7494,7 +7378,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 1.0, 0.890196, 0.090196, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"hidden" : 1,
@@ -7737,7 +7620,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 1.0, 0.890196, 0.090196, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"hidden" : 1,
@@ -8161,7 +8043,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 1.0, 0.611765, 0.611765, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"hidden" : 1,
@@ -8354,7 +8235,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 0.4, 0.4, 0.8, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"hidden" : 1,
@@ -8868,7 +8748,6 @@
 					}
 ,
 					"text" : "p \"filling performances\"",
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"textjustification" : 0,
 					"varname" : "pattr[1]"
 				}
@@ -8877,8 +8756,6 @@
 , 			{
 				"box" : 				{
 					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
-					"color" : [ 0.8, 0.84, 0.71, 1.0 ],
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
@@ -9003,7 +8880,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 0.156863, 0.8, 0.54902, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"id" : "obj-7",
@@ -9075,7 +8951,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 1.0, 0.611765, 0.611765, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"hidden" : 1,
@@ -9104,7 +8979,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 0.156863, 0.8, 0.54902, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"id" : "obj-15",
@@ -9191,7 +9065,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 0.4, 0.4, 0.8, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"hidden" : 1,
@@ -9228,12 +9101,10 @@
 							}
 , 							{
 								"box" : 								{
-									"bgcolor" : [ 0.992218, 0.992218, 0.992218, 1.0 ],
 									"cols" : 2,
 									"colwidth" : 45,
 									"fontname" : "Geneva",
 									"fontsize" : 9.998779,
-									"hcellcolor" : [ 0.836576, 0.836576, 0.933852, 1.0 ],
 									"id" : "obj-23",
 									"maxclass" : "jit.cellblock",
 									"numinlets" : 2,
@@ -9491,7 +9362,6 @@
 					}
 ,
 					"text" : "p jitter",
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"textjustification" : 0,
 					"varname" : "pattr"
 				}
@@ -9557,8 +9427,6 @@
 , 			{
 				"box" : 				{
 					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
-					"color" : [ 0.4, 0.4, 0.8, 1.0 ],
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
@@ -9577,7 +9445,6 @@
 					}
 ,
 					"text" : "autopattr",
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"textjustification" : 0,
 					"varname" : "u230000180"
 				}
@@ -9586,8 +9453,6 @@
 , 			{
 				"box" : 				{
 					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
-					"color" : [ 0.8, 0.84, 0.71, 1.0 ],
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
@@ -9601,7 +9466,6 @@
 					"presentation" : 0,
 					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"text" : "print line~",
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"textjustification" : 0
 				}
 
@@ -9609,8 +9473,6 @@
 , 			{
 				"box" : 				{
 					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
-					"color" : [ 0.8, 0.84, 0.71, 1.0 ],
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
@@ -9835,7 +9697,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 0.156863, 0.8, 0.54902, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"id" : "obj-14",
@@ -9905,7 +9766,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 0.156863, 0.8, 0.54902, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"id" : "obj-19",
@@ -10128,7 +9988,6 @@
 					}
 ,
 					"text" : "p target",
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"textjustification" : 0
 				}
 
@@ -10136,8 +9995,6 @@
 , 			{
 				"box" : 				{
 					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
-					"color" : [ 0.156863, 0.8, 0.54902, 1.0 ],
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
@@ -10151,7 +10008,6 @@
 					"presentation" : 0,
 					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"text" : "s dumpout",
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"textjustification" : 0
 				}
 
@@ -10159,8 +10015,6 @@
 , 			{
 				"box" : 				{
 					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
-					"color" : [ 0.8, 0.84, 0.71, 1.0 ],
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
@@ -10271,7 +10125,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 1.0, 0.611765, 0.611765, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"hidden" : 1,
@@ -10394,7 +10247,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 0.156863, 0.8, 0.54902, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"id" : "obj-13",
@@ -10767,7 +10619,6 @@
 							}
 , 							{
 								"box" : 								{
-									"color" : [ 0.156863, 0.8, 0.54902, 1.0 ],
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"id" : "obj-40",
@@ -11261,7 +11112,6 @@
 					}
 ,
 					"text" : "p compatibility",
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"textjustification" : 0
 				}
 
@@ -11269,8 +11119,6 @@
 , 			{
 				"box" : 				{
 					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
-					"color" : [ 0.156863, 0.8, 0.54902, 1.0 ],
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
@@ -11285,7 +11133,6 @@
 					"presentation" : 0,
 					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"text" : "r msg",
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"textjustification" : 0
 				}
 
@@ -11293,9 +11140,6 @@
 , 			{
 				"box" : 				{
 					"background" : 0,
-					"bgcolor" : [ 0.91328, 0.91328, 0.91328, 0.75 ],
-					"blinkcolor" : [ 1.0, 0.890196, 0.090196, 1.0 ],
-					"fgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
 					"hidden" : 0,
 					"id" : "obj-41",
 					"ignoreclick" : 0,
@@ -11303,7 +11147,6 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "bang" ],
-					"outlinecolor" : [ 0.71328, 0.71328, 0.71328, 1.0 ],
 					"patching_rect" : [ 181.25, 286.0, 20.0, 20.0 ],
 					"presentation" : 0,
 					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ]
@@ -11313,8 +11156,6 @@
 , 			{
 				"box" : 				{
 					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
-					"color" : [ 0.8, 0.84, 0.71, 1.0 ],
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
@@ -11328,7 +11169,6 @@
 					"presentation" : 0,
 					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"text" : "print dump",
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"textjustification" : 0
 				}
 
@@ -11336,8 +11176,6 @@
 , 			{
 				"box" : 				{
 					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
-					"color" : [ 0.8, 0.84, 0.71, 1.0 ],
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
@@ -11471,7 +11309,6 @@
 											}
 , 											{
 												"box" : 												{
-													"color" : [ 0.156863, 0.8, 0.54902, 1.0 ],
 													"fontname" : "Arial",
 													"fontsize" : 11.595187,
 													"hidden" : 1,
@@ -11847,7 +11684,6 @@
 											}
 , 											{
 												"box" : 												{
-													"color" : [ 0.156863, 0.8, 0.54902, 1.0 ],
 													"fontname" : "Arial",
 													"fontsize" : 11.595187,
 													"hidden" : 1,
@@ -12181,7 +12017,6 @@
 											}
 , 											{
 												"box" : 												{
-													"color" : [ 0.156863, 0.8, 0.54902, 1.0 ],
 													"fontname" : "Arial",
 													"fontsize" : 11.595187,
 													"hidden" : 1,
@@ -12510,7 +12345,6 @@
 											}
 , 											{
 												"box" : 												{
-													"color" : [ 0.156863, 0.8, 0.54902, 1.0 ],
 													"fontname" : "Arial",
 													"fontsize" : 11.595187,
 													"id" : "obj-16",
@@ -12639,7 +12473,6 @@
 											}
 , 											{
 												"box" : 												{
-													"color" : [ 0.156863, 0.8, 0.54902, 1.0 ],
 													"fontname" : "Arial",
 													"fontsize" : 11.595187,
 													"id" : "obj-25",
@@ -13199,7 +13032,6 @@
 											}
 , 											{
 												"box" : 												{
-													"color" : [ 0.156863, 0.8, 0.54902, 1.0 ],
 													"fontname" : "Arial",
 													"fontsize" : 11.595187,
 													"hidden" : 1,
@@ -13535,7 +13367,6 @@
 											}
 , 											{
 												"box" : 												{
-													"color" : [ 0.156863, 0.8, 0.54902, 1.0 ],
 													"fontname" : "Arial",
 													"fontsize" : 11.595187,
 													"hidden" : 1,
@@ -13655,7 +13486,6 @@
 					}
 ,
 					"text" : "p \"new features\"",
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"textjustification" : 0
 				}
 
@@ -13663,8 +13493,6 @@
 , 			{
 				"box" : 				{
 					"background" : 0,
-					"bgcolor" : [ 0.867, 0.867, 0.867, 1.0 ],
-					"bgcolor2" : [ 0.867, 0.867, 0.867, 1.0 ],
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
@@ -13680,7 +13508,6 @@
 					"presentation" : 0,
 					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"text" : "Amplitude 0.825",
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"textjustification" : 0
 				}
 
