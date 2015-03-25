@@ -1,6 +1,14 @@
 ejies - Version history
 
 *******************
+3.2: 25 March 2015
+
+- polishing patches for Max 6/7 compatibility.
+- overview now uses maxurl so we don't load mxj for nothing
+
+
+
+*******************
 3.15: 8 February 2014
 
 Bug correction:
@@ -29,7 +37,6 @@ ej.function.js: now has an outputmode attribute like function. Thanks Alexis Bas
 
 Added:
 ej.buffer2l: output meaningful samples out of a buffer~ object
-
 
 
 

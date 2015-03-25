@@ -1,6 +1,6 @@
 e j i e s (version 3.15)
 by Emmanuel Jourdan, e--j dev
-This version requires Max 6.1 or higher.
+This version requires Max 6.1.x or Max 7.x
 
 Older Version compatibility:
 - Max 6.0.x: use ejies 3.0b2
