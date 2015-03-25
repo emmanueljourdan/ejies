@@ -8,7 +8,7 @@
 			"architecture" : "x86"
 		}
 ,
-		"rect" : [ 39.0, 84.0, 574.0, 312.0 ],
+		"rect" : [ 100.0, 100.0, 574.0, 312.0 ],
 		"bgcolor" : [ 0.937255, 0.92549, 0.792157, 1.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
@@ -129,7 +129,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 440.0, 345.0, 370.0, 26.0 ],
+					"patching_rect" : [ 440.0, 345.0, 370.0, 25.0 ],
 					"text" : ";\rmax launchbrowser http://support.e--j.com"
 				}
 
@@ -160,7 +160,7 @@
 					"maxclass" : "newobj",
 					"numinlets" : 4,
 					"numoutlets" : 0,
-					"patching_rect" : [ 237.677704, 280.935394, 210.0, 20.0 ],
+					"patching_rect" : [ 237.677704, 280.935394, 210.0, 19.0 ],
 					"text" : "bgcolor 0.937255 0.92549 0.792157 1."
 				}
 
@@ -176,7 +176,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 528.0, 25.0, 143.0, 18.0 ],
+					"patching_rect" : [ 528.0, 25.0, 143.0, 30.0 ],
 					"text" : "load ejies-overview.maxpat"
 				}
 
@@ -191,7 +191,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 528.0, 44.0, 57.0, 20.0 ],
+					"patching_rect" : [ 528.0, 44.0, 57.0, 19.0 ],
 					"text" : "pcontrol"
 				}
 
@@ -205,7 +205,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 69.0, 202.0, 42.0, 17.0 ],
+					"patching_rect" : [ 69.0, 197.205124, 42.0, 17.0 ],
 					"text" : "titotu"
 				}
 
@@ -334,7 +334,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 135.0, 197.0, 18.0, 17.0 ],
+					"patching_rect" : [ 135.0, 190.794876, 18.0, 17.0 ],
 					"text" : "ti"
 				}
 
@@ -367,7 +367,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 123.0, 179.0, 18.0, 17.0 ],
+					"patching_rect" : [ 123.0, 167.717941, 18.0, 17.0 ],
 					"text" : "t"
 				}
 
@@ -651,7 +651,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 60.0, 183.0, 31.0, 17.0 ],
+					"patching_rect" : [ 60.0, 172.846161, 31.0, 17.0 ],
 					"text" : "tutu"
 				}
 
@@ -665,7 +665,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 45.0, 162.0, 31.0, 17.0 ],
+					"patching_rect" : [ 45.0, 145.92308, 31.0, 17.0 ],
 					"text" : "toto"
 				}
 
@@ -679,7 +679,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 34.0, 141.0, 25.0, 17.0 ],
+					"patching_rect" : [ 34.0, 119.0, 25.0, 17.0 ],
 					"text" : "titi"
 				}
 

@@ -8,7 +8,7 @@
 			"architecture" : "x86"
 		}
 ,
-		"rect" : [ 49.0, 54.0, 565.0, 286.0 ],
+		"rect" : [ 100.0, 100.0, 565.0, 286.0 ],
 		"bgcolor" : [ 0.937255, 0.92549, 0.792157, 1.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
@@ -37,7 +37,7 @@
 					"maxclass" : "newobj",
 					"numinlets" : 4,
 					"numoutlets" : 0,
-					"patching_rect" : [ 324.0, 217.0, 210.0, 20.0 ],
+					"patching_rect" : [ 324.0, 217.0, 210.0, 19.0 ],
 					"text" : "bgcolor 0.937255 0.92549 0.792157 1."
 				}
 
@@ -143,7 +143,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 431.0, 279.0, 417.0, 31.0 ],
+					"patching_rect" : [ 431.0, 279.0, 417.0, 30.0 ],
 					"text" : ";\rmax launchbrowser http://support.e--j.com"
 				}
 
@@ -176,7 +176,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 529.0, 23.0, 143.0, 18.0 ],
+					"patching_rect" : [ 529.0, 23.0, 143.0, 30.0 ],
 					"text" : "load ejies-overview.maxpat"
 				}
 
@@ -191,7 +191,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 529.0, 42.0, 57.0, 20.0 ],
+					"patching_rect" : [ 529.0, 42.0, 57.0, 19.0 ],
 					"text" : "pcontrol"
 				}
 
@@ -205,7 +205,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 181.287918, 148.0, 51.0, 17.0 ],
+					"patching_rect" : [ 181.287918, 137.0, 51.0, 17.0 ],
 					"text" : "poll 100"
 				}
 
@@ -219,7 +219,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 145.039352, 148.0, 32.5, 17.0 ],
+					"patching_rect" : [ 145.039352, 137.0, 32.5, 17.0 ],
 					"text" : "poll"
 				}
 
@@ -247,7 +247,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 235.634369, 148.0, 41.0, 17.0 ],
+					"patching_rect" : [ 235.634369, 137.0, 41.0, 17.0 ],
 					"text" : "nopoll"
 				}
 
@@ -261,7 +261,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 2,
 					"outlettype" : [ "bang", "" ],
-					"patching_rect" : [ 72.0, 119.0, 43.0, 19.0 ],
+					"patching_rect" : [ 72.0, 108.0, 43.0, 19.0 ],
 					"text" : "sel 32"
 				}
 
@@ -275,7 +275,7 @@
 					"numinlets" : 0,
 					"numoutlets" : 4,
 					"outlettype" : [ "int", "int", "int", "int" ],
-					"patching_rect" : [ 72.0, 94.0, 48.0, 19.0 ],
+					"patching_rect" : [ 72.0, 83.0, 48.0, 19.0 ],
 					"text" : "key"
 				}
 
@@ -290,7 +290,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 213.0, 207.0, 82.0, 20.0 ],
+					"patching_rect" : [ 213.0, 207.0, 82.0, 19.0 ],
 					"text" : "loadmess set"
 				}
 
@@ -317,7 +317,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 281.601715, 148.0, 47.0, 17.0 ],
+					"patching_rect" : [ 281.601715, 137.0, 47.0, 17.0 ],
 					"text" : "getlock"
 				}
 
@@ -329,7 +329,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "bang" ],
-					"patching_rect" : [ 72.0, 148.0, 20.0, 20.0 ]
+					"patching_rect" : [ 72.0, 137.0, 20.0, 20.0 ]
 				}
 
 			}
@@ -341,7 +341,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "int" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 113.0, 148.0, 20.0, 20.0 ]
+					"patching_rect" : [ 113.0, 137.0, 20.0, 20.0 ]
 				}
 
 			}
