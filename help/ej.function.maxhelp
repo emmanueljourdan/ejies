@@ -2,13 +2,13 @@
 	"patcher" : 	{
 		"fileversion" : 1,
 		"appversion" : 		{
-			"major" : 7,
-			"minor" : 0,
-			"revision" : 0,
-			"architecture" : "x64"
+			"major" : 6,
+			"minor" : 1,
+			"revision" : 9,
+			"architecture" : "x86"
 		}
 ,
-		"rect" : [ 21.0, 56.0, 624.0, 461.0 ],
+		"rect" : [ 100.0, 100.0, 624.0, 461.0 ],
 		"bgcolor" : [ 0.937255, 0.92549, 0.792157, 1.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
@@ -30,19 +30,11 @@
 		"tags" : "",
 		"boxes" : [ 			{
 				"box" : 				{
-					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 0.0 ],
-					"bubble" : 0,
-					"bubblepoint" : 0.5,
-					"bubbleside" : 1,
-					"bubbletextmargin" : 5,
 					"fontface" : 3,
 					"fontname" : "Arial",
 					"fontsize" : 20.871338,
 					"frgb" : 0.0,
-					"hidden" : 0,
 					"id" : "obj-49",
-					"ignoreclick" : 1,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
@@ -50,175 +42,104 @@
 					"presentation" : 1,
 					"presentation_rect" : [ 136.0, 137.0, 166.0, 30.0 ],
 					"text" : "ej.function.js",
-					"textcolor" : [ 0.937255, 0.92549, 0.792157, 1.0 ],
-					"textjustification" : 0,
-					"underline" : 0
+					"textcolor" : [ 0.937255, 0.92549, 0.792157, 1.0 ]
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 0.0 ],
-					"bubble" : 0,
-					"bubblepoint" : 0.5,
-					"bubbleside" : 1,
-					"bubbletextmargin" : 5,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
 					"frgb" : 0.0,
-					"hidden" : 0,
 					"id" : "obj-11",
-					"ignoreclick" : 1,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 15.719757, 45.0, 365.0, 19.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"text" : "Graphical multi-breakpoint function editor",
-					"textcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
-					"textjustification" : 0,
-					"underline" : 0
+					"textcolor" : [ 1.0, 1.0, 1.0, 1.0 ]
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"angle" : 0.0,
-					"arrow_orientation" : 0,
-					"background" : 0,
 					"bgcolor" : [ 0.015686, 0.388235, 0.501961, 1.0 ],
-					"border" : 0,
-					"bordercolor" : [ 0.0, 0.0, 0.0, 1.0 ],
-					"drag_window" : 0,
-					"grad1" : [ 0.75, 0.79, 0.93, 1.0 ],
-					"grad2" : [ 0.66, 0.66, 0.72, 1.0 ],
-					"hidden" : 0,
-					"horizontal_direction" : 0,
 					"id" : "obj-83",
-					"ignoreclick" : 1,
 					"maxclass" : "panel",
-					"mode" : 0,
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 9.719757, 9.719761, 382.01355, 57.248684 ],
 					"presentation" : 1,
 					"presentation_rect" : [ 131.0, 133.0, 632.0, 58.0 ],
-					"rounded" : 8,
-					"shadow" : -1,
-					"shape" : 0,
-					"vertical_direction" : 0
+					"shadow" : -1
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"active" : 1,
-					"align" : 1,
-					"background" : 0,
 					"bgcolor" : [ 0.937255, 0.92549, 0.792157, 1.0 ],
 					"bgoncolor" : [ 0.937255, 0.92549, 0.792157, 1.0 ],
 					"bgovercolor" : [ 0.937255, 0.92549, 0.792157, 1.0 ],
 					"bgoveroncolor" : [ 0.937255, 0.92549, 0.792157, 1.0 ],
-					"blinktime" : 150,
-					"border" : 2,
 					"bordercolor" : [ 0.937255, 0.92549, 0.792157, 1.0 ],
 					"borderoncolor" : [ 0.937255, 0.92549, 0.792157, 1.0 ],
 					"fontface" : 3,
 					"fontlink" : 1,
 					"fontname" : "Arial",
 					"fontsize" : 13.914225,
-					"hidden" : 0,
 					"id" : "obj-55",
-					"ignoreclick" : 0,
 					"maxclass" : "textbutton",
-					"mode" : 0,
 					"numinlets" : 1,
 					"numoutlets" : 3,
 					"outlettype" : [ "", "", "int" ],
-					"outputmode" : 1,
 					"parameter_enable" : 0,
 					"patching_rect" : [ 395.0, 24.0, 147.471756, 23.544798 ],
-					"presentation" : 0,
 					"presentation_rect" : [ 90.0, 90.0, 147.471756, 23.544798 ],
-					"rounded" : 14.0,
-					"spacing_x" : 4.0,
-					"spacing_y" : 4.0,
 					"text" : "open ejies overview",
 					"textcolor" : [ 0.015686, 0.388235, 0.501961, 1.0 ],
-					"texton" : "Button On",
 					"textoncolor" : [ 0.184314, 0.65098, 0.792157, 1.0 ],
 					"textovercolor" : [ 0.054902, 0.47451, 0.6, 1.0 ],
-					"textoveroncolor" : [ 0.015686, 0.388235, 0.501961, 1.0 ],
-					"tosymbol" : 1,
-					"truncate" : 1,
-					"underline" : 0
+					"textoveroncolor" : [ 0.015686, 0.388235, 0.501961, 1.0 ]
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"dragtrack" : 0,
 					"handoff" : "",
-					"handoffdelay" : 250,
-					"hidden" : 0,
 					"hilite" : 0,
 					"id" : "obj-48",
-					"ignoreclick" : 0,
 					"maxclass" : "ubutton",
 					"numinlets" : 1,
 					"numoutlets" : 4,
 					"outlettype" : [ "bang", "bang", "", "int" ],
 					"patching_rect" : [ 449.0, 432.0, 159.0, 21.0 ],
 					"presentation" : 1,
-					"presentation_rect" : [ 611.455444, 438.968689, 155.0, 18.0 ],
-					"rounded" : 0.0,
-					"stay" : 0,
-					"toggle" : 0
+					"presentation_rect" : [ 611.455444, 438.968689, 155.0, 18.0 ]
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 9.160198,
-					"gradient" : 0,
 					"hidden" : 1,
 					"id" : "obj-50",
-					"ignoreclick" : 0,
 					"linecount" : 2,
 					"maxclass" : "message",
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 496.0, 465.0, 370.0, 26.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
-					"text" : ";\rmax launchbrowser http://support.e--j.com",
-					"textjustification" : 0
+					"patching_rect" : [ 496.0, 465.0, 370.0, 25.0 ],
+					"text" : ";\rmax launchbrowser http://support.e--j.com"
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 0.0 ],
-					"bubble" : 0,
-					"bubblepoint" : 0.5,
-					"bubbleside" : 1,
-					"bubbletextmargin" : 5,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
 					"frgb" : 0.0,
-					"hidden" : 0,
 					"id" : "obj-51",
-					"ignoreclick" : 1,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
@@ -226,94 +147,69 @@
 					"presentation" : 1,
 					"presentation_rect" : [ 611.0, 438.0, 166.0, 19.0 ],
 					"text" : "© Emmanuel Jourdan, e--j dev",
-					"textcolor" : [ 0.356863, 0.356863, 0.356863, 1.0 ],
-					"textjustification" : 0,
-					"underline" : 0
+					"textcolor" : [ 0.356863, 0.356863, 0.356863, 1.0 ]
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
 					"hidden" : 1,
 					"id" : "obj-47",
-					"ignoreclick" : 0,
 					"maxclass" : "newobj",
 					"numinlets" : 4,
 					"numoutlets" : 0,
-					"patching_rect" : [ 211.677704, 456.935364, 210.0, 20.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
-					"text" : "bgcolor 0.937255 0.92549 0.792157 1.",
-					"textjustification" : 0
+					"patching_rect" : [ 211.677704, 456.935364, 210.0, 19.0 ],
+					"text" : "bgcolor 0.937255 0.92549 0.792157 1."
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
-					"gradient" : 0,
 					"hidden" : 1,
 					"id" : "obj-12",
-					"ignoreclick" : 0,
 					"maxclass" : "message",
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 528.0, 23.0, 148.0, 18.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
-					"text" : "load ejies-overview.maxpat",
-					"textjustification" : 0
+					"patching_rect" : [ 528.0, 23.0, 148.0, 17.0 ],
+					"text" : "load ejies-overview.maxpat"
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
 					"hidden" : 1,
 					"id" : "obj-13",
-					"ignoreclick" : 0,
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 528.0, 42.0, 57.0, 20.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
-					"text" : "pcontrol",
-					"textjustification" : 0
+					"patching_rect" : [ 528.0, 42.0, 57.0, 19.0 ],
+					"text" : "pcontrol"
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
-					"hidden" : 0,
 					"id" : "obj-1",
-					"ignoreclick" : 0,
 					"maxclass" : "newobj",
 					"numinlets" : 0,
 					"numoutlets" : 0,
 					"patcher" : 					{
 						"fileversion" : 1,
 						"appversion" : 						{
-							"major" : 7,
-							"minor" : 0,
-							"revision" : 0,
-							"architecture" : "x64"
+							"major" : 6,
+							"minor" : 1,
+							"revision" : 9,
+							"architecture" : "x86"
 						}
 ,
 						"rect" : [ 75.0, 154.0, 730.0, 242.0 ],
@@ -367,7 +263,7 @@
 							}
 , 							{
 								"box" : 								{
-									"embedstate" : [ [ "CreateNFunctions", 1, "function0", 0, 1, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "timedisplay", 0 ], [ "hiddenpoint", 0 ], [ "mousereport", 0 ], [ "clickadd", 1 ], [ "pointsize", 5 ], [ "movemode", 6 ], [ "autocursor", 1 ], [ "numcurvepoints", 12 ], [ "clickmove", 1 ], [ "drawtoedges", 0 ], [ "nbfunction", 1 ], [ "bordersync", 0 ], [ "grid", 0 ], [ "clicksustain", 1 ], [ "outputmode", 0 ], [ "cacheddrawing", 0 ], [ "ghost", 20 ], [ "legend", 1 ], [ "autosustain", 0 ], [ "mode", 0 ], [ "snap2grid", 0 ], [ "notifyrecalled", 0 ] ],
+									"embedstate" : [ [ "CreateNFunctions", 1, "function0", 0, 1, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "bordersync", 0 ], [ "clickmove", 1 ], [ "hiddenpoint", 0 ], [ "legend", 1 ], [ "notifyrecalled", 0 ], [ "numcurvepoints", 12 ], [ "mode", 0 ], [ "drawtoedges", 0 ], [ "nbfunction", 1 ], [ "clicksustain", 1 ], [ "snap2grid", 0 ], [ "autocursor", 1 ], [ "autosustain", 0 ], [ "mousereport", 0 ], [ "ghost", 20 ], [ "outputmode", 0 ], [ "pointsize", 5 ], [ "grid", 0 ], [ "timedisplay", 0 ], [ "movemode", 6 ], [ "cacheddrawing", 0 ], [ "clickadd", 1 ] ],
 									"filename" : "ej.function.js",
 									"id" : "obj-3",
 									"maxclass" : "jsui",
@@ -397,7 +293,7 @@
 									}
 ,
 									"text" : "autopattr",
-									"varname" : "u708000179"
+									"varname" : "u379001241"
 								}
 
 							}
@@ -570,8 +466,6 @@
 					}
 ,
 					"patching_rect" : [ 486.0, 383.0, 128.0, 19.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"saved_object_attributes" : 					{
 						"default_fontface" : 0,
 						"default_fontname" : "Arial",
@@ -586,30 +480,25 @@
 					}
 ,
 					"text" : "p movemode",
-					"textjustification" : 0,
 					"varname" : "pattr[7]"
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
-					"hidden" : 0,
 					"id" : "obj-2",
-					"ignoreclick" : 0,
 					"maxclass" : "newobj",
 					"numinlets" : 0,
 					"numoutlets" : 0,
 					"patcher" : 					{
 						"fileversion" : 1,
 						"appversion" : 						{
-							"major" : 7,
-							"minor" : 0,
-							"revision" : 0,
-							"architecture" : "x64"
+							"major" : 6,
+							"minor" : 1,
+							"revision" : 9,
+							"architecture" : "x86"
 						}
 ,
 						"rect" : [ 320.0, 189.0, 364.0, 401.0 ],
@@ -671,7 +560,7 @@
 									}
 ,
 									"text" : "autopattr",
-									"varname" : "u736000178"
+									"varname" : "u825001240"
 								}
 
 							}
@@ -756,7 +645,7 @@
 							}
 , 							{
 								"box" : 								{
-									"embedstate" : [ [ "CreateNFunctions", 2, "function0", "function1", 0, 1, 0, 500, 0, 1, 0, 500 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "SetColor", 1, "brgb", 204, 204, 204 ], [ "SetColor", 1, "frgb", 82, 82, 82 ], [ "SetColor", 1, "rgb2", 107, 107, 107 ], [ "SetColor", 1, "rgb3", 255, 0, 0 ], [ "SetColor", 1, "rgb4", 51, 51, 51 ], [ "SetColor", 1, "rgb5", 128, 128, 128 ], [ "SetColor", 1, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "timedisplay", 0 ], [ "hiddenpoint", 0 ], [ "mousereport", 0 ], [ "clickadd", 1 ], [ "pointsize", 5 ], [ "movemode", 0 ], [ "autocursor", 1 ], [ "numcurvepoints", 12 ], [ "clickmove", 1 ], [ "drawtoedges", 0 ], [ "nbfunction", 2 ], [ "bordersync", 0 ], [ "grid", 0 ], [ "clicksustain", 1 ], [ "outputmode", 0 ], [ "cacheddrawing", 0 ], [ "ghost", 20 ], [ "legend", 1 ], [ "autosustain", 0 ], [ "mode", 1 ], [ "snap2grid", 0 ], [ "notifyrecalled", 0 ] ],
+									"embedstate" : [ [ "CreateNFunctions", 2, "function0", "function1", 0, 1, 0, 500, 0, 1, 0, 500 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "SetColor", 1, "brgb", 204, 204, 204 ], [ "SetColor", 1, "frgb", 82, 82, 82 ], [ "SetColor", 1, "rgb2", 107, 107, 107 ], [ "SetColor", 1, "rgb3", 255, 0, 0 ], [ "SetColor", 1, "rgb4", 51, 51, 51 ], [ "SetColor", 1, "rgb5", 128, 128, 128 ], [ "SetColor", 1, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "bordersync", 0 ], [ "clickmove", 1 ], [ "hiddenpoint", 0 ], [ "legend", 1 ], [ "notifyrecalled", 0 ], [ "numcurvepoints", 12 ], [ "mode", 1 ], [ "drawtoedges", 0 ], [ "nbfunction", 2 ], [ "clicksustain", 1 ], [ "snap2grid", 0 ], [ "autocursor", 1 ], [ "autosustain", 0 ], [ "mousereport", 0 ], [ "ghost", 20 ], [ "outputmode", 0 ], [ "pointsize", 5 ], [ "grid", 0 ], [ "timedisplay", 0 ], [ "movemode", 0 ], [ "cacheddrawing", 0 ], [ "clickadd", 1 ] ],
 									"filename" : "ej.function.js",
 									"id" : "obj-10",
 									"maxclass" : "jsui",
@@ -871,8 +760,6 @@
 					}
 ,
 					"patching_rect" : [ 368.0, 405.0, 112.0, 19.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"saved_object_attributes" : 					{
 						"default_fontface" : 0,
 						"default_fontname" : "Arial",
@@ -887,30 +774,25 @@
 					}
 ,
 					"text" : "p curve",
-					"textjustification" : 0,
 					"varname" : "pattr[6]"
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
-					"hidden" : 0,
 					"id" : "obj-3",
-					"ignoreclick" : 0,
 					"maxclass" : "newobj",
 					"numinlets" : 0,
 					"numoutlets" : 0,
 					"patcher" : 					{
 						"fileversion" : 1,
 						"appversion" : 						{
-							"major" : 7,
-							"minor" : 0,
-							"revision" : 0,
-							"architecture" : "x64"
+							"major" : 6,
+							"minor" : 1,
+							"revision" : 9,
+							"architecture" : "x86"
 						}
 ,
 						"rect" : [ 99.0, 136.0, 579.0, 281.0 ],
@@ -1033,7 +915,7 @@
 							}
 , 							{
 								"box" : 								{
-									"embedstate" : [ [ "CreateNFunctions", 2, "function0", "function1", 0, 1, 0, 1000, 0, 50, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "SetColor", 1, "brgb", 204, 204, 204 ], [ "SetColor", 1, "frgb", 82, 82, 82 ], [ "SetColor", 1, "rgb2", 107, 107, 107 ], [ "SetColor", 1, "rgb3", 255, 0, 0 ], [ "SetColor", 1, "rgb4", 51, 51, 51 ], [ "SetColor", 1, "rgb5", 128, 128, 128 ], [ "SetColor", 1, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "timedisplay", 0 ], [ "hiddenpoint", 0 ], [ "mousereport", 0 ], [ "clickadd", 1 ], [ "pointsize", 5 ], [ "movemode", 0 ], [ "autocursor", 1 ], [ "numcurvepoints", 12 ], [ "clickmove", 1 ], [ "drawtoedges", 0 ], [ "nbfunction", 2 ], [ "bordersync", 0 ], [ "grid", 0 ], [ "clicksustain", 1 ], [ "outputmode", 0 ], [ "cacheddrawing", 0 ], [ "ghost", 20 ], [ "legend", 1 ], [ "autosustain", 0 ], [ "mode", 0 ], [ "snap2grid", 0 ], [ "notifyrecalled", 0 ] ],
+									"embedstate" : [ [ "CreateNFunctions", 2, "function0", "function1", 0, 1, 0, 1000, 0, 50, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "SetColor", 1, "brgb", 204, 204, 204 ], [ "SetColor", 1, "frgb", 82, 82, 82 ], [ "SetColor", 1, "rgb2", 107, 107, 107 ], [ "SetColor", 1, "rgb3", 255, 0, 0 ], [ "SetColor", 1, "rgb4", 51, 51, 51 ], [ "SetColor", 1, "rgb5", 128, 128, 128 ], [ "SetColor", 1, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "bordersync", 0 ], [ "clickmove", 1 ], [ "hiddenpoint", 0 ], [ "legend", 1 ], [ "notifyrecalled", 0 ], [ "numcurvepoints", 12 ], [ "mode", 0 ], [ "drawtoedges", 0 ], [ "nbfunction", 2 ], [ "clicksustain", 1 ], [ "snap2grid", 0 ], [ "autocursor", 1 ], [ "autosustain", 0 ], [ "mousereport", 0 ], [ "ghost", 20 ], [ "outputmode", 0 ], [ "pointsize", 5 ], [ "grid", 0 ], [ "timedisplay", 0 ], [ "movemode", 0 ], [ "cacheddrawing", 0 ], [ "clickadd", 1 ] ],
 									"filename" : "ej.function.js",
 									"id" : "obj-14",
 									"maxclass" : "jsui",
@@ -1134,13 +1016,13 @@
 									}
 ,
 									"text" : "autopattr",
-									"varname" : "u069000177"
+									"varname" : "u734001239"
 								}
 
 							}
 , 							{
 								"box" : 								{
-									"embedstate" : [ [ "CreateNFunctions", 2, "function0", "function1", 0, 1, 0, 1000, 0, 50, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "SetColor", 1, "brgb", 204, 204, 204 ], [ "SetColor", 1, "frgb", 82, 82, 82 ], [ "SetColor", 1, "rgb2", 107, 107, 107 ], [ "SetColor", 1, "rgb3", 255, 0, 0 ], [ "SetColor", 1, "rgb4", 51, 51, 51 ], [ "SetColor", 1, "rgb5", 128, 128, 128 ], [ "SetColor", 1, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "timedisplay", 0 ], [ "hiddenpoint", 0 ], [ "mousereport", 0 ], [ "clickadd", 1 ], [ "pointsize", 5 ], [ "movemode", 0 ], [ "autocursor", 1 ], [ "numcurvepoints", 12 ], [ "clickmove", 1 ], [ "drawtoedges", 0 ], [ "nbfunction", 2 ], [ "bordersync", 0 ], [ "grid", 0 ], [ "clicksustain", 1 ], [ "outputmode", 0 ], [ "cacheddrawing", 0 ], [ "ghost", 20 ], [ "legend", 1 ], [ "autosustain", 0 ], [ "mode", 0 ], [ "snap2grid", 0 ], [ "notifyrecalled", 0 ] ],
+									"embedstate" : [ [ "CreateNFunctions", 2, "function0", "function1", 0, 1, 0, 1000, 0, 50, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "SetColor", 1, "brgb", 204, 204, 204 ], [ "SetColor", 1, "frgb", 82, 82, 82 ], [ "SetColor", 1, "rgb2", 107, 107, 107 ], [ "SetColor", 1, "rgb3", 255, 0, 0 ], [ "SetColor", 1, "rgb4", 51, 51, 51 ], [ "SetColor", 1, "rgb5", 128, 128, 128 ], [ "SetColor", 1, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "bordersync", 0 ], [ "clickmove", 1 ], [ "hiddenpoint", 0 ], [ "legend", 1 ], [ "notifyrecalled", 0 ], [ "numcurvepoints", 12 ], [ "mode", 0 ], [ "drawtoedges", 0 ], [ "nbfunction", 2 ], [ "clicksustain", 1 ], [ "snap2grid", 0 ], [ "autocursor", 1 ], [ "autosustain", 0 ], [ "mousereport", 0 ], [ "ghost", 20 ], [ "outputmode", 0 ], [ "pointsize", 5 ], [ "grid", 0 ], [ "timedisplay", 0 ], [ "movemode", 0 ], [ "cacheddrawing", 0 ], [ "clickadd", 1 ] ],
 									"filename" : "ej.function.js",
 									"id" : "obj-6",
 									"maxclass" : "jsui",
@@ -1320,8 +1202,6 @@
 					}
 ,
 					"patching_rect" : [ 486.0, 339.0, 128.0, 19.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"saved_object_attributes" : 					{
 						"default_fontface" : 0,
 						"default_fontname" : "Arial",
@@ -1336,122 +1216,83 @@
 					}
 ,
 					"text" : "p \"Progress Bar\"",
-					"textjustification" : 0,
 					"varname" : "pattr[5]"
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 0.0 ],
-					"bubble" : 0,
-					"bubblepoint" : 0.5,
-					"bubbleside" : 1,
-					"bubbletextmargin" : 5,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
 					"frgb" : 0.0,
-					"hidden" : 0,
 					"id" : "obj-4",
-					"ignoreclick" : 1,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 320.0, 433.0, 55.0, 19.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
-					"text" : "see also:",
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
-					"textjustification" : 0,
-					"underline" : 0
+					"text" : "see also:"
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
 					"hidden" : 1,
 					"id" : "obj-5",
-					"ignoreclick" : 0,
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 243.0, 432.0, 76.0, 20.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
-					"text" : "prepend help",
-					"textjustification" : 0
+					"patching_rect" : [ 243.0, 432.0, 76.0, 19.0 ],
+					"text" : "prepend help"
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
-					"gradient" : 0,
-					"hidden" : 0,
 					"id" : "obj-6",
-					"ignoreclick" : 0,
 					"maxclass" : "message",
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 374.0, 434.0, 47.0, 17.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
-					"text" : "ej.fplay",
-					"textjustification" : 0
+					"text" : "ej.fplay"
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
 					"hidden" : 1,
 					"id" : "obj-7",
-					"ignoreclick" : 0,
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 322.0, 433.0, 50.0, 20.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
-					"text" : "pcontrol",
-					"textjustification" : 0
+					"patching_rect" : [ 322.0, 433.0, 50.0, 19.0 ],
+					"text" : "pcontrol"
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
-					"hidden" : 0,
 					"id" : "obj-8",
-					"ignoreclick" : 0,
 					"maxclass" : "newobj",
 					"numinlets" : 0,
 					"numoutlets" : 0,
 					"patcher" : 					{
 						"fileversion" : 1,
 						"appversion" : 						{
-							"major" : 7,
-							"minor" : 0,
-							"revision" : 0,
-							"architecture" : "x64"
+							"major" : 6,
+							"minor" : 1,
+							"revision" : 9,
+							"architecture" : "x86"
 						}
 ,
 						"rect" : [ 337.0, 138.0, 490.0, 216.0 ],
@@ -1620,7 +1461,7 @@
 									}
 ,
 									"text" : "autopattr",
-									"varname" : "u824000175"
+									"varname" : "u949001237"
 								}
 
 							}
@@ -1732,7 +1573,7 @@
 							}
 , 							{
 								"box" : 								{
-									"embedstate" : [ [ "CreateNFunctions", 2, "function0", "function1", 0, 1, 0, 1000, 0, 1, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "SetColor", 1, "brgb", 204, 204, 204 ], [ "SetColor", 1, "frgb", 82, 82, 82 ], [ "SetColor", 1, "rgb2", 107, 107, 107 ], [ "SetColor", 1, "rgb3", 255, 0, 0 ], [ "SetColor", 1, "rgb4", 51, 51, 51 ], [ "SetColor", 1, "rgb5", 128, 128, 128 ], [ "SetColor", 1, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "timedisplay", 0 ], [ "hiddenpoint", 0 ], [ "mousereport", 0 ], [ "clickadd", 1 ], [ "pointsize", 5 ], [ "movemode", 0 ], [ "autocursor", 1 ], [ "numcurvepoints", 12 ], [ "clickmove", 1 ], [ "drawtoedges", 0 ], [ "nbfunction", 2 ], [ "bordersync", 0 ], [ "grid", 0 ], [ "clicksustain", 1 ], [ "outputmode", 0 ], [ "cacheddrawing", 0 ], [ "ghost", 20 ], [ "legend", 1 ], [ "autosustain", 0 ], [ "mode", 0 ], [ "snap2grid", 0 ], [ "notifyrecalled", 0 ] ],
+									"embedstate" : [ [ "CreateNFunctions", 2, "function0", "function1", 0, 1, 0, 1000, 0, 1, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "SetColor", 1, "brgb", 204, 204, 204 ], [ "SetColor", 1, "frgb", 82, 82, 82 ], [ "SetColor", 1, "rgb2", 107, 107, 107 ], [ "SetColor", 1, "rgb3", 255, 0, 0 ], [ "SetColor", 1, "rgb4", 51, 51, 51 ], [ "SetColor", 1, "rgb5", 128, 128, 128 ], [ "SetColor", 1, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "bordersync", 0 ], [ "clickmove", 1 ], [ "hiddenpoint", 0 ], [ "legend", 1 ], [ "notifyrecalled", 0 ], [ "numcurvepoints", 12 ], [ "mode", 0 ], [ "drawtoedges", 0 ], [ "nbfunction", 2 ], [ "clicksustain", 1 ], [ "snap2grid", 0 ], [ "autocursor", 1 ], [ "autosustain", 0 ], [ "mousereport", 0 ], [ "ghost", 20 ], [ "outputmode", 0 ], [ "pointsize", 5 ], [ "grid", 0 ], [ "timedisplay", 0 ], [ "movemode", 0 ], [ "cacheddrawing", 0 ], [ "clickadd", 1 ] ],
 									"filename" : "ej.function.js",
 									"id" : "obj-18",
 									"ignoreclick" : 1,
@@ -1904,8 +1745,6 @@
 					}
 ,
 					"patching_rect" : [ 368.0, 383.0, 112.0, 19.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"saved_object_attributes" : 					{
 						"default_fontface" : 0,
 						"default_fontname" : "Arial",
@@ -1920,30 +1759,25 @@
 					}
 ,
 					"text" : "p pattr",
-					"textjustification" : 0,
 					"varname" : "pattr[4]"
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
-					"hidden" : 0,
 					"id" : "obj-9",
-					"ignoreclick" : 0,
 					"maxclass" : "newobj",
 					"numinlets" : 0,
 					"numoutlets" : 0,
 					"patcher" : 					{
 						"fileversion" : 1,
 						"appversion" : 						{
-							"major" : 7,
-							"minor" : 0,
-							"revision" : 0,
-							"architecture" : "x64"
+							"major" : 6,
+							"minor" : 1,
+							"revision" : 9,
+							"architecture" : "x86"
 						}
 ,
 						"rect" : [ 311.0, 419.0, 382.0, 150.0 ],
@@ -2014,8 +1848,6 @@
 					}
 ,
 					"patching_rect" : [ 486.0, 405.0, 128.0, 19.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"saved_object_attributes" : 					{
 						"default_fontface" : 0,
 						"default_fontname" : "Arial",
@@ -2030,30 +1862,25 @@
 					}
 ,
 					"text" : "p \"How to create me?\"",
-					"textjustification" : 0,
 					"varname" : "Copy & Paste...[1]"
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
-					"hidden" : 0,
 					"id" : "obj-10",
-					"ignoreclick" : 0,
 					"maxclass" : "newobj",
 					"numinlets" : 0,
 					"numoutlets" : 0,
 					"patcher" : 					{
 						"fileversion" : 1,
 						"appversion" : 						{
-							"major" : 7,
-							"minor" : 0,
-							"revision" : 0,
-							"architecture" : "x64"
+							"major" : 6,
+							"minor" : 1,
+							"revision" : 9,
+							"architecture" : "x86"
 						}
 ,
 						"rect" : [ 242.0, 170.0, 451.0, 362.0 ],
@@ -2133,7 +1960,7 @@
 									}
 ,
 									"text" : "autopattr",
-									"varname" : "u323000174"
+									"varname" : "u703001236"
 								}
 
 							}
@@ -2281,7 +2108,7 @@
 							}
 , 							{
 								"box" : 								{
-									"embedstate" : [ [ "CreateNFunctions", 1, "function0", 0, 1, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "timedisplay", 0 ], [ "hiddenpoint", 0 ], [ "mousereport", 1 ], [ "clickadd", 1 ], [ "pointsize", 8 ], [ "movemode", 0 ], [ "autocursor", 1 ], [ "numcurvepoints", 12 ], [ "clickmove", 1 ], [ "drawtoedges", 0 ], [ "nbfunction", 1 ], [ "bordersync", 0 ], [ "grid", 0 ], [ "clicksustain", 1 ], [ "outputmode", 0 ], [ "cacheddrawing", 0 ], [ "ghost", 20 ], [ "legend", 1 ], [ "autosustain", 0 ], [ "mode", 0 ], [ "snap2grid", 0 ], [ "notifyrecalled", 0 ] ],
+									"embedstate" : [ [ "CreateNFunctions", 1, "function0", 0, 1, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "bordersync", 0 ], [ "clickmove", 1 ], [ "hiddenpoint", 0 ], [ "legend", 1 ], [ "notifyrecalled", 0 ], [ "numcurvepoints", 12 ], [ "mode", 0 ], [ "drawtoedges", 0 ], [ "nbfunction", 1 ], [ "clicksustain", 1 ], [ "snap2grid", 0 ], [ "autocursor", 1 ], [ "autosustain", 0 ], [ "mousereport", 1 ], [ "ghost", 20 ], [ "outputmode", 0 ], [ "pointsize", 8 ], [ "grid", 0 ], [ "timedisplay", 0 ], [ "movemode", 0 ], [ "cacheddrawing", 0 ], [ "clickadd", 1 ] ],
 									"filename" : "ej.function.js",
 									"id" : "obj-12",
 									"maxclass" : "jsui",
@@ -2456,10 +2283,10 @@
 									"patcher" : 									{
 										"fileversion" : 1,
 										"appversion" : 										{
-											"major" : 7,
-											"minor" : 0,
-											"revision" : 0,
-											"architecture" : "x64"
+											"major" : 6,
+											"minor" : 1,
+											"revision" : 9,
+											"architecture" : "x86"
 										}
 ,
 										"rect" : [ 15.0, 55.0, 555.0, 201.0 ],
@@ -2755,8 +2582,6 @@
 					}
 ,
 					"patching_rect" : [ 368.0, 361.0, 112.0, 19.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"saved_object_attributes" : 					{
 						"default_fontface" : 0,
 						"default_fontname" : "Arial",
@@ -2771,79 +2596,53 @@
 					}
 ,
 					"text" : "p mouse",
-					"textjustification" : 0,
 					"varname" : "domain range and zooming[1]"
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 0.0 ],
-					"bubble" : 0,
-					"bubblepoint" : 0.5,
-					"bubbleside" : 1,
-					"bubbletextmargin" : 5,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
 					"frgb" : 0.0,
-					"hidden" : 0,
 					"id" : "obj-15",
-					"ignoreclick" : 1,
 					"linecount" : 2,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 15.719757, 76.0, 361.0, 32.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
-					"text" : "The function's parameters are saved in a patcher, not the values of the points (use a pattr/autopattr for that).",
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
-					"textjustification" : 0,
-					"underline" : 0
+					"text" : "The function's parameters are saved in a patcher, not the values of the points (use a pattr/autopattr for that)."
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
-					"hidden" : 0,
 					"id" : "obj-16",
-					"ignoreclick" : 0,
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 243.0, 297.0, 81.0, 19.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
-					"text" : "print dumpout",
-					"textjustification" : 0
+					"text" : "print dumpout"
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
-					"hidden" : 0,
 					"id" : "obj-17",
-					"ignoreclick" : 0,
 					"maxclass" : "newobj",
 					"numinlets" : 0,
 					"numoutlets" : 0,
 					"patcher" : 					{
 						"fileversion" : 1,
 						"appversion" : 						{
-							"major" : 7,
-							"minor" : 0,
-							"revision" : 0,
-							"architecture" : "x64"
+							"major" : 6,
+							"minor" : 1,
+							"revision" : 9,
+							"architecture" : "x86"
 						}
 ,
 						"rect" : [ 127.0, 130.0, 636.0, 374.0 ],
@@ -3321,11 +3120,11 @@
 										"range" : [ 0, 100 ],
 										"rangeMax" : [ 1.0 ],
 										"rangeMin" : [ 0.0 ],
-										"temp-20054141156" : [ 5, 1, 13, "function0", 0, 2311.541992, 0, 1, 100, 0.1, 0.0, 0.45, 0, 470.027283, 0.775, 0, 1101.955688, 0.4, 0, 1120.374268, 1, 0, 1135.753784, 1, 0, 1155.164917, 0.325, 0, 1191.377563, 0.175, 0, 1209.69397, 0.55, 0, 1209.69397, 0.95, 0, 1282.959229, 0.3875, 0, 1769.774292, 0.0875, 0, 1968.040649, 1, 0, 2311.541992, 0.5875, 0 ]
+										"temp-20054141156" : [ 5, 1, 13, "function0", 0, 2311.541992, 0, 1, 100, 0.1, 0, 0.45, 0, 470.027283, 0.775, 0, 1101.955688, 0.4, 0, 1120.374268, 1, 0, 1135.753784, 1, 0, 1155.164917, 0.325, 0, 1191.377563, 0.175, 0, 1209.69397, 0.55, 0, 1209.69397, 0.95, 0, 1282.959229, 0.3875, 0, 1769.774292, 0.0875, 0, 1968.040649, 1, 0, 2311.541992, 0.5875, 0 ]
 									}
 ,
 									"text" : "autopattr",
-									"varname" : "u781000173"
+									"varname" : "u392001235"
 								}
 
 							}
@@ -3585,7 +3384,7 @@
 							}
 , 							{
 								"box" : 								{
-									"embedstate" : [ [ "CreateNFunctions", 2, "function0", "function1", 0, 1, 0, 1000, 0, 1, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "SetColor", 1, "brgb", 204, 204, 204 ], [ "SetColor", 1, "frgb", 82, 82, 82 ], [ "SetColor", 1, "rgb2", 107, 107, 107 ], [ "SetColor", 1, "rgb3", 255, 0, 0 ], [ "SetColor", 1, "rgb4", 51, 51, 51 ], [ "SetColor", 1, "rgb5", 128, 128, 128 ], [ "SetColor", 1, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "timedisplay", 0 ], [ "hiddenpoint", 0 ], [ "mousereport", 0 ], [ "clickadd", 1 ], [ "pointsize", 5 ], [ "movemode", 0 ], [ "autocursor", 1 ], [ "numcurvepoints", 12 ], [ "clickmove", 1 ], [ "drawtoedges", 0 ], [ "nbfunction", 2 ], [ "bordersync", 0 ], [ "grid", 0 ], [ "clicksustain", 1 ], [ "outputmode", 0 ], [ "cacheddrawing", 0 ], [ "ghost", 20 ], [ "legend", 1 ], [ "autosustain", 0 ], [ "mode", 0 ], [ "snap2grid", 0 ], [ "notifyrecalled", 0 ] ],
+									"embedstate" : [ [ "CreateNFunctions", 2, "function0", "function1", 0, 1, 0, 1000, 0, 1, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "SetColor", 1, "brgb", 204, 204, 204 ], [ "SetColor", 1, "frgb", 82, 82, 82 ], [ "SetColor", 1, "rgb2", 107, 107, 107 ], [ "SetColor", 1, "rgb3", 255, 0, 0 ], [ "SetColor", 1, "rgb4", 51, 51, 51 ], [ "SetColor", 1, "rgb5", 128, 128, 128 ], [ "SetColor", 1, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "bordersync", 0 ], [ "clickmove", 1 ], [ "hiddenpoint", 0 ], [ "legend", 1 ], [ "notifyrecalled", 0 ], [ "numcurvepoints", 12 ], [ "mode", 0 ], [ "drawtoedges", 0 ], [ "nbfunction", 2 ], [ "clicksustain", 1 ], [ "snap2grid", 0 ], [ "autocursor", 1 ], [ "autosustain", 0 ], [ "mousereport", 0 ], [ "ghost", 20 ], [ "outputmode", 0 ], [ "pointsize", 5 ], [ "grid", 0 ], [ "timedisplay", 0 ], [ "movemode", 0 ], [ "cacheddrawing", 0 ], [ "clickadd", 1 ] ],
 									"filename" : "ej.function.js",
 									"id" : "obj-46",
 									"maxclass" : "jsui",
@@ -3799,7 +3598,7 @@
 							}
 , 							{
 								"box" : 								{
-									"embedstate" : [ [ "CreateNFunctions", 1, "function0", 0, 1, 0, 2311.541992 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "timedisplay", 0 ], [ "hiddenpoint", 0 ], [ "mousereport", 0 ], [ "clickadd", 1 ], [ "pointsize", 5 ], [ "movemode", 0 ], [ "autocursor", 1 ], [ "numcurvepoints", 12 ], [ "clickmove", 1 ], [ "drawtoedges", 0 ], [ "nbfunction", 1 ], [ "bordersync", 0 ], [ "grid", 0 ], [ "clicksustain", 1 ], [ "outputmode", 0 ], [ "cacheddrawing", 0 ], [ "ghost", 20 ], [ "legend", 1 ], [ "autosustain", 0 ], [ "mode", 0 ], [ "snap2grid", 0 ], [ "notifyrecalled", 0 ] ],
+									"embedstate" : [ [ "CreateNFunctions", 1, "function0", 0, 1, 0, 2311.541992 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "bordersync", 0 ], [ "clickmove", 1 ], [ "hiddenpoint", 0 ], [ "legend", 1 ], [ "notifyrecalled", 0 ], [ "numcurvepoints", 12 ], [ "mode", 0 ], [ "drawtoedges", 0 ], [ "nbfunction", 1 ], [ "clicksustain", 1 ], [ "snap2grid", 0 ], [ "autocursor", 1 ], [ "autosustain", 0 ], [ "mousereport", 0 ], [ "ghost", 20 ], [ "outputmode", 0 ], [ "pointsize", 5 ], [ "grid", 0 ], [ "timedisplay", 0 ], [ "movemode", 0 ], [ "cacheddrawing", 0 ], [ "clickadd", 1 ] ],
 									"filename" : "ej.function.js",
 									"id" : "obj-61",
 									"maxclass" : "jsui",
@@ -4404,8 +4203,6 @@
 					}
 ,
 					"patching_rect" : [ 368.0, 339.0, 112.0, 19.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"saved_object_attributes" : 					{
 						"default_fontface" : 0,
 						"default_fontname" : "Arial",
@@ -4420,20 +4217,16 @@
 					}
 ,
 					"text" : "p zooming",
-					"textjustification" : 0,
 					"varname" : "domain range and zooming"
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
 					"hidden" : 1,
 					"id" : "obj-18",
-					"ignoreclick" : 0,
 					"maxclass" : "newobj",
 					"numinlets" : 0,
 					"numoutlets" : 1,
@@ -4441,10 +4234,10 @@
 					"patcher" : 					{
 						"fileversion" : 1,
 						"appversion" : 						{
-							"major" : 7,
-							"minor" : 0,
-							"revision" : 0,
-							"architecture" : "x64"
+							"major" : 6,
+							"minor" : 1,
+							"revision" : 9,
+							"architecture" : "x86"
 						}
 ,
 						"rect" : [ 344.0, 260.0, 291.0, 178.0 ],
@@ -4620,9 +4413,7 @@
  ]
 					}
 ,
-					"patching_rect" : [ 87.0, 129.0, 56.0, 20.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
+					"patching_rect" : [ 87.0, 129.0, 56.0, 19.0 ],
 					"saved_object_attributes" : 					{
 						"default_fontface" : 0,
 						"default_fontname" : "Arial",
@@ -4636,66 +4427,42 @@
 						"tags" : ""
 					}
 ,
-					"text" : "p choose",
-					"textjustification" : 0
+					"text" : "p choose"
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"align" : 0,
-					"arrow" : 1,
-					"arrowframe" : 1,
-					"arrowlink" : 1,
-					"autopopulate" : 0,
-					"background" : 0,
-					"depth" : 0,
-					"fontface" : 0,
+					"bgcolor" : [ 1.0, 1.0, 1.0, 0.0 ],
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
-					"hidden" : 0,
 					"id" : "obj-19",
-					"ignoreclick" : 0,
 					"items" : [ "command", "+", "dble", "click", "to", "switch", "of", "function", ",", "ctrl", "+", "dble", "click", "to", "switch", "of", "function" ],
-					"labelclick" : 0,
 					"maxclass" : "umenu",
 					"menumode" : 2,
 					"numinlets" : 1,
 					"numoutlets" : 3,
 					"outlettype" : [ "int", "", "" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 87.0, 157.0, 225.0, 19.0 ],
-					"pattrmode" : 0,
-					"prefix" : "",
-					"prefix_mode" : 0,
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
-					"rounded" : 8,
-					"showdotfiles" : 0,
-					"truncate" : 1,
-					"underline" : 0
+					"patching_rect" : [ 87.0, 157.0, 225.0, 19.0 ]
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
-					"hidden" : 0,
 					"id" : "obj-20",
-					"ignoreclick" : 0,
 					"maxclass" : "newobj",
 					"numinlets" : 0,
 					"numoutlets" : 0,
 					"patcher" : 					{
 						"fileversion" : 1,
 						"appversion" : 						{
-							"major" : 7,
-							"minor" : 0,
-							"revision" : 0,
-							"architecture" : "x64"
+							"major" : 6,
+							"minor" : 1,
+							"revision" : 9,
+							"architecture" : "x86"
 						}
 ,
 						"rect" : [ 306.0, 61.0, 595.0, 450.0 ],
@@ -4806,7 +4573,7 @@
 							}
 , 							{
 								"box" : 								{
-									"embedstate" : [ [ "CreateNFunctions", 2, "function0", "function1", 0, 1, 0, 1000, 0, 1, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "SetColor", 1, "brgb", 204, 204, 204 ], [ "SetColor", 1, "frgb", 82, 82, 82 ], [ "SetColor", 1, "rgb2", 107, 107, 107 ], [ "SetColor", 1, "rgb3", 255, 0, 0 ], [ "SetColor", 1, "rgb4", 51, 51, 51 ], [ "SetColor", 1, "rgb5", 128, 128, 128 ], [ "SetColor", 1, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "timedisplay", 0 ], [ "hiddenpoint", 0 ], [ "mousereport", 0 ], [ "clickadd", 1 ], [ "pointsize", 5 ], [ "movemode", 0 ], [ "autocursor", 1 ], [ "numcurvepoints", 12 ], [ "clickmove", 1 ], [ "drawtoedges", 0 ], [ "nbfunction", 2 ], [ "bordersync", 0 ], [ "grid", 0 ], [ "clicksustain", 1 ], [ "outputmode", 0 ], [ "cacheddrawing", 0 ], [ "ghost", 20 ], [ "legend", 1 ], [ "autosustain", 0 ], [ "mode", 0 ], [ "snap2grid", 0 ], [ "notifyrecalled", 0 ] ],
+									"embedstate" : [ [ "CreateNFunctions", 2, "function0", "function1", 0, 1, 0, 1000, 0, 1, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "SetColor", 1, "brgb", 204, 204, 204 ], [ "SetColor", 1, "frgb", 82, 82, 82 ], [ "SetColor", 1, "rgb2", 107, 107, 107 ], [ "SetColor", 1, "rgb3", 255, 0, 0 ], [ "SetColor", 1, "rgb4", 51, 51, 51 ], [ "SetColor", 1, "rgb5", 128, 128, 128 ], [ "SetColor", 1, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "bordersync", 0 ], [ "clickmove", 1 ], [ "hiddenpoint", 0 ], [ "legend", 1 ], [ "notifyrecalled", 0 ], [ "numcurvepoints", 12 ], [ "mode", 0 ], [ "drawtoedges", 0 ], [ "nbfunction", 2 ], [ "clicksustain", 1 ], [ "snap2grid", 0 ], [ "autocursor", 1 ], [ "autosustain", 0 ], [ "mousereport", 0 ], [ "ghost", 20 ], [ "outputmode", 0 ], [ "pointsize", 5 ], [ "grid", 0 ], [ "timedisplay", 0 ], [ "movemode", 0 ], [ "cacheddrawing", 0 ], [ "clickadd", 1 ] ],
 									"filename" : "ej.function.js",
 									"id" : "obj-7",
 									"maxclass" : "jsui",
@@ -4849,7 +4616,7 @@
 							}
 , 							{
 								"box" : 								{
-									"embedstate" : [ [ "CreateNFunctions", 2, "functionA", "functionB", 0, 1, 0, 1000, 0, 1, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "SetColor", 1, "brgb", 204, 204, 204 ], [ "SetColor", 1, "frgb", 82, 82, 82 ], [ "SetColor", 1, "rgb2", 107, 107, 107 ], [ "SetColor", 1, "rgb3", 255, 0, 0 ], [ "SetColor", 1, "rgb4", 51, 51, 51 ], [ "SetColor", 1, "rgb5", 128, 128, 128 ], [ "SetColor", 1, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "timedisplay", 0 ], [ "hiddenpoint", 0 ], [ "mousereport", 0 ], [ "clickadd", 1 ], [ "pointsize", 5 ], [ "movemode", 0 ], [ "autocursor", 1 ], [ "numcurvepoints", 12 ], [ "clickmove", 1 ], [ "drawtoedges", 0 ], [ "nbfunction", 2 ], [ "bordersync", 0 ], [ "grid", 0 ], [ "clicksustain", 1 ], [ "outputmode", 0 ], [ "cacheddrawing", 0 ], [ "ghost", 20 ], [ "legend", 1 ], [ "autosustain", 0 ], [ "mode", 0 ], [ "snap2grid", 0 ], [ "notifyrecalled", 0 ] ],
+									"embedstate" : [ [ "CreateNFunctions", 2, "functionA", "functionB", 0, 1, 0, 1000, 0, 1, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "SetColor", 1, "brgb", 204, 204, 204 ], [ "SetColor", 1, "frgb", 82, 82, 82 ], [ "SetColor", 1, "rgb2", 107, 107, 107 ], [ "SetColor", 1, "rgb3", 255, 0, 0 ], [ "SetColor", 1, "rgb4", 51, 51, 51 ], [ "SetColor", 1, "rgb5", 128, 128, 128 ], [ "SetColor", 1, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "bordersync", 0 ], [ "clickmove", 1 ], [ "hiddenpoint", 0 ], [ "legend", 1 ], [ "notifyrecalled", 0 ], [ "numcurvepoints", 12 ], [ "mode", 0 ], [ "drawtoedges", 0 ], [ "nbfunction", 2 ], [ "clicksustain", 1 ], [ "snap2grid", 0 ], [ "autocursor", 1 ], [ "autosustain", 0 ], [ "mousereport", 0 ], [ "ghost", 20 ], [ "outputmode", 0 ], [ "pointsize", 5 ], [ "grid", 0 ], [ "timedisplay", 0 ], [ "movemode", 0 ], [ "cacheddrawing", 0 ], [ "clickadd", 1 ] ],
 									"filename" : "ej.function.js",
 									"id" : "obj-10",
 									"maxclass" : "jsui",
@@ -5069,7 +4836,7 @@
 									}
 ,
 									"text" : "autopattr",
-									"varname" : "u493000172"
+									"varname" : "u220001234"
 								}
 
 							}
@@ -5089,7 +4856,7 @@
 							}
 , 							{
 								"box" : 								{
-									"embedstate" : [ [ "CreateNFunctions", 2, "function0", "function1", 0, 1, 0, 1000, 0, 1, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "SetColor", 1, "brgb", 204, 204, 204 ], [ "SetColor", 1, "frgb", 82, 82, 82 ], [ "SetColor", 1, "rgb2", 107, 107, 107 ], [ "SetColor", 1, "rgb3", 255, 0, 0 ], [ "SetColor", 1, "rgb4", 51, 51, 51 ], [ "SetColor", 1, "rgb5", 128, 128, 128 ], [ "SetColor", 1, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "timedisplay", 0 ], [ "hiddenpoint", 0 ], [ "mousereport", 0 ], [ "clickadd", 1 ], [ "pointsize", 5 ], [ "movemode", 0 ], [ "autocursor", 1 ], [ "numcurvepoints", 12 ], [ "clickmove", 1 ], [ "drawtoedges", 0 ], [ "nbfunction", 2 ], [ "bordersync", 0 ], [ "grid", 0 ], [ "clicksustain", 1 ], [ "outputmode", 0 ], [ "cacheddrawing", 0 ], [ "ghost", 20 ], [ "legend", 1 ], [ "autosustain", 0 ], [ "mode", 0 ], [ "snap2grid", 0 ], [ "notifyrecalled", 0 ] ],
+									"embedstate" : [ [ "CreateNFunctions", 2, "function0", "function1", 0, 1, 0, 1000, 0, 1, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "SetColor", 1, "brgb", 204, 204, 204 ], [ "SetColor", 1, "frgb", 82, 82, 82 ], [ "SetColor", 1, "rgb2", 107, 107, 107 ], [ "SetColor", 1, "rgb3", 255, 0, 0 ], [ "SetColor", 1, "rgb4", 51, 51, 51 ], [ "SetColor", 1, "rgb5", 128, 128, 128 ], [ "SetColor", 1, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "bordersync", 0 ], [ "clickmove", 1 ], [ "hiddenpoint", 0 ], [ "legend", 1 ], [ "notifyrecalled", 0 ], [ "numcurvepoints", 12 ], [ "mode", 0 ], [ "drawtoedges", 0 ], [ "nbfunction", 2 ], [ "clicksustain", 1 ], [ "snap2grid", 0 ], [ "autocursor", 1 ], [ "autosustain", 0 ], [ "mousereport", 0 ], [ "ghost", 20 ], [ "outputmode", 0 ], [ "pointsize", 5 ], [ "grid", 0 ], [ "timedisplay", 0 ], [ "movemode", 0 ], [ "cacheddrawing", 0 ], [ "clickadd", 1 ] ],
 									"filename" : "ej.function.js",
 									"id" : "obj-26",
 									"maxclass" : "jsui",
@@ -5119,7 +4886,7 @@
 							}
 , 							{
 								"box" : 								{
-									"embedstate" : [ [ "CreateNFunctions", 2, "functionA", "functionB", 0, 1, 0, 1000, 0, 1, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "SetColor", 1, "brgb", 204, 204, 204 ], [ "SetColor", 1, "frgb", 82, 82, 82 ], [ "SetColor", 1, "rgb2", 107, 107, 107 ], [ "SetColor", 1, "rgb3", 255, 0, 0 ], [ "SetColor", 1, "rgb4", 51, 51, 51 ], [ "SetColor", 1, "rgb5", 128, 128, 128 ], [ "SetColor", 1, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "timedisplay", 0 ], [ "hiddenpoint", 0 ], [ "mousereport", 0 ], [ "clickadd", 1 ], [ "pointsize", 5 ], [ "movemode", 0 ], [ "autocursor", 1 ], [ "numcurvepoints", 12 ], [ "clickmove", 1 ], [ "drawtoedges", 0 ], [ "nbfunction", 2 ], [ "bordersync", 0 ], [ "grid", 0 ], [ "clicksustain", 1 ], [ "outputmode", 0 ], [ "cacheddrawing", 0 ], [ "ghost", 20 ], [ "legend", 1 ], [ "autosustain", 0 ], [ "mode", 0 ], [ "snap2grid", 0 ], [ "notifyrecalled", 0 ] ],
+									"embedstate" : [ [ "CreateNFunctions", 2, "functionA", "functionB", 0, 1, 0, 1000, 0, 1, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "SetColor", 1, "brgb", 204, 204, 204 ], [ "SetColor", 1, "frgb", 82, 82, 82 ], [ "SetColor", 1, "rgb2", 107, 107, 107 ], [ "SetColor", 1, "rgb3", 255, 0, 0 ], [ "SetColor", 1, "rgb4", 51, 51, 51 ], [ "SetColor", 1, "rgb5", 128, 128, 128 ], [ "SetColor", 1, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "bordersync", 0 ], [ "clickmove", 1 ], [ "hiddenpoint", 0 ], [ "legend", 1 ], [ "notifyrecalled", 0 ], [ "numcurvepoints", 12 ], [ "mode", 0 ], [ "drawtoedges", 0 ], [ "nbfunction", 2 ], [ "clicksustain", 1 ], [ "snap2grid", 0 ], [ "autocursor", 1 ], [ "autosustain", 0 ], [ "mousereport", 0 ], [ "ghost", 20 ], [ "outputmode", 0 ], [ "pointsize", 5 ], [ "grid", 0 ], [ "timedisplay", 0 ], [ "movemode", 0 ], [ "cacheddrawing", 0 ], [ "clickadd", 1 ] ],
 									"filename" : "ej.function.js",
 									"id" : "obj-28",
 									"maxclass" : "jsui",
@@ -5374,8 +5141,6 @@
 					}
 ,
 					"patching_rect" : [ 486.0, 361.0, 128.0, 19.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"saved_object_attributes" : 					{
 						"default_fontface" : 0,
 						"default_fontname" : "Arial",
@@ -5390,30 +5155,25 @@
 					}
 ,
 					"text" : "p \"Copy & Paste...\"",
-					"textjustification" : 0,
 					"varname" : "Copy & Paste..."
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
-					"hidden" : 0,
 					"id" : "obj-21",
-					"ignoreclick" : 0,
 					"maxclass" : "newobj",
 					"numinlets" : 0,
 					"numoutlets" : 0,
 					"patcher" : 					{
 						"fileversion" : 1,
 						"appversion" : 						{
-							"major" : 7,
-							"minor" : 0,
-							"revision" : 0,
-							"architecture" : "x64"
+							"major" : 6,
+							"minor" : 1,
+							"revision" : 9,
+							"architecture" : "x86"
 						}
 ,
 						"rect" : [ 99.0, 136.0, 856.0, 403.0 ],
@@ -5580,13 +5340,13 @@
 									}
 ,
 									"text" : "autopattr",
-									"varname" : "u884000171"
+									"varname" : "u942001233"
 								}
 
 							}
 , 							{
 								"box" : 								{
-									"embedstate" : [ [ "CreateNFunctions", 2, "function0", "function1", 0, 1, 0, 1000, 0, 50, 1000, 2000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "SetColor", 1, "brgb", 204, 204, 204 ], [ "SetColor", 1, "frgb", 82, 82, 82 ], [ "SetColor", 1, "rgb2", 107, 107, 107 ], [ "SetColor", 1, "rgb3", 255, 0, 0 ], [ "SetColor", 1, "rgb4", 51, 51, 51 ], [ "SetColor", 1, "rgb5", 128, 128, 128 ], [ "SetColor", 1, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "timedisplay", 0 ], [ "hiddenpoint", 0 ], [ "mousereport", 0 ], [ "clickadd", 1 ], [ "pointsize", 5 ], [ "movemode", 0 ], [ "autocursor", 1 ], [ "numcurvepoints", 12 ], [ "clickmove", 1 ], [ "drawtoedges", 0 ], [ "nbfunction", 2 ], [ "bordersync", 0 ], [ "grid", 0 ], [ "clicksustain", 1 ], [ "outputmode", 0 ], [ "cacheddrawing", 0 ], [ "ghost", 20 ], [ "legend", 1 ], [ "autosustain", 0 ], [ "mode", 0 ], [ "snap2grid", 0 ], [ "notifyrecalled", 0 ] ],
+									"embedstate" : [ [ "CreateNFunctions", 2, "function0", "function1", 0, 1, 0, 1000, 0, 50, 1000, 2000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "SetColor", 1, "brgb", 204, 204, 204 ], [ "SetColor", 1, "frgb", 82, 82, 82 ], [ "SetColor", 1, "rgb2", 107, 107, 107 ], [ "SetColor", 1, "rgb3", 255, 0, 0 ], [ "SetColor", 1, "rgb4", 51, 51, 51 ], [ "SetColor", 1, "rgb5", 128, 128, 128 ], [ "SetColor", 1, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "bordersync", 0 ], [ "clickmove", 1 ], [ "hiddenpoint", 0 ], [ "legend", 1 ], [ "notifyrecalled", 0 ], [ "numcurvepoints", 12 ], [ "mode", 0 ], [ "drawtoedges", 0 ], [ "nbfunction", 2 ], [ "clicksustain", 1 ], [ "snap2grid", 0 ], [ "autocursor", 1 ], [ "autosustain", 0 ], [ "mousereport", 0 ], [ "ghost", 20 ], [ "outputmode", 0 ], [ "pointsize", 5 ], [ "grid", 0 ], [ "timedisplay", 0 ], [ "movemode", 0 ], [ "cacheddrawing", 0 ], [ "clickadd", 1 ] ],
 									"filename" : "ej.function.js",
 									"id" : "obj-11",
 									"maxclass" : "jsui",
@@ -5679,8 +5439,6 @@
 					}
 ,
 					"patching_rect" : [ 486.0, 317.0, 128.0, 19.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"saved_object_attributes" : 					{
 						"default_fontface" : 0,
 						"default_fontname" : "Arial",
@@ -5695,30 +5453,25 @@
 					}
 ,
 					"text" : "p \"read write\"",
-					"textjustification" : 0,
 					"varname" : "pattr[3]"
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
-					"hidden" : 0,
 					"id" : "obj-22",
-					"ignoreclick" : 0,
 					"maxclass" : "newobj",
 					"numinlets" : 0,
 					"numoutlets" : 0,
 					"patcher" : 					{
 						"fileversion" : 1,
 						"appversion" : 						{
-							"major" : 7,
-							"minor" : 0,
-							"revision" : 0,
-							"architecture" : "x64"
+							"major" : 6,
+							"minor" : 1,
+							"revision" : 9,
+							"architecture" : "x86"
 						}
 ,
 						"rect" : [ 344.0, 48.0, 623.0, 577.0 ],
@@ -6488,8 +6241,6 @@
 					}
 ,
 					"patching_rect" : [ 368.0, 295.0, 111.0, 19.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"saved_object_attributes" : 					{
 						"default_fontface" : 0,
 						"default_fontname" : "Arial",
@@ -6503,30 +6254,25 @@
 						"tags" : ""
 					}
 ,
-					"text" : "p \"get informations\"",
-					"textjustification" : 0
+					"text" : "p \"get informations\""
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
-					"hidden" : 0,
 					"id" : "obj-23",
-					"ignoreclick" : 0,
 					"maxclass" : "newobj",
 					"numinlets" : 0,
 					"numoutlets" : 0,
 					"patcher" : 					{
 						"fileversion" : 1,
 						"appversion" : 						{
-							"major" : 7,
-							"minor" : 0,
-							"revision" : 0,
-							"architecture" : "x64"
+							"major" : 6,
+							"minor" : 1,
+							"revision" : 9,
+							"architecture" : "x86"
 						}
 ,
 						"rect" : [ 318.0, 56.0, 510.0, 399.0 ],
@@ -6587,8 +6333,7 @@
 									"numinlets" : 2,
 									"numoutlets" : 1,
 									"outlettype" : [ "" ],
-									"patching_rect" : [ 368.0, 367.0, 97.0, 18.0 ],
-									"text" : "notifyrecalled 0"
+									"patching_rect" : [ 368.0, 367.0, 97.0, 18.0 ]
 								}
 
 							}
@@ -6766,7 +6511,7 @@
 									}
 ,
 									"text" : "autopattr",
-									"varname" : "u176000170"
+									"varname" : "u288001232"
 								}
 
 							}
@@ -6858,7 +6603,7 @@
 							}
 , 							{
 								"box" : 								{
-									"embedstate" : [ [ "CreateNFunctions", 4, "function0", "function1", "function2", "function3", 0, 1, 0, 1000, 0, 1, 0, 1000, 0, 1, 0, 1000, 0, 1, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "SetColor", 1, "brgb", 204, 204, 204 ], [ "SetColor", 1, "frgb", 82, 82, 82 ], [ "SetColor", 1, "rgb2", 107, 107, 107 ], [ "SetColor", 1, "rgb3", 255, 0, 0 ], [ "SetColor", 1, "rgb4", 51, 51, 51 ], [ "SetColor", 1, "rgb5", 128, 128, 128 ], [ "SetColor", 1, "rgb6", 107, 107, 107 ], [ "SetColor", 2, "brgb", 204, 204, 204 ], [ "SetColor", 2, "frgb", 82, 82, 82 ], [ "SetColor", 2, "rgb2", 107, 107, 107 ], [ "SetColor", 2, "rgb3", 255, 0, 0 ], [ "SetColor", 2, "rgb4", 51, 51, 51 ], [ "SetColor", 2, "rgb5", 128, 128, 128 ], [ "SetColor", 2, "rgb6", 107, 107, 107 ], [ "SetColor", 3, "brgb", 204, 204, 204 ], [ "SetColor", 3, "frgb", 82, 82, 82 ], [ "SetColor", 3, "rgb2", 107, 107, 107 ], [ "SetColor", 3, "rgb3", 255, 0, 0 ], [ "SetColor", 3, "rgb4", 51, 51, 51 ], [ "SetColor", 3, "rgb5", 128, 128, 128 ], [ "SetColor", 3, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "timedisplay", 0 ], [ "hiddenpoint", 0 ], [ "mousereport", 0 ], [ "clickadd", 1 ], [ "pointsize", 5 ], [ "movemode", 0 ], [ "autocursor", 1 ], [ "numcurvepoints", 12 ], [ "clickmove", 1 ], [ "drawtoedges", 0 ], [ "nbfunction", 4 ], [ "bordersync", 0 ], [ "grid", 0 ], [ "clicksustain", 1 ], [ "outputmode", 0 ], [ "cacheddrawing", 0 ], [ "ghost", 20 ], [ "legend", 1 ], [ "autosustain", 0 ], [ "mode", 0 ], [ "snap2grid", 0 ], [ "notifyrecalled", 0 ] ],
+									"embedstate" : [ [ "CreateNFunctions", 4, "function0", "function1", "function2", "function3", 0, 1, 0, 1000, 0, 1, 0, 1000, 0, 1, 0, 1000, 0, 1, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "SetColor", 1, "brgb", 204, 204, 204 ], [ "SetColor", 1, "frgb", 82, 82, 82 ], [ "SetColor", 1, "rgb2", 107, 107, 107 ], [ "SetColor", 1, "rgb3", 255, 0, 0 ], [ "SetColor", 1, "rgb4", 51, 51, 51 ], [ "SetColor", 1, "rgb5", 128, 128, 128 ], [ "SetColor", 1, "rgb6", 107, 107, 107 ], [ "SetColor", 2, "brgb", 204, 204, 204 ], [ "SetColor", 2, "frgb", 82, 82, 82 ], [ "SetColor", 2, "rgb2", 107, 107, 107 ], [ "SetColor", 2, "rgb3", 255, 0, 0 ], [ "SetColor", 2, "rgb4", 51, 51, 51 ], [ "SetColor", 2, "rgb5", 128, 128, 128 ], [ "SetColor", 2, "rgb6", 107, 107, 107 ], [ "SetColor", 3, "brgb", 204, 204, 204 ], [ "SetColor", 3, "frgb", 82, 82, 82 ], [ "SetColor", 3, "rgb2", 107, 107, 107 ], [ "SetColor", 3, "rgb3", 255, 0, 0 ], [ "SetColor", 3, "rgb4", 51, 51, 51 ], [ "SetColor", 3, "rgb5", 128, 128, 128 ], [ "SetColor", 3, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "bordersync", 0 ], [ "clickmove", 1 ], [ "hiddenpoint", 0 ], [ "legend", 1 ], [ "notifyrecalled", 0 ], [ "numcurvepoints", 12 ], [ "mode", 0 ], [ "drawtoedges", 0 ], [ "nbfunction", 4 ], [ "clicksustain", 1 ], [ "snap2grid", 0 ], [ "autocursor", 1 ], [ "autosustain", 0 ], [ "mousereport", 0 ], [ "ghost", 20 ], [ "outputmode", 0 ], [ "pointsize", 5 ], [ "grid", 0 ], [ "timedisplay", 0 ], [ "movemode", 0 ], [ "cacheddrawing", 0 ], [ "clickadd", 1 ] ],
 									"filename" : "ej.function.js",
 									"id" : "obj-23",
 									"maxclass" : "jsui",
@@ -7058,8 +6803,6 @@
 					}
 ,
 					"patching_rect" : [ 486.0, 295.0, 128.0, 19.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"saved_object_attributes" : 					{
 						"default_fontface" : 0,
 						"default_fontname" : "Arial",
@@ -7074,30 +6817,25 @@
 					}
 ,
 					"text" : "p (in)active",
-					"textjustification" : 0,
 					"varname" : "pattr[2]"
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
-					"hidden" : 0,
 					"id" : "obj-24",
-					"ignoreclick" : 0,
 					"maxclass" : "newobj",
 					"numinlets" : 0,
 					"numoutlets" : 0,
 					"patcher" : 					{
 						"fileversion" : 1,
 						"appversion" : 						{
-							"major" : 7,
-							"minor" : 0,
-							"revision" : 0,
-							"architecture" : "x64"
+							"major" : 6,
+							"minor" : 1,
+							"revision" : 9,
+							"architecture" : "x86"
 						}
 ,
 						"rect" : [ 56.0, 160.0, 855.0, 373.0 ],
@@ -7147,10 +6885,10 @@
 									"patcher" : 									{
 										"fileversion" : 1,
 										"appversion" : 										{
-											"major" : 7,
-											"minor" : 0,
-											"revision" : 0,
-											"architecture" : "x64"
+											"major" : 6,
+											"minor" : 1,
+											"revision" : 9,
+											"architecture" : "x86"
 										}
 ,
 										"rect" : [ 525.0, 182.0, 190.0, 274.0 ],
@@ -7389,10 +7127,10 @@
 									"patcher" : 									{
 										"fileversion" : 1,
 										"appversion" : 										{
-											"major" : 7,
-											"minor" : 0,
-											"revision" : 0,
-											"architecture" : "x64"
+											"major" : 6,
+											"minor" : 1,
+											"revision" : 9,
+											"architecture" : "x86"
 										}
 ,
 										"rect" : [ 525.0, 182.0, 190.0, 274.0 ],
@@ -7631,10 +7369,10 @@
 									"patcher" : 									{
 										"fileversion" : 1,
 										"appversion" : 										{
-											"major" : 7,
-											"minor" : 0,
-											"revision" : 0,
-											"architecture" : "x64"
+											"major" : 6,
+											"minor" : 1,
+											"revision" : 9,
+											"architecture" : "x86"
 										}
 ,
 										"rect" : [ 525.0, 182.0, 190.0, 274.0 ],
@@ -8028,7 +7766,7 @@
 							}
 , 							{
 								"box" : 								{
-									"embedstate" : [ [ "CreateNFunctions", 1, "function0", 0, 1, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "timedisplay", 0 ], [ "hiddenpoint", 0 ], [ "mousereport", 0 ], [ "clickadd", 1 ], [ "pointsize", 5 ], [ "movemode", 0 ], [ "autocursor", 1 ], [ "numcurvepoints", 12 ], [ "clickmove", 1 ], [ "drawtoedges", 0 ], [ "nbfunction", 1 ], [ "bordersync", 0 ], [ "grid", 0 ], [ "clicksustain", 1 ], [ "outputmode", 0 ], [ "cacheddrawing", 0 ], [ "ghost", 20 ], [ "legend", 1 ], [ "autosustain", 0 ], [ "mode", 0 ], [ "snap2grid", 0 ], [ "notifyrecalled", 0 ] ],
+									"embedstate" : [ [ "CreateNFunctions", 1, "function0", 0, 1, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "bordersync", 0 ], [ "clickmove", 1 ], [ "hiddenpoint", 0 ], [ "legend", 1 ], [ "notifyrecalled", 0 ], [ "numcurvepoints", 12 ], [ "mode", 0 ], [ "drawtoedges", 0 ], [ "nbfunction", 1 ], [ "clicksustain", 1 ], [ "snap2grid", 0 ], [ "autocursor", 1 ], [ "autosustain", 0 ], [ "mousereport", 0 ], [ "ghost", 20 ], [ "outputmode", 0 ], [ "pointsize", 5 ], [ "grid", 0 ], [ "timedisplay", 0 ], [ "movemode", 0 ], [ "cacheddrawing", 0 ], [ "clickadd", 1 ] ],
 									"filename" : "ej.function.js",
 									"id" : "obj-20",
 									"maxclass" : "jsui",
@@ -8153,7 +7891,7 @@
 							}
 , 							{
 								"box" : 								{
-									"embedstate" : [ [ "CreateNFunctions", 1, "function0", 0, 1, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "timedisplay", 0 ], [ "hiddenpoint", 0 ], [ "mousereport", 0 ], [ "clickadd", 1 ], [ "pointsize", 5 ], [ "movemode", 0 ], [ "autocursor", 1 ], [ "numcurvepoints", 12 ], [ "clickmove", 1 ], [ "drawtoedges", 0 ], [ "nbfunction", 1 ], [ "bordersync", 0 ], [ "grid", 0 ], [ "clicksustain", 1 ], [ "outputmode", 0 ], [ "cacheddrawing", 0 ], [ "ghost", 20 ], [ "legend", 1 ], [ "autosustain", 0 ], [ "mode", 0 ], [ "snap2grid", 0 ], [ "notifyrecalled", 0 ] ],
+									"embedstate" : [ [ "CreateNFunctions", 1, "function0", 0, 1, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "bordersync", 0 ], [ "clickmove", 1 ], [ "hiddenpoint", 0 ], [ "legend", 1 ], [ "notifyrecalled", 0 ], [ "numcurvepoints", 12 ], [ "mode", 0 ], [ "drawtoedges", 0 ], [ "nbfunction", 1 ], [ "clicksustain", 1 ], [ "snap2grid", 0 ], [ "autocursor", 1 ], [ "autosustain", 0 ], [ "mousereport", 0 ], [ "ghost", 20 ], [ "outputmode", 0 ], [ "pointsize", 5 ], [ "grid", 0 ], [ "timedisplay", 0 ], [ "movemode", 0 ], [ "cacheddrawing", 0 ], [ "clickadd", 1 ] ],
 									"filename" : "ej.function.js",
 									"id" : "obj-29",
 									"maxclass" : "jsui",
@@ -8251,13 +7989,13 @@
 									}
 ,
 									"text" : "autopattr",
-									"varname" : "u988000169"
+									"varname" : "u908001231"
 								}
 
 							}
 , 							{
 								"box" : 								{
-									"embedstate" : [ [ "CreateNFunctions", 1, "function0", 0, 1, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "timedisplay", 0 ], [ "hiddenpoint", 0 ], [ "mousereport", 0 ], [ "clickadd", 1 ], [ "pointsize", 5 ], [ "movemode", 0 ], [ "autocursor", 1 ], [ "numcurvepoints", 12 ], [ "clickmove", 1 ], [ "drawtoedges", 0 ], [ "nbfunction", 1 ], [ "bordersync", 0 ], [ "grid", 0 ], [ "clicksustain", 1 ], [ "outputmode", 0 ], [ "cacheddrawing", 0 ], [ "ghost", 20 ], [ "legend", 1 ], [ "autosustain", 0 ], [ "mode", 0 ], [ "snap2grid", 0 ], [ "notifyrecalled", 0 ] ],
+									"embedstate" : [ [ "CreateNFunctions", 1, "function0", 0, 1, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "bordersync", 0 ], [ "clickmove", 1 ], [ "hiddenpoint", 0 ], [ "legend", 1 ], [ "notifyrecalled", 0 ], [ "numcurvepoints", 12 ], [ "mode", 0 ], [ "drawtoedges", 0 ], [ "nbfunction", 1 ], [ "clicksustain", 1 ], [ "snap2grid", 0 ], [ "autocursor", 1 ], [ "autosustain", 0 ], [ "mousereport", 0 ], [ "ghost", 20 ], [ "outputmode", 0 ], [ "pointsize", 5 ], [ "grid", 0 ], [ "timedisplay", 0 ], [ "movemode", 0 ], [ "cacheddrawing", 0 ], [ "clickadd", 1 ] ],
 									"filename" : "ej.function.js",
 									"id" : "obj-36",
 									"maxclass" : "jsui",
@@ -8732,8 +8470,6 @@
 					}
 ,
 					"patching_rect" : [ 486.0, 273.0, 128.0, 19.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"saved_object_attributes" : 					{
 						"default_fontface" : 0,
 						"default_fontname" : "Arial",
@@ -8748,30 +8484,25 @@
 					}
 ,
 					"text" : "p \"filling performances\"",
-					"textjustification" : 0,
 					"varname" : "pattr[1]"
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
-					"hidden" : 0,
 					"id" : "obj-25",
-					"ignoreclick" : 0,
 					"maxclass" : "newobj",
 					"numinlets" : 0,
 					"numoutlets" : 0,
 					"patcher" : 					{
 						"fileversion" : 1,
 						"appversion" : 						{
-							"major" : 7,
-							"minor" : 0,
-							"revision" : 0,
-							"architecture" : "x64"
+							"major" : 6,
+							"minor" : 1,
+							"revision" : 9,
+							"architecture" : "x86"
 						}
 ,
 						"rect" : [ 337.0, 138.0, 613.0, 426.0 ],
@@ -8894,7 +8625,7 @@
 							}
 , 							{
 								"box" : 								{
-									"embedstate" : [ [ "CreateNFunctions", 2, "myFunction", "Second function", 0, 1, 0, 1000, 0, 1, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "SetColor", 1, "brgb", 204, 204, 204 ], [ "SetColor", 1, "frgb", 82, 82, 82 ], [ "SetColor", 1, "rgb2", 107, 107, 107 ], [ "SetColor", 1, "rgb3", 255, 0, 0 ], [ "SetColor", 1, "rgb4", 51, 51, 51 ], [ "SetColor", 1, "rgb5", 128, 128, 128 ], [ "SetColor", 1, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "timedisplay", 0 ], [ "hiddenpoint", 0 ], [ "mousereport", 0 ], [ "clickadd", 1 ], [ "pointsize", 5 ], [ "movemode", 0 ], [ "autocursor", 1 ], [ "numcurvepoints", 12 ], [ "clickmove", 1 ], [ "drawtoedges", 0 ], [ "nbfunction", 2 ], [ "bordersync", 0 ], [ "grid", 0 ], [ "clicksustain", 1 ], [ "outputmode", 0 ], [ "cacheddrawing", 0 ], [ "ghost", 20 ], [ "legend", 1 ], [ "autosustain", 0 ], [ "mode", 0 ], [ "snap2grid", 0 ], [ "notifyrecalled", 0 ] ],
+									"embedstate" : [ [ "CreateNFunctions", 2, "myFunction", "Second function", 0, 1, 0, 1000, 0, 1, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "SetColor", 1, "brgb", 204, 204, 204 ], [ "SetColor", 1, "frgb", 82, 82, 82 ], [ "SetColor", 1, "rgb2", 107, 107, 107 ], [ "SetColor", 1, "rgb3", 255, 0, 0 ], [ "SetColor", 1, "rgb4", 51, 51, 51 ], [ "SetColor", 1, "rgb5", 128, 128, 128 ], [ "SetColor", 1, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "bordersync", 0 ], [ "clickmove", 1 ], [ "hiddenpoint", 0 ], [ "legend", 1 ], [ "notifyrecalled", 0 ], [ "numcurvepoints", 12 ], [ "mode", 0 ], [ "drawtoedges", 0 ], [ "nbfunction", 2 ], [ "clicksustain", 1 ], [ "snap2grid", 0 ], [ "autocursor", 1 ], [ "autosustain", 0 ], [ "mousereport", 0 ], [ "ghost", 20 ], [ "outputmode", 0 ], [ "pointsize", 5 ], [ "grid", 0 ], [ "timedisplay", 0 ], [ "movemode", 0 ], [ "cacheddrawing", 0 ], [ "clickadd", 1 ] ],
 									"filename" : "ej.function.js",
 									"id" : "obj-8",
 									"maxclass" : "jsui",
@@ -9081,7 +8812,7 @@
 									}
 ,
 									"text" : "autopattr",
-									"varname" : "u032000168"
+									"varname" : "u648001230"
 								}
 
 							}
@@ -9119,7 +8850,7 @@
 							}
 , 							{
 								"box" : 								{
-									"embedstate" : [ [ "CreateNFunctions", 2, "myFunction", "Second function", 0, 1, 0, 1000, 0, 1, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "SetColor", 1, "brgb", 204, 204, 204 ], [ "SetColor", 1, "frgb", 82, 82, 82 ], [ "SetColor", 1, "rgb2", 107, 107, 107 ], [ "SetColor", 1, "rgb3", 255, 0, 0 ], [ "SetColor", 1, "rgb4", 51, 51, 51 ], [ "SetColor", 1, "rgb5", 128, 128, 128 ], [ "SetColor", 1, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "timedisplay", 0 ], [ "hiddenpoint", 0 ], [ "mousereport", 0 ], [ "clickadd", 1 ], [ "pointsize", 5 ], [ "movemode", 0 ], [ "autocursor", 1 ], [ "numcurvepoints", 12 ], [ "clickmove", 1 ], [ "drawtoedges", 0 ], [ "nbfunction", 2 ], [ "bordersync", 0 ], [ "grid", 0 ], [ "clicksustain", 1 ], [ "outputmode", 0 ], [ "cacheddrawing", 0 ], [ "ghost", 20 ], [ "legend", 1 ], [ "autosustain", 0 ], [ "mode", 0 ], [ "snap2grid", 0 ], [ "notifyrecalled", 0 ] ],
+									"embedstate" : [ [ "CreateNFunctions", 2, "myFunction", "Second function", 0, 1, 0, 1000, 0, 1, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "SetColor", 1, "brgb", 204, 204, 204 ], [ "SetColor", 1, "frgb", 82, 82, 82 ], [ "SetColor", 1, "rgb2", 107, 107, 107 ], [ "SetColor", 1, "rgb3", 255, 0, 0 ], [ "SetColor", 1, "rgb4", 51, 51, 51 ], [ "SetColor", 1, "rgb5", 128, 128, 128 ], [ "SetColor", 1, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "bordersync", 0 ], [ "clickmove", 1 ], [ "hiddenpoint", 0 ], [ "legend", 1 ], [ "notifyrecalled", 0 ], [ "numcurvepoints", 12 ], [ "mode", 0 ], [ "drawtoedges", 0 ], [ "nbfunction", 2 ], [ "clicksustain", 1 ], [ "snap2grid", 0 ], [ "autocursor", 1 ], [ "autosustain", 0 ], [ "mousereport", 0 ], [ "ghost", 20 ], [ "outputmode", 0 ], [ "pointsize", 5 ], [ "grid", 0 ], [ "timedisplay", 0 ], [ "movemode", 0 ], [ "cacheddrawing", 0 ], [ "clickadd", 1 ] ],
 									"filename" : "ej.function.js",
 									"id" : "obj-24",
 									"maxclass" : "jsui",
@@ -9162,7 +8893,7 @@
 							}
 , 							{
 								"box" : 								{
-									"embedstate" : [ [ "CreateNFunctions", 2, "myFunction", "Second function", 0, 1, 0, 1000, 0, 1, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "SetColor", 1, "brgb", 204, 204, 204 ], [ "SetColor", 1, "frgb", 82, 82, 82 ], [ "SetColor", 1, "rgb2", 107, 107, 107 ], [ "SetColor", 1, "rgb3", 255, 0, 0 ], [ "SetColor", 1, "rgb4", 51, 51, 51 ], [ "SetColor", 1, "rgb5", 128, 128, 128 ], [ "SetColor", 1, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "timedisplay", 0 ], [ "hiddenpoint", 0 ], [ "mousereport", 0 ], [ "clickadd", 1 ], [ "pointsize", 5 ], [ "movemode", 0 ], [ "autocursor", 1 ], [ "numcurvepoints", 12 ], [ "clickmove", 1 ], [ "drawtoedges", 0 ], [ "nbfunction", 2 ], [ "bordersync", 0 ], [ "grid", 0 ], [ "clicksustain", 1 ], [ "outputmode", 0 ], [ "cacheddrawing", 0 ], [ "ghost", 20 ], [ "legend", 1 ], [ "autosustain", 0 ], [ "mode", 1 ], [ "snap2grid", 0 ], [ "notifyrecalled", 0 ] ],
+									"embedstate" : [ [ "CreateNFunctions", 2, "myFunction", "Second function", 0, 1, 0, 1000, 0, 1, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "SetColor", 1, "brgb", 204, 204, 204 ], [ "SetColor", 1, "frgb", 82, 82, 82 ], [ "SetColor", 1, "rgb2", 107, 107, 107 ], [ "SetColor", 1, "rgb3", 255, 0, 0 ], [ "SetColor", 1, "rgb4", 51, 51, 51 ], [ "SetColor", 1, "rgb5", 128, 128, 128 ], [ "SetColor", 1, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "bordersync", 0 ], [ "clickmove", 1 ], [ "hiddenpoint", 0 ], [ "legend", 1 ], [ "notifyrecalled", 0 ], [ "numcurvepoints", 12 ], [ "mode", 1 ], [ "drawtoedges", 0 ], [ "nbfunction", 2 ], [ "clicksustain", 1 ], [ "snap2grid", 0 ], [ "autocursor", 1 ], [ "autosustain", 0 ], [ "mousereport", 0 ], [ "ghost", 20 ], [ "outputmode", 0 ], [ "pointsize", 5 ], [ "grid", 0 ], [ "timedisplay", 0 ], [ "movemode", 0 ], [ "cacheddrawing", 0 ], [ "clickadd", 1 ] ],
 									"filename" : "ej.function.js",
 									"id" : "obj-27",
 									"maxclass" : "jsui",
@@ -9346,8 +9077,6 @@
 					}
 ,
 					"patching_rect" : [ 486.0, 251.0, 128.0, 19.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"saved_object_attributes" : 					{
 						"default_fontface" : 0,
 						"default_fontname" : "Arial",
@@ -9362,133 +9091,87 @@
 					}
 ,
 					"text" : "p jitter",
-					"textjustification" : 0,
 					"varname" : "pattr"
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 0.0 ],
-					"bubble" : 0,
-					"bubblepoint" : 0.5,
-					"bubbleside" : 1,
-					"bubbletextmargin" : 5,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
 					"frgb" : 0.0,
-					"hidden" : 0,
 					"id" : "obj-28",
-					"ignoreclick" : 1,
 					"linecount" : 10,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 407.0, 98.0, 166.0, 136.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
-					"text" : "- fully compatible with function\r- mutliple functions\r- grid & snap to grid\r- import/export as text file\r- display point value on idle\r- pattr compatible\r- copy & paste\r- domain with 2 limits\r- zoom\r- ...",
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
-					"textjustification" : 0,
-					"underline" : 0
+					"text" : "- fully compatible with function\r- mutliple functions\r- grid & snap to grid\r- import/export as text file\r- display point value on idle\r- pattr compatible\r- copy & paste\r- domain with 2 limits\r- zoom\r- ..."
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"bgcolor" : [ 1.0, 1.0, 1.0, 0.0 ],
-					"bubble" : 0,
-					"bubblepoint" : 0.5,
-					"bubbleside" : 1,
-					"bubbletextmargin" : 5,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
 					"frgb" : 0.0,
-					"hidden" : 0,
 					"id" : "obj-29",
-					"ignoreclick" : 1,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 400.0, 80.0, 158.0, 19.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
-					"text" : "features:",
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
-					"textjustification" : 0,
-					"underline" : 0
+					"text" : "features:"
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
 					"hidden" : 1,
 					"id" : "obj-35",
-					"ignoreclick" : 0,
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 4,
 					"outlettype" : [ "", "", "", "" ],
-					"patching_rect" : [ 471.0, 67.0, 54.0, 20.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
+					"patching_rect" : [ 471.0, 67.0, 54.0, 19.0 ],
 					"restore" : 					{
 						"ej.function" : [ 5, 2, 4, 7, "Amplitude", 0, 1000, 0, 1, 67, 0.1, 0, 0, 0, 200, 1, 0, 776.041687, 0.525, 2, 1000, 0, 0, "Second function", 0, 1000, 0, 1, 100, 0.1, 0, 0, 0, 200, 0.3125, 0, 300, 0.3625, 0, 500, 0.4875, 0, 700, 0.3375, 0, 800, 0.1875, 2, 1000, 0, 0 ]
 					}
 ,
 					"text" : "autopattr",
-					"textjustification" : 0,
-					"varname" : "u230000180"
+					"varname" : "u287001242"
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
-					"hidden" : 0,
 					"id" : "obj-36",
-					"ignoreclick" : 0,
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 90.25, 331.0, 61.0, 19.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
-					"text" : "print line~",
-					"textjustification" : 0
+					"text" : "print line~"
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
-					"hidden" : 0,
 					"id" : "obj-37",
-					"ignoreclick" : 0,
 					"maxclass" : "newobj",
 					"numinlets" : 0,
 					"numoutlets" : 0,
 					"patcher" : 					{
 						"fileversion" : 1,
 						"appversion" : 						{
-							"major" : 7,
-							"minor" : 0,
-							"revision" : 0,
-							"architecture" : "x64"
+							"major" : 6,
+							"minor" : 1,
+							"revision" : 9,
+							"architecture" : "x86"
 						}
 ,
 						"rect" : [ 268.0, 112.0, 576.0, 390.0 ],
@@ -9972,8 +9655,6 @@
 					}
 ,
 					"patching_rect" : [ 368.0, 317.0, 112.0, 19.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"saved_object_attributes" : 					{
 						"default_fontface" : 0,
 						"default_fontname" : "Arial",
@@ -9987,50 +9668,38 @@
 						"tags" : ""
 					}
 ,
-					"text" : "p target",
-					"textjustification" : 0
+					"text" : "p target"
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
-					"hidden" : 0,
 					"id" : "obj-38",
-					"ignoreclick" : 0,
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 226.0, 320.0, 65.0, 19.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
-					"text" : "s dumpout",
-					"textjustification" : 0
+					"text" : "s dumpout"
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
-					"hidden" : 0,
 					"id" : "obj-39",
-					"ignoreclick" : 0,
 					"maxclass" : "newobj",
 					"numinlets" : 0,
 					"numoutlets" : 0,
 					"patcher" : 					{
 						"fileversion" : 1,
 						"appversion" : 						{
-							"major" : 7,
-							"minor" : 0,
-							"revision" : 0,
-							"architecture" : "x64"
+							"major" : 6,
+							"minor" : 1,
+							"revision" : 9,
+							"architecture" : "x86"
 						}
 ,
 						"rect" : [ 273.0, 60.0, 568.0, 676.0 ],
@@ -10061,8 +9730,7 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 215.0, 606.0, 20.0, 20.0 ],
-									"presentation_rect" : [ 215.0, 606.0, 0.0, 0.0 ]
+									"patching_rect" : [ 215.0, 606.0, 20.0, 20.0 ]
 								}
 
 							}
@@ -10076,7 +9744,6 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "" ],
 									"patching_rect" : [ 215.0, 630.0, 88.0, 17.0 ],
-									"presentation_rect" : [ 215.0, 630.0, 0.0, 0.0 ],
 									"text" : "outputmode $1"
 								}
 
@@ -11096,8 +10763,6 @@
 					}
 ,
 					"patching_rect" : [ 368.0, 251.0, 112.0, 19.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"saved_object_attributes" : 					{
 						"default_fontface" : 0,
 						"default_fontname" : "Arial",
@@ -11111,87 +10776,63 @@
 						"tags" : ""
 					}
 ,
-					"text" : "p compatibility",
-					"textjustification" : 0
+					"text" : "p compatibility"
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
-					"hidden" : 0,
 					"id" : "obj-40",
-					"ignoreclick" : 0,
 					"maxclass" : "newobj",
 					"numinlets" : 0,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 45.0, 156.0, 40.0, 19.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
-					"text" : "r msg",
-					"textjustification" : 0
+					"text" : "r msg"
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"hidden" : 0,
 					"id" : "obj-41",
-					"ignoreclick" : 0,
 					"maxclass" : "button",
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "bang" ],
-					"patching_rect" : [ 181.25, 286.0, 20.0, 20.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ]
+					"patching_rect" : [ 181.25, 286.0, 20.0, 20.0 ]
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
-					"hidden" : 0,
 					"id" : "obj-42",
-					"ignoreclick" : 0,
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 135.5, 309.0, 65.0, 19.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
-					"text" : "print dump",
-					"textjustification" : 0
+					"text" : "print dump"
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
-					"hidden" : 0,
 					"id" : "obj-43",
-					"ignoreclick" : 0,
 					"maxclass" : "newobj",
 					"numinlets" : 0,
 					"numoutlets" : 0,
 					"patcher" : 					{
 						"fileversion" : 1,
 						"appversion" : 						{
-							"major" : 7,
-							"minor" : 0,
-							"revision" : 0,
-							"architecture" : "x64"
+							"major" : 6,
+							"minor" : 1,
+							"revision" : 9,
+							"architecture" : "x86"
 						}
 ,
 						"rect" : [ 600.0, 158.0, 193.0, 213.0 ],
@@ -11225,10 +10866,10 @@
 									"patcher" : 									{
 										"fileversion" : 1,
 										"appversion" : 										{
-											"major" : 7,
-											"minor" : 0,
-											"revision" : 0,
-											"architecture" : "x64"
+											"major" : 6,
+											"minor" : 1,
+											"revision" : 9,
+											"architecture" : "x86"
 										}
 ,
 										"rect" : [ 20.0, 74.0, 442.0, 154.0 ],
@@ -11372,10 +11013,10 @@
 									"patcher" : 									{
 										"fileversion" : 1,
 										"appversion" : 										{
-											"major" : 7,
-											"minor" : 0,
-											"revision" : 0,
-											"architecture" : "x64"
+											"major" : 6,
+											"minor" : 1,
+											"revision" : 9,
+											"architecture" : "x86"
 										}
 ,
 										"rect" : [ 30.0, 89.0, 505.0, 341.0 ],
@@ -11851,10 +11492,10 @@
 									"patcher" : 									{
 										"fileversion" : 1,
 										"appversion" : 										{
-											"major" : 7,
-											"minor" : 0,
-											"revision" : 0,
-											"architecture" : "x64"
+											"major" : 6,
+											"minor" : 1,
+											"revision" : 9,
+											"architecture" : "x86"
 										}
 ,
 										"rect" : [ 69.0, 466.0, 457.0, 182.0 ],
@@ -12107,10 +11748,10 @@
 									"patcher" : 									{
 										"fileversion" : 1,
 										"appversion" : 										{
-											"major" : 7,
-											"minor" : 0,
-											"revision" : 0,
-											"architecture" : "x64"
+											"major" : 6,
+											"minor" : 1,
+											"revision" : 9,
+											"architecture" : "x86"
 										}
 ,
 										"rect" : [ 20.0, 74.0, 581.0, 482.0 ],
@@ -12666,10 +12307,10 @@
 									"patcher" : 									{
 										"fileversion" : 1,
 										"appversion" : 										{
-											"major" : 7,
-											"minor" : 0,
-											"revision" : 0,
-											"architecture" : "x64"
+											"major" : 6,
+											"minor" : 1,
+											"revision" : 9,
+											"architecture" : "x86"
 										}
 ,
 										"rect" : [ 336.0, 404.0, 617.0, 290.0 ],
@@ -13185,10 +12826,10 @@
 									"patcher" : 									{
 										"fileversion" : 1,
 										"appversion" : 										{
-											"major" : 7,
-											"minor" : 0,
-											"revision" : 0,
-											"architecture" : "x64"
+											"major" : 6,
+											"minor" : 1,
+											"revision" : 9,
+											"architecture" : "x86"
 										}
 ,
 										"rect" : [ 171.0, 389.0, 440.0, 166.0 ],
@@ -13470,8 +13111,6 @@
 					}
 ,
 					"patching_rect" : [ 368.0, 273.0, 112.0, 19.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"saved_object_attributes" : 					{
 						"default_fontface" : 0,
 						"default_fontname" : "Arial",
@@ -13485,51 +13124,35 @@
 						"tags" : ""
 					}
 ,
-					"text" : "p \"new features\"",
-					"textjustification" : 0
+					"text" : "p \"new features\""
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
-					"gradient" : 0,
-					"hidden" : 0,
 					"id" : "obj-44",
-					"ignoreclick" : 0,
 					"maxclass" : "message",
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 45.0, 364.0, 272.0, 17.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
-					"text" : "Amplitude 0.825",
-					"textjustification" : 0
+					"text" : "Amplitude 0.825"
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"background" : 0,
-					"border" : 1,
-					"embedstate" : [ [ "CreateNFunctions", 2, "Amplitude", "Second function", 0, 1, 0, 1000, 0, 1, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "SetColor", 1, "brgb", 204, 204, 204 ], [ "SetColor", 1, "frgb", 82, 82, 82 ], [ "SetColor", 1, "rgb2", 107, 107, 107 ], [ "SetColor", 1, "rgb3", 255, 0, 0 ], [ "SetColor", 1, "rgb4", 51, 51, 51 ], [ "SetColor", 1, "rgb5", 128, 128, 128 ], [ "SetColor", 1, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "timedisplay", 0 ], [ "hiddenpoint", 0 ], [ "mousereport", 0 ], [ "clickadd", 1 ], [ "pointsize", 5 ], [ "movemode", 0 ], [ "autocursor", 1 ], [ "numcurvepoints", 12 ], [ "clickmove", 1 ], [ "drawtoedges", 0 ], [ "nbfunction", 2 ], [ "bordersync", 0 ], [ "grid", 0 ], [ "clicksustain", 1 ], [ "outputmode", 0 ], [ "cacheddrawing", 0 ], [ "ghost", 20 ], [ "legend", 1 ], [ "autosustain", 0 ], [ "mode", 0 ], [ "snap2grid", 0 ], [ "notifyrecalled", 0 ] ],
+					"embedstate" : [ [ "CreateNFunctions", 2, "Amplitude", "Second function", 0, 1, 0, 1000, 0, 1, 0, 1000 ], [ "SetColor", 0, "brgb", 204, 204, 204 ], [ "SetColor", 0, "frgb", 82, 82, 82 ], [ "SetColor", 0, "rgb2", 107, 107, 107 ], [ "SetColor", 0, "rgb3", 255, 0, 0 ], [ "SetColor", 0, "rgb4", 51, 51, 51 ], [ "SetColor", 0, "rgb5", 128, 128, 128 ], [ "SetColor", 0, "rgb6", 107, 107, 107 ], [ "SetColor", 1, "brgb", 204, 204, 204 ], [ "SetColor", 1, "frgb", 82, 82, 82 ], [ "SetColor", 1, "rgb2", 107, 107, 107 ], [ "SetColor", 1, "rgb3", 255, 0, 0 ], [ "SetColor", 1, "rgb4", 51, 51, 51 ], [ "SetColor", 1, "rgb5", 128, 128, 128 ], [ "SetColor", 1, "rgb6", 107, 107, 107 ], [ "fsaa", 1 ], [ "redrawon" ], [ "bordersync", 0 ], [ "clickmove", 1 ], [ "hiddenpoint", 0 ], [ "legend", 1 ], [ "notifyrecalled", 0 ], [ "numcurvepoints", 12 ], [ "mode", 0 ], [ "drawtoedges", 0 ], [ "nbfunction", 2 ], [ "clicksustain", 1 ], [ "snap2grid", 0 ], [ "autocursor", 1 ], [ "autosustain", 0 ], [ "mousereport", 0 ], [ "ghost", 20 ], [ "outputmode", 0 ], [ "pointsize", 5 ], [ "grid", 0 ], [ "timedisplay", 0 ], [ "movemode", 0 ], [ "cacheddrawing", 0 ], [ "clickadd", 1 ] ],
 					"filename" : "ej.function.js",
-					"hidden" : 0,
 					"id" : "obj-46",
-					"ignoreclick" : 0,
 					"maxclass" : "jsui",
-					"nofsaa" : 0,
 					"numinlets" : 1,
 					"numoutlets" : 5,
 					"outlettype" : [ "", "", "", "", "" ],
 					"parameter_enable" : 0,
 					"patching_rect" : [ 45.0, 181.0, 200.0, 100.0 ],
-					"presentation" : 0,
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"varname" : "ej.function"
 				}
 
@@ -13656,21 +13279,21 @@
  ],
 		"dependency_cache" : [ 			{
 				"name" : "ej.function.js",
-				"bootpath" : "/Users/ej/Perso-works/ejies/jsui",
+				"bootpath" : "/Users/jourdan/Ircam-Works/Repositories/ejies/jsui",
 				"patcherrelativepath" : "../jsui",
 				"type" : "TEXT",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "",
-				"bootpath" : "/Users/ej/Perso-works/ejies/help",
+				"bootpath" : "/Users/jourdan/Ircam-Works/Repositories/ejies/help",
 				"patcherrelativepath" : ".",
 				"type" : "fold",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "ej.function.xml",
-				"bootpath" : "/Users/ej/Perso-works/ejies/help",
+				"bootpath" : "/Users/jourdan/Ircam-Works/Repositories/ejies/help",
 				"patcherrelativepath" : ".",
 				"type" : "TEXT",
 				"implicit" : 1
