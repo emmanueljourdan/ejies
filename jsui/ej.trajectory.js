@@ -267,7 +267,7 @@ function paint()
 	}
 }
 
-function reset()
+function clear()
 {
 	points = new Array();
 	redraw();

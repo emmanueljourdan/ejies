@@ -5,7 +5,7 @@
 			"major" : 7,
 			"minor" : 0,
 			"revision" : 4,
-			"architecture" : "x64",
+			"architecture" : "x86",
 			"modernui" : 1
 		}
 ,
@@ -175,7 +175,7 @@
 							"major" : 7,
 							"minor" : 0,
 							"revision" : 4,
-							"architecture" : "x64",
+							"architecture" : "x86",
 							"modernui" : 1
 						}
 ,
@@ -682,7 +682,7 @@
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 103.0, 117.0, 37.0, 22.0 ],
 					"style" : "",
-					"text" : "reset"
+					"text" : "clear"
 				}
 
 			}
@@ -858,7 +858,7 @@
  ],
 		"dependency_cache" : [ 			{
 				"name" : "ej.trajectory.js",
-				"bootpath" : "~/Desktop/trajectoires",
+				"bootpath" : "~/Ircam-Works/Repositories/ejies/jsui",
 				"type" : "TEXT",
 				"implicit" : 1
 			}
