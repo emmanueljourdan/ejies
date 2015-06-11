@@ -65,7 +65,7 @@ function Point(x, y, z)
 	}
 
 	this.getYToScreen = function(height, zoomFactor) {
-		var y = this.y *= zoomFactor;
+		var y = this.y * zoomFactor;
 		return (y * height * 0.5 + height * 0.5);
 	}
 
@@ -313,8 +313,8 @@ function onclick(x, y, button, mod1, shift, caps, opt, mod2)
 	lastMouse.x = x;
 	lastMouse.y = y;
 
-	x = ((((x / width) - 0.5) * 2) / zoomFactor ) * 0.5 + 0.5;
-	y = ((((y / height) - 0.5) * 2) / zoomFactor ) * 0.5 + 0.5;
+	x = ((((x / width) * 2.) - 1) / zoomFactor );
+	y = ((((y / height) * 2.) - 1) / zoomFactor );
 
 	durationPoint = -1;
 	if (idlePoint != -1) {
@@ -358,8 +358,8 @@ function ondrag(x, y, button, mod1, shift, caps, opt, mod2)
 		var width = this.box.rect[2] - this.box.rect[0];
 		var height = this.box.rect[3] - this.box.rect[1];
 		
-		x = ((((x / width) - 0.5) * 2) / zoomFactor ) * 0.5 + 0.5;
-		y = ((((y / height) - 0.5) * 2) / zoomFactor ) * 0.5 + 0.5;
+		x = ((((x / width) - 0.5) * 2) / zoomFactor );
+		y = ((((y / height) - 0.5) * 2) / zoomFactor );
 
 		points[movingPoint] = new Point(x, y);
 		points[movingPoint].duration = oldPoint.duration;

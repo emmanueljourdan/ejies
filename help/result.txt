@@ -1,0 +1,18 @@
+$x
+{
+	{ -136 } @type "linear"
+	1.00s { -48 } @type "linear"
+	1.00s { -21 } @type "linear"
+	1.00s { 52 } @type "linear"
+	1.00s { 111 } @type "linear"
+	1.00s { 155 } @type "linear"
+}
+$y
+{
+	{ 1.627 } @type "linear"
+	1.00s { 2.922 } @type "linear"
+	1.00s { 2.289 } @type "linear"
+	1.00s { 3.010 } @type "linear"
+	1.00s { 3.233 } @type "linear"
+	1.00s { 2.855 } @type "linear"
+}
