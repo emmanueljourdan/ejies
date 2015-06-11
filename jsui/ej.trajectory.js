@@ -1,7 +1,6 @@
 /*
-	ej.trajectory.js
-	2015 - ej
- */
+	ej.trajectory.js by Emmanuel Jourdan, e--j dev 
+*/
 
 autowatch = 1;
 
@@ -29,26 +28,26 @@ var hps = new Array();		// HPs
 var idlePoint = -1;		// index of the point the mouse is over
 var movingPoint = -1;	// index of the point your are moving
 var durationPoint = -1;
-var letters = [ "x", "y" ];
+var letters = [ "x", "y", "z"];
 var zoomFactor = 1.0;
 var lastMouse = new Array(2);		// used to calculate delta
 
-function Point(x, y)
+function Point(x, y, z)
 {
 	this.x = x;
 	this.y = y;
-	this.time = 1.0;
+	this.z = z;
 	this.duration = 1.;
 
 	this.getDist = function() {
-		var x = (this.x * 2.) - 1.;
-		var y = (this.y * 2.) - 1.;
+		var x = this.x;
+		var y = this.y;
 		return Math.sqrt(x * x + y * y);
 	}
 
 	this.getAz = function() {
-		var x = (this.x * 2.) - 1.;
-		var y = (this.y * 2.) - 1.;
+		var x = this.x;
+		var y = this.y;
 		var az = (Math.atan2(y, x) + Math.PI / 2.) / Math.PI * 180.0
 		return az > 180 ? az - 360 : az;
 	}
@@ -60,30 +59,18 @@ function Point(x, y)
 	}
 
 
-	this.getX = function(width, zoomFactor) {
-		var x = (this.x * 2.) - 1.;
-		x *= zoomFactor;
+	this.getXToScreen = function(width, zoomFactor) {
+		var x = this.x * zoomFactor;
 		return (x * width * 0.5 + width * 0.5);
 	}
 
-	this.getY = function(height, zoomFactor) {
-		var y = (this.y * 2.) - 1.;
-		y *= zoomFactor;
+	this.getYToScreen = function(height, zoomFactor) {
+		var y = this.y *= zoomFactor;
 		return (y * height * 0.5 + height * 0.5);
 	}
 
-	this.AddToDuration = function (v) {
-		this.duration += v;
-
-		if (this.duration < 0.05)
-			this.duration = 0.05;
-	}
-
-	this.mirror = function() {
-		var normalizedX = this.x * 2. - 1.;
-		normalizedX *= -1.;
-
-		this.x = (normalizedX + 1.) / 2.;
+	this.mirror = function() {	// do we need that?
+		this.x = -this.x;
 	}
 }
 
@@ -238,7 +225,7 @@ function paint()
 		set_source_rgba(0., 0.4, 0.6, 0.8);
 		for (var i = 0; i < hps.length; i++) {
 			var pointSize = POINT_SIZE * 1.;
-			ellipse(hps[i].getX(width, zoomFactor) - pointSize * 0.5, hps[i].getY(height, zoomFactor) - pointSize * 0.5, pointSize, pointSize);
+			ellipse(hps[i].getXToScreen(width, zoomFactor) - pointSize * 0.5, hps[i].getYToScreen(height, zoomFactor) - pointSize * 0.5, pointSize, pointSize);
 			fill();
 
 		}
@@ -248,9 +235,9 @@ function paint()
 		set_source_rgba(linecolor);
 		for (var i = 0; i < points.length; i++) {
 			if (i == 0) {
-				move_to(points[i].getX(width, zoomFactor), points[i].getY(height, zoomFactor));
+				move_to(points[i].getXToScreen(width, zoomFactor), points[i].getYToScreen(height, zoomFactor));
 			} else {
-				line_to(points[i].getX(width, zoomFactor), points[i].getY(height, zoomFactor));
+				line_to(points[i].getXToScreen(width, zoomFactor), points[i].getYToScreen(height, zoomFactor));
 			}
 		}
 		stroke();
@@ -262,7 +249,7 @@ function paint()
 				set_source_rgba(pointcolor);
 			else
 				set_source_rgba(linecolor);
-			ellipse(points[i].getX(width, zoomFactor) - pointSize * 0.5, points[i].getY(height, zoomFactor) - pointSize * 0.5, pointSize, pointSize);
+			ellipse(points[i].getXToScreen(width, zoomFactor) - pointSize * 0.5, points[i].getYToScreen(height, zoomFactor) - pointSize * 0.5, pointSize, pointSize);
 			fill();
 		}
 
@@ -270,7 +257,7 @@ function paint()
 			set_source_rgb(0.1, 0.1, 0.1);
 			select_font_face("Lato", "normal", "normal");
 			set_font_size(12.0);
-			move_to(points[idlePoint].getX(width, zoomFactor) + (points[idlePoint].x > 0.7 ? -100 : 10), points[idlePoint].getY(height, zoomFactor));
+			move_to(points[idlePoint].getXToScreen(width, zoomFactor) + (points[idlePoint].x > 0.7 ? -100 : 10), points[idlePoint].getYToScreen(height, zoomFactor));
 			if (idlePoint == 0) {
 				show_text(Math.round(points[idlePoint].getAz()) + "° " + points[idlePoint].getDist().toFixed(3));
 			} else {
@@ -297,7 +284,7 @@ function getPointIndex(x, y, width, height)
 		var pointSize = POINT_SIZE * points[i].duration;
 		if (pointSize < 5)
 			pointSize = 5.;
-		if (x >= (points[i].getX(width, zoomFactor) - pointSize * 0.5) && x <= (points[i].getX(width, zoomFactor) + pointSize * 0.5) && y >= (points[i].getY(height, zoomFactor) - pointSize * 0.5) && y <= (points[i].getY(height, zoomFactor) + pointSize * 0.5)) {
+		if (x >= (points[i].getXToScreen(width, zoomFactor) - pointSize * 0.5) && x <= (points[i].getXToScreen(width, zoomFactor) + pointSize * 0.5) && y >= (points[i].getYToScreen(height, zoomFactor) - pointSize * 0.5) && y <= (points[i].getYToScreen(height, zoomFactor) + pointSize * 0.5)) {
 			return i;
 		}
 	}
@@ -573,7 +560,7 @@ function text()
 				}
 			}
 
-post(absoluteTime[i] - absoluteTime[i-1], "\n");
+			post(absoluteTime[i] - absoluteTime[i-1], "\n");
 			/*
 			points[i] = new Point(0., 0.);
 			points[i].setAzDist(vals[0], vals[1]);
