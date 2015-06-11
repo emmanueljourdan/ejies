@@ -69,8 +69,12 @@ function Point(x, y, z)
 		return (y * height * 0.5 + height * 0.5);
 	}
 
-	this.mirror = function() {	// do we need that?
+	this.doMirrorX = function() {
 		this.x = -this.x;
+	}
+
+	this.doMirrorY = function() {
+		this.y = -this.y;
 	}
 }
 
@@ -144,10 +148,19 @@ function rotate(v)
 	redraw();
 }
 
-function mirror()
+function mirror_x()
 {
 	for (var i = 0; i < points.length; i++) {
-		points[i].mirror()
+		points[i].doMirrorX()
+	}
+
+	redraw();
+}
+
+function mirror_y()
+{
+	for (var i = 0; i < points.length; i++) {
+		points[i].doMirrorY()
 	}
 
 	redraw();
