@@ -546,18 +546,6 @@
 			}
 , 			{
 				"box" : 				{
-					"id" : "obj-17",
-					"maxclass" : "comment",
-					"numinlets" : 1,
-					"numoutlets" : 0,
-					"patching_rect" : [ 762.0, 63.0, 123.0, 20.0 ],
-					"style" : "",
-					"text" : "paste from antescofo"
-				}
-
-			}
-, 			{
-				"box" : 				{
 					"id" : "obj-15",
 					"maxclass" : "comment",
 					"numinlets" : 1,
@@ -565,57 +553,6 @@
 					"patching_rect" : [ 508.0, 166.0, 56.0, 20.0 ],
 					"style" : "",
 					"text" : "zooming"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-12",
-					"maxclass" : "comment",
-					"numinlets" : 1,
-					"numoutlets" : 0,
-					"patching_rect" : [ 140.0, 796.0, 228.0, 20.0 ],
-					"style" : "",
-					"text" : "bang when done writting the result.txt file"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-9",
-					"maxclass" : "newobj",
-					"numinlets" : 2,
-					"numoutlets" : 1,
-					"outlettype" : [ "" ],
-					"patching_rect" : [ 103.0, 795.0, 33.0, 22.0 ],
-					"style" : "",
-					"text" : "qlim"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-6",
-					"maxclass" : "newobj",
-					"numinlets" : 1,
-					"numoutlets" : 3,
-					"outlettype" : [ "", "bang", "int" ],
-					"patching_rect" : [ 103.0, 851.0, 40.0, 22.0 ],
-					"style" : "",
-					"text" : "text"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-5",
-					"maxclass" : "message",
-					"numinlets" : 2,
-					"numoutlets" : 1,
-					"outlettype" : [ "" ],
-					"patching_rect" : [ 103.0, 822.0, 117.0, 22.0 ],
-					"style" : "",
-					"text" : "read result.txt, open"
 				}
 
 			}
@@ -644,46 +581,6 @@
 					"patching_rect" : [ 454.0, 208.0, 57.0, 22.0 ],
 					"style" : "",
 					"text" : "zoom $1"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-11",
-					"maxclass" : "button",
-					"numinlets" : 1,
-					"numoutlets" : 1,
-					"outlettype" : [ "bang" ],
-					"patching_rect" : [ 726.0, 59.0, 24.0, 24.0 ],
-					"style" : ""
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-7",
-					"linecount" : 16,
-					"maxclass" : "textedit",
-					"numinlets" : 1,
-					"numoutlets" : 4,
-					"outlettype" : [ "", "int", "", "" ],
-					"parameter_enable" : 0,
-					"patching_rect" : [ 726.0, 102.0, 309.0, 359.0 ],
-					"style" : "",
-					"text" : "$x\n{\n\t{ -96 } @type \"linear\"\n\t8.65s { -35 } @type \"linear\"\n\t2.35s { 69 } @type \"linear\"\n\t1.00s { 124 } @type \"linear\"\n\t1.00s { 169 } @type \"linear\"\n}\n$y\n{\n\t{ 0.695 } @type \"linear\"\n\t8.65s { 0.649 } @type \"linear\"\n\t2.35s { 0.530 } @type \"linear\"\n\t1.00s { 0.822 } @type \"linear\"\n\t1.00s { 0.715 } @type \"linear\"\n}\n"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-3",
-					"maxclass" : "message",
-					"numinlets" : 2,
-					"numoutlets" : 1,
-					"outlettype" : [ "" ],
-					"patching_rect" : [ 157.0, 117.0, 65.0, 22.0 ],
-					"style" : "",
-					"text" : "writecurve"
 				}
 
 			}
@@ -731,15 +628,6 @@
 					"disabled" : 0,
 					"hidden" : 0,
 					"source" : [ "obj-10", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-7", 0 ],
-					"disabled" : 0,
-					"hidden" : 0,
-					"source" : [ "obj-11", 0 ]
 				}
 
 			}
@@ -829,52 +717,7 @@
 					"destination" : [ "obj-8", 0 ],
 					"disabled" : 0,
 					"hidden" : 0,
-					"source" : [ "obj-3", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-8", 0 ],
-					"disabled" : 0,
-					"hidden" : 0,
 					"source" : [ "obj-4", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-6", 0 ],
-					"disabled" : 0,
-					"hidden" : 0,
-					"source" : [ "obj-5", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-8", 0 ],
-					"disabled" : 0,
-					"hidden" : 0,
-					"source" : [ "obj-7", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-9", 0 ],
-					"disabled" : 0,
-					"hidden" : 0,
-					"source" : [ "obj-8", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-5", 0 ],
-					"disabled" : 0,
-					"hidden" : 0,
-					"source" : [ "obj-9", 0 ]
 				}
 
 			}
