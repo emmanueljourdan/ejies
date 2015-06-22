@@ -54,8 +54,8 @@ function Point(x, y, z)
 
 	this.setAzDist = function(az, dist) {
 		var radians = (az - 90.) / 180. * Math.PI;
-		this.x = dist * 0.5 * Math.cos(radians) + 0.5;
-		this.y = dist * 0.5 * Math.sin(radians) + 0.5;
+		this.x = dist * Math.cos(radians);
+		this.y = dist * Math.sin(radians);
 	}
 
 
