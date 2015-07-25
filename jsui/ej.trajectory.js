@@ -1,17 +1,18 @@
 /*
-	ej.trajectory.js by Emmanuel Jourdan, e--j dev 
+	ej.trajectory.js by Emmanuel Jourdan, e--j dev
 */
 
 autowatch = 1;
+border = 0;                     // disable jsui's border
+outlets = 2;
 
 // mgraphics initialization
-mgraphics.init();				// initialize mgraphics
-mgraphics.relative_coords = 0;	// coordinate system: x, y, width height
-mgraphics.autofill = 0;			// we want to fill the paths ourself
+mgraphics.init();               // initialize mgraphics
+mgraphics.relative_coords = 0;  // coordinate system: x, y, width height
+mgraphics.autofill = 0;         // we want to fill the paths ourself
 
 // CONST
-var PARSING_TIME = 0;
-var PARSING_VALUE = 1;
+const OUTLET_DUMPOUT = 1;
 
 // darwing variables
 var CENTER_POINT_SIZE = 12.0;
@@ -370,7 +371,7 @@ function ondrag(x, y, button, mod1, shift, caps, opt, mod2)
 		var oldPoint = points[movingPoint];
 		var width = this.box.rect[2] - this.box.rect[0];
 		var height = this.box.rect[3] - this.box.rect[1];
-		
+
 		x = ((((x / width) - 0.5) * 2) / zoomFactor );
 		y = ((((y / height) - 0.5) * 2) / zoomFactor );
 
@@ -385,4 +386,17 @@ function ondrag(x, y, button, mod1, shift, caps, opt, mod2)
 function redraw()
 {
 	mgraphics.redraw();
+}
+
+function dump_to_dict()
+{
+    var d = new Dict();
+
+    d.set("schema", "ej.trajectory");
+    for (var i = 0; i < points.length; i++) {
+        d.replace("points::"+ i + "::x", points[i].x);
+        d.replace("points::"+ i + "::y", points[i].y);
+        d.replace("points::"+ i + "::z", points[i].z);
+    }
+    outlet(OUTLET_DUMPOUT, "dictionary", d.name);
 }
