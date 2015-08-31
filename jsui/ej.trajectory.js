@@ -35,10 +35,9 @@ var lastMouse = new Array(2);		// used to calculate delta
 
 function Point(x, y, z)
 {
-	this.x = x;
-	this.y = y;
-	this.z = z;
-	this.duration = 1.;
+	this.x = x == undefined ? 0. : x;
+	this.y = y == undefined ? 0. : y;
+	this.z = z == undefined ? 1. : z;
 
 	this.getDist = function() {
 		var x = this.x;
@@ -167,116 +166,95 @@ function mirror_y()
 	redraw();
 }
 
-function duration_add(v)
-{
-	// do not change the duration of the first point
-	for (var i = 1; i < points.length; i++) {
-		points[i].AddToDuration(v);
-	}
-
-	redraw();
-}
-
-function time()
-{
-	for (var i = 0; i < Math.min(arguments.length, points.length - 1); i++) {
-		points[i+1].duration = arguments[i];
-	}
-
-	redraw();
-}
-
 function paint()
 {
 	var width = this.box.rect[2] - this.box.rect[0];
 	var height = this.box.rect[3] - this.box.rect[1];
 
-	with (mgraphics) {
-		// background
-		set_source_rgba(bgcolor);
-		rectangle_rounded(bordersize * 0.5, bordersize * 0.5, width - bordersize, height - bordersize, 10.,10.);
-		set_line_width(bordersize);
-		fill_preserve();
-		set_source_rgba(bordercolor);
-		stroke();
+	// background
+	mgraphics.set_source_rgba(bgcolor);
+	mgraphics.rectangle_rounded(bordersize * 0.5, bordersize * 0.5, width - bordersize, height - bordersize, 10.,10.);
+	mgraphics.set_line_width(bordersize);
+	mgraphics.fill_preserve();
+	mgraphics.set_source_rgba(bordercolor);
+	mgraphics.stroke();
 
-		// axis
-		set_source_rgba(bordercolor[0], bordercolor[1], bordercolor[2], bordercolor[3] * 0.1);
-		move_to(0., 0.);
-		line_to(width, height);
-		move_to(width, 0.);
-		line_to(0., height);
-		move_to(width * 0.5, 0.);
-		line_to(width * 0.5, height);
-		move_to(0, height * 0.5);
-		line_to(width, height * 0.5);
-		stroke();
+	// axis
+	mgraphics.set_source_rgba(bordercolor[0], bordercolor[1], bordercolor[2], bordercolor[3] * 0.1);
+	mgraphics.move_to(0., 0.);
+	mgraphics.line_to(width, height);
+	mgraphics.move_to(width, 0.);
+	mgraphics.line_to(0., height);
+	mgraphics.move_to(width * 0.5, 0.);
+	mgraphics.line_to(width * 0.5, height);
+	mgraphics.move_to(0, height * 0.5);
+	mgraphics.line_to(width, height * 0.5);
+	mgraphics.stroke();
 
-		// circles
-		var fontsize = 12.0 * zoomFactor;
-		if (fontsize < 10.0)
-			fontsize = 10.0;
-		for (var i = 0; i < circlesValues.length; i++) {
-			var circleSize = zoomFactor * circlesValues[i];
-			set_line_width(1.);
-			ellipse(width * 0.5 - (width * circleSize * 0.5), height * 0.5 - (height * circleSize * 0.5), width * circleSize, height * circleSize);
-			if (circlesValues[i] == 1) {
-				set_source_rgba(bordercolor[0], bordercolor[1], bordercolor[2], bordercolor[3] * 0.05);
-				fill();
-			} else {
-				set_source_rgba(bordercolor[0], bordercolor[1], bordercolor[2], bordercolor[3] * 0.1);
-				stroke();
-			}
-
-			set_source_rgb(0.5, 0.5, 0.5, 0.5);
-			select_font_face("Lato", "normal", "normal");
-			set_font_size(fontsize);
-			move_to(width * 0.5 + (width * circleSize * 0.5) - fontsize * 0.5, height * 0.5 + fontsize*0.5);
-			show_text(circlesValues[i].toString());
+	// circles
+	var fontsize = 12.0 * zoomFactor;
+	if (fontsize < 10.0)
+		fontsize = 10.0;
+	for (var i = 0; i < circlesValues.length; i++) {
+		var circleSize = zoomFactor * circlesValues[i];
+		mgraphics.set_line_width(1.);
+		mgraphics.ellipse(width * 0.5 - (width * circleSize * 0.5), height * 0.5 - (height * circleSize * 0.5), width * circleSize, height * circleSize);
+		if (circlesValues[i] == 1) {
+			mgraphics.set_source_rgba(bordercolor[0], bordercolor[1], bordercolor[2], bordercolor[3] * 0.05);
+			mgraphics.fill();
+		} else {
+			mgraphics.set_source_rgba(bordercolor[0], bordercolor[1], bordercolor[2], bordercolor[3] * 0.1);
+			mgraphics.stroke();
 		}
 
-		// display HPs
-		set_source_rgba(0., 0.4, 0.6, 0.8);
-		for (var i = 0; i < hps.length; i++) {
-			var pointSize = POINT_SIZE * 1.;
-			ellipse(hps[i].getXToScreen(width, zoomFactor) - pointSize * 0.5, hps[i].getYToScreen(height, zoomFactor) - pointSize * 0.5, pointSize, pointSize);
-			fill();
+		mgraphics.set_source_rgb(0.5, 0.5, 0.5, 0.5);
+		mgraphics.select_font_face("Lato", "normal", "normal");
+		mgraphics.set_font_size(fontsize);
+		mgraphics.move_to(width * 0.5 + (width * circleSize * 0.5) - fontsize * 0.5, height * 0.5 + fontsize*0.5);
+		mgraphics.show_text(circlesValues[i].toString());
+	}
 
+	// display HPs
+	mgraphics.set_source_rgba(0., 0.4, 0.6, 0.8);
+	for (var i = 0; i < hps.length; i++) {
+		var pointSize = POINT_SIZE * 1.;
+		mgraphics.ellipse(hps[i].getXToScreen(width, zoomFactor) - pointSize * 0.5, hps[i].getYToScreen(height, zoomFactor) - pointSize * 0.5, pointSize, pointSize);
+		mgraphics.fill();
+
+	}
+
+
+	// lines between points
+	mgraphics.set_source_rgba(linecolor);
+	for (var i = 0; i < points.length; i++) {
+		if (i == 0) {
+			mgraphics.move_to(points[i].getXToScreen(width, zoomFactor), points[i].getYToScreen(height, zoomFactor));
+		} else {
+			mgraphics.line_to(points[i].getXToScreen(width, zoomFactor), points[i].getYToScreen(height, zoomFactor));
 		}
+	}
+	mgraphics.stroke();
 
+	// paint points
+	for (var i = 0; i < points.length; i++) {
+		var pointSize = POINT_SIZE * points[i].z;
+		if (idlePoint == i)
+			mgraphics.set_source_rgba(pointcolor);
+		else
+			mgraphics.set_source_rgba(linecolor);
+		mgraphics.ellipse(points[i].getXToScreen(width, zoomFactor) - pointSize * 0.5, points[i].getYToScreen(height, zoomFactor) - pointSize * 0.5, pointSize, pointSize);
+		mgraphics.fill();
+	}
 
-		// lines between points
-		set_source_rgba(linecolor);
-		for (var i = 0; i < points.length; i++) {
-			if (i == 0) {
-				move_to(points[i].getXToScreen(width, zoomFactor), points[i].getYToScreen(height, zoomFactor));
-			} else {
-				line_to(points[i].getXToScreen(width, zoomFactor), points[i].getYToScreen(height, zoomFactor));
-			}
-		}
-		stroke();
-
-		// paint points
-		for (var i = 0; i < points.length; i++) {
-			var pointSize = POINT_SIZE * points[i].duration;
-			if (idlePoint == i)
-				set_source_rgba(pointcolor);
-			else
-				set_source_rgba(linecolor);
-			ellipse(points[i].getXToScreen(width, zoomFactor) - pointSize * 0.5, points[i].getYToScreen(height, zoomFactor) - pointSize * 0.5, pointSize, pointSize);
-			fill();
-		}
-
-		if (idlePoint != -1) {
-			set_source_rgb(0.1, 0.1, 0.1);
-			select_font_face("Lato", "normal", "normal");
-			set_font_size(12.0);
-			move_to(points[idlePoint].getXToScreen(width, zoomFactor) + (points[idlePoint].x > 0.7 ? -100 : 10), points[idlePoint].getYToScreen(height, zoomFactor));
-			if (idlePoint == 0) {
-				show_text(Math.round(points[idlePoint].getAz()) + "° " + points[idlePoint].getDist().toFixed(3));
-			} else {
-				show_text(Math.round(points[idlePoint].getAz()) + "° " + points[idlePoint].getDist().toFixed(3) + " " + points[idlePoint].duration.toFixed(2) + "s");
-			}
+	if (idlePoint != -1) {
+		mgraphics.set_source_rgb(0.1, 0.1, 0.1);
+		mgraphics.select_font_face("Lato", "normal", "normal");
+		mgraphics.set_font_size(12.0);
+		mgraphics.move_to(points[idlePoint].getXToScreen(width, zoomFactor) + (points[idlePoint].x > 0.7 ? -100 : 10), points[idlePoint].getYToScreen(height, zoomFactor));
+		if (idlePoint == 0) {
+			mgraphics.show_text(Math.round(points[idlePoint].getAz()) + "° " + points[idlePoint].getDist().toFixed(3));
+		} else {
+			mgraphics.show_text(Math.round(points[idlePoint].getAz()) + "° " + points[idlePoint].getDist().toFixed(3) + " " + points[idlePoint].z.toFixed(2) + "s");
 		}
 	}
 }
@@ -295,7 +273,7 @@ function onresize(width, height)
 function getPointIndex(x, y, width, height)
 {
 	for (var i = 0; i < points.length; i++) {
-		var pointSize = POINT_SIZE * points[i].duration;
+		var pointSize = POINT_SIZE * points[i].z;
 		if (pointSize < 5)
 			pointSize = 5.;
 		if (x >= (points[i].getXToScreen(width, zoomFactor) - pointSize * 0.5) && x <= (points[i].getXToScreen(width, zoomFactor) + pointSize * 0.5) && y >= (points[i].getYToScreen(height, zoomFactor) - pointSize * 0.5) && y <= (points[i].getYToScreen(height, zoomFactor) + pointSize * 0.5)) {
@@ -376,7 +354,7 @@ function ondrag(x, y, button, mod1, shift, caps, opt, mod2)
 		y = ((((y / height) - 0.5) * 2) / zoomFactor );
 
 		points[movingPoint] = new Point(x, y);
-		points[movingPoint].duration = oldPoint.duration;
+		points[movingPoint].z = oldPoint.z;
 		redraw();
 	} else {
 		movingPoint = -1;
