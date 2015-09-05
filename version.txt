@@ -1,5 +1,12 @@
 ejies - Version history
 
+
+*******************
+3.2.1: 5 September 2015
+
+- ready for Package Manager
+
+
 *******************
 3.2: 25 March 2015
 
