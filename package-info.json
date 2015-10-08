@@ -18,7 +18,7 @@
 ,
 		"windows" : 		{
 			"platform" : [ "ia32", "x64" ],
-			"min_version" : "Vista"
+			"min_version" : "7"
 		}
 
 	}
