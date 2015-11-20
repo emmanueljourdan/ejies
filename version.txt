@@ -2,9 +2,16 @@ ejies - Version history
 
 
 *******************
+3.2.2: 20 November 2015
+
+- changed license to MIT
+- one read me is enough
+
+
+*******************
 3.2.1: 5 September 2015
 
-- ready for Package Manager
+- almost ready for Package Manager
 
 
 *******************
