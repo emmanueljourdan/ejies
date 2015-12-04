@@ -1,7 +1,7 @@
 {
 	"author" : "Emmanuel Jourdan",
 	"authors" : [  ],
-	"categories" : [ "abstractions", "mxj", "js", "jsui" ],
+	"tags" : [ "abstractions", "mxj", "js", "jsui" ],
 	"description" : "ejies is a collection of abstractions utilities, digital signal processing, JavaScripts and Java tools.",
 	"displayname" : "",
 	"extends" : "",
@@ -24,8 +24,7 @@
 	}
 ,
 	"readme" : "",
-	"tags" : [  ],
-	"version" : "3.2.2",
+	"version" : "3.2.3",
 	"versions" : null,
 	"website" : "http://www.e--j.com",
 	"filelist" : 	{
