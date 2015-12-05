@@ -1,6 +1,14 @@
 ejies - Version history
 
 
+
+*******************
+3.2.3: 5 December 2015
+
+- version ready for Max 7.1
+- minor cleanup
+
+
 *******************
 3.2.2: 20 November 2015
 
