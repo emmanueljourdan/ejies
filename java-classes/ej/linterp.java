@@ -34,6 +34,7 @@ public class linterp extends ejies {
 	private int outputmode = 0;
 	private byte mode = 0;
 	private boolean autotrigger = false;
+	private	int channel = 1;
 	
 	/**
 	 * Create a linterp object.
@@ -69,6 +70,7 @@ public class linterp extends ejies {
 
 		
 		declareAttribute("outputmode", null, "setMode");
+		declareAttribute("channel", null, "setChannel");
 		declareAttribute("buf_name");
 		declareAttribute("autotrigger");
 		createInfoOutlet(false);
@@ -82,6 +84,13 @@ public class linterp extends ejies {
 			outputmode = i;
 		else
 			outputmode = 0;
+	}
+
+	private void setChannel(int i) {
+		if (i >= 1) {	// no upper limit (MSPBuffer will clamp to the buffer channelcount)
+			channel = i;
+		} else
+			error("bad channel number (index starts at 1)");
 	}
 		
 	private void checkInletAssistance() {
@@ -321,7 +330,7 @@ public class linterp extends ejies {
 	
 	private void writeToBuffer() {
 		if (buf_name != null && resultat.length > 0) {
-			MSPBuffer.poke(buf_name, resultat);
+			MSPBuffer.poke(buf_name, channel, resultat);
 		}
 	}
 }
