@@ -38,6 +38,7 @@ public class lscale extends ejies {
 	private String methodString = "calculeNormal";
 	private String buf_name = null;
 	private int outputmode = 0;
+	private int channel = 1;
 
 	private boolean clip = false;
 	
@@ -54,6 +55,7 @@ public class lscale extends ejies {
 		
 		declareAttribute("clip", "getClip", "setClip");
 		declareAttribute("outputmode", null, "setMode");
+		declareAttribute("channel", null, "setChannel");
 		declareAttribute("buf_name");
 
 		initClass();
@@ -69,6 +71,13 @@ public class lscale extends ejies {
 			outputmode = i;
 		else
 			outputmode = 0;
+	}
+
+	private void setChannel(int i) {
+		if (i >= 1) {	// no upper limit (MSPBuffer will clamp to the buffer channelcount)
+			channel = i;
+		} else
+			error("bad channel number (index starts at 1)");
 	}
 	
 	/**
@@ -255,7 +264,7 @@ public class lscale extends ejies {
 	
 	private void writeToBuffer() {
 		if (buf_name != null && resultat.length > 0) {
-			MSPBuffer.poke(buf_name, resultat);
+			MSPBuffer.poke(buf_name, channel, resultat);
 		}
 	}
 }
