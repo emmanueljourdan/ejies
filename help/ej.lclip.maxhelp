@@ -286,7 +286,6 @@
 						"tags" : "",
 						"style" : "",
 						"subpatcher_template" : "",
-						"visible" : 1,
 						"boxes" : [ 							{
 								"box" : 								{
 									"fontname" : "Arial",
@@ -313,8 +312,8 @@
 									"numinlets" : 5,
 									"numoutlets" : 6,
 									"outlettype" : [ "float", "float", "float", "float", "list", "" ],
-									"patching_rect" : [ 416.0, 204.0, 200.0, 74.0 ],
-									"setmode" : 1,
+									"patching_rect" : [ 416.0, 204.0, 203.0, 74.0 ],
+									"selectalpha" : 0.2,
 									"style" : ""
 								}
 
@@ -446,13 +445,14 @@
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"id" : "obj-7",
+									"linecount" : 2,
 									"maxclass" : "newobj",
 									"numinlets" : 1,
 									"numoutlets" : 2,
 									"outlettype" : [ "float", "bang" ],
-									"patching_rect" : [ 533.0, 61.0, 96.0, 21.0 ],
+									"patching_rect" : [ 527.0, 46.0, 92.0, 34.0 ],
 									"style" : "",
-									"text" : "buffer~ toto 50 2"
+									"text" : "buffer~ toto 0 2 @samps 2048"
 								}
 
 							}
@@ -466,8 +466,7 @@
 									"numinlets" : 5,
 									"numoutlets" : 6,
 									"outlettype" : [ "float", "float", "float", "float", "list", "" ],
-									"patching_rect" : [ 416.0, 89.0, 200.0, 74.0 ],
-									"setmode" : 1,
+									"patching_rect" : [ 416.0, 89.0, 203.0, 74.0 ],
 									"style" : ""
 								}
 

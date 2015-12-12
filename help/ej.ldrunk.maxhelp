@@ -294,7 +294,7 @@
 									"maxclass" : "comment",
 									"numinlets" : 1,
 									"numoutlets" : 0,
-									"patching_rect" : [ 74.0, 141.0, 40.0, 20.0 ],
+									"patching_rect" : [ 74.0, 141.0, 40.0, 19.0 ],
 									"style" : "",
 									"text" : "40 ms"
 								}
@@ -309,7 +309,7 @@
 									"numinlets" : 2,
 									"numoutlets" : 1,
 									"outlettype" : [ "" ],
-									"patching_rect" : [ 11.0, 141.0, 62.0, 18.0 ],
+									"patching_rect" : [ 11.0, 141.0, 62.0, 21.0 ],
 									"style" : "",
 									"text" : "interval 40"
 								}
@@ -324,7 +324,7 @@
 									"numinlets" : 2,
 									"numoutlets" : 1,
 									"outlettype" : [ "" ],
-									"patching_rect" : [ 12.0, 114.0, 56.0, 18.0 ],
+									"patching_rect" : [ 12.0, 114.0, 56.0, 21.0 ],
 									"style" : "",
 									"text" : "interval 0"
 								}
@@ -410,7 +410,7 @@
 									"numinlets" : 4,
 									"numoutlets" : 2,
 									"outlettype" : [ "list", "" ],
-									"patching_rect" : [ 115.0, 185.0, 202.0, 20.0 ],
+									"patching_rect" : [ 115.0, 185.0, 202.0, 21.0 ],
 									"style" : "",
 									"text" : "mxj ej.ldrunk 0 100 5 10 @interval 40"
 								}
@@ -424,7 +424,7 @@
 									"maxclass" : "comment",
 									"numinlets" : 1,
 									"numoutlets" : 0,
-									"patching_rect" : [ 75.0, 114.0, 30.0, 20.0 ],
+									"patching_rect" : [ 75.0, 114.0, 30.0, 19.0 ],
 									"style" : "",
 									"text" : "stop"
 								}
@@ -439,7 +439,7 @@
 									"maxclass" : "comment",
 									"numinlets" : 1,
 									"numoutlets" : 0,
-									"patching_rect" : [ 21.0, 21.0, 291.0, 33.0 ],
+									"patching_rect" : [ 21.0, 21.0, 291.0, 32.0 ],
 									"style" : "",
 									"text" : "When interval attribute is set to a value greater than 0, it outputs lists continuously."
 								}
@@ -574,7 +574,7 @@
 									"numinlets" : 5,
 									"numoutlets" : 6,
 									"outlettype" : [ "float", "float", "float", "float", "list", "" ],
-									"patching_rect" : [ 428.0, 204.0, 200.0, 74.0 ],
+									"patching_rect" : [ 428.0, 204.0, 206.0, 74.0 ],
 									"setmode" : 1,
 									"style" : ""
 								}
@@ -644,13 +644,14 @@
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"id" : "obj-11",
+									"linecount" : 2,
 									"maxclass" : "newobj",
 									"numinlets" : 1,
 									"numoutlets" : 2,
 									"outlettype" : [ "float", "bang" ],
-									"patching_rect" : [ 545.0, 61.0, 96.0, 21.0 ],
+									"patching_rect" : [ 542.0, 50.0, 92.0, 34.0 ],
 									"style" : "",
-									"text" : "buffer~ toto 50 2"
+									"text" : "buffer~ toto 0 2 @samps 2048"
 								}
 
 							}
@@ -664,7 +665,7 @@
 									"numinlets" : 5,
 									"numoutlets" : 6,
 									"outlettype" : [ "float", "float", "float", "float", "list", "" ],
-									"patching_rect" : [ 428.0, 89.0, 200.0, 74.0 ],
+									"patching_rect" : [ 428.0, 89.0, 206.0, 74.0 ],
 									"setmode" : 1,
 									"style" : ""
 								}

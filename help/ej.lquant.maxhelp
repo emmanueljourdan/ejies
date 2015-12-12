@@ -352,13 +352,14 @@
 									"fontname" : "Arial",
 									"fontsize" : 11.595187,
 									"id" : "obj-7",
+									"linecount" : 2,
 									"maxclass" : "newobj",
 									"numinlets" : 1,
 									"numoutlets" : 2,
 									"outlettype" : [ "float", "bang" ],
-									"patching_rect" : [ 512.0, 61.5, 96.0, 21.0 ],
+									"patching_rect" : [ 516.0, 50.5, 92.0, 34.0 ],
 									"style" : "",
-									"text" : "buffer~ toto 50 2"
+									"text" : "buffer~ toto 0 2 @samps 2048"
 								}
 
 							}
