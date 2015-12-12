@@ -286,6 +286,7 @@
 						"tags" : "",
 						"style" : "",
 						"subpatcher_template" : "",
+						"visible" : 1,
 						"boxes" : [ 							{
 								"box" : 								{
 									"fontname" : "Arial",
@@ -296,7 +297,6 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "" ],
 									"patching_rect" : [ 416.0, 178.0, 119.0, 21.0 ],
-									"presentation_rect" : [ 416.0, 178.0, 0.0, 0.0 ],
 									"style" : "",
 									"text" : "set toto 2, buftime 50"
 								}
@@ -314,7 +314,6 @@
 									"numoutlets" : 6,
 									"outlettype" : [ "float", "float", "float", "float", "list", "" ],
 									"patching_rect" : [ 416.0, 204.0, 200.0, 74.0 ],
-									"presentation_rect" : [ 416.0, 204.0, 0.0, 0.0 ],
 									"setmode" : 1,
 									"style" : ""
 								}
@@ -322,25 +321,28 @@
 							}
 , 							{
 								"box" : 								{
+									"fontsize" : 11.595187,
 									"id" : "obj-17",
 									"maxclass" : "number",
+									"minimum" : 1,
 									"numinlets" : 1,
 									"numoutlets" : 2,
 									"outlettype" : [ "", "bang" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 237.0, 96.0, 50.0, 20.0 ],
+									"patching_rect" : [ 237.0, 96.0, 53.0, 21.0 ],
 									"style" : ""
 								}
 
 							}
 , 							{
 								"box" : 								{
+									"fontsize" : 11.595187,
 									"id" : "obj-15",
 									"maxclass" : "message",
 									"numinlets" : 2,
 									"numoutlets" : 1,
 									"outlettype" : [ "" ],
-									"patching_rect" : [ 237.0, 121.0, 59.0, 20.0 ],
+									"patching_rect" : [ 237.0, 121.0, 68.0, 21.0 ],
 									"style" : "",
 									"text" : "channel $1"
 								}
