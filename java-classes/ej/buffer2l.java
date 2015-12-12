@@ -61,10 +61,10 @@ public class buffer2l extends ejies {
 	}
 	
 	private void setattrChannel(int n) {
-		if (n > 0 && n <= 4)
+		if (n >= 1)
 			channel = n;
 		else
-			error("ej.buffer2l: wrong channel (1-4)");
+			error("ej.buffer2l: wrong channel (index starts at 1)");
 	}
 	
 	private void setattrZoom(float[] f) {
