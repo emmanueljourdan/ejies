@@ -3,11 +3,11 @@ ejies - Version history
 
 
 *******************
-3.2.3: 5 December 2015
+3.2.3: 14 December 2015
 
 - version ready for Max 7.1
 - minor cleanup
-
+- updated mxj objects with @channel attribute to support new buffer~ multichannel capabilities
 
 *******************
 3.2.2: 20 November 2015
