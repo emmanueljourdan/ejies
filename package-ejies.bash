@@ -19,7 +19,7 @@ if [ $# == 2 ] ; then
 
 	echo -ne "Removing unnecessary files... "
 	cd "$_dst"/ejies_$1.$2/
-	rm -fR *.bash README.md graphics
+	mv README.md readme.md
 	echo -ne "done\n"
 
 	echo -ne "Making zip on the Desktop... "

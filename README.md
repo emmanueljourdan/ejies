@@ -6,9 +6,10 @@ The ejies is a collection of abstractions utilities, digital signal processing, 
 Take a look at [e--j dev's website](http://www.e--j.com) to learn more about it.
 
 ## Compatibility
-This version requires Max 6.1.x or Max 7.x. Max 7.1 or higher recommanded.
+This version requires Max 7.1 or higher.
 
 Older Version compatibility:
+- Max < 7.1 use ejies 3.2
 - Max 6.0.x: use ejies 3.0b2
 - Max 5.1.7 or higher, use ejies 3.0b1
 - Max 4.6.x, you might want to download ejies 1.58.
