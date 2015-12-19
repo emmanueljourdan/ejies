@@ -2339,7 +2339,7 @@
 , 			{
 				"box" : 				{
 					"maxclass" : "comment",
-					"text" : "3 sizes (big, small, tiny\r2 colors (Aqua, Graphite)\r2 backgrounds (Aqua, Metal)\r2 orientations (vertical, horizontal)",
+					"text" : "3 sizes (big, small, tiny)\r2 colors (Aqua, Graphite)\r2 backgrounds (Aqua, Metal)\r2 orientations (vertical, horizontal)",
 					"linecount" : 4,
 					"numoutlets" : 0,
 					"patching_rect" : [ 597.0, 87.0, 191.0, 60.0 ],
