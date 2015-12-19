@@ -304,7 +304,6 @@
 , 							{
 								"box" : 								{
 									"allowdrag" : 0,
-									"buffername" : "toto",
 									"chanoffset" : 2,
 									"fontsize" : 11.595187,
 									"id" : "obj-19",
@@ -395,7 +394,6 @@
 , 							{
 								"box" : 								{
 									"allowdrag" : 0,
-									"buffername" : "toto",
 									"fontsize" : 11.595187,
 									"id" : "obj-20",
 									"maxclass" : "waveform~",

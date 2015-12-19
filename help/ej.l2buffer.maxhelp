@@ -287,7 +287,6 @@
 , 			{
 				"box" : 				{
 					"allowdrag" : 0,
-					"buffername" : "titi",
 					"chanoffset" : 2,
 					"fontsize" : 11.595187,
 					"id" : "obj-6",
@@ -336,7 +335,6 @@
 , 			{
 				"box" : 				{
 					"allowdrag" : 0,
-					"buffername" : "titi",
 					"fontsize" : 11.595187,
 					"id" : "obj-9",
 					"maxclass" : "waveform~",
@@ -411,7 +409,6 @@
 , 			{
 				"box" : 				{
 					"allowdrag" : 0,
-					"buffername" : "toto",
 					"chanoffset" : 2,
 					"fontsize" : 11.595187,
 					"id" : "obj-14",
@@ -477,7 +474,6 @@
 , 			{
 				"box" : 				{
 					"allowdrag" : 0,
-					"buffername" : "toto",
 					"fontsize" : 11.595187,
 					"id" : "obj-18",
 					"maxclass" : "waveform~",
@@ -644,7 +640,6 @@
 , 							{
 								"box" : 								{
 									"allowdrag" : 0,
-									"buffername" : "tutu",
 									"chanoffset" : 4,
 									"fontsize" : 11.595187,
 									"id" : "obj-5",
@@ -691,7 +686,6 @@
 , 							{
 								"box" : 								{
 									"allowdrag" : 0,
-									"buffername" : "tutu",
 									"chanoffset" : 3,
 									"fontsize" : 11.595187,
 									"id" : "obj-8",
@@ -738,7 +732,6 @@
 , 							{
 								"box" : 								{
 									"allowdrag" : 0,
-									"buffername" : "tutu",
 									"chanoffset" : 2,
 									"fontsize" : 11.595187,
 									"id" : "obj-11",
@@ -815,7 +808,6 @@
 , 							{
 								"box" : 								{
 									"allowdrag" : 0,
-									"buffername" : "tutu",
 									"fontsize" : 11.595187,
 									"id" : "obj-16",
 									"maxclass" : "waveform~",
