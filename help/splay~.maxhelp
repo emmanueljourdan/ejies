@@ -170,7 +170,7 @@
 , 			{
 				"box" : 				{
 					"maxclass" : "textbutton",
-					"bgoncolor" : [ 0.937255, 0.92549, 0.792157, 1.0 ],
+					"bgoncolor" : [ 0.937255, 0.92549, 0.792157, 0.0 ],
 					"textcolor" : [ 0.015686, 0.388235, 0.501961, 1.0 ],
 					"numinlets" : 1,
 					"fontname" : "Arial",
@@ -179,17 +179,17 @@
 					"numoutlets" : 3,
 					"fontlink" : 1,
 					"textovercolor" : [ 0.054902, 0.47451, 0.6, 1.0 ],
-					"bordercolor" : [ 0.937255, 0.92549, 0.792157, 1.0 ],
+					"bordercolor" : [ 0.937255, 0.92549, 0.792157, 0.0 ],
 					"presentation_rect" : [ 135.0, 135.0, 147.471741, 24.0 ],
-					"borderoncolor" : [ 0.937255, 0.92549, 0.792157, 1.0 ],
+					"borderoncolor" : [ 0.937255, 0.92549, 0.792157, 0.0 ],
 					"fontface" : 3,
 					"outlettype" : [ "int", "", "int" ],
-					"bgovercolor" : [ 0.937255, 0.92549, 0.792157, 1.0 ],
+					"bgovercolor" : [ 0.937255, 0.92549, 0.792157, 0.0 ],
 					"fontsize" : 13.914225,
 					"text" : "open ejies overview",
-					"bgcolor" : [ 0.937255, 0.92549, 0.792157, 1.0 ],
+					"bgcolor" : [ 0.937255, 0.92549, 0.792157, 0.0 ],
 					"patching_rect" : [ 394.0, 21.0, 147.471741, 24.0 ],
-					"bgoveroncolor" : [ 0.937255, 0.92549, 0.792157, 1.0 ],
+					"bgoveroncolor" : [ 0.937255, 0.92549, 0.792157, 0.0 ],
 					"id" : "obj-55"
 				}
 

@@ -1,6 +1,13 @@
 ejies - Version history
 
 
+*******************
+3.2.4: 20 December 2015
+
+- added some snippets for the jsui
+- helpfiles fixed objectionable background color on mouse over with textbutton
+- added icon.png to the package
+
 
 *******************
 3.2.3: 14 December 2015
