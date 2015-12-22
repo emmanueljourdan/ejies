@@ -1,5 +1,34 @@
 ejies - Version history
 
+
+*******************
+3.2.4: 20 December 2015
+
+- added some snippets for the jsui
+- helpfiles fixed objectionable background color on mouse over with textbutton
+- added icon.png to the package
+
+
+*******************
+3.2.3: 14 December 2015
+
+- version ready for Max 7.1
+- minor cleanup
+- updated mxj objects with @channel attribute to support new buffer~ multichannel capabilities
+
+*******************
+3.2.2: 20 November 2015
+
+- changed license to MIT
+- one read me is enough
+
+
+*******************
+3.2.1: 5 September 2015
+
+- almost ready for Package Manager
+
+
 *******************
 3.2: 25 March 2015
 

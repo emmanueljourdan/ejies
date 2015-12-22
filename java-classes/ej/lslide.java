@@ -34,6 +34,7 @@ public class lslide extends ejies {
 	private MaxClock cl = new MaxClock(this, "exec");
 	private boolean isClockRunning = false;
 	private int interval = 0;
+	private int channel = 1;
 	
 	/**
 	 * Create a lslide object with arguments.
@@ -49,6 +50,7 @@ public class lslide extends ejies {
 		declareAttribute("slide_up", "getSlideUp", "setSlideUp");
 		declareAttribute("slide_down", "getSlideDown", "setSlideDown");
 		declareAttribute("outputmode", null, "setMode");
+		declareAttribute("channel", null, "setChannel");
 		declareAttribute("buf_name");
 		declareAttribute("interval", null, "setInterval");
 		
@@ -96,6 +98,13 @@ public class lslide extends ejies {
 			outputmode = i;
 		else
 			outputmode = 0;
+	}
+	
+	private void setChannel(int i) {
+		if (i >= 1) {	// no upper limit (MSPBuffer will clamp to the buffer channelcount)
+			channel = i;
+		} else
+			error("bad channel number (index starts at 1)");
 	}
 	
 	/**
@@ -249,7 +258,7 @@ public class lslide extends ejies {
 	
 	private void writeToBuffer() {
 		if (buf_name != null && resultat.length > 0) {
-			MSPBuffer.poke(buf_name, resultat);
+			MSPBuffer.poke(buf_name, channel, resultat);
 		}
 	}
 	

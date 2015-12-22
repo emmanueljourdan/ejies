@@ -9,9 +9,9 @@ post("\nejies", ejies.VersNum, ejies.VersDate);
 post("\n     by Emmanuel Jourdan\, e--j dev\n");
 
 function EjiesUtils()
-{ 
-	this.VersNum = "3.2";			// Version Number
-	this.VersDate = "(03/2015)";	// Version release date
+{
+	this.VersNum = "3.2.4";			// Version Number
+	this.VersDate = "(12/2015)";	// Version release date
 
 	// clip method
 	this.clip = function(x, min, max)
@@ -26,7 +26,7 @@ function EjiesUtils()
 	this.error = function(x)
 	{
 		var errorString = "• error: " + x.jsarguments[0] + ":";
-		
+
 		// If the it's a string with a lenth of 1 -> it's strange...
 		// that means we passed a string to the function (and the length property refer to a string)
 		if (arguments.length > 2 && typeof(arguments[1]) == "string" && arguments[1].length == 1)
@@ -35,7 +35,7 @@ function EjiesUtils()
 			for (var i = 1; i < arguments.length; i++)
 				errorString += " " + arguments[i];
 		}
-		
+
 		post(errorString + "\n");
 	}
 
@@ -57,7 +57,7 @@ function ej_attr_args_offset(a)
 		if (a[i] && typeof(a[i]) == "string" && (a[i].toString().charAt(0)=="@"))
 			return i;
 	}
-	
+
 	return i;
 }
 
@@ -70,7 +70,7 @@ function ej_attr_args_process(x,a)
 	var tmpString;
 	var firstAttribute = ej_attr_args_offset(a);
 
-	
+
 	// walk and find strings starting with @
 	// call functions with attr names followed by any arguments
 	for (i = firstAttribute; i < a.length;i ++) {
@@ -83,7 +83,7 @@ function ej_attr_args_process(x,a)
 
 			// grab new attrname, stripping '@'
 			attrname = a[i].slice(1); // works because a[i] is a string
-			
+
 			// reset arguments
 			attrargs = null;
 		} else {
@@ -97,8 +97,8 @@ function ej_attr_args_process(x,a)
 				post("js: attribute " + a[i].slice(1) + " is not a valid attribtue argument\n");
 				return;
 			}
-			
-		}	
+
+		}
 	}
 
 	// process pending to handle last attribute argument
@@ -118,7 +118,7 @@ function ej_attr_process_pending(x,attrname,attrargs)
 			// way that you need to pass the attribute arguments. might requre
 			// some trickiness or a brute force switch statement based on
 			// attrargs.length or something, but should give you the basic idea.
-			
+
 			if (attrargs != null)
 				x[attrname].apply(x, attrargs); // unroll the arguments
 		} else {

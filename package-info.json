@@ -1,18 +1,41 @@
 {
-	"name": "ejies",
-	"type": "package",
-	"author": "Emmanuel Jourdan",
-	"description": "ejies is a collection of abstractions utilities, digital signal processing, JavaScripts and Java tools.",
-	"version": "3.2",
-	"major_version": "3",
-	"minor_version": "2",
-	"min_max_version": "6.1.0",
-	"min_osx_version": "6.1.0",
-	"min_win_version": "6.1.0",
-	"website": "http://www.e--j.com/index.php/what-is-ejies/",
-	"link_mac32": "http://download.e--j.com/software/ejies_3.2.zip",
-	"link_mac64": "http://download.e--j.com/software/ejies_3.2.zip",
-	"link_win32": "http://download.e--j.com/software/ejies_3.2.zip",
-	"link_win64": "http://download.e--j.com/software/ejies_3.2.zip",
-	"relative_path": "None"
+	"author" : "Emmanuel Jourdan",
+	"authors" : [  ],
+	"tags" : [ "abstractions", "mxj", "js", "jsui" ],
+	"description" : "ejies is a collection of abstractions utilities, digital signal processing, JavaScripts and Java tools.",
+	"displayname" : "",
+	"extends" : "",
+	"extensible" : 0,
+	"homepatcher" : "ejies-overview.maxpat",
+	"max_version_max" : "none",
+	"max_version_min" : "6.1.10",
+	"name" : "ejies",
+	"os" : 	{
+		"macintosh" : 		{
+			"platform" : [ "ia32", "x64" ],
+			"min_version" : "10.7.x"
+		}
+,
+		"windows" : 		{
+			"platform" : [ "ia32", "x64" ],
+			"min_version" : "7"
+		}
+
+	}
+,
+	"readme" : "",
+	"version" : "3.2.3",
+	"versions" : null,
+	"website" : "http://www.e--j.com",
+	"filelist" : 	{
+		"patchers" : [ "ej.dialog.maxpat", "ej.jit.preview.maxpat", "ej.line.maxpat", "ej.mout~.maxpat", "ej.numbox-keyboard.maxpat", "ej.vdb-sig~.maxpat", "ej.vdb~.maxpat", "jit.fullscreen.maxpat", "jit.getparam.maxpat", "kaf.maxpat", "kd&u.maxpat", "ptt.maxpat", "splay~.maxpat", "stout~.maxpat" ],
+		"help" : [ "ej.4m.maxhelp", "ej.buffer2l.maxhelp", "ej.cc.maxhelp", "ej.cn.maxhelp", "ej.cycle.maxhelp", "ej.dialog.maxhelp", "ej.dn.maxhelp", "ej.dx2x.maxhelp", "ej.fplay.maxhelp", "ej.ftom.maxhelp", "ej.function.maxhelp", "ej.function.xml", "ej.jit.preview.maxhelp", "ej.l2buffer.maxhelp", "ej.lchange.maxhelp", "ej.lclip.maxhelp", "ej.ldrunk.maxhelp", "ej.led.maxhelp", "ej.line.maxhelp", "ej.linterp.maxhelp", "ej.lock.maxhelp", "ej.lop.maxhelp", "ej.lquant.maxhelp", "ej.lscale.maxhelp", "ej.lslide.maxhelp", "ej.lui.maxhelp", "ej.mmmm.maxhelp", "ej.mout~.maxhelp", "ej.mtof.maxhelp", "ej.nthru.maxhelp", "ej.numbox.maxhelp", "ej.op.maxhelp", "ej.route.maxhelp", "ej.sliders-overview.maxhelp", "ej.urn.maxhelp", "ej.vdb-sig~.maxhelp", "ej.vdb~.maxhelp", "ej.x2dx.maxhelp", "jit.fullscreen.maxhelp", "jit.getparam.maxhelp", "kaf.maxhelp", "kd&u.maxhelp", "ptt.maxhelp", "splay~.maxhelp", "stout~.maxhelp" ],
+		"java-classes" : [ "ej/buffer2l.class", "ej/buffer2l.java", "ej/dx2x.class", "ej/dx2x.java", "ej/ejies.class", "ej/ejies.java", "ej/fplay$Courbe.class", "ej/fplay$Point.class", "ej/fplay.class", "ej/fplay.java", "ej/ftom.class", "ej/ftom.java", "ej/getejiesversion$1.class", "ej/getejiesversion.class", "ej/getejiesversion.java", "ej/l2buffer.class", "ej/l2buffer.java", "ej/lchange.class", "ej/lchange.java", "ej/lclip.class", "ej/lclip.java", "ej/ldrunk.class", "ej/ldrunk.java", "ej/linterp.class", "ej/linterp.java", "ej/ListAbs.class", "ej/ListAbs.java", "ej/ListAbsDiff.class", "ej/ListAbsDiff.java", "ej/ListAcos.class", "ej/ListAcos.java", "ej/ListAddition.class", "ej/ListAddition.java", "ej/ListAsin.class", "ej/ListAsin.java", "ej/ListAtan.class", "ej/ListAtan.java", "ej/ListAtan2.class", "ej/ListAtan2.java", "ej/ListAtodb.class", "ej/ListAtodb.java", "ej/ListAverage.class", "ej/ListAverage.java", "ej/ListCeil.class", "ej/ListCeil.java", "ej/ListCos.class", "ej/ListCos.java", "ej/ListDbtoa.class", "ej/ListDbtoa.java", "ej/ListDivision.class", "ej/ListDivision.java", "ej/ListEqual.class", "ej/ListEqual.java", "ej/ListEqualPass.class", "ej/ListEqualPass.java", "ej/ListExp.class", "ej/ListExp.java", "ej/ListFloor.class", "ej/ListFloor.java", "ej/ListGT.class", "ej/ListGT.java", "ej/ListGTOE.class", "ej/ListGTOE.java", "ej/ListGTOEPass.class", "ej/ListGTOEPass.java", "ej/ListGTPass.class", "ej/ListGTPass.java", "ej/ListIntDiv.class", "ej/ListIntDiv.java", "ej/ListInvDivision.class", "ej/ListInvDivision.java", "ej/ListInvIntDiv.class", "ej/ListInvIntDiv.java", "ej/ListInvModulo.class", "ej/ListInvModulo.java", "ej/ListInvSoustraction.class", "ej/ListInvSoustraction.java", "ej/ListLn.class", "ej/ListLn.java", "ej/ListLog10.class", "ej/ListLog10.java", "ej/ListLog2.class", "ej/ListLog2.java", "ej/ListLT.class", "ej/ListLT.java", "ej/ListLTOE.class", "ej/ListLTOE.java", "ej/ListLTOEPass.class", "ej/ListLTOEPass.java", "ej/ListLTPass.class", "ej/ListLTPass.java", "ej/ListMaximum.class", "ej/ListMaximum.java", "ej/ListMinimum.class", "ej/ListMinimum.java", "ej/ListModulo.class", "ej/ListModulo.java", "ej/ListNotEqual.class", "ej/ListNotEqual.java", "ej/ListNotEqualPass.class", "ej/ListNotEqualPass.java", "ej/ListOperator.class", "ej/ListOperator.java", "ej/ListPow.class", "ej/ListPow.java", "ej/ListProduit.class", "ej/ListProduit.java", "ej/ListRound.class", "ej/ListRound.java", "ej/ListSin.class", "ej/ListSin.java", "ej/ListSoustraction.class", "ej/ListSoustraction.java", "ej/ListSqrt.class", "ej/ListSqrt.java", "ej/ListTan.class", "ej/ListTan.java", "ej/ListTrunc.class", "ej/ListTrunc.java", "ej/lop.class", "ej/lop.java", "ej/lquant.class", "ej/lquant.java", "ej/lscale.class", "ej/lscale.java", "ej/lslide.class", "ej/lslide.java", "ej/mmmm.class", "ej/mmmm.java", "ej/mtof.class", "ej/mtof.java", "ej/urn.class", "ej/urn.java", "ej/x2dx.class", "ej/x2dx.java" ],
+		"jsextensions" : [ "ejies-jsextensions.js" ],
+		"jsui" : [ "ej.function.js", "ej.led.js", "ej.numbox.js" ],
+		"media" : [ "images/ej.bg-h-big-aqua.png", "images/ej.bg-h-big.png", "images/ej.bg-h-small-aqua.png", "images/ej.bg-h-small.png", "images/ej.bg-h-tiny-aqua.png", "images/ej.bg-h-tiny.png", "images/ej.bg-v-big-aqua.png", "images/ej.bg-v-big.png", "images/ej.bg-v-small-aqua.png", "images/ej.bg-v-small.png", "images/ej.bg-v-tiny-aqua.png", "images/ej.bg-v-tiny.png", "images/ej.cancel.png", "images/ej.dialog.png", "images/ej.k-blue-h-big-aqua.png", "images/ej.k-blue-h-big.png", "images/ej.k-blue-h-small-aqua.png", "images/ej.k-blue-h-small.png", "images/ej.k-blue-h-tiny-aqua.png", "images/ej.k-blue-h-tiny.png", "images/ej.k-blue-v-big-aqua.png", "images/ej.k-blue-v-big.png", "images/ej.k-blue-v-small-aqua.png", "images/ej.k-blue-v-small.png", "images/ej.k-blue-v-tiny-aqua.png", "images/ej.k-blue-v-tiny.png", "images/ej.k-graph-h-big-aqua.png", "images/ej.k-graph-h-big.png", "images/ej.k-graph-h-small-aqua.png", "images/ej.k-graph-h-small.png", "images/ej.k-graph-h-tiny-aqua.png", "images/ej.k-graph-h-tiny.png", "images/ej.k-graph-v-big-aqua.png", "images/ej.k-graph-v-big.png", "images/ej.k-graph-v-small-aqua.png", "images/ej.k-graph-v-small.png", "images/ej.k-graph-v-tiny-aqua.png", "images/ej.k-graph-v-tiny.png", "images/ej.ok.png", "legacy/ej.bg-h-big-aqua.pct", "legacy/ej.bg-h-big.pct", "legacy/ej.bg-h-small-aqua.pct", "legacy/ej.bg-h-small.pct", "legacy/ej.bg-h-tiny-aqua.pct", "legacy/ej.bg-h-tiny.pct", "legacy/ej.bg-v-big-aqua.pct", "legacy/ej.bg-v-big.pct", "legacy/ej.bg-v-small-aqua.pct", "legacy/ej.bg-v-small.pct", "legacy/ej.bg-v-tiny-aqua.pct", "legacy/ej.bg-v-tiny.pct", "legacy/ej.cancel.pct", "legacy/ej.dialog.pct", "legacy/ej.k-blue-h-big-aqua.pct", "legacy/ej.k-blue-h-big.pct", "legacy/ej.k-blue-h-small-aqua.pct", "legacy/ej.k-blue-h-small.pct", "legacy/ej.k-blue-h-tiny-aqua.pct", "legacy/ej.k-blue-h-tiny.pct", "legacy/ej.k-blue-v-big-aqua.pct", "legacy/ej.k-blue-v-big.pct", "legacy/ej.k-blue-v-small-aqua.pct", "legacy/ej.k-blue-v-small.pct", "legacy/ej.k-blue-v-tiny-aqua.pct", "legacy/ej.k-blue-v-tiny.pct", "legacy/ej.k-graph-h-big-aqua.pct", "legacy/ej.k-graph-h-big.pct", "legacy/ej.k-graph-h-small-aqua.pct", "legacy/ej.k-graph-h-small.pct", "legacy/ej.k-graph-h-tiny-aqua.pct", "legacy/ej.k-graph-h-tiny.pct", "legacy/ej.k-graph-v-big-aqua.pct", "legacy/ej.k-graph-v-big.pct", "legacy/ej.k-graph-v-small-aqua.pct", "legacy/ej.k-graph-v-small.pct", "legacy/ej.k-graph-v-tiny-aqua.pct", "legacy/ej.k-graph-v-tiny.pct", "legacy/ej.ok.pct" ],
+		"javascript" : [ "ej.4m.js", "ej.cc.js", "ej.cn.js", "ej.cycle.js", "ej.dn.js", "ej.lock.js", "ej.lui.js", "ej.nthru.js", "ej.op.js", "ej.route.js" ],
+		"extras" : [ "ejies-overview.maxpat" ]
+	}
+
 }

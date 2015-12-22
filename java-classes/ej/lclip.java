@@ -25,7 +25,8 @@ public class lclip extends ejies {
 	private float clipMax = 0;
 	private String buf_name = null;
 	private int outputmode = 0;
-	
+	private int channel = 1;
+
 	/**
 	 * Create a lclip object. The arguments sets the limits.
 	 * @param clipMin define the lowest value of the resulting list
@@ -36,6 +37,7 @@ public class lclip extends ejies {
 		createInfoOutlet(false);
 		
 		declareAttribute("outputmode", null, "setMode");
+		declareAttribute("channel", null, "setChannel");
 		declareAttribute("buf_name");
 
 		this.clipMin = clipMin;
@@ -50,6 +52,13 @@ public class lclip extends ejies {
 			outputmode = i;
 		else
 			outputmode = 0;
+	}
+
+	private void setChannel(int i) {
+		if (i >= 1) {	// no upper limit (MSPBuffer will clamp to the buffer channelcount)
+			channel = i;
+		} else
+			error("bad channel number (index starts at 1)");
 	}
 	
 	/**
@@ -135,7 +144,7 @@ public class lclip extends ejies {
 	
 	private void writeToBuffer() {
 		if (buf_name != null && resultat.length > 0) {
-			MSPBuffer.poke(buf_name, resultat);
+			MSPBuffer.poke(buf_name, channel, resultat);
 		}
 	}
 }

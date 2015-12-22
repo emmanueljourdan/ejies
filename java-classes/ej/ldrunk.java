@@ -35,6 +35,7 @@ public class ldrunk extends ejies {
 	private MaxClock cl = new MaxClock(this, "exec");
 	private boolean isClockRunning = false;
 	private int interval = 0;
+	private int channel = 1;
 
 	
 	/**
@@ -77,6 +78,7 @@ public class ldrunk extends ejies {
 		declareAttribute("ignore0");
 		declareAttribute("autoreset");
 		declareAttribute("outputmode", null, "setMode");
+		declareAttribute("channel", null, "setChannel");
 		declareAttribute("buf_name");
 		declareAttribute("interval", null, "setInterval");
 
@@ -108,6 +110,13 @@ public class ldrunk extends ejies {
 			outputmode = i;
 		else
 			outputmode = 0;
+	}
+
+	private void setChannel(int i) {
+		if (i >= 1) {	// no upper limit (MSPBuffer will clamp to the buffer channelcount)
+			channel = i;
+		} else
+			error("bad channel number (index starts at 1)");
 	}
 	
 	private void doIt() {
@@ -249,7 +258,7 @@ public class ldrunk extends ejies {
 	
 	private void writeToBuffer() {
 		if (buf_name != null && resultat.length > 0) {
-			MSPBuffer.poke(buf_name, resultat);
+			MSPBuffer.poke(buf_name, channel, resultat);
 		}
 	}
 }

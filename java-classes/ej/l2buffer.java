@@ -109,10 +109,10 @@ public class l2buffer extends ejies {
 	}
 
 	private void setChannel(int i) {
-		if (i >= 1 && i <= 4) {
+		if (i >= 1) {	// no upper limit (MSPBuffer will clamp to the buffer channelcount)
 			channel = i;
 		} else
-			error("bad channel number");
+			error("bad channel number (index starts at 1)");
 	}
 	
 	private void writeToBuffer(float[] args) {
