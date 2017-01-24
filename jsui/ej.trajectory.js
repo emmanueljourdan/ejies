@@ -378,3 +378,16 @@ function dump_to_dict()
     }
     outlet(OUTLET_DUMPOUT, "dictionary", d.name);
 }
+
+
+function dictionary(ref)
+{
+	var d = new Dict(ref);
+
+	if (d.get("schema") === "ej.trajectory") {
+		post(d.get(""), "\n");
+
+	} else {
+		error("couldn't read this kind of dictionary.");
+	}
+}
