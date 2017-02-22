@@ -2084,7 +2084,7 @@ function MyDump(courbe, sendName)
 	if (! courbe.np)
 		return;
 
-	if (typeof(sendName) != "string") {
+	if (arguments.length > 1 && typeof(sendName) != "string") {
 		ejies.error(this, "send name must be a symbol");
 		return;
 	}
@@ -2169,7 +2169,7 @@ function MyDumpMatrix(courbe, sendName)
 	if (! courbe.np)
 		return;
 
-	if (typeof(sendName) != "string") {
+	if (arguments.length > 1 && typeof(sendName) != "string") {
 		ejies.error(this, "send name must be a symbol");
 		return;
 	}
@@ -2208,7 +2208,7 @@ function MyListDump(courbe, sendName)
 	if (! courbe.np)
 		return;
 
-	if (typeof(sendName) != "string") {
+	if (arguments.length > 1 && typeof(sendName) != "string") {
 		ejies.error(this, "send name must be a symbol");
 		return;
 	}
