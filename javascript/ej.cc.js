@@ -89,7 +89,7 @@ ExecuteOperation.local = 1;
 
 function ChangeColor(MyObj)
 {
-	if (MyObj.maxclass == NomObjet && MyObj.maxclass != "patcher" && !MyObj.understands("color") &&  understandsBordercolor(MyObj)) {
+	if (MyObj.maxclass == NomObjet && MyObj.maxclass != "patcher" && !MyObj.understands("color") &&  !isUIObject(MyObj)) {
 		if (Couleur)
 			MyObj.colorindex = Couleur;
 		else // Couleur == 0
@@ -106,7 +106,7 @@ function resetall()
 
 function ResetAllColors(MyObj)
 {
-	if (!MyObj.understands("color") && understandsBordercolor(MyObj)) {
+	if (!MyObj.understands("color") && !isUIObject(MyObj)) {
 		if (MyObj.maxclass == "patcher")
 			MyObj.colorindex = 10;	// probably not ideal, but there's no way to send the color message ta a patcher (newobj) AFAIK
 		else
@@ -132,34 +132,8 @@ function InternalExecuteOperation(a, b)
 }
 InternalExecuteOperation.local = 1;
 
-function understandsBordercolor(MyObj)
-{
-	// identify UI objects who don't understand bordercolor to suppress tha worrying error post in the max window
-	if (	MyObj.maxclass == "inlet"		|
-			MyObj.maxclass == "outlet"		|
-			MyObj.maxclass == "playbar"		|
-			MyObj.maxclass == "matrixctrl"	|
-			MyObj.maxclass == "pictctrl"	|
-			MyObj.maxclass == "pictslider"	|
-			MyObj.maxclass == "ezdac~"		|
-			MyObj.maxclass == "ezadc~"		|
-			MyObj.maxclass == "fpic"		|
-			MyObj.maxclass == "gswitch"		|
-			MyObj.maxclass == "gswitch2"	|
-			MyObj.maxclass == "hint"		|
-			MyObj.maxclass == "imovie"		|
-			MyObj.maxclass == "jit.pwindow"	|
-			MyObj.maxclass == "jit.scope"	|
-			MyObj.maxclass == "jweb"		|
-			MyObj.maxclass == "lcd"			|
-			MyObj.maxclass == "led"			|
-			MyObj.maxclass == "radiogroup"	|
-			MyObj.maxclass == "suckah"		|
-			MyObj.maxclass == "swatch"		|
-			MyObj.maxclass == "ubutton")
-		return 0;
-	else 
-		return 1;
+function isUIObject(MyObj) {
+	return MyObj.understands("paint")
 }
 
 // Pour la compilation automatique
