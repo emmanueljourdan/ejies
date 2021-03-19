@@ -93,7 +93,7 @@ function ChangeColor(MyObj)
 		if (Couleur)
 			MyObj.colorindex = Couleur;
 		else // Couleur == 0
-			MyObj.message("sendbox", "bordercolor", 0.8, 0.84, 0.7, 1.);	// sending Max 5 default color. There's no real way to get the default.
+			MyObj.message("sendbox", "bordercolor", 0.5, 0.5, 0.5, 1.);	// sending Max 5 default color. There's no real way to get the default.
 	}
 	return true;	// pour que l'iteration continue
 }
@@ -110,7 +110,7 @@ function ResetAllColors(MyObj)
 		if (MyObj.maxclass == "patcher")
 			MyObj.colorindex = 10;	// probably not ideal, but there's no way to send the color message ta a patcher (newobj) AFAIK
 		else
-			MyObj.message("sendbox", "bordercolor", 0.8, 0.84, 0.7, 1.);
+			MyObj.message("sendbox", "bordercolor", 0.5, 0.5, 0.5, 1.);
 	}
 	return true;
 }
