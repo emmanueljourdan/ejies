@@ -1,5 +1,5 @@
 /*
- *	ej.fplay by Emmanuel Jourdan, e--j dev Ñ 04 2006
+ *	ej.fplay by Emmanuel Jourdan, e--j dev - 04 2006
  *	function player
  *
  *	$Revision: 1.33 $

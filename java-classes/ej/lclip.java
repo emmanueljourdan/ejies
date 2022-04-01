@@ -1,5 +1,5 @@
 /*
- *	ej.lclip by Emmanuel Jourdan, e--j dev Ñ 02 2005
+ *	ej.lclip by Emmanuel Jourdan, e--j dev - 02 2005
  *	Constrains a list within a certain range
  *
  *	$Revision: 1.6 $

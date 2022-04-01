@@ -1,5 +1,5 @@
 /*
- *	ej.lquant by Emmanuel Jourdan, e--j dev Ñ 08 2005
+ *	ej.lquant by Emmanuel Jourdan, e--j dev - 08 2005
  *	Quantize a list
  *
  *	$Revision: 1.6 $

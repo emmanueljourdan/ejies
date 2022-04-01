@@ -1,5 +1,5 @@
 /*
- *	ej.urn by Emmanuel Jourdan, e--j dev Ñ 04 2005
+ *	ej.urn by Emmanuel Jourdan, e--j dev - 04 2005
  *	like the urn object but for larger range
  *
  *	$Revision: 1.5 $

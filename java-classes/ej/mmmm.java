@@ -1,5 +1,5 @@
 /*
- *	ej.mmmm by Emmanuel Jourdan, e--j dev Ñ 12 2005
+ *	ej.mmmm by Emmanuel Jourdan, e--j dev - 12 2005
  *	output the min, median, mean, maximum on a int/float stream
  *
  *	$Revision: 1.7 $

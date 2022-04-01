@@ -1,5 +1,5 @@
 /*
- *	ej.lchange by Emmanuel Jourdan, e--j dev Ñ 12 2005
+ *	ej.lchange by Emmanuel Jourdan, e--j dev - 12 2005
  *	aware of list change
  *
  *	$Revision: 1.11 $

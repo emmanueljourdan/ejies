@@ -1,5 +1,5 @@
 /*
- *	ej.buffer2l by Emmanuel Jourdan, e--j dev Ñ 07 2013
+ *	ej.buffer2l by Emmanuel Jourdan, e--j dev - 07 2013
  *	output "best" samples of a buffer as list
  *
  */

@@ -1,5 +1,5 @@
 /*
- *	ej.ftom by Emmanuel Jourdan, e--j dev Ñ 02 2005
+ *	ej.ftom by Emmanuel Jourdan, e--j dev - 02 2005
  *	Frequency to MIDI (with tuning adjustment)
  *
  *	$Revision: 1.8 $

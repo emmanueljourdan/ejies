@@ -1,5 +1,5 @@
 /*
- *	ej.lop by Emmanuel Jourdan, e--j dev Ñ 12 2005
+ *	ej.lop by Emmanuel Jourdan, e--j dev - 12 2005
  *	list operator
  *
  *  Many thanks to Ben Nevile for performances enhacement.

@@ -1,5 +1,5 @@
 /*
- *	ej.mtof by Emmanuel Jourdan, e--j dev Ñ 02 2005
+ *	ej.mtof by Emmanuel Jourdan, e--j dev - 02 2005
  *	MIDI to Frequency (with tuning adjustment)
  *
  *	$Revision: 1.7 $

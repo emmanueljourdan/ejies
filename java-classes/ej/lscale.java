@@ -1,5 +1,5 @@
 /*
- *	ej.lscale by Emmanuel Jourdan, e--j dev Ñ 02 2005
+ *	ej.lscale by Emmanuel Jourdan, e--j dev - 02 2005
  *	scale for lists
  *
  *

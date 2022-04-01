@@ -1,5 +1,5 @@
 /*
- *	ejies Java externals by Emmanuel Jourdan, e--j dev Ñ 12 2005
+ *	ejies Java externals by Emmanuel Jourdan, e--j dev - 12 2005
  *
  *	$Revision: 1.14 $
  *	$Date: 2007/05/22 17:33:28 $
