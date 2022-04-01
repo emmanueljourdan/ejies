@@ -35,7 +35,7 @@ public class buffer2l extends ejies {
 		declareAttribute("grain",  null, "setattrGrain");
 		declareAttribute("buf_name", null, "setattrBufName");
 		declareAttribute("channel", null, "setattrChannel");
-		declareAttribute("zoom", null, null);
+		declareAttribute("zoom", null, "setattrZoom");
 
 		setInletAssist(INLET_ASSIST);
 		setOutletAssist(OUTLET_ASSIST);
@@ -83,6 +83,9 @@ public class buffer2l extends ejies {
 				max = 0f;
 			if (max > 1f)
 				max = 1f;
+
+			zoom[0] = min;
+			zoom[1] = max;
 		} else 
 			error("ej.buffer2l: zoom wrong arguments");
 	}
