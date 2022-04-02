@@ -32,7 +32,7 @@ public class l2buffer extends ejies {
 		
 		switch (args.length) {
 		case 0:
-			post("¥ warning: ej.l2buffer: don't forget the argument..."); break;
+			post("â€¢ warning: ej.l2buffer: don't forget the argument..."); break;
 		case 1:
 			set(args[0].toString()); break;
 		case 2:

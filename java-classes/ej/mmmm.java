@@ -30,7 +30,7 @@ public class mmmm extends ejies
 	private float[] b;
 	private float[] c;
 	private double somme = 0;	// soyons fous... un double
-	private int idx;		// index du tableau ou sera stockée la prohaine valeur
+	private int idx;		// index du tableau ou sera stock√©e la prohaine valeur
 	private boolean arrayFull = false;
 	
 	// si il n'y a pas d'arguments
@@ -108,13 +108,13 @@ public class mmmm extends ejies
 	 * @param f float
 	 */
 	public void inlet(float f) {
-		// reçoit les int et les float
+		// re√ßoit les int et les float
 		addToList(f);
 		sortie();
 	}
 
 	private void addToList(float val) {
-		if ( idx == (window - 1) ) {	// remet à zéro le compteur
+		if ( idx == (window - 1) ) {	// remet √† z√©ro le compteur
 			a[idx] = val;
 			idx = 0;
 			arrayFull = true;
@@ -146,7 +146,7 @@ public class mmmm extends ejies
 		if  (! arrayFull)
 			return;
 
-		// copy array... ça éxiste dans Java... c'est magique
+		// copy array... √ßa √©xiste dans Java... c'est magique
 		System.arraycopy(a, 0, b, 0, a.length);
 		
 		if (verbose)

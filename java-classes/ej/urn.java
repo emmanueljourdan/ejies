@@ -82,7 +82,7 @@ public class urn extends ejies {
 	 */
 	public void clear() {
 		/*
-		 * Il n'est pas ncessaire de rinitialiser le tableau,
+		 * Il n'est pas nÂcessaire de rÂinitialiser le tableau,
 		 * on fiche des valeurs qui sont dedans.
 		 */
 		howManyLeft = urnSize;
@@ -105,12 +105,12 @@ public class urn extends ejies {
 	
 	private synchronized void urner() {
 		/*
-		 * Chaque fois qu'on demande une valeur alatoire, la valeur est mise
-		 * ˆ la fin du tableau (en fait ˆ l'index de howManyLeft - 1)
+		 * Chaque fois qu'on demande une valeur alÂatoire, la valeur est mise
+		 * Âˆ la fin du tableau (en fait Âˆ l'index de howManyLeft - 1)
 		 */
-		int rIdx;     // stockera l'index donn par Random
+		int rIdx;     // stockera l'index donnÂ par Random
 		
-		rIdx = myRandom.nextInt(howManyLeft--); // ATTENTION: on dcrmente aprs utiliser la valeur !!!
+		rIdx = myRandom.nextInt(howManyLeft--); // ATTENTION: on dÂcrÂmente aprÂs utiliser la valeur !!!
 		outlet(0, urnValues[rIdx]);
 
 		// swap if needed...
@@ -142,7 +142,7 @@ public class urn extends ejies {
 		else
 			myRandom = new Random(seed);
 		
-		urnErase(); // remplissage avec les valeurs par dfaut
-		// howManyLeft = urnSize; // mme fonctionnement que urn
+		urnErase(); // remplissage avec les valeurs par dÂfaut
+		// howManyLeft = urnSize; // mÂme fonctionnement que urn
 	}
 }

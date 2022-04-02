@@ -47,7 +47,7 @@ public class getejiesversion extends ejies {
 		    			outlet(0, tmp);
 				} catch (MalformedURLException e) {
 				} catch (IOException e) {
-					post("¥ warning: Unable to get the version number from ej's website. Check your internet connection.");
+					post("â€¢ warning: Unable to get the version number from ej's website. Check your internet connection.");
 					outlet(0, "need internet");
 				}
             }

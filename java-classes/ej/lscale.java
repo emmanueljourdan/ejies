@@ -164,16 +164,16 @@ public class lscale extends ejies {
 	 */
 	public void list(float[] args) {
 		switch (getInlet()) {
-			case 0:                // première entrée... liste à scaler
+			case 0:                // premi√®re entr√©e... liste ¬à scaler
 				a = args;
 				calcule();
 				break;
 			case 1:
-				newArgs(args);     // arguments donnés sous forme de liste
+				newArgs(args);     // arguments donn√©s sous forme de liste
 				break;
-			default:               // quelle idée d'envoyer une liste ici
+			default:               // quelle id√©e d'envoyer une liste ici
 				error("ej.lscale: doesn't expect a list here");
-				break; // est-ce vraiment nécessaire ?
+				break; // est-ce vraiment n√©cessaire ?
 		}
 	}
 	
@@ -182,7 +182,7 @@ public class lscale extends ejies {
 //	}
 	
 	private void calculeChoice() {
-		// choix de la méthod pour le scaling
+		// choix de la m√©thod pour le scaling
 		if (expValue == 1)
 			methodString = (clip ? "calculeClip" : "calculeNormal");
 		else

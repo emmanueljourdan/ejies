@@ -19,7 +19,7 @@ import com.cycling74.msp.MSPBuffer;
  * @version $Revision: 1.10 $
  */
 public class ldrunk extends ejies {
-	private static final String[] INLET_ASSIST = new String[]{ "clean list", "Random range (float/list)", "random step (± step / 2)", "probability of random (%)" };
+	private static final String[] INLET_ASSIST = new String[]{ "clean list", "Random range (float/list)", "random step (Â± step / 2)", "probability of random (%)" };
 	private static final String[] OUTLET_ASSIST = new String[]{ "Drunked list"};	
 
 	private float[] range = new float[]{ 0, 127 };
@@ -41,7 +41,7 @@ public class ldrunk extends ejies {
 	/**
 	 * Create a ldrunk object with specified maximum and step.
 	 * @param maxRange define the maximum of the range
-	 * @param stepSize define the step (randomness will be ± step/2) 
+	 * @param stepSize define the step (randomness will be Â± step/2) 
 	 */
 	public ldrunk(float maxRange, float stepSize) {
 		this(0f, maxRange, stepSize, 100f);
@@ -51,7 +51,7 @@ public class ldrunk extends ejies {
 	 * Create a ldrunk object with specified minimum, maximum and step.
 	 * @param minRange define the minimum of the range
 	 * @param maxRange define the maximum of the range
-	 * @param stepSize define the step (randomness will be ± step/2) 
+	 * @param stepSize define the step (randomness will be Â± step/2) 
 	 */
 	public ldrunk(float minRange, float maxRange, float stepSize)	{
 		this(minRange, maxRange, stepSize, 100f);
@@ -61,7 +61,7 @@ public class ldrunk extends ejies {
 	 * Create a ldrunk object with specified minimum, maximum, step and probapility.
 	 * @param minRange define the minimum of the range
 	 * @param maxRange define the maximum of the range
-	 * @param stepSize define the step (randomness will be ± step/2) 
+	 * @param stepSize define the step (randomness will be Â± step/2) 
 	 * @param proba probability of randomness (percentage)
 	 */
 	public ldrunk(float minRange, float maxRange, float stepSize, float proba)	{
@@ -217,11 +217,11 @@ public class ldrunk extends ejies {
 	private void doRandom() {
 		if (autoreset) {
 			resultat = new float[inputList.length];
-			System.arraycopy(inputList, 0, resultat, 0, inputList.length); // copie des donnes (la liste d'entre reste intacte
+			System.arraycopy(inputList, 0, resultat, 0, inputList.length); // copie des donnÃ©es (la liste d'entrÃ©e reste intacte
 		} else
-			resultat = inputList; // pas de copie: c'est juste une rfrence
+			resultat = inputList; // pas de copie: c'est juste une rÃ©fÃ©rence
 
-		// ± (step size / 2) sur chaque valeur...
+		// Â± (step size / 2) sur chaque valeur...
 		for (int i = 0; i < resultat.length; i++) {
 			if (ignore0) {
 				if (resultat[i] != 0f)

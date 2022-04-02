@@ -31,7 +31,7 @@ public class lop extends ejies {
 	
 	private float[] a = new float[0];
 	private float[] b = new float[0];
-	private String op = "*"; // il y en faut bien un par défaut
+	private String op = "*"; // il y en faut bien un par d√©faut
 	private boolean scalarmode = false;
 	private boolean autotrigger = false;
 	private boolean aSet = false;
@@ -50,11 +50,11 @@ public class lop extends ejies {
 		setInletAssist(INLET_ASSIST);
 		setOutletAssist(OUTLET_ASSIST);
 
-		// premier argument défini l'opérateur
+		// premier argument d√©fini l'op¬érateur
 		if (args.length > 0)
 			setOp(new Atom[] { args[0] });
 		
-		// arguments suivants définissent les valeurs par défaut
+		// arguments suivants d√©finissent les valeurs par d¬éfaut
 		if (args.length > 1)
 			setVal(generateValFromArgs(args));
 		
@@ -65,7 +65,7 @@ public class lop extends ejies {
 	}
 
 	private float[] generateValFromArgs(Atom[] a) {
-		float[] tmp = new float[a.length - 1]; // 1 de moins car le premier est le nom de l'opérateur
+		float[] tmp = new float[a.length - 1]; // 1 de moins car le premier est le nom de l'op√©rateur
 		
 		for (int i = 1; i < a.length; i++) {
 			if (a[i].isInt())
@@ -73,7 +73,7 @@ public class lop extends ejies {
 			else if (a[i].isFloat())
 				tmp[i-1] = a[i].getFloat();
 			else
-				error("ej.lop: " + a[i].toString() + " bad argument: int/float expected");// du coup il ne va rien écrire dans tmp[i]
+				error("ej.lop: " + a[i].toString() + " bad argument: int/float expected");// du coup il ne va rien √©crire dans tmp[i]
 		}
 		
 		return tmp;
@@ -216,13 +216,13 @@ public class lop extends ejies {
 		// si c'est unary il n'y a pas besoin de ce poser de question
 		if (isUnary == true)
 			outlet(0, myListOperator.operate(a, 0)); // au lieu d'avoir encore un constructeur
-		else if (scalarmode == false || (a.length > 1 && b.length > 1))		// si c'est pas scalarmode ou que les deux entrées ont reçues des listes
+		else if (scalarmode == false || (a.length > 1 && b.length > 1))		// si c'est pas scalarmode ou que les deux entr√©es ont re√ßues des listes
 			outlet(0, myListOperator.operate(a, b));
 		else if (scalarmode == true && b.length == 1)
 			outlet(0, myListOperator.operate(a, b[0]));
 		else if (scalarmode == true && a.length == 1)
 			outlet(0, myListOperator.operate(a[0], b));
-		// else : scalarmode est true mais l'une des deux listes n'est pas définie
+		// else : scalarmode est true mais l'une des deux listes n'est pas d√©finie
 	}
 	
 	/**

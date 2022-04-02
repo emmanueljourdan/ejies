@@ -25,7 +25,7 @@ public class lchange extends ejies
 						new String[] {"1 when the list change, 0 otherwise"}
 						};
 
-	private Atom[] lastThing = new Atom[0]; // c'est là qu'on met la dernière chose
+	private Atom[] lastThing = new Atom[0]; // c'est l√† qu'on met la derni√®re chose
 	private int mode = 0;
 	
 	/**
@@ -70,7 +70,7 @@ public class lchange extends ejies
 	 */
 	public void anything(String s, Atom[] args)
 	{
-		// si la longueur est différente
+		// si la longueur est diff¬érente
 		if (lastThing.length != (args.length + 1)) {
 			isDifferent(s, args);
 		} else {
@@ -119,7 +119,7 @@ public class lchange extends ejies
 	
 	private void isDifferent(String s, Atom[] args)
 	{
-		// en fonction du mode on sort des infos différentes
+		// en fonction du mode on sort des infos diff√©rentes
 		if (mode == 0)
 			outlet(0, s, args);
 		else if (mode == 1)
@@ -132,7 +132,7 @@ public class lchange extends ejies
 
 	private void isEqual()
 	{
-		// mode int on envoie 0 car c'est égal
+		// mode int on envoie 0 car c'est √©gal
 		if (mode == 2)
 			outlet(0, 0);
 	}
@@ -152,13 +152,13 @@ public class lchange extends ejies
 			for (i = 1; i < (args.length + 1); i++) {
 				if ( lastThing[i].equals(args[i - 1]) == false ) {
 					isDifferent(s, args);
-					return; // c'est différent on se casse en vitesse
+					return; // c'est diff√©rent on se casse en vitesse
 				}
 			}
-			// si la boucle continue jusqu'à la fin, c'est que les éléments sont identiques.
+			// si la boucle continue jusqu'√† la fin, c'est que les √©l√©ments sont identiques.
 			isEqual();
 		} else {
-			// c'est différent
+			// c'est diff√©rent
 			isDifferent(s, args);
 		}
 	}

@@ -27,7 +27,7 @@ public class linterp extends ejies {
 
 	private float interpFactor[] = null;
 	private float[][] listes = new float[8][];
-	private float[] resultat = new float[0]; // ça permet de savoir si on a fait le calcul...
+	private float[] resultat = new float[0]; // √ßa permet de savoir si on a fait le calcul...
 	private String buf_name = null;
 	private byte combienInput;
 	
@@ -52,18 +52,18 @@ public class linterp extends ejies {
 				this.combienInput = 8;
 				declareTypedIO("lllllllll", "l");
 			} else if (args[0].getString().equals("weight") && args.length > 1) { // mode poids
-				if (args[1].isInt() && args[1].getInt() > 1 && args[1].getInt() <= 8) { // l'arguement doit être un entier compris entre 2 et 8
+				if (args[1].isInt() && args[1].getInt() > 1 && args[1].getInt() <= 8) { // l'arguement doit √™tre un entier compris entre 2 et 8
 					this.mode = 3;
 					combienInput = (byte) (args[1].getInt());
 					
-					declareIO(combienInput + 1, 1); // il y a une entrée de plus pour les facteurs d'interpolation
+					declareIO(combienInput + 1, 1); // il y a une entr√©e de plus pour les facteurs d'interpolation
 				} else
 					bail("bad argument for argument weigth (int between 1 and 8 expected)");
 			} else {
 				bail("unkown argument for ej.linterp... have a look to the help file.");
 			}
 		} else {
-			this.mode = 0; // mais on le savait déjà
+			this.mode = 0; // mais on le savait d√©j√†
 			this.combienInput = 2;
 			declareTypedIO("fll", "l");
 		}
@@ -147,7 +147,7 @@ public class linterp extends ejies {
 			case 0:
 				setInterpFactor(args);
 				calcule();
-				return;// car c'est déclenché aussi à la fin de la méthode
+				return;// car c'est d√©clench√© aussi √† la fin de la m√©thode
 			default:
 				setInput(getInlet(), args);
 		}
@@ -189,8 +189,8 @@ public class linterp extends ejies {
 	
 	private void setInterpFactor(float[] args) {			
 		/*
-		 * on met toujours trois éléments ans le tableau
-		 * comme ça on a pas de problème quand on change de mode...
+		 * on met toujours trois √©l√©ments ans le tableau
+		 * comme √ßa on a pas de probl√®me quand on change de mode...
 		 */
 		if (mode != 3) {
 			switch (args.length) {
@@ -218,11 +218,11 @@ public class linterp extends ejies {
 		for (i = 0; i < args.length; i++)
 			max += args[i];
 		
-		// si la somme est égale à 1, c'est pas la peine de le normaliser
+		// si la somme est √©gale 1, c'est pas la peine de le normaliser
 		if (max == 1)
 			return args;
 		
-		// sinon on divise chaque élément par le maximum
+		// sinon on divise chaque √©l√©ment par le maximum
 		for (i = 0; i < args.length; i++)
 			args[i] /= max;
 		
@@ -253,7 +253,7 @@ public class linterp extends ejies {
 				}
 			}
 		} else if (mode == 2) {
-			// resultat.length > 0 quand on a déjà sorti quelque chose (ce qui veut dire que toutes les listes ont été remplies)
+			// resultat.length > 0 quand on a d√©j√† sorti quelque chose (ce qui veut dire que toutes les listes ont √©t√© remplies)
 			if (resultat.length > 0 || inputCheck((byte) 8)) {
 				resultat = new float[findSmallestList()];
 
@@ -288,7 +288,7 @@ public class linterp extends ejies {
 	}
 	
 	private boolean inputCheck(byte byteArg) {
-		// c'est pas très élégant...
+		// c'est pas tr√®s √©l√©gant...
 		byte flag = 0;
 		
 		try {

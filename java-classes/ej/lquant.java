@@ -172,7 +172,7 @@ public class lquant extends ejies {
 	}
 	
 	// Optimize the quantisation factors to reduce the number of calculation. I'm particulary proud of that part...
-	// cherche les plus grand communs dénominateurs
+	// cherche les plus grand communs d√©nominateurs
 	private void setQuantFactors(float[] args) {
 		Arrays.sort(args);
 		Atom[] tmp = Atom.newAtom(args);

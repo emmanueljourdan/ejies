@@ -7,7 +7,7 @@
  */
 
 /**
- * TODO: copy paste entre ej.fplay ? à la funbuff
+ * TODO: copy paste entre ej.fplay ? √† la funbuff
  */
 
 
@@ -77,7 +77,7 @@ public class fplay extends ejies {
 		setInletAssist(INLET_ASSIST);
 		setOutletAssist(OUTLET_ASSIST);
 
-		init();	// création des courbes
+		init();	// cr√©ation des courbes
 		isDblClickAllowed = true;
 	}
 	
@@ -86,7 +86,7 @@ public class fplay extends ejies {
 	 */
 	public void dblclick() {
 		if (isDblClickAllowed) {
-			// surdéfinition de ej.dblclick()
+			// surd√©finition de ej.dblclick()
 			post("ej.fplay infos:");
 			post("  nbfunctions: " + getNbFunctions());
 			post("  mode: " + (mode ? "curve" : "line"));
@@ -485,7 +485,7 @@ public class fplay extends ejies {
 	
 	/**
 	 * Normalize all the points of the current function.
-	 * This will strech the points to “fill" the domain and the range.
+	 * This will strech the points to fill" the domain and the range.
 	 */
 	public void normalize() {
 		((Courbe) Courbes.get(current)).normalize();
@@ -493,7 +493,7 @@ public class fplay extends ejies {
 	
 	/**
 	 * Normalize points of the current function depending on the domain.
-	 * This will strech the points to “fill" the domain.
+	 * This will strech the points to fill" the domain.
 	 */
 	public void normalize_x() {
 		((Courbe) Courbes.get(current)).normalizeX();
@@ -501,7 +501,7 @@ public class fplay extends ejies {
 
 	/**
 	 * Normalize points of the current function depending on the range.
- 	 * This will strech the points to “fill" the range.
+ 	 * This will strech the points to fill" the range.
 	 */
 	public void normalize_y() {
 		((Courbe) Courbes.get(current)).normalizeY();
@@ -750,7 +750,7 @@ public class fplay extends ejies {
 		
 		String msgName = null;
 		
-		// d'abord les messages à longeur variables
+		// d'abord les messages √† longeur variables
 		if (args[0].isString()) {
 			msgName = args[0].getString();
 			
@@ -767,7 +767,7 @@ public class fplay extends ejies {
 		}
 		
 		if (args.length == 1) {
-			if (isNumber(args[0])) {	// un seul argument numérique -> interpolation
+			if (isNumber(args[0])) {	// un seul argument num√©rique -> interpolation
 				myInterp(courbeIdx, args[0].toFloat());
 			} else {
 				// args[0] is string
@@ -1187,7 +1187,7 @@ public class fplay extends ejies {
 		private double[] domain = {0., 1000.};			// domain de la courbe
 		private double[] range = {0., 1.};			// range de la courbe
 		private ArrayList lPoints = new ArrayList();	// PointsArray
-		private int NextFrom = 0;						// utilisé pour le message next
+		private int NextFrom = 0;						// utilis√© pour le message next
 
 //		private int np = 0;										// used because of the reading
 //		private double[] ZoomX = {0., 1000.};			// domain de la courbe
@@ -1510,14 +1510,14 @@ public class fplay extends ejies {
 			if (min < max) {
 				double factor = (max - min) / (range[1] - range[0]);
 				
-				double tmp; // pour des raisons de lisibilités
+				double tmp; // pour des raisons de lisibilit√©s
 				for (int i = 0; i < lPoints.size(); i++) {
 					tmp = ((((Point) lPoints.get(i)).getY() - range[0]) * factor) + min; 
 					((Point) lPoints.get(i)).setY(tmp);
 				}
 				
 				// je pourrais utiliser domain(min, max) mais il y a un test de plus,
-				// qui est déjà effectué au début de setDomain()
+				// qui est d√©j√† effectu√© au d√©but de setDomain()
 				range[0] = min;
 				range[1] = max;
 			}
@@ -1527,14 +1527,14 @@ public class fplay extends ejies {
 			if (min < max) {
 				double factor = (max - min) / (domain[1] - domain[0]);
 				
-				double tmp; // pour des raisons de lisibilités
+				double tmp; // pour des raisons de lisibilit√©s
 				for (int i = 0; i <  np(); i++) {
 					tmp = ((((Point) lPoints.get(i)).getX() - domain[0]) * factor) + min; 
 					((Point) lPoints.get(i)).setX(tmp);
 				}
 				
 				// je pourrais utiliser domain(min, max) mais il y a un test de plus,
-				// qui est déjà effectué au début de setDomain()
+				// qui est d√©j√† effectu√© au d√©but de setDomain()
 				domain[0] = min;
 				domain[1] = max;
 			}
@@ -1759,8 +1759,8 @@ public class fplay extends ejies {
 		}
 		
 		public void clearPoints(Atom[] a) {
-			// utilisé quand ça vient par argparser
-			// la suppression se fait à l'envers sinon, les numéros d'index ne sont plus bons.
+			// utilis√© quand √ßa vient par argparser
+			// la suppression se fait √† l'envers sinon, les num√©ros d'index ne sont plus bons.
 			for (int i = (a.length - 1); i >= 0 ; i--) {
 				if (isNumber(a[i]))
 					clearPoints(a[i].toInt());
@@ -1774,7 +1774,7 @@ public class fplay extends ejies {
 				for (int i = 1; i < (np() - 1); i++) {
 					if (getPoint(i-1).getY() == getPoint(i).getY() && getPoint(i+1).getY() == getPoint(i-1).getY()) {
 						removeOnePoint(i);
-						i = Math.max(0, i - 2); // la prochaine fois qu'on rentre dans la boucle for ça commencera à partir de ce point
+						i = Math.max(0, i - 2); // la prochaine fois qu'on rentre dans la boucle for √ßa commencera √† partir de ce point
 					}
 				}
 			}
@@ -1793,7 +1793,7 @@ public class fplay extends ejies {
 			while (listiter.hasNext()) {
 				// si c'est plus petit on va ecrire tout de suite dans la liste
 				if (valx < ((Point) listiter.next()).getX()) {
-					lPoints.add(listiter.previousIndex(), new Point(valx, valy)); // previousIndex car on accède déjà à next avant
+					lPoints.add(listiter.previousIndex(), new Point(valx, valy)); // previousIndex car on acc¬ède d¬éj¬à ¬à next avant
 					return;
 				}
 			}
@@ -1860,12 +1860,12 @@ public class fplay extends ejies {
 
 		public void moveOnePoint(int idx, double posX, double posY) {
 			/**
-			 * s'occupe du déplacement du point (il y a aussi un reordering effectué)
+			 * s'occupe du d√©placement du point (il y a aussi un reordering effectu√©)
 			 */
 			if (idx >= 0 && idx < np() && ((Point) lPoints.get(idx)).getFix() == false) {
 				((Point) lPoints.get(idx)).setValues(posX, posY);
 				
-				quickSort(0, np() - 1); // car on a peut-être trop déplacé le point
+				quickSort(0, np() - 1); // car on a peut-√™tre trop d√©plac√© le point
 			}
 			
 			applyAutoSustain();
@@ -1873,12 +1873,12 @@ public class fplay extends ejies {
 		
 		public void moveOnePoint(int idx, double posX, double posY, double curve) {
 			/*
-			 * s'occupe du déplacement du point, lorsque la valeur de curve est définie
+			 * s'occupe du d¬éplacement du point, lorsque la valeur de curve est d¬éfinie
 			 */
 			if (idx >= 0 && idx < np() && ((Point) lPoints.get(idx)).getFix() == false) {
 				((Point) lPoints.get(idx)).setValues(posX, posY, curve);
 				
-				quickSort(0, np() - 1);	// car on a peut-être déplacé le point
+				quickSort(0, np() - 1);	// car on a peut-√™tre d√©plac√© le point
 			}
 			
 			applyAutoSustain();
@@ -1930,7 +1930,7 @@ public class fplay extends ejies {
 			}
 		
 		private void swapPoints(int num1, int num2) {
-			// échange des pointeurs
+			// ¬échange des pointeurs
 			Point tmp = (Point) lPoints.get(num1);
 			lPoints.set(num2, lPoints.get(num2));
 			lPoints.set(num1,  tmp);
@@ -2027,7 +2027,7 @@ public class fplay extends ejies {
 		}
 
 		Point(double valx, double valy, int state) {
-			// x, y, sustain et fix codé en binaire
+			// x, y, sustain et fix cod¬é en binaire
 			this(valx, valy, (state & 2) == 2, (state & 1) == 1, 0.);
 		}
 		
