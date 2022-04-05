@@ -14,17 +14,17 @@
 		"macintosh" : 		{
 			"platform" : [ "ia32", "x64" ],
 			"min_version" : "10.7.x"
-		}
-,
+		},
+
 		"windows" : 		{
 			"platform" : [ "ia32", "x64" ],
 			"min_version" : "7"
 		}
 
-	}
-,
+	},
+
 	"readme" : "",
-	"version" : "3.2.3",
+	"version" : "3.2.5",
 	"versions" : null,
 	"website" : "http://www.e--j.com",
 	"filelist" : 	{

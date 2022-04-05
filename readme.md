@@ -71,7 +71,7 @@ Collection of Aqua sliders.
 
 
 ## Installation:
-Use Max 7.1's package manager or Drag the folder in one of Max's supported package folder.
+Use Max's package manager or Drag the folder in one of Max's supported Package folders.
 
 
 ## Support

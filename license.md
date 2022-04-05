@@ -1,7 +1,7 @@
 The MIT License (MIT)
 =====================
 
-Copyright © 2015 [e--j dev](http://www.e--j.com)
+Copyright © 2022 [e--j dev](http://www.e--j.com)
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation

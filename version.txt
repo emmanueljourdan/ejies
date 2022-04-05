@@ -2,6 +2,14 @@ ejies - Version history
 
 
 *******************
+3.2.5: 5 April 2022
+
+- ej.function.js: fixed listfunnel/dump (#25)
+- js ej.cc: miscellaneous updates for Max 8, produce less errors
+- mxj ej.buffer2l: no longer crash with out range zoom parameters (#26)
+
+
+*******************
 3.2.4: 20 December 2015
 
 - added some snippets for the jsui
